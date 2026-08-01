@@ -32,7 +32,7 @@ AGATE Test Studio
 │   └── Central Backend
 │
 ├── agate-ai
-│   └── AI engine (LLMs, Ollama, prompt management, test generation)
+│   └── AI engine (LLMs, Ollama, Chatbot for Client, test generation based on OpenAPI specification)
 │
 ├── agate-tosca-migrator
 │   └── Migration of existing Tosca tests into AGATE DSL
@@ -54,10 +54,10 @@ The core backend responsible for executing AGATE test suites.
 * YAML-based test DSL
 * Human-readable test scenarios
 * Reusable test components
-* Environment configuration
 * Data-driven testing
+* Environment configuration
 * Detailed execution logging
-* Comprehensive reports
+* Comprehensive reports with log-info
 * CI/CD integration
 
 ### Supported Engines
@@ -89,17 +89,15 @@ AI-powered generation of AGATE test scenarios from **OpenAPI specifications**.
 
 Planned capabilities include:
 
-* Automatic YAML test generation
-* Prompt templates
+* Automatic YAML test generation based on OpenAPI specification
 * Local LLM support
-* Ollama integration
-* AI-assisted test maintenance
+* Local Ollama integration
 
 ---
 
 ## 4️⃣ AGATE Client *(Under Development)*
 
-A modern web-based interface for managing:
+A web-based interface for managing:
 
 * Projects
 * Test Suites
