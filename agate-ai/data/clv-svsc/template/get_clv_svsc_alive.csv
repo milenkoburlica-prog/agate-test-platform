@@ -1,0 +1,4 @@
+testcaseName;Verify_get_clv_svsc_alive_success_returns_200_returns_200
+testcaseDescription;Verify that service alive endpoint is available
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200

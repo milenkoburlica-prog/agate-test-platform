@@ -1,0 +1,55 @@
+# This file contains steps that can be called by any TestCase
+steps:
+      # 1. Execute and store full response based on R-Varaible
+      - type: CMD
+        op: EXEC
+        command: "{B[command]}"
+        response: resp1
+
+      # 2. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: resp1
+        action: EXITCODE
+        expected: 0        
+
+      # 2. Execute and store full response based on R-Varaible
+      - type: CMD
+        op: EXEC
+        command: "{R[command]}"
+        response: resp1
+
+      # 3. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: resp1
+        action: EXITCODE
+        expected: 0        
+
+
+      # 4. Execute and store full response based on R-Varaible
+      - type: CMD
+        op: EXEC
+        command: "{B[command]}"
+        response: resp1
+
+      # 5. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: resp1
+        action: EXITCODE
+        expected: 0        
+
+
+      # 6. Execute and store full response based on B-Varaible
+      - type: CMD
+        op: EXEC
+        command: "{B[command2]}"
+        response: resp2
+
+      # 7. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: resp2
+        action: EXITCODE
+        expected: 0        

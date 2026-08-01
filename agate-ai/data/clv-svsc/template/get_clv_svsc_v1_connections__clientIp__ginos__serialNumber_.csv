@@ -1,0 +1,17 @@
+testcaseName;Verify_getGino_success_returns_200_returns_200;Verify_getGino_invalid_input_returns_400_returns_400;Verify_Response_Fields_getGino
+testcaseDescription;Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/ginos/{serialNumber} returns a successful response with valid clientIp and serialNumber.;Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/ginos/{serialNumber} returns a 400 Bad Request response with an invalid clientIp.;Verify response contains documented response fields
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200;400;200
+clientIp;111.111.111.111;111.111.111.111;111.111.111.111
+serialNumber;1234567890;1234567890;1234567890
+assert.ginoIp;;;ginoIp
+assert.name;;;name
+assert.group;;;group
+assert.serialNumber;;;serialNumber
+assert.status;;;status
+assert.creationDate;;;creationDate
+assert.lastContact;;;lastContact
+assert.fwVersion;;;fwVersion
+assert.macAddress;;;macAddress
+assert.satelliteSerialNumber;;;satelliteSerialNumber
+assert.accessDns;;;accessDns

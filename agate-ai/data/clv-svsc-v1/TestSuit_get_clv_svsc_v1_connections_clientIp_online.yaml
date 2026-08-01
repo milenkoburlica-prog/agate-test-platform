@@ -1,0 +1,157 @@
+testCases:
+
+  - id: Verify_checkOnline_success_returns_200_returns_200
+    description: Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/online returns a successful response with HTTP 200 for a valid clientIp.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_checkOnline_invalid_input_returns_400_returns_400
+    description: Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/online returns a bad request response with HTTP 400 for an invalid clientIp format.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_checkOnline_not_found_returns_404_returns_404
+    description: Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/online returns a not found response with HTTP 404 for a non-existent clientIp.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 404
+
+  - id: Verify_checkOnline_missing_parameter_returns_400_returns_400
+    description: Verify that the GET request to /clv-svsc/v1/connections/{clientIp}/online returns a bad request response with HTTP 400 when the clientIp parameter is missing.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_checkOnline_response_contains_online
+    description: Verify response contains field online
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: online
+
+  - id: Verify_checkOnline_response_contains_pingLog
+    description: Verify response contains field pingLog
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_online
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: pingLog

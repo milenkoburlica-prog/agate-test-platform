@@ -1,0 +1,226 @@
+testCases:
+
+  - id: Verify_listOrdinations_success_returns_200_returns_200
+    description: "Verify that the API returns a successful response when providing a valid contract partner number."
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_listOrdinations_invalid_input_returns_400_returns_400
+    description: "Verify that the API returns a 400 Bad Request response when providing an invalid contract partner number format."
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_listOrdinations_scenario_returns_404_returns_404
+    description: "Verify that the API returns a 404 Not Found response when providing a contract partner number that does not exist."
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 404
+
+  - id: Verify_listOrdinations_missing_parameter_returns_400_returns_400
+    description: "Verify that the API returns a 400 Bad Request response when the contract partner number is missing in the request."
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_Response_Fields_listOrdinations
+    description: "Verify response contains documented response fields"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].contractPartnerNumber
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].ordinationNumber
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].ordinationActive
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].formOfAddress
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].titlePrefix
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].firstName
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].lastName
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].titleSuffix
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].zip
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].city
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].street
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].predecessor
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].successor
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].clientIp
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].provision
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].reservation

@@ -1,0 +1,7 @@
+testcaseName;Verify_getGinoInfo_success_returns_200_returns_200;Verify_getGinoInfo_invalid_input_returns_400_returns_400;Verify_getGinoInfo_scenario_returns_404_returns_404
+testcaseDescription;Verify successful operation for a valid clientIp and serialNumber with infoType 'config';Verify HTTP 400 Bad Request for an invalid clientIp format;Verify HTTP 404 Not Found for a clientIp that does not exist
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200;400;404
+clientIp;111.111.111.111;111.111.111.111;111.111.111.111
+serialNumber;1234567890;1234567890;1234567890
+infoType;config;config;config

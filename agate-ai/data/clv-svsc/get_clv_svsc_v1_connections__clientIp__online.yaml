@@ -1,0 +1,80 @@
+testCases:
+
+  - id: Verify_checkOnline_success_returns_200_returns_200
+    description: "Verify successful operation for a valid clientIp"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections__clientIp__online
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_checkOnline_invalid_input_returns_400_returns_400
+    description: "Verify that an invalid IP format fails with a 400 Bad Request"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections__clientIp__online
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_Response_Fields_checkOnline
+    description: "Verify response contains documented response fields"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections__clientIp__online
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          clientIp: 111.111.111.111
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: online
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: pingLog

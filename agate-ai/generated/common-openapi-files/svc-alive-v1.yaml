@@ -1,0 +1,33 @@
+openapi: 3.0.4
+info:
+  title: SVC Alive Endpoints
+  version: 1.0.0
+  description: Endpoints for probing the service.
+  contact:
+    name: Karl Scheibelhofer
+    email: karl.scheibelhofer@svc.co.at
+tags:
+  - name: alive
+paths:
+  /alive:
+    summary: Tests whether the service is available.
+    description: Tests whether the service is available.
+    parameters:
+      - $ref: "./common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+      - $ref: "./common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+    head:
+      tags:
+        - alive
+      responses:
+        "200":
+          description: Service is available.
+        "204":
+          description: Service is available.
+    get:
+      tags:
+        - alive
+      responses:
+        "200":
+          description: Service is available.
+        "204":
+          description: Service is available.

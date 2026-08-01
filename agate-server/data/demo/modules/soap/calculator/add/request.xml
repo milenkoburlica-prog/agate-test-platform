@@ -1,0 +1,10 @@
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Add xmlns="http://tempuri.org/">
+      <intA>{B[intA]}</intA>
+      <intB>{B[intB]}</intB>
+    </Add>
+  </soap:Body>
+</soap:Envelope>

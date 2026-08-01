@@ -1,0 +1,55 @@
+testCases:
+  - id: "TC_BUF_01"
+    description: "Successful variable creation and basic text validation"
+    stage: '*'
+    priority: HIGH  
+    variables:
+      local_prefix: "PRE-PROD"
+      app_name: "Payment-Processing"
+    steps:
+      # 1. Store a raw value directly into the buffer
+      - type: BUFFER
+        op: EXEC
+        name: "application_env"
+        value: "Customer-Service-PROD"
+
+      # 2. Check if the buffered value equals the expected string
+      - type: BUFFER
+        op: ASSERT
+        name: "application_env"
+        action: EQUALS
+        expected: "Customer-Service-PROD"
+
+      # 3. Check if the buffered value contains a specific substring
+      - type: BUFFER
+        op: ASSERT
+        name: "application_env"
+        action: CONTAINS
+        expected: "Service"
+
+  - id: "TC_BUF_02"
+    description: "Resolving dynamic variables inside BufferEngine using tags"
+    stage: '*'
+    priority: MEDIUM
+    variables:
+      local_prefix: "PRE-PROD"
+      app_name: "Payment-Processing"
+    steps:
+      # 1. Combine existing variables into a new buffer variable via dynamic tags
+      - type: BUFFER
+        op: EXEC
+        name: "full_system_string"
+        value: "{B[local_prefix]}-{B[app_name]}-v2"
+
+      # 2. Validate the newly constructed complex string
+      - type: BUFFER
+        op: ASSERT
+        name: "full_system_string"
+        action: EQUALS
+        expected: "PRE-PROD-Payment-Processing-v2"
+
+      # 3. Ensure the variable is not empty
+      - type: BUFFER
+        op: ASSERT
+        name: "full_system_string"
+        action: IS_NOT_EMPTY

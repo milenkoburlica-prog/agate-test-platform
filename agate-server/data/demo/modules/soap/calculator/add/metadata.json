@@ -1,0 +1,9 @@
+{
+  "url" : "{{endpoint}}/calculator.asmx",
+  "method" : "POST",
+  "headers" : {
+    "Content-Type" : "text/xml;charset=UTF-8",
+    "SOAPAction" : "\"http://tempuri.org/Add\"",
+    "User-Agent" : "Agate-HttpClient (Version 1.0.0)"
+  }
+}

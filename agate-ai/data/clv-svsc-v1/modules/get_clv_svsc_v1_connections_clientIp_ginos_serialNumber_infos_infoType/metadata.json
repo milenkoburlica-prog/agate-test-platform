@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/clv-svsc/v1/connections/{B[clientIp]}/ginos/{B[serialNumber]}/infos/{B[infoType]}",
+  "method" : "GET",
+  "headers" : {
+       "Content-Type" : "application/json;charset=UTF-8",
+       "accept" : "application/json"  }
+}

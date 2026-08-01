@@ -1,0 +1,379 @@
+testCases:
+
+  - id: Verify_getGino_success_returns_200_returns_200
+    description: Verify that the GET request to retrieve a gino for a valid clientIp and serialNumber returns HTTP 200 OK.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_getGino_invalid_input_returns_400_returns_400
+    description: Verify that the GET request to retrieve a gino for an invalid clientIp returns HTTP 400 Bad Request.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_getGino_not_found_returns_404_returns_404
+    description: Verify that the GET request to retrieve a gino for a non-existent clientIp returns HTTP 404 Not Found.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 404
+
+  - id: Verify_getGino_response_contains_ginoIp
+    description: Verify response contains field ginoIp
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: ginoIp
+
+  - id: Verify_getGino_response_contains_name
+    description: Verify response contains field name
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: name
+
+  - id: Verify_getGino_response_contains_group
+    description: Verify response contains field group
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: group
+
+  - id: Verify_getGino_response_contains_serialNumber
+    description: Verify response contains field serialNumber
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: serialNumber
+
+  - id: Verify_getGino_response_contains_status
+    description: Verify response contains field status
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: status
+
+  - id: Verify_getGino_response_contains_creationDate
+    description: Verify response contains field creationDate
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: creationDate
+
+  - id: Verify_getGino_response_contains_lastContact
+    description: Verify response contains field lastContact
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: lastContact
+
+  - id: Verify_getGino_response_contains_fwVersion
+    description: Verify response contains field fwVersion
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: fwVersion
+
+  - id: Verify_getGino_response_contains_macAddress
+    description: Verify response contains field macAddress
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: macAddress
+
+  - id: Verify_getGino_response_contains_satelliteSerialNumber
+    description: Verify response contains field satelliteSerialNumber
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: satelliteSerialNumber
+
+  - id: Verify_getGino_response_contains_accessDns
+    description: Verify response contains field accessDns
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections_clientIp_ginos_serialNumber
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          clientIp: 111.111.111.111
+          serialNumber: 1234567890
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: accessDns

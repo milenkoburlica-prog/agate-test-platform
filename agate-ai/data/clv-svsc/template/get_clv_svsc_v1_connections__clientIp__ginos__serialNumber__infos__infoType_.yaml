@@ -1,0 +1,27 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections__clientIp__ginos__serialNumber__infos__infoType_
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          clientIp: "{B[clientIp]}"
+          serialNumber: "{B[serialNumber]}"
+          infoType: "{B[infoType]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{B[statusCode]}"

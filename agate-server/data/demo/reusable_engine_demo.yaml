@@ -1,0 +1,67 @@
+testCases: 
+  - id: TC_CMD_01
+    description: Demo Reusable basic
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+      command2: "java -version"
+    steps:
+      # 1. Execute and store full response
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          command: "mvn --version"
+        
+  - id: TC_CMD_02
+    description: Demo Reusable basic - verbose
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      # 1. Execute and store full response
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: "mvn --version"
+        
+
+  - id: TC_CMD_03
+    description: Demo Reusable basic - R-Buffer vs B-Buffer
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+      command2: "java -version"
+    steps:
+      # 1. Execute and store full response
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: "mvn -version"
+        
+  - id: TC_CMD_04
+    description: Demo Reusable basic - Responses from Reusable Module
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+      command2: "java -version"
+    steps:
+      # 1. Execute and store full response
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: "mvn --version"
+        
+      # 4. Buffer response 1
+      - type: BUFFER
+        op: EXEC
+        name: "RResponse1"
+        action: TEXT

@@ -1,0 +1,495 @@
+testCases:
+
+  - id: Verify_listOrdinations_success_returns_200_returns_200
+    description: Verify that the API returns a successful response for a valid contract partner number.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_listOrdinations_invalid_input_returns_400_returns_400
+    description: Verify that the API returns a 400 Bad Request response for an invalid contract partner number format.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_listOrdinations_scenario_returns_404_returns_404
+    description: Verify that the API returns a 404 Not Found response for a contract partner number that does not exist.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 404
+
+  - id: Verify_listOrdinations_response_contains_[*].contractPartnerNumber
+    description: Verify response contains field [*].contractPartnerNumber
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].contractPartnerNumber
+
+  - id: Verify_listOrdinations_response_contains_[*].ordinationNumber
+    description: Verify response contains field [*].ordinationNumber
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].ordinationNumber
+
+  - id: Verify_listOrdinations_response_contains_[*].ordinationActive
+    description: Verify response contains field [*].ordinationActive
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].ordinationActive
+
+  - id: Verify_listOrdinations_response_contains_[*].formOfAddress
+    description: Verify response contains field [*].formOfAddress
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].formOfAddress
+
+  - id: Verify_listOrdinations_response_contains_[*].titlePrefix
+    description: Verify response contains field [*].titlePrefix
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].titlePrefix
+
+  - id: Verify_listOrdinations_response_contains_[*].firstName
+    description: Verify response contains field [*].firstName
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].firstName
+
+  - id: Verify_listOrdinations_response_contains_[*].lastName
+    description: Verify response contains field [*].lastName
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].lastName
+
+  - id: Verify_listOrdinations_response_contains_[*].titleSuffix
+    description: Verify response contains field [*].titleSuffix
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].titleSuffix
+
+  - id: Verify_listOrdinations_response_contains_[*].zip
+    description: Verify response contains field [*].zip
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].zip
+
+  - id: Verify_listOrdinations_response_contains_[*].city
+    description: Verify response contains field [*].city
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].city
+
+  - id: Verify_listOrdinations_response_contains_[*].street
+    description: Verify response contains field [*].street
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].street
+
+  - id: Verify_listOrdinations_response_contains_[*].predecessor
+    description: Verify response contains field [*].predecessor
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].predecessor
+
+  - id: Verify_listOrdinations_response_contains_[*].successor
+    description: Verify response contains field [*].successor
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].successor
+
+  - id: Verify_listOrdinations_response_contains_[*].clientIp
+    description: Verify response contains field [*].clientIp
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].clientIp
+
+  - id: Verify_listOrdinations_response_contains_[*].provision
+    description: Verify response contains field [*].provision
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].provision
+
+  - id: Verify_listOrdinations_response_contains_[*].reservation
+    description: Verify response contains field [*].reservation
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners_contractPartnerNumber_ordinations
+        endpoint: "{B[apiEndpoint]}"
+
+        parameters:
+          contractPartnerNumber: 123456
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].reservation

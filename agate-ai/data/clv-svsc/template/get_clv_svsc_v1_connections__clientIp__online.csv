@@ -1,0 +1,7 @@
+testcaseName;Verify_checkOnline_success_returns_200_returns_200;Verify_checkOnline_invalid_input_returns_400_returns_400;Verify_Response_Fields_checkOnline
+testcaseDescription;Verify successful operation for a valid clientIp;Verify that an invalid IP format fails with a 400 Bad Request;Verify response contains documented response fields
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200;400;200
+clientIp;111.111.111.111;111.111.111.111;111.111.111.111
+assert.online;;;online
+assert.pingLog;;;pingLog

@@ -1,0 +1,17 @@
+testcaseName;Verify_listGinos_success_returns_200_returns_200;Verify_listGinos_invalid_input_returns_400_returns_400;Verify_listGinos_not_found_returns_404_returns_404;Verify_listGinos_missing_parameter_returns_400_returns_400;Verify_Response_Fields_listGinos
+testcaseDescription;Verify that the API returns a successful response with HTTP 200 for a valid clientIp.;Verify that the API returns a 400 Bad Request response for an invalid clientIp format.;Verify that the API returns a 404 Not Found response for a non-existent clientIp.;Verify that the API returns a 400 Bad Request response when the clientIp parameter is missing.;Verify response contains documented response fields
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200;400;404;400;200
+clientIp;111.111.111.111;111.111.111.111;111.111.111.111;111.111.111.111;111.111.111.111
+serialNumber;;;;;
+assert.ginoIp;;;;;[*].ginoIp
+assert.name;;;;;[*].name
+assert.group;;;;;[*].group
+assert.serialNumber;;;;;[*].serialNumber
+assert.status;;;;;[*].status
+assert.creationDate;;;;;[*].creationDate
+assert.lastContact;;;;;[*].lastContact
+assert.fwVersion;;;;;[*].fwVersion
+assert.macAddress;;;;;[*].macAddress
+assert.satelliteSerialNumber;;;;;[*].satelliteSerialNumber
+assert.accessDns;;;;;[*].accessDns

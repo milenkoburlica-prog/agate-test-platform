@@ -1,0 +1,30 @@
+testCases:
+  - id: TC_WAIT_01
+    description: WAIT Test Step
+    stage: DEMOS
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+      # 1. Wait 2 sec
+      - type: BUFFER
+        op: EXEC
+        name: "timeout"
+        value: "2s"
+ 
+      # 2. Wait 1 sec
+      - type: WAIT
+        value: "{B[timeout]}" 
+
+      # 3. Wait 1 sec
+      - type: WAIT
+        value: 1000 
+ 
+      # 4. Wait 200ms
+      - type: WAIT
+        value: "200ms" 
+ 
+      # 4. Wait 200 ms
+      - type: WAIT
+        value: "200 ms" 

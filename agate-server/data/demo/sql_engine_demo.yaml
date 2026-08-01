@@ -1,0 +1,297 @@
+testCases:
+
+  - id: TC_01_Demo_SQL
+    description: TC_01 Demo SQL - Standard Workflow
+    stage: INT
+    priority: HIGH
+    variables:
+      {}
+    steps:
+
+      # 1. Setup Data
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 
+            CURRENT_DATE as TODAY_COL,
+            150.55 as PRICE,
+            NULL as DELETED_AT,
+            'Active' as STATUS,
+            '5' as COUNTER
+          FROM DUAL
+        response: res_demo
+
+
+      # 2. ASSERT: Validate cell value (Row 0 is default, Column 0..n)
+      - type: SQL
+        op: ASSERT
+        action: EQUALS
+        column: 4
+        expected: 5
+        response: res_demo
+
+      # 3. ASSERT: Validate cell value (Row 0, Column COUNTER)
+      - type: SQL
+        op: ASSERT
+        action: EQUALS
+        row: 0
+        column: "COUNTER"
+        expected: "5"
+        response: res_demo
+        
+      # 4. ASSERT: Validate total row count in result set
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        action: ROW_COUNT
+        expected: "1"
+
+      # 5. ASSERT: Validate NULL status
+      - type: SQL
+        op: ASSERT
+        action: IS_NOT_NULL
+        row: 0
+        column: 4
+        response: res_demo
+
+     # 6. ASSERT: Validate NULL status
+      - type: SQL
+        op: ASSERT
+        action: IS_NULL
+        row: 0
+        column: 2
+        response: res_demo
+
+      # 7. ASSERT: Validate IS_NOT_EMPTY
+      - type: SQL
+        op: ASSERT
+        row: 0
+        column: "COUNTER"
+        action: IS_NOT_EMPTY
+        response: res_demo
+
+      # 8. ASSERT: Validate IS_NOT_EMPTY
+      - type: SQL
+        op: ASSERT
+        row: 0
+        column: "2"
+        action: IS_EMPTY
+        response: res_demo
+
+      # 9. ASSERT: Validate cell value (Row 0..n, 0 is default, Column 0..n)
+      - type: SQL
+        op: ASSERT
+        action: EQUALS
+        row: 0
+        column: '4'
+        expected: 5
+        response: res_demo
+
+      # 10. ASSERT: Validate using "not equal" operator
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER" # 
+        action: NOT_EQUALS
+        expected: "10"
+
+      # 11. ASSERT: Validate "greater than" condition
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER"
+        action: GREATER_THAN
+        expected: 3
+
+      # 12. ASSERT: Validate "greater than or equal" condition
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER"
+        action: GREATER_THAN_OR_EQUAL
+        expected: 5
+
+      # 13. ASSERT: Validate "less than" condition
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER"
+        action: LESS_THAN
+        expected: 6
+
+      # 14. ASSERT: Validate "greater than or equal" condition
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER"
+        action: LESS_THAN_OR_EQUAL
+        expected: 5
+
+      # 15. ASSERT: Validate "between" condition
+      - type: SQL
+        op: ASSERT
+        response: res_demo
+        row: 0
+        column: "COUNTER"
+        action: BETWEEN
+        expected: 3..5
+
+      # 16. ASSERT: Validate if value contains specific characters
+      - type: SQL
+        op: ASSERT
+        action: CONTAINS
+        row: 0
+        column: "COUNTER"
+        expected: "5"
+        response: res_demo
+
+      # 17. Setup Data
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 
+            TO_CHAR(CURRENT_DATE, 'DD.MM.YYYY') as TODAY_COL,
+            150.55 as PRICE,
+            NULL as DELETED_AT,
+            'Active' as STATUS
+          FROM DUAL
+        response: res_demo2
+
+      # 18. Smart Date Assertion (Keywords: TODAY)
+      - type: SQL
+        op: ASSERT
+        column: "TODAY_COL"
+        action: EQUALS
+        expected: "{DATE[][][]}"
+        response: res_demo2
+
+      # 19. Setup Data
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 
+            CURRENT_DATE as DAY_COL,
+            150.55 as PRICE,
+            NULL as DELETED_AT,
+            'Active' as STATUS
+          FROM DUAL
+        response: res_demo3
+
+      # 20. Smart Date Assertion (Keywords: TODAY)
+      - type: SQL
+        op: ASSERT
+        column: "DAY_COL"
+        action: DATE_EQUALS
+        expected: "TODAY"
+        response: res_demo3
+
+
+      # 21. Setup Data
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 
+            SYSDATE-1 as DAY_COL,
+            150.55 as PRICE,
+            NULL as DELETED_AT,
+            'Active' as STATUS,
+            '5' as COUNTER
+          FROM DUAL
+        response: res_demo4
+
+      # 22. Smart Date Assertion (Keywords: YESTERDAY)
+      - type: SQL
+        op: ASSERT
+        column: "DAY_COL"
+        action: DATE_EQUALS
+        expected: "YESTERDAY"
+        response: res_demo4
+
+      # 23. Simulate a table with 3 rows of 'COMPLETED' and 1 row of 'FAILED'
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' as STATUS, 100 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'COMPLETED' as STATUS, 200 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'FAILED' as STATUS, 50 as AMOUNT FROM DUAL
+        response: res_multi
+
+      # 24. This ASSERT should PASS because at least one row is 'FAILED'
+      # It will report "Matches: 1/3" in the log
+      - type: SQL
+        op: ASSERT
+        column: "STATUS"
+        action: ANY_MATCH
+        expected: "FAILED"
+        response: res_multi
+
+      # 25. Numeric Range combined with Row Index
+      - type: SQL
+        op: ASSERT
+        row: 0
+        column: "AMOUNT"
+        action: BETWEEN
+        expected: "30..250"
+        response: res_multi
+
+      # 26. Simulate a table with 3 rows of 'COMPLETED' and 1 row of 'FAILED'
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' as STATUS, 100 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'COMPLETED' as STATUS, 200 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'FAILED' as STATUS, 50 as AMOUNT FROM DUAL
+        response: res_multi2
+
+      # 27. This ASSERT should FAIL because not all rows are 'COMPLETED'
+      # It will report "Matches: 2/3" in the log
+      - type: SQL
+        op: ASSERT
+        column: "STATUS"
+        action: ANY_MATCH
+        expected: "COMPLETED"
+        response: res_multi2
+
+      # 28. BUFFER: Extract cell value (2,0)=50 into a variable
+      - type: SQL
+        op: BUFFER
+        row: 2
+        column: "1"
+        name: amount
+        response: res_multi2
+
+      # 29. BUFFER: ASSERT Buffer
+      - type: BUFFER 
+        op: ASSERT
+        name: "amount"
+        action: EQUALS
+        expected: "50"
+
+
+      # 30. Demo constraints
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' as STATUS, 100 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'COMPLETED' as STATUS, 200 as AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'FAILED' as STATUS, 50 as AMOUNT FROM DUAL
+        response: aktivni_korisnici
+        constraints:
+          - column: "status"
+            action: "EQUALS"
+            expected: "COMPLETED"
+          - column: "amount"
+            action: "EQUALS"
+            expected: "100"
+ 

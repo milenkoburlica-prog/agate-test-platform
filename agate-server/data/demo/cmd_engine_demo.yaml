@@ -1,0 +1,147 @@
+# Hello World 3 Demo
+testCases:
+  - id: TC Hello World 1
+    description: Hello World 1
+    stage: "*"
+    priority: HIGH  
+    variables:
+      command: "ver"
+    steps:
+      # 1. EXEC ausführen
+      - type: CMD
+        op: EXEC
+        command: 'echo %OS%'
+        response: os_version
+
+      # 2. Den Wert explizit in den Buffer/Variables schreiben, damit {B[...]} ihn sieht
+      - type: CMD
+        op: BUFFER
+        response: os_version
+        action: TEXT
+        name: os_version_var
+
+      # 3. Jetzt funktioniert die Condition
+      - type: CMD
+        condition: "'{B[os_version_var]}' == 'Windows_NT'"
+        op: EXEC
+        command: "{B[command]}"
+        response: windows_version
+
+      # 4. 
+      - type: CMD
+        op: EXEC
+        command: "java --version"
+        response: java_version_raw
+
+      # 5. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: TEXT
+        name: java_version
+
+      # 6. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: FILTER
+        value: "Runtime"
+        name: java_runtime_version
+
+      # 7. default value is 0
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LINE
+        name: java_version
+
+      # 8. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LINE
+        value: 0
+        name: java_version
+
+      # 9. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LINE
+        value: 1
+        name: java_version
+
+      # 10. default value is 0
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LAST_LINE
+        name: java_version
+
+      # 11. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LAST_LINE
+        value: 0
+        name: java_version_last_line
+
+      # 12. 
+      - type: CMD
+        op: BUFFER
+        response: java_version_raw
+        action: LAST_LINE
+        value: 1
+        name: java_version
+
+      # 13. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: java_version_raw
+        action: EXITCODE
+        expected: 0        
+        
+
+      # 14. 
+      - type: CMD
+        op: ASSERT
+        response: java_version_raw
+        action: CONTAINS
+        value: "OpenJDK 64-Bit"
+
+      # 15. 
+      - type: CMD
+        op: ASSERT
+        response: java_version_raw
+        action: NOT_CONTAINS
+        value: "OpenJDK 32-Bit"
+
+      # 16. 
+      - type: CMD
+        op: ASSERT
+        response: java_version_raw
+        action: COUNT
+        value: "OpenJDK 64-Bit"
+        expected: 1
+
+      # 17. 
+      - type: CMD
+        op: ASSERT
+        response: 'java_version_last_line'
+        action: CONTAINS
+        value: "OpenJDK 64-Bit"
+
+      # 18. 
+      - type: CMD
+        op: ASSERT
+        response: 'java_version_last_line'
+        action: CONTAINS
+        value: "OpenJDK 64-Bit Server VM"
+
+      # 19. 
+      - type: CMD
+        op: ASSERT
+        response: 'java_version_last_line'
+        action: NOT_CONTAINS
+        value: "OpenJDK 32-Bit Server VM Temurin-21.0.10+7 (build 21.0.10+7-LTS, mixed mode, sharing)"
+        

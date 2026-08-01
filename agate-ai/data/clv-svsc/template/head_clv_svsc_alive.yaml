@@ -1,0 +1,23 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.head_clv_svsc_alive
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{B[statusCode]}"

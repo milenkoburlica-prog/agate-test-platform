@@ -1,0 +1,203 @@
+testCases:
+
+  - id: TC_SOAP_Calculator
+    description: "Public Service http://www.dneonline.com/calculator.asmx"
+    stage: "*"
+    priority: HIGH
+    variables:
+      x: '15'
+      y: "5"
+
+    steps:
+
+      # 1. Execute SOAP Call
+      - type: SOAP
+        op: EXEC
+        command: soap.calculator.add
+        endpoint: "http://www.dneonline.com"
+        parameters: 
+          intA: "{B[x]}"
+          intB: "{B[y]}"
+        response: response
+      
+      # ==========================================
+      # DEMONSTRATION OF ALL "ASSERT" CAPABILITIES
+      # ==========================================      # 2.
+      
+      # A) STATUS: All numeric actions supported by the code (EQUALS/EXITCODE, GREATER_THAN, GREATER_OR_EQUALS, LESS_THAN, LESS_OR_EQUALS)
+      # 2.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: EQUALS
+        expected: 200
+ 
+      # 3.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: GREATER_THAN
+        expected: 199
+
+      # 4.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: GREATER_OR_EQUALS
+        expected: 200
+
+      # 5. 
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: LESS_THAN
+        expected: 300
+
+      # 6.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: LESS_OR_EQUALS
+        expected: 200
+
+      # B) HEADERS: The only header action your current code supports without throwing an exception
+      # 7.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: HEADERS
+        path: "Content-Type"
+        action: IS_HEADER_PRESENT
+        expected: "true"
+
+      # 8.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: HEADERS
+        path: "Foo-Type"
+        action: IS_HEADER_PRESENT
+        expected: "false"
+
+
+      # C) BODY: All string actions (EQUALS, NOT_EQUALS, CONTAINS, NOT_EMPTY) executed against the XML body
+      # 9.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: BODY
+        path: "//*[local-name()='AddResult']"
+        action: EQUALS
+        expected: "20"
+
+      # 10.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: BODY
+        path: "//*[local-name()='AddResult']"
+        action: NOT_EQUALS
+        expected: "100"
+
+      # 11.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: BODY
+        path: "//*[local-name()='AddResult']"
+        action: CONTAINS
+        expected: "2"
+
+      # 12.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: BODY
+        path: "//*[local-name()='AddResult']/text()"
+        action: NOT_EMPTY
+
+      # Testing a non-existent tag returns "NULL" (Your code converts expected "{NULL}" to "NULL" to match XPath's empty return)
+      # 13.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: BODY
+        path: "//*[local-name()='NonExistingTag']"
+        action: EQUALS
+        expected: "{NULL}"
+
+
+
+      # ==========================================
+      # DEMONSTRATION OF ALL "BUFFER" CAPABILITIES
+      # ==========================================
+
+      # A) STATUS: Storing the HTTP response status code
+      # 14.
+      - type: SOAP
+        op: BUFFER
+        name: http_status_code
+        response: response
+        source: STATUS
+
+      # B) HEADERS: Storing a specific header value
+      # 15.
+      - type: SOAP
+        op: BUFFER
+        name: response_content_type
+        response: response
+        source: HEADERS
+        path: "Content-Type"
+
+      # C) BODY: Storing a value using a standard XPath query (No 'action' parameter needed)
+      # 16.
+      - type: SOAP
+        op: BUFFER
+        name: calculator_result
+        response: response
+        source: BODY
+        path: "//*[local-name()='AddResult']"
+
+
+  - id: TC_SOAP_ListOfCountryNamesGroupedByContinent
+    description: "Public Service http://webservices.oorsprong.org"
+    stage: "*"
+    priority: HIGH
+    variables:
+      x: '15'
+      y: "5"
+
+    steps:
+
+      # 1. 
+      - type: SOAP
+        op: EXEC
+        command: soap.countryinfo.ListOfCountryNamesGroupedByContinent
+        endpoint: "http://webservices.oorsprong.org"
+        response: response
+
+      # 2.
+      - type: SOAP
+        op: ASSERT
+        response: response
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+      # 3.
+      - type: SOAP
+        op: BUFFER
+        name: isocode
+        response: response
+        source: BODY
+        path: "/*[local-name()='tCountryCodeAndNameGroupedByContinent']/*[local-name()='CountryCodeAndNames']/*[local-name()='tCountryCodeAndName']/*[local-name()='sISOCode']"
+        constraints:
+          - path: "/*[local-name()='tCountryCodeAndNameGroupedByContinent']/*[local-name()='CountryCodeAndNames']/*[local-name()='tCountryCodeAndName']/*[local-name()='sName']"
+            action: EQUALS
+            expected: 'Botswana'
+

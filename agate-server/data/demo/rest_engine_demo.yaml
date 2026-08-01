@@ -1,0 +1,74 @@
+testCases:
+  - id: TC_01
+    description: Simple Rest GET Test
+    stage: '*'
+    priority: HIGH  
+    variables:
+      jsonplaceholder.endpont: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      # 1
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpont]}"
+        response: response_rest1
+      
+      # 2
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: 200
+        response: response_rest1
+      
+      # 3
+      - type: REST
+        op: BUFFER
+        name: "title"
+        source: BODY
+        action: EQUALS
+        path: "$.title"
+        expected: "delectus aut autem"
+        response: response_rest1
+      
+      # 4
+      - type: BUFFER
+        op: ASSERT
+        name: "title"
+        action: EQUALS
+        expected: "delectus aut autem"
+        response: res_verify
+      
+      # 5
+      - type: REST
+        op: ASSERT
+        source: BODY
+        selector: JSON_PATH
+        path: "$.title"
+        action: EQUALS
+        expected: "delectus aut autem"
+        response: response_rest1
+
+  - id: TC_02
+    description: Simple Rest POST Test
+    stage: '*'
+    priority: HIGH  
+    variables:
+      jsonplaceholder.endpont: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      # 1
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.posts
+        endpoint: "{B[jsonplaceholder.endpont]}"
+        response: response_rest2
+
+      # 2
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: 200
+        response: response_rest2

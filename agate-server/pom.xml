@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>at.co.svc.test</groupId>
+    <artifactId>agate-server</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>quarkus</packaging>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <quarkus.platform.version>3.31.4</quarkus.platform.version>
+        <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <allure.version>2.24.0</allure.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+<dependency>
+    <groupId>org.apache.pdfbox</groupId>
+    <artifactId>pdfbox</artifactId>
+    <version>3.0.1</version> 
+    </dependency>
+<dependency>
+    <groupId>com.itextpdf</groupId>
+    <artifactId>html2pdf</artifactId>
+    <version>5.0.0</version>
+</dependency>    
+
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-jexl3</artifactId>
+    <version>3.3</version>
+</dependency>
+
+<!-- Source: https://mvnrepository.com/artifact/com.openhtmltopdf/openhtmltopdf-pdfbox -->
+<dependency>
+    <groupId>com.openhtmltopdf</groupId>
+    <artifactId>openhtmltopdf-pdfbox</artifactId>
+    <version>1.0.10</version>
+    <scope>compile</scope>
+</dependency>    
+<!-- Source: https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+<dependency>
+    <groupId>com.jayway.jsonpath</groupId>
+    <artifactId>json-path</artifactId>
+    <version>3.0.0</version>
+    <scope>compile</scope>
+</dependency>
+
+
+<dependency>
+    <groupId>com.microsoft.playwright</groupId>
+    <artifactId>playwright</artifactId>
+    <version>1.42.0</version>
+</dependency>
+
+		<dependency>
+           <groupId>io.quarkus</groupId>
+           <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+
+        <!-- REST + JSON -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-jackson</artifactId>
+        </dependency>
+
+        <!-- CDI -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- YAML parsing -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <!-- Apache POI za Excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+        <!-- Picocli -->
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.7.5</version>
+        </dependency>
+
+
+        <!-- Allure -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>21.9.0.0</version>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.42</version>
+        </dependency>
+
+        <dependency>
+           <groupId>io.qameta.allure</groupId>
+           <artifactId>allure-java-commons</artifactId>
+           <version>2.24.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+        
+        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>at.co.svc.agate.core.runner.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase> 
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <parameters>true</parameters>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+                <configuration>
+                   <systemPropertyVariables>
+                       <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
+                   </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
+               <groupId>io.qameta.allure</groupId>
+               <artifactId>allure-maven</artifactId>
+               <version>2.12.0</version>
+               <configuration>
+                   <reportVersion>2.24.0</reportVersion>
+                   <resultsDirectory>${project.basedir}/allure-results</resultsDirectory>
+               </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>exec-maven-plugin</artifactId>
+               <version>3.1.0</version>
+               <executions>
+                  <execution>
+                     <id>rewrite-allure-results</id>
+                     <phase>test</phase>
+                     <goals>
+                        <goal>java</goal>
+                     </goals>
+                     <configuration>
+                         <mainClass>at.co.svc.agate.core.allure.AllureResultRewriter</mainClass>
+                     </configuration>
+                  </execution>
+               </executions>
+            </plugin>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jar-plugin</artifactId>
+               <version>3.3.0</version>
+               <executions>
+                  <execution>
+                     <goals>
+                         <goal>test-jar</goal>
+                     </goals>
+                   </execution>
+               </executions>
+             </plugin>
+        </plugins>
+    </build>
+</project>

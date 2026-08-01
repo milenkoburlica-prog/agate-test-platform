@@ -1,0 +1,227 @@
+# Hello World Demo
+testCases:
+  # 
+  - id: TC Variables 1
+    description: Verifizierung der Default-Formate und Offset-Logik
+    stage: "*"
+    priority: HIGH  
+    variables:
+      db_user: "{E[env.database.user]}"
+      datetime: "{DATETIME}"
+    steps:
+      # 1. echo test variables
+      - type: CMD
+        op: EXEC
+        command: 'echo db_user: {B[db_user]}' 
+        response: buff_out
+
+      # 2. echo test variables
+      - type: CMD
+        op: EXEC
+        command: 'echo datetime: {B[datetime]}' 
+        response: buff_out
+
+  # 
+  - id: TC Variables 2
+    description: Verifizierung der Default-Formate und Offset-Logik
+    stage: "*"
+    priority: HIGH  
+    variables:
+      {}
+    steps:
+
+      # 1. echo test variables
+      - type: CMD
+        op: EXEC
+        command: 'echo db_user: {E[env.database.user]}' 
+        response: buff_out
+
+      # 2. echo test variables
+      - type: CMD
+        op: EXEC
+        command: 'echo dattime: {DATETIME}' 
+        response: buff_out
+
+  # 
+  - id: TC Variables 3 - timestamp difference
+    description: Verifizierung der Default-Formate und Offset-Logik
+    stage: "*"
+    priority: HIGH  
+    variables:
+      datetime: "{DATETIME}"
+    steps:
+
+      # 1. echo time variables 1
+      - type: CMD
+        op: EXEC
+        command: 'echo time: {B[datetime]}' 
+        response: buff_out
+
+      # 2. echo time variables 2
+      - type: CMD
+        op: EXEC
+        command: 'echo time: {DATETIME}' 
+        response: buff_out
+
+      # 3. Wait 1 sec
+      - type: WAIT
+        value: 1000 
+
+      # 4. echo time variables 1
+      - type: CMD
+        op: EXEC
+        command: 'echo time: {B[datetime]}' 
+        response: buff_out
+
+      # 5. echo time variables 3
+      - type: CMD
+        op: EXEC
+        command: 'echo time: {DATETIME}' 
+        response: buff_out
+
+
+
+  # Test Suite: TOSCA Date Compatibility & Defaults
+  - id: TC Tosca Date Defaults
+    description: Verifizierung der Default-Formate und Offset-Logik
+    stage: "*"
+    priority: HIGH  
+    steps:
+      # 1. Defaults ohne Parameter
+      - type: CMD
+        op: EXEC
+        command: 'echo Default DATE: {DATE}' # Erwartet: dd.MM.yyyy
+        response: buff_out
+
+      - type: CMD
+        op: EXEC
+        command: 'echo Default DATETIME: {DATETIME}' # Erwartet: dd.MM.yyyy hh:mm:ss
+        response: buff_out
+
+      # 2. Leere Klammern & Formate
+      - type: CMD
+        op: EXEC
+        command: 'echo DATE[][][]: {DATE[][][]}' # Default Format dd.MM.yyyy
+        response: buff_out
+
+      - type: CMD
+        op: EXEC
+        command: 'echo DATE ddMMyyyy: {DATE[][][ddMMyyyy]}'
+        response: buff_out
+
+      - type: CMD
+        op: EXEC
+        command: 'echo DATE yyyy: {DATE[][][yyyy]}'
+        response: buff_out
+
+      # 3. Offsets mit Default-Format
+      - type: CMD
+        op: EXEC
+        command: 'echo Offset +10 Tage: {DATE[][+10d][]}'
+        response: buff_out
+
+      - type: CMD
+        op: EXEC
+        command: 'echo Offset +6M +1d: {DATE[][+6M+1d][]}'
+        response: buff_out
+
+      # 4. Offsets mit non-Default-Format
+      - type: CMD
+        op: EXEC
+        command: 'echo Offset +10 Tage: {DATE[][+10d][]}'
+        response: buff_out
+
+      - type: CMD
+        op: EXEC
+        command: 'echo Offset +2d for 22.01.2025: {DATE[22.01.2025][2d][]}'
+        response: buff_out
+
+      # 5. Komplexe DATETIME
+      - type: CMD
+        op: EXEC
+        command: 'echo DATETIME -200d: {DATETIME[][-200d][dd-MM-yyyy HH:mm:ss]}'
+        response: buff_out
+
+  - id: TC Hello World 1
+    description: Hello World 1
+    stage: "*"
+    priority: HIGH  
+    steps:
+      # 1
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[env.database.user]}'
+        response: buff_out
+
+      # 2
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[users.staat]}'
+        response: buff_out
+
+  - id: TC Hello World 2
+    description: Hello World 2
+    stage: "*"
+    priority: HIGH  
+    variables:
+      retryCount: '3'
+    steps:
+      # 1
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[retryCount]}'
+        response: buff_out
+
+  - id: TC Hello World 2
+    description: Hello World 2
+    stage: "*"
+    priority: HIGH  
+    variables:
+      name1: 'STRING:FIX:5'
+      name2: STRING:FIX:5
+      name3: 'testname'
+    steps:
+      # 1
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[name1]}'
+        response: buff_out
+
+      # 2
+      - type: CMD
+        op: EXEC
+        command: 'echo STRING:FIX:7'
+        response: buff_out
+
+      # 3
+      - type: CMD
+        op: EXEC
+        command: 'echo STRING:NULL'
+        response: buff_out
+
+      # 4
+      - type: CMD
+        op: EXEC
+        command: 'echo BOOLEAN:true'
+        response: buff_out
+
+      # 5
+      - type: CMD
+        op: EXEC
+        command: 'echo BOOLEAN:false'
+        response: buff_out
+
+      # 6
+      - type: CMD
+        op: EXEC
+        command: 'echo STRING:EMPTY G'
+        response: buff_out
+
+      # 7
+      - type: CMD
+        op: EXEC
+        command: 'echo STRING:5:EMPTY G'
+        response: buff_out
+
+
+

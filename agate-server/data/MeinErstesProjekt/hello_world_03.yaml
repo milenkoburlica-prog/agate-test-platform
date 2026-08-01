@@ -1,0 +1,27 @@
+# Hello World 2 Demo
+testCases:
+  - id: TC Hello World 2
+    description: Hello World 2
+    stage: "*"
+    priority: HIGH  
+    steps:
+      # 1. Execute and store full response
+      - type: CMD
+        op: EXEC
+        command: "java -version"
+        response: java_out
+
+      # 2. Buffer complete output-text
+      - type: CMD
+        op: BUFFER
+        response: java_out
+        action: TEXT
+        name: var_version_only 
+        
+      # 3. Assert Exit Code
+      - type: CMD
+        op: ASSERT
+        response: java_out
+        action: EXITCODE
+        expected: 0        
+        

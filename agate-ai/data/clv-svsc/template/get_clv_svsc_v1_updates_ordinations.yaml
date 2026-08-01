@@ -1,0 +1,41 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          updated-after: "{B[updated-after]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{B[statusCode]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.contractPartnerNumber]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.contractPartnerNumber]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.lastChange]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.lastChange]}"

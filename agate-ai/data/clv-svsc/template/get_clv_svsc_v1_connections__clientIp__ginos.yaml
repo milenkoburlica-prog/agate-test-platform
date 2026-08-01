@@ -1,0 +1,114 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_connections__clientIp__ginos
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          clientIp: "{B[clientIp]}"
+          serialNumber: "{B[serialNumber]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{B[statusCode]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.ginoIp]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.ginoIp]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.name]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.name]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.group]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.group]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.serialNumber]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.serialNumber]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.status]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.status]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.creationDate]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.creationDate]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.lastContact]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.lastContact]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.fwVersion]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.fwVersion]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.macAddress]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.macAddress]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.satelliteSerialNumber]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.satelliteSerialNumber]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.accessDns]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.accessDns]}"

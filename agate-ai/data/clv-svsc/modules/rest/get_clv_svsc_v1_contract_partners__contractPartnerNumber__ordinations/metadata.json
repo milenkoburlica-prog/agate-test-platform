@@ -1,0 +1,8 @@
+{
+  "url":"{{endpoint}}/clv-svsc/v1/contract-partners/{B[contractPartnerNumber]}/ordinations",
+  "method":"GET",
+  "headers":{
+    "Content-Type":"application/json;charset=UTF-8",
+    "accept":"application/json"
+  }
+}

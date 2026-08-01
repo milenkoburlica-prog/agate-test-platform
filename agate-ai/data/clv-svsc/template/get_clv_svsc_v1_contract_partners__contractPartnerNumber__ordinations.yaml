@@ -1,0 +1,153 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_contract_partners__contractPartnerNumber__ordinations
+        endpoint: "{B[apiEndpoint]}"
+        parameters:
+          contractPartnerNumber: "{B[contractPartnerNumber]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{B[statusCode]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.contractPartnerNumber]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.contractPartnerNumber]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.ordinationNumber]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.ordinationNumber]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.ordinationActive]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.ordinationActive]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.formOfAddress]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.formOfAddress]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.titlePrefix]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.titlePrefix]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.firstName]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.firstName]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.lastName]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.lastName]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.titleSuffix]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.titleSuffix]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.zip]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.zip]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.city]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.city]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.street]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.street]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.predecessor]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.predecessor]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.successor]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.successor]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.clientIp]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.clientIp]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.provision]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.provision]}"
+
+      - type: REST
+        op: ASSERT
+        condition: "{B[statusCode]} == '200' AND {XL[assert.reservation]} != NULL"
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: "{XL[assert.reservation]}"

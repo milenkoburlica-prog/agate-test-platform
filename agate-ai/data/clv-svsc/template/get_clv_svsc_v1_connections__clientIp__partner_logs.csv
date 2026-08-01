@@ -1,0 +1,9 @@
+testcaseName;Verify_getPartnerLogs_success_returns_200_returns_200;Verify_getPartnerLogs_invalid_input_returns_400_returns_400;Verify_getPartnerLogs_not_found_returns_404_returns_404;Verify_getPartnerLogs_missing_parameter_returns_400_returns_400;Verify_getPartnerLogs_scenario_returns_504_returns_504;Verify_Response_Fields_getPartnerLogs
+testcaseDescription;Verify that the GET /clv-svsc/v1/connections/{clientIp}/partner-logs returns a 200 OK for a valid clientIp.;Verify that the GET /clv-svsc/v1/connections/{clientIp}/partner-logs returns a 400 Bad Request for an invalid clientIp format.;Verify that the GET /clv-svsc/v1/connections/{clientIp}/partner-logs returns a 404 Not Found for an unknown clientIp.;Verify that the GET /clv-svsc/v1/connections/{clientIp}/partner-logs returns a 400 Bad Request for missing timeout parameter.;Verify that the GET /clv-svsc/v1/connections/{clientIp}/partner-logs returns a 504 Gateway Timeout for a timeout value that exceeds allowed duration.;Verify response contains documented response fields
+apiEndpoint;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at;https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at
+statusCode;200;400;404;400;504;200
+clientIp;111.111.111.111;111.111.111.111;111.111.111.111;111.111.111.111;111.111.111.111;111.111.111.111
+timeout;;;;;;
+assert.earliest;;;;;;earliest
+assert.latest;;;;;;latest
+assert.entries;;;;;;entries

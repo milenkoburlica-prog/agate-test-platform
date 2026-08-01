@@ -1,0 +1,24 @@
+testCases:
+
+  - id: Verify_get_status_success_returns_200_returns_200
+    description: Verify successful operation of service status check
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_status
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200

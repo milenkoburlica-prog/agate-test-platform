@@ -1,0 +1,116 @@
+testCases:
+
+  - id: Verify_ordinationUpdate_success_returns_200_returns_200
+    description: Verify that the API returns a successful response for a valid updated-after parameter.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+  - id: Verify_ordinationUpdate_invalid_input_returns_400_returns_400
+    description: Verify that the API returns a 400 Bad Request response for an invalid updated-after parameter format.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_ordinationUpdate_missing_parameter_returns_400_returns_400
+    description: Verify that the API returns a 400 Bad Request response when the updated-after parameter is missing.
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: 400
+
+  - id: Verify_ordinationUpdate_response_contains_[*].contractPartnerNumber
+    description: Verify response contains field [*].contractPartnerNumber
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].contractPartnerNumber
+
+  - id: Verify_ordinationUpdate_response_contains_[*].lastChange
+    description: Verify response contains field [*].lastChange
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      apiEndpoint: "https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.get_clv_svsc_v1_updates_ordinations
+        endpoint: "{B[apiEndpoint]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: BODY
+        action: EXISTS
+        path: [*].lastChange

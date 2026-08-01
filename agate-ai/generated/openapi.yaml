@@ -1,0 +1,1102 @@
+openapi: 3.0.4
+info:
+  title: CLV SVSC
+  version: v1
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  description: A service for retrieving the ordinations from our contract partners and analyzing the data for our client devices (GINOs).
+  contact:
+    name: Jakob Graf
+    email: jakob.graf@svc.co.at
+tags:
+  - name: V1 Ordinations Resource
+  - name: V1 Updates Resource
+  - name: V1 Ginos Resource
+  - name: V1 Online Resource
+  - name: V1 Partner Logs Resource
+components:
+  parameters:
+    SerialNumberQuery:
+      name: serialNumber
+      in: query
+      schema:
+        description: The serial number of the gino.
+        pattern: "^[\\d\\*]*$"
+        type: string
+        example: "1234567890"
+    ClientIp:
+      name: clientIp
+      in: path
+      required: true
+      schema:
+        description: The IP address of the connection.
+        pattern: "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$"
+        type: string
+        example: 111.111.111.111
+    SerialNumber:
+      name: serialNumber
+      in: path
+      required: true
+      schema:
+        description: The serial number of the gino.
+        pattern: "^\\d{10}$"
+        type: string
+        example: "1234567890"
+    InfoType:
+      name: infoType
+      in: path
+      required: true
+      schema:
+        description: The info type to get infos for the gino.
+        pattern: ^config|boot|statistic$
+        type: string
+        example: config
+    Timeout:
+      name: timeout
+      in: query
+      schema:
+        format: int64
+        description: Timeout for request to backend service in milliseconds.
+        default: "2000"
+        maximum: 10000
+        minimum: 1
+        type: integer
+        example: 2000
+    ContractPartnerNumber:
+      name: contractPartnerNumber
+      in: path
+      required: true
+      schema:
+        description: The contract partner number to deliver ordinations for.
+        pattern: "^.{6}$"
+        type: string
+        example: "123456"
+    UpdatedAfter:
+      name: updated-after
+      in: query
+      schema:
+        description: Only retrieve relevant ordinations which are updated after the given date.
+        type: string
+  responses: {}
+  schemas:
+    ZonedDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10T12:15:50+02:00
+    GinoDto:
+      type: object
+      properties:
+        ginoIp:
+          description: The IP address of the Gino device
+          type: string
+          example: 127.0.0.1
+        name:
+          description: The name of the Gino device
+          type: string
+          example: Gino Entrance
+        group:
+          description: The group of the Gino device
+          type: string
+          example: Ordination
+        serialNumber:
+          description: The serial number of the Gino device
+          type: string
+          example: "1234567890"
+        status:
+          description: The status of the Gino device
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/GinoStatus"
+          example: ACTIVE
+        creationDate:
+          description: The creation date of the Gino device
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/LocalDateTime"
+          example: 2021-01-01T00:00:00
+        lastContact:
+          description: The last contact date of the Gino device
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/LocalDateTime"
+          example: 2021-01-01T00:00:00
+        fwVersion:
+          description: The firmware version of the Gino device
+          type: string
+          example: 1.0.0
+        macAddress:
+          description: The MAC address of the Gino device
+          type: string
+          example: 00:00:00:00:00:00
+        satelliteSerialNumber:
+          description: The serial number of the satellite connected to the Gino device. Returns null when no satellite is attached.
+          type: string
+          example: "1234567890"
+        accessDns:
+          description: The dns of the Gino device
+          type: string
+          example: gino.local
+    GinoStatus:
+      type: string
+      description: |
+        Status of the GINO device.
+        
+        The statuses `ACTIVE` and `INACTIVE` imply that the GINO has been released (i.e. it is not `NOT_RELEASED`).
+        The distinction between `ACTIVE` and `INACTIVE` is based solely on the timestamp of the last contact.
+        
+        * NOT_RELEASED - The GINO is registered in the system but has not yet been released for productive use.
+        * ACTIVE - The GINO is released and its last contact was within the last 31 minutes.
+        * INACTIVE - The GINO is released and its last contact was more than 31 minutes ago.
+      enum:
+        - NOT_RELEASED
+        - ACTIVE
+        - INACTIVE
+    LocalDateTime:
+      format: date-time
+      type: string
+    OnlineDto:
+      type: object
+      properties:
+        online:
+          description: The online status of the Gino device
+          type: boolean
+          example: true
+        pingLog:
+          description: The ping log of the Gino device
+          type: array
+          items:
+            type: string
+    UpdateOrdinationTuple:
+      required:
+        - contractPartnerNumber
+        - lastChange
+      type: object
+      properties:
+        contractPartnerNumber:
+          description: The contract partner number.
+          pattern: "^.{0,6}$"
+          type: string
+          example: "222222"
+        lastChange:
+          description: The last change of any relevant ordination of the contract partner.
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/ZonedDateTime"
+          example: 2025-01-01T00:00:00+02:00
+    AncestorDto:
+      type: object
+      properties:
+        contractPartnerNumber:
+          description: The contract partner number.
+          pattern: "^[0-9]$"
+          type: string
+          example: "999002"
+        ordinationNumber:
+          description: The ordination number.
+          pattern: "[0-9]{1,2}"
+          type: integer
+          example: 99
+    ProvisionDto:
+      type: object
+      properties:
+        provider:
+          description: The name of the provider.
+          type: string
+          example: SVC
+        redundancy:
+          description: If the connection is redundant.
+          type: boolean
+          example: true
+        connectionNumber:
+          description: The connection number.
+          type: string
+          example: "123456789"
+        creationDate:
+          description: The creation date of the connection.
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/ZonedDateTime"
+          example: 2025-11-11T11:11:11+02:00
+    OrdinationDto:
+      required:
+        - contractPartnerNumber
+        - ordinationNumber
+        - lastName
+      type: object
+      properties:
+        contractPartnerNumber:
+          description: The contract partner number.
+          pattern: "^[0-9]$"
+          type: string
+          example: "999000"
+        ordinationNumber:
+          description: The ordination number.
+          pattern: "[0-9]{1,2}"
+          type: integer
+          example: 99
+        ordinationActive:
+          description: The ordination active flag.
+          type: boolean
+          example: true
+        formOfAddress:
+          description: The form of address.
+          type: string
+          example: Frau
+        titlePrefix:
+          description: The title prefix.
+          type: string
+          example: Dr.
+        firstName:
+          description: The first name.
+          type: string
+          example: Michaela
+        lastName:
+          description: The last name.
+          type: string
+          example: Musterfrau
+        titleSuffix:
+          description: The title suffix.
+          type: string
+          example: MSc.
+        zip:
+          description: The zip code.
+          type: string
+          example: "1010"
+        city:
+          description: The city.
+          type: string
+          example: Wien
+        street:
+          description: The street.
+          type: string
+          example: Stephansplatz 1
+        predecessor:
+          description: The predecessor ordination.
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/AncestorDto"
+        successor:
+          description: The successor ordination.
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/AncestorDto"
+        clientIp:
+          description: The client IP address.
+          type: string
+          example: 111.111.111.111
+        provision:
+          description: The provision of this connection
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/ProvisionDto"
+        reservation:
+          description: The reservation of this connection
+          type: object
+          allOf:
+            - $ref: "#/components/schemas/ProvisionDto"
+    PartnerLogsDto:
+      type: object
+      properties:
+        earliest:
+          description: The earliest date of the logs
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/LocalDateTime"
+          example: 2021-01-01T00:00:00
+        latest:
+          description: The latest date of the logs
+          type: string
+          allOf:
+            - $ref: "#/components/schemas/LocalDateTime"
+          example: 2021-01-01T00:00:00
+        entries:
+          description: The entries of the logs
+          type: array
+          items:
+            type: string
+          example:
+            - 2021-01-01T00:00:00 - INFO - Log message
+  examples:
+    ClientIpNotFound:
+      summary: Resource Not Found (Client Ip)
+      description: No connection with this ip is found.
+      value:
+        type: urn:problem-type:belgif:resourceNotFound
+        href: https://www.belgif.be/specification/rest/api-guide/problems/resourceNotFound.html
+        title: Resource Not Found
+        status: 404
+        detail: No data found for /connection/111.111.111.1 with clientIp [111.111.111.1]
+        issues:
+          - in: path
+            name: clientIp
+            value: 111.111.111.1
+        instance: /clv-svsc/v1/connnection/111.111.111.1/gino/123456
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    SerialNumberNotFound:
+      summary: Resource Not Found (Serial Number)
+      description: No gino found with this serial number.
+      value:
+        type: urn:problem-type:belgif:resourceNotFound
+        href: https://www.belgif.be/specification/rest/api-guide/problems/resourceNotFound.html
+        title: Resource Not Found
+        status: 404
+        detail: No data found for /connection/111.111.111.1/gino/123456 with serialNumber [123456]
+        issues:
+          - in: path
+            name: serialNumber
+            value: "123456"
+        instance: /clv-svsc/v1/connnection/111.111.111.1/gino/123456
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ContractPartnerNumberNotFound:
+      summary: Resource Not Found (Contract Partner Number)
+      description: If you receive this error, the contract partner does not exist.
+      value:
+        type: urn:problem-type:belgif:resourceNotFound
+        href: https://www.belgif.be/specification/rest/api-guide/problems/resourceNotFound.html
+        title: Resource Not Found
+        status: 404
+        detail: No data found for /contract-partners/123457 with contractPartnerNumber [123457]
+        issues:
+          - in: path
+            name: contractPartnerNumber
+            value: 123457
+        instance: /clv-svsc/v1/contract-partners/123457
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorClientIp:
+      summary: Validation Error (Client Ip)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Invalid IP address ({regexp}).
+            in: path
+            name: clientIp
+            value: 111.111.111
+        instance: /clv-svsc/v1/connnection/111.111.111.X/gino/123456
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorSerialNumber:
+      summary: Validation Error (Serial Number)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Invalid serial number ({regexp}).
+            in: query
+            name: serialNumber
+            value: "111"
+        instance: /clv-svsc/v1/connnection/111.111.111.1/gino/111
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorInfoType:
+      summary: Validation Error (Info Type)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Info type not a valid format ({regexp})
+            in: path
+            name: infoType
+            value: random
+        instance: /clv-svsc/v1/connnection/111.111.111.1/gino/123456/infos/random
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorTimeoutTooSmall:
+      summary: Validation Error (Timeout Too Small)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Timeout must be greater than 0ms.
+            in: query
+            name: timeout
+            value: "-1"
+        instance: /clv-svsc/v1/connnection/111.111.111.1/partner-logs
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorTimeoutTooLarge:
+      summary: Validation Error (Timeout Too Large)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Timeout must be greater than 0ms.
+            in: query
+            name: timeout
+            value: "-1"
+        instance: /clv-svsc/v1/connnection/111.111.111.1/partner-logs
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    GatewayTimeout:
+      summary: Gateway Timeout
+      description: The request ran into a timeout error
+      value:
+        type: urn:problem-type:svc:gatewayTimeout
+        href: https://svcproxyp.ecard.sozialversicherung.at:9289/clv-svsc/problems/gatewayTimeout.html
+        status: 504
+        title: Gateway Timeout
+        detail: The upstream service did not respond within the configured timeout.
+        instance: /clv-svsc/v1/connnection/111.111.111.1/partner-logs
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorContractPartnerNumber:
+      summary: Validation Error (Contract Partner Number)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: Contract partner number is not a valid format (^.{0,6}$)
+            in: path
+            name: contractPartnerNumber
+            value: ABC1234
+        instance: /clv-svsc/v1/contract-partners/1111111/ordinations
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+    ValidationErrorUpdatedAfter:
+      summary: Validation Error (Updated After)
+      description: The request contains invalid data
+      value:
+        type: urn:problem-type:belgif:badRequest
+        href: https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html
+        title: Bad Request
+        status: 400
+        detail: The input message is incorrect
+        issues:
+          - type: urn:problem-type:belgif:input-validation:schemaViolation
+            href: https://www.belgif.be/specification/rest/api-guide/issues/schemaViolation.html
+            title: Input isn't valid with respect to schema
+            detail: The given datetime is not a valid datetime (2025-01-01T01:00:00+02:00) with timezone offset by ISO 8601.
+            in: path
+            name: updated-after
+            value: 2014.01.01 17:48
+        instance: /clv-svsc/v1/updates/ordinations
+        transactionId: 1d7a42d1-d7c4-4a09-80cb-a812f66e538c
+paths:
+  /clv-svsc/alive:
+    $ref: "./common-openapi-files/svc-alive-v1.yaml#/paths/~1alive"
+  /clv-svsc/v1/alive:
+    $ref: "./common-openapi-files/svc-alive-v1.yaml#/paths/~1alive"
+  /clv-svsc/v1/connections/{clientIp}/ginos:
+    get:
+      summary: Get all ginos for a given connection
+      description: |
+        ## Get all ginos for a given connection 
+
+        This operation lists all ginos for a given connection. 
+
+        ### Validations
+        * The `clientIp` parameter must be a valid IP-address
+        * The `serialNumber` parameter must be a valid 10-digit number 
+
+        ### Returns
+        * **200 OK** - The request was successful:
+          * The response body contains a list of ginos.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - The client ip was not found. 
+
+        ### Notes
+        * It is possible that the gino list is empty, if no gino is connected on the connection.
+      operationId: listGinos
+      tags:
+        - V1 Ginos Resource
+      parameters:
+        - $ref: "#/components/parameters/ClientIp"
+        - $ref: "#/components/parameters/SerialNumberQuery"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GinoDto"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorClientIp:
+                  $ref: "#/components/examples/ValidationErrorClientIp"
+                ValidationErrorSerialNumber:
+                  $ref: "#/components/examples/ValidationErrorSerialNumber"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ClientIpNotFound:
+                  $ref: "#/components/examples/ClientIpNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+  /clv-svsc/v1/connections/{clientIp}/ginos/{serialNumber}:
+    get:
+      summary: Get gino for a given connection and serial number
+      description: |
+        ## Get a ginos for a given connection and serial number 
+
+        This operation gets a gino for a given connection and serial number. 
+
+        ### Validations
+        * The `clientIp` parameter must be a valid IP-address
+        * The `serialNumber` parameter must be a valid 10-digit number 
+
+        ### Returns
+        * **200 OK** - The request was successful:
+          * The response body contains a gino.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - The client ip or serial number was not found.
+      operationId: getGino
+      tags:
+        - V1 Ginos Resource
+      parameters:
+        - $ref: "#/components/parameters/ClientIp"
+        - $ref: "#/components/parameters/SerialNumber"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GinoDto"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorClientIp:
+                  $ref: "#/components/examples/ValidationErrorClientIp"
+                ValidationErrorSerialNumber:
+                  $ref: "#/components/examples/ValidationErrorSerialNumber"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ClientIpNotFound:
+                  $ref: "#/components/examples/ClientIpNotFound"
+                SerialNumberNotFound:
+                  $ref: "#/components/examples/SerialNumberNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+  /clv-svsc/v1/connections/{clientIp}/ginos/{serialNumber}/infos/{infoType}:
+    get:
+      summary: Get info for a given gino
+      description: |
+        ## Get info for a given gino. 
+
+        This operation gets the info for a given gino. 
+
+        ### Validations
+        * The `clientIp` parameter must be a valid IP-address
+        * The `serialNumber` parameter must be a valid 10-digit number
+        * The `infoType` parameter must be in {config, boot, statistic} 
+
+        ### Returns
+        * **200 OK** - The request was successful:
+          * The response body contains the info for a gino.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - The client ip or serial number was not found. 
+
+        ### Notes
+        * The information is a key-value pair and can be one of the following:
+        * config
+          * kalveAuthUrl
+          * kalveDownloadUrl
+          * kalveFwUrl
+          * kalveNoAuthUrl
+          * ipType
+        * boot
+          * lastBoot
+        * statistic
+          * adpuBasisLifetime
+          * adpuBasisToday
+          * adpuBasisYesterday
+          * adpuNfcLifetime
+          * adpuNfcToday
+          * adpuNfcYesterday
+          * adpuSatelliteLifetime
+          * adpuSatelliteToday
+          * adpuSatelliteYesterday
+      operationId: getGinoInfo
+      tags:
+        - V1 Ginos Resource
+      parameters:
+        - $ref: "#/components/parameters/ClientIp"
+        - $ref: "#/components/parameters/SerialNumber"
+        - $ref: "#/components/parameters/InfoType"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorClientIp:
+                  $ref: "#/components/examples/ValidationErrorClientIp"
+                ValidationErrorSerialNumber:
+                  $ref: "#/components/examples/ValidationErrorSerialNumber"
+                ValidationErrorInfoType:
+                  $ref: "#/components/examples/ValidationErrorInfoType"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ClientIpNotFound:
+                  $ref: "#/components/examples/ClientIpNotFound"
+                SerialNumberNotFound:
+                  $ref: "#/components/examples/SerialNumberNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+  /clv-svsc/v1/connections/{clientIp}/online:
+    get:
+      summary: Check if a router is online
+      description: |
+        ## Check if a router is online. 
+
+        This operation checks if a router is online. 
+
+        ### Validations
+        * The `clientIp` parameter must be a valid IP-address
+        ### Returns
+        * **200 OK** - The request was successful:
+          * The response body contains the online status.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - The client ip was not found. 
+
+        ### Notes
+        * The online status is a boolean value.
+        * The online status is determined with a ping request to the router.
+        * The ping log is the return value from the command.
+      operationId: checkOnline
+      tags:
+        - V1 Online Resource
+      parameters:
+        - $ref: "#/components/parameters/ClientIp"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnlineDto"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorClientIp:
+                  $ref: "#/components/examples/ValidationErrorClientIp"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ClientIpNotFound:
+                  $ref: "#/components/examples/ClientIpNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+  /clv-svsc/v1/connections/{clientIp}/partner-logs:
+    get:
+      summary: Get the partner logs for a connection
+      description: |
+        ## Get the partner logs for a connection. 
+        
+        This operation retrieves all partner logs for a given connection. 
+        
+        ### Validations
+        * The `clientIp` parameter must be a valid IP-address
+        * The `timeout` parameter must be a integer
+        ### Returns
+        * **200 OK** - The request was successful:
+        * The response body contains a list with log entries.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - The client ip was not found. 
+        
+        ### Notes
+        * Partner logs are taken into account if the client ip matches and the log contains certain keywords.
+      operationId: getPartnerLogs
+      tags:
+        - V1 Partner Logs Resource
+      parameters:
+        - $ref: "#/components/parameters/ClientIp"
+        - $ref: "#/components/parameters/Timeout"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerLogsDto"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorClientIp:
+                  $ref: "#/components/examples/ValidationErrorClientIp"
+                ValidationErrorTimeoutTooSmall:
+                  $ref: "#/components/examples/ValidationErrorTimeoutTooSmall"
+                ValidationErrorTimeoutTooLarge:
+                  $ref: "#/components/examples/ValidationErrorTimeoutTooLarge"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ClientIpNotFound:
+                  $ref: "#/components/examples/ClientIpNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+        "504":
+          description: Gateway Timeout
+          content:
+            application/problem+json:
+              examples:
+                GatewayTimeout:
+                  $ref: "#/components/examples/GatewayTimeout"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/Problem"
+  /clv-svsc/v1/contract-partners/{contractPartnerNumber}/ordinations:
+    get:
+      summary: List Ordinations of Contract Partner
+      description: |
+        ## List Ordinations of Contract Partner 
+        
+        This operation retrieves all ordinations associated with a given contract partner number. 
+        
+        ### Validations
+        * The contract partner number must be a **max. 6-character string** 
+        
+        ### Returns
+        * **200 OK** - If the contract partner number exists:
+          * The response body contains a list of all ordinations for the contract partner.
+        * **400 Bad Request** - If the request contains invalid data.
+        * **404 Not Found** - If the contract partner number does not exist. 
+        
+        ### Notes
+        * Normally, there is exactly **one ordination** per contract partner.
+        * The fields:
+          * `successor.*` are included **only if** there is a **successor** ordination.
+          * `predecessor.*` are included **only if** there is a **predecessor** ordination.
+        * The field:
+          * `clientIp` is included **only if** there is a **connection** assigned to the ordination.
+          * `provision` is returned **only if** the ordination is **provisioned**.
+          * `reservation` is returned **only if** the ordination has a **reservation**.
+        * Fields are **only returned** if their values are **set** (i.e., not `null`).
+      operationId: listOrdinations
+      tags:
+        - V1 Ordinations Resource
+      parameters:
+        - $ref: "#/components/parameters/ContractPartnerNumber"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              examples:
+                listOrdinationsDefault:
+                  summary: Not provisioned
+                  description: |
+                    In this scenario, we observe an **ordination** that is not provisioned.
+                    We can determine this based on the following conditions: 
+
+                    1. No detailed information about the provision is delivered.
+                       The following fields are `null`:
+                       - `provision` 
+
+                    2. The field `clientIp` is set, if one is already registered for the ordination.
+                  value:
+                    - contractPartnerNumber: "999000"
+                      ordinationNumber: 99
+                      ordinationActive: true
+                      formOfAddress: Frau
+                      titlePrefix: Dr.
+                      firstName: Manuela
+                      lastName: Musterfrau
+                      titleSuffix: MSc.
+                      zip: "1010"
+                      city: Wien
+                      street: Stephansplatz 1
+                      clientIp: 111.111.111.111
+                listOrdinationsProvisioned:
+                  summary: Provisioned
+                  description: |
+                    In this scenario, we observe an **ordination** that is provisioned.
+                    We can determine this based on the following conditions: 
+
+                    1. Detailed information about the provision is delivered.
+                       The following fields are set:
+                       - `provision` 
+
+                    2. The field `clientIp` is set.
+                  value:
+                    - contractPartnerNumber: "999000"
+                      ordinationNumber: 99
+                      ordinationActive: true
+                      formOfAddress: Frau
+                      titlePrefix: Dr.
+                      firstName: Manuela
+                      lastName: Musterfrau
+                      titleSuffix: MSc.
+                      zip: "1010"
+                      city: Wien
+                      street: Stephansplatz 1
+                      clientIp: 111.111.111.111
+                      provision:
+                        provider: SVC
+                        redundancy: true
+                        connectionNumber: "123456789"
+                        creationDate: 2025-11-11T11:11:11
+                listOrdinationsReserved:
+                  summary: Reserved
+                  description: |
+                    In this scenario, we observe an **ordination** that is provisioned.
+                    We can determine this based on the following conditions: 
+
+                    1. Detailed information about the provision is delivered.
+                       The following fields are set:
+                       - `provision` 
+
+                    2. The field `clientIp` is set.
+                  value:
+                    - contractPartnerNumber: "999000"
+                      ordinationNumber: 99
+                      ordinationActive: true
+                      formOfAddress: Frau
+                      titlePrefix: Dr.
+                      firstName: Manuela
+                      lastName: Musterfrau
+                      titleSuffix: MSc.
+                      zip: "1010"
+                      city: Wien
+                      street: Stephansplatz 1
+                      clientIp: 111.111.111.111
+                      provision:
+                        provider: SVC
+                        redundancy: true
+                        connectionNumber: "123456789"
+                        creationDate: 2025-11-11T11:11:11
+                      reservation:
+                        provider: A1
+                        redundancy: false
+                        connectionNumber: ABC-123
+                        creationDate: 2026-11-11T11:11:11
+                listOrdinationsAncestors:
+                  summary: Ancestors
+                  description: |
+                    In this scenario, we observe an **ordination** that has been **moved**.
+                    We can determine this based on the following conditions: 
+
+                    1. The fields `successor` and `predecessor` are set.
+                       The following fields are set on the new ordination:
+                       - `predecessor`
+                       The following fields are set on the old ordination:
+                       - `successor` 
+
+                    2. The field `clientIp` and `provision` is set on the new ordination.
+                    3. There are some combinations of `predecessor` and `successor` which describes different scenarios
+                       - `successor` and `clientIp` is set (Ordination is ready to be moved to `successor`).
+                       - `predecessor` and `clientIp` is set (Ordination was moved from `predecessor`).
+                       - `successor` is set with different `contractPartnerNumber` (`successor` took over the ordination)
+                       - `predecessor` is set with different `contractPartnerNumber` (Ordination was taken over from `predecessor`)
+                  value: |
+                    [
+                        {
+                            "contractPartnerNumber": "999000",
+                            "ordinationNumber": 99,
+                            "ordinationActive": true,
+                            "formOfAddress": "Frau",
+                            "titlePrefix": "Dr.",
+                            "firstName": "Manuela",
+                            "lastName": "Musterfrau",
+                            "titleSuffix": "MSc.",
+                            "zip": "1010",
+                            "city": "Wien",
+                            "street": "Stephansplatz 2",
+                            "predecessor": {
+                                "contractPartnerNumber": "999000",
+                                "ordinationNumber": 99
+                            },
+                            "clientIp": "111.111.111.111",
+                            "provision": {
+                                "provider": "SVC",
+                                "redundancy": true,
+                                "connectionNumber": "123456789",
+                                "creationDate": "2025-11-11T11:11:11"
+                            },
+                            "reservation": {
+                                "provider": "A1",
+                                "redundancy": false,
+                                "connectionNumber": "ABC-123",
+                                "creationDate": "2026-11-11T11:11:11"
+                            }
+                        },
+                        {
+                            "contractPartnerNumber": "999000",
+                            "ordinationNumber": 99,
+                            "ordinationActive": false,
+                            "formOfAddress": "Frau",
+                            "titlePrefix": "Dr.",
+                            "firstName": "Manuela",
+                            "lastName": "Musterfrau",
+                            "titleSuffix": "MSc.",
+                            "zip": "1010",
+                            "city": "Wien",
+                            "street": "Stephansplatz 1",
+                            "successor": {
+                                "contractPartnerNumber": "999000",
+                                "ordinationNumber": 99
+                            }
+                        }
+                    ]
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrdinationDto"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorContractPartnerNumber:
+                  $ref: "#/components/examples/ValidationErrorContractPartnerNumber"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
+        "404":
+          description: Resource Not Found
+          content:
+            application/problem+json:
+              examples:
+                ContractPartnerNumberNotFound:
+                  $ref: "#/components/examples/ContractPartnerNumberNotFound"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/ResourceNotFoundProblem"
+  /clv-svsc/v1/updates/ordinations:
+    get:
+      summary: Get Contract Partners with Updated Relevant Ordinations
+      description: |
+        ## Get Contract Partners with Updated Relevant Ordinations 
+        
+        This operation retrieves all contract partners for whom a relevant ordination has been updated after the specified date. 
+        
+        ### Validations
+        * The `updated-after` parameter must be a valid ISO-8601 date-time string **with timezone offset**, e.g.: `2025-01-01T01:00:00+02:00` 
+        
+        ### Returns
+        * **200 OK** - The request was successful:
+          * The response body contains a list of contract partner numbers, each with the latest relevant change timestamp.
+        * **400 Bad Request** - If the request contains invalid data. 
+        
+        ### Notes
+        * It is possible that a contract partner number is returned **even though no relevant change occurred**.
+          * For example: A non-relevant field was changed on the server.
+        * All **ordinations** are considered relevant.
+        * Only ordinations that have changed **after** the `updated-after` date are considered.
+        * Newly inserted ordinations or provisions are relevant, as well as changes for the ordination or provision.
+        * If the `updated-after` parameter is **not provided**, a default value is used:
+          * **Yesterday at 00:00 (server time)**.
+      operationId: ordinationUpdate
+      tags:
+        - V1 Updates Resource
+      parameters:
+        - $ref: "#/components/parameters/UpdatedAfter"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvSystem"
+        - $ref: "./common-openapi-files/common-v1.yaml#/components/parameters/StdHeaderSvTxId"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              examples:
+                updatedOrdinationsDefault:
+                  summary: Updated Ordinations Default
+                  description: |
+                    In this scenario, we observe one possibly updated **ordination** for the contract partner.
+                    We can determine this based on the following conditions: 
+
+                    1. An entry for the contract partner is included in the list.
+                  value: |
+                    [
+                        {
+                            "contractPartnerNumber": "999000",
+                            "lastChange": "2025-11-11T11:11:11+02:00",
+                        }
+                    ]
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UpdateOrdinationTuple"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                ValidationErrorUpdatedAfter:
+                  $ref: "#/components/examples/ValidationErrorUpdatedAfter"
+              schema:
+                $ref: "./common-openapi-files/problem-v1.yaml#/components/schemas/InputValidationProblem"
