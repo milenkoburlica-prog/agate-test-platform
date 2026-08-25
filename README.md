@@ -10,7 +10,7 @@ A single AGATE test can combine:
 
 within the same execution flow — using a human-readable YAML DSL.
 
-Instead of assembling separate tools, libraries and scripts for each technology, AGATE models them as **first-class test steps within one unified test execution model**.
+Instead of assembling separate tools, libraries and scripts for each technology, AGATE models supported technologies as **first-class test steps within one unified execution model**.
 
 ---
 
@@ -40,13 +40,13 @@ REPORT
 
 For example:
 
-1. Create an entity through a REST API
-2. Verify the persisted data using SQL
-3. Trigger processing through a SOAP service
-4. Wait for asynchronous processing
-5. Validate the application state in OpenShift
-6. Execute a command-line verification
-7. Verify the final result in the GUI
+1. Create an entity through a REST API.
+2. Verify the persisted data using SQL.
+3. Trigger processing through a SOAP service.
+4. Wait for asynchronous processing.
+5. Validate the application state in OpenShift.
+6. Execute a command-line verification.
+7. Verify the final result in the GUI.
 
 **AGATE executes all of these steps as one test case and produces one consolidated test result.**
 
@@ -58,20 +58,22 @@ This is the core idea behind AGATE:
 
 # ✨ Key Features
 
-* ✅ Human-readable, no-code YAML test definitions
-* ✅ Cross-technology test orchestration
-* ✅ REST, SOAP, SQL, CMD and OpenShift as first-class test steps
-* ✅ Reusable business and technical test components
-* ✅ Data-driven testing
-* ✅ Environment-independent test definitions
-* ✅ Shared variables and data between different test engines
-* ✅ Detailed execution logging and HTML reports
-* ✅ CI/CD friendly execution
-* ✅ Extensible engine architecture
-* 🚧 GUI automation
-* 🚧 OpenAPI-driven test generation and contract analysis
-* 🚧 AI-assisted test generation and maintenance
-* 🔄 Migration path from Tricentis Tosca
+- ✅ Human-readable, no-code YAML test definitions
+- ✅ Cross-technology test orchestration
+- ✅ REST, SOAP, SQL, CMD and OpenShift as first-class test steps
+- ✅ Reusable business and technical test components
+- ✅ Data-driven testing
+- ✅ Environment-independent test definitions
+- ✅ Shared variables and data between different test engines
+- ✅ Detailed execution logging and HTML reports
+- ✅ CI/CD-friendly execution
+- ✅ Extensible engine architecture
+- ✅ Deterministic OpenAPI parsing and contract modeling
+- ✅ OpenAPI change detection and impact analysis
+- 🚧 GUI automation
+- 🚧 OpenAPI-driven test generation
+- 🚧 AI-assisted test generation and maintenance
+- 🔄 Migration path from Tricentis Tosca
 
 ---
 
@@ -152,14 +154,23 @@ The important part is that **different technologies participate in the same busi
 
 # 🏗️ Project Architecture
 
+AGATE separates deterministic test execution, deterministic API contract analysis, optional AI-assisted functionality and migration tooling into dedicated components.
+
 ```text
-                    AGATE Test Platform
-                            │
-          ┌─────────────────┼──────────────────┐
-          │                 │                  │
-          ▼                 ▼                  ▼
-    agate-server         agate-ai       agate-tosca-migrator
-          │
+                             AGATE Test Platform
+                                     │
+          ┌──────────────────────────┼──────────────────────────┐
+          │                          │                          │
+          ▼                          ▼                          ▼
+    agate-server               agate-openapi                agate-ai
+          │                          │                          │
+          │                    OpenAPI Contract             AI-assisted
+          │                       Analysis                  Workflows
+          │                          │
+          │                ┌─────────┼─────────┐
+          │                ▼         ▼         ▼
+          │             Parsing    Change     Impact
+          │             & Model   Detection  Analysis
           │
           ▼
      Execution Core
@@ -169,15 +180,27 @@ The important part is that **different technologies participate in the same busi
    REST  SOAP   SQL   CMD    OC   WAIT   GUI
           │
           ▼
-      Test Report
+     Unified Report
 
 
-    agate-client
-    (under development)
-          │
-          ▼
-   Web Management UI
+                    Additional Components
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+       agate-tosca-migrator       agate-client
+                 │                (under development)
+                 │                     │
+                 ▼                     ▼
+          Tosca → AGATE DSL      Web Management UI
 ```
+
+A central architectural principle is:
+
+> **Deterministic where possible. AI where useful.**
+
+`agate-server` executes tests deterministically.  
+`agate-openapi` analyzes API contracts deterministically.  
+`agate-ai` adds optional AI-assisted workflows on top of those deterministic foundations.
 
 ---
 
@@ -191,32 +214,32 @@ It loads AGATE YAML test suites, resolves configuration and test data, executes 
 
 ### Core Capabilities
 
-* YAML-based AGATE DSL
-* Cross-technology test execution
-* Reusable test components
-* Shared execution context
-* Environment configuration
-* User-specific configuration
-* Data-driven tests
-* Assertions
-* Detailed execution logging
-* HTML reports
-* CI/CD integration
+- YAML-based AGATE DSL
+- Cross-technology test execution
+- Reusable test components
+- Shared execution context
+- Environment configuration
+- User-specific configuration
+- Data-driven tests
+- Assertions
+- Detailed execution logging
+- HTML reports
+- CI/CD integration
 
 ### Native Test Engines
 
-| Engine       | Purpose                                    | AGATE Support         |
-| ------------ | ------------------------------------------ | --------------------- |
-| 🌐 REST      | REST API execution and validation          | **Native**            |
-| 🏢 SOAP      | SOAP service execution and validation      | **Native**            |
-| 🗄️ SQL      | Database queries and assertions            | **Native**            |
-| 🖥️ CMD      | Command-line execution                     | **Native**            |
-| ☸️ OpenShift | OpenShift CLI operations and validation    | **Native**            |
-| ⏳ WAIT       | Synchronization and asynchronous workflows | **Native**            |
-| 📑 JSON      | JSON processing and validation             | **Native**            |
-| 📄 PDF       | PDF validation                             | **Native**            |
-| 📦 BUFFER    | Shared runtime data / value handling       | **Native**            |
-| 🌐 GUI       | Browser-based UI automation                | **Under Development** |
+| Engine | Purpose | AGATE Support |
+| --- | --- | --- |
+| 🌐 REST | REST API execution and validation | **Native** |
+| 🏢 SOAP | SOAP service execution and validation | **Native** |
+| 🗄️ SQL | Database queries and assertions | **Native** |
+| 🖥️ CMD | Command-line execution | **Native** |
+| ☸️ OpenShift | OpenShift CLI operations and validation | **Native** |
+| ⏳ WAIT | Synchronization and asynchronous workflows | **Native** |
+| 📑 JSON | JSON processing and validation | **Native** |
+| 📄 PDF | PDF validation | **Native** |
+| 📦 BUFFER | Shared runtime data / value handling | **Native** |
+| 🌐 GUI | Browser-based UI automation | **Under Development** |
 
 ### Why Native Engines Matter
 
@@ -266,6 +289,155 @@ OpenShift validation
 
 ---
 
+## 2️⃣ AGATE OpenAPI
+
+`agate-openapi` is the deterministic API contract analysis component of AGATE.
+
+Its purpose is to transform OpenAPI YAML or JSON specifications into an internal AGATE model that can be used for analysis, change detection, impact analysis and later test generation.
+
+### Core Capabilities
+
+- OpenAPI YAML/JSON loading
+- Deterministic parsing
+- `$ref` resolution
+- Endpoint and operation extraction
+- HTTP method analysis
+- Parameter analysis
+- Request-body schema analysis
+- Response schema analysis
+- Metadata extraction
+- Validation constraint extraction
+- OpenAPI contract change detection
+- Breaking-change detection
+- Test impact analysis
+- CLI-based inspection
+
+The processing model is intentionally deterministic:
+
+```text
+OpenAPI Specification
+        │
+        ▼
+   agate-openapi
+        │
+        ├── Parse & Resolve $ref
+        │
+        ├── Build AGATE API Model
+        │
+        ├── Detect Contract Changes
+        │
+        └── Analyze Test Impact
+        │
+        ▼
+Deterministic Contract Knowledge
+```
+
+The goal is to provide a reliable technical foundation before optional AI functionality is introduced.
+
+### Planned Direction
+
+```text
+OpenAPI
+   │
+   ▼
+API Contract
+   │
+   ▼
+Change Detection
+   │
+   ▼
+Impact Analysis
+   │
+   ▼
+Business Contract
+   │
+   ▼
+Test Contract
+   │
+   ▼
+Generated / Maintained AGATE Tests
+```
+
+This is the foundation for AGATE's longer-term direction toward **contract-aware enterprise test automation**.
+
+---
+
+## 3️⃣ AGATE AI
+
+### Under Development
+
+`agate-ai` is the optional AI-assisted layer of AGATE.
+
+It explores the use of LLMs for tasks where probabilistic assistance can provide value without making deterministic execution dependent on AI.
+
+Planned and experimental capabilities include:
+
+- AI-assisted test scenario generation
+- OpenAPI-based test generation
+- Test data generation
+- Coverage analysis
+- Business contract generation
+- Test contract generation
+- Test maintenance assistance
+- Prompt management
+- Local LLM support
+- Ollama integration
+
+The architectural principle is:
+
+> **OpenAPI parsing, contract modeling, change detection and impact analysis should not require an LLM.**
+
+AI is used as an assistant on top of deterministic AGATE models.
+
+---
+
+## 4️⃣ AGATE Tosca Migrator
+
+### Available on Request
+
+Many organizations have invested heavily in **Tricentis Tosca** test assets.
+
+AGATE provides a migration approach for transforming existing Tosca test structures into the native AGATE DSL.
+
+```text
+Existing Tosca Tests
+        │
+        ▼
+AGATE Tosca Migrator
+        │
+        ▼
+     AGATE DSL
+        │
+        ▼
+Version-controlled
+open test assets
+```
+
+The objective is to help organizations preserve existing test investments while transitioning toward an open and vendor-independent test automation architecture.
+
+The Tosca migration component is currently offered as a **customized migration service**.
+
+---
+
+## 5️⃣ AGATE Client
+
+### Under Development
+
+`agate-client` is intended to provide a web-based interface for managing:
+
+- Projects
+- Test suites
+- Test executions
+- Test data
+- Environments
+- Reports
+- OpenAPI analysis
+- AI-assisted workflows
+
+The AGATE Server remains the execution core, allowing tests to run independently from the web interface and making command-line and CI/CD execution possible.
+
+---
+
 # 🔁 Reusable Business Steps
 
 AGATE separates reusable technical operations from business test scenarios.
@@ -298,11 +470,11 @@ The same test scenario can therefore execute against multiple datasets without d
 
 This is particularly useful for:
 
-* positive and negative test cases
-* boundary-value testing
-* different users and roles
-* different environments
-* regression suites
+- Positive and negative test cases
+- Boundary-value testing
+- Different users and roles
+- Different environments
+- Regression suites
 
 ---
 
@@ -330,114 +502,14 @@ AGATE generates execution reports for test runs.
 
 Reports provide information about:
 
-* executed test cases
-* individual test steps
-* execution status
-* assertion results
-* errors
-* execution timing
+- Executed test cases
+- Individual test steps
+- Execution status
+- Assertion results
+- Errors
+- Execution timing
 
 The goal is to provide one consolidated view even when a test crosses several technical layers.
-
----
-
-# 🔄 AGATE Tosca Migrator
-
-### Available on Request
-
-Many organizations have invested heavily in **Tricentis Tosca** test assets.
-
-AGATE provides a migration approach for transforming existing Tosca test structures into the native AGATE DSL.
-
-```text
-Existing Tosca Tests
-        │
-        ▼
-AGATE Tosca Migrator
-        │
-        ▼
-     AGATE DSL
-        │
-        ▼
-Version-controlled
-open test assets
-```
-
-The objective is to help organizations preserve existing test investments while transitioning toward an open and vendor-independent test automation architecture.
-
-The Tosca migration component is currently offered as a **customized migration service**.
-
----
-
-# 🧠 AGATE OpenAPI & AI
-
-### Under Development
-
-AGATE is being extended beyond test execution toward **contract-aware test automation**.
-
-The OpenAPI component is designed to analyze API specifications deterministically and build an internal AGATE representation of the API contract.
-
-The planned processing chain is:
-
-```text
-OpenAPI Specification
-        │
-        ▼
-Deterministic Parser
-        │
-        ▼
-API Contract Model
-        │
-        ▼
-Change Detection
-        │
-        ▼
-Impact Analysis
-        │
-        ▼
-Test Generation / Maintenance
-        │
-        ▼
-Executable AGATE Tests
-```
-
-Planned and experimental capabilities include:
-
-* OpenAPI YAML/JSON parsing
-* `$ref` resolution
-* Endpoint and parameter analysis
-* Request and response schema analysis
-* API contract change detection
-* Breaking-change detection
-* Test impact analysis
-* OpenAPI-based test generation
-* AI-assisted test generation
-* AI-assisted test maintenance
-* Local LLM support
-* Ollama integration
-
-A central design principle is to keep deterministic contract analysis separate from optional AI-assisted functionality.
-
-This makes it possible to use AI where it provides value without making the test execution itself dependent on an LLM.
-
----
-
-# 🖥️ AGATE Client
-
-### Under Development
-
-`agate-client` is intended to provide a web-based interface for managing:
-
-* projects
-* test suites
-* test executions
-* test data
-* environments
-* reports
-* OpenAPI analysis
-* AI-assisted workflows
-
-The AGATE Server remains the execution core, allowing tests to run independently from the web interface and making command-line and CI/CD execution possible.
 
 ---
 
@@ -447,31 +519,32 @@ Several excellent open-source testing frameworks already exist.
 
 AGATE does not attempt to replace every specialized testing tool.
 
-Instead, its focus is **cross-technology enterprise test orchestration**.
+Instead, its focus is **cross-technology enterprise test orchestration combined with deterministic contract analysis**.
 
-| Capability                | AGATE                  | Karate                | Robot Framework             | Step CI      | Tavern       | Schemathesis          |
-| ------------------------- | ---------------------- | --------------------- | --------------------------- | ------------ | ------------ | --------------------- |
-| REST                      | 🟢 **Native**          | 🟢 Native             | 🟡 Library                  | 🟢 Native    | 🟢 Native    | 🟢 Native             |
-| SOAP                      | 🟢 **Native**          | 🟢 Native             | 🟡 Library                  | 🟢 Native    | 🟡 Extension | 🔴                    |
-| SQL / Database            | 🟢 **Native**          | 🟡 Integration        | 🟡 Library                  | 🔴           | 🟡 Python    | 🔴                    |
-| CMD / Shell               | 🟢 **Native**          | 🟡 Integration        | 🟢 Process Library          | 🔴           | 🟡 Python    | 🔴                    |
-| OpenShift                 | 🟢 **Native**          | 🟡 Custom Integration | 🟡 Library / CLI            | 🔴           | 🔴           | 🔴                    |
-| GUI / Browser             | 🚧                     | 🟢 Native             | 🟡 Browser/Selenium Library | 🔴           | 🔴           | 🔴                    |
-| Cross-technology scenario | 🟢 **Core concept**    | 🟢 Possible           | 🟢 Possible                 | 🟡 API focus | 🟡 API focus | 🔴 API focus          |
-| Reusable business steps   | 🟢 **Native**          | 🟢                    | 🟢 Keywords                 | 🟢           | 🟡           | 🔴 Different approach |
-| Data-driven testing       | 🟢 **Native**          | 🟢                    | 🟢                          | 🟢           | 🟢           | 🟢 Generated data     |
-| OpenAPI-driven generation | 🚧                     | 🟡 Ecosystem          | 🟡 Extensions               | 🟡           | 🔴           | 🟢 **Core strength**  |
-| Contract change analysis  | 🚧 **AGATE OpenAPI**   | 🔴 Not core           | 🔴 Not core                 | 🔴           | 🔴           | 🟡 Contract focus     |
-| Change → impacted tests   | 🚧 **AGATE direction** | 🔴                    | 🔴                          | 🔴           | 🔴           | 🟡 Different approach |
-| Tosca migration           | 🟢 **AGATE Migrator**  | 🔴                    | 🔴                          | 🔴           | 🔴           | 🔴                    |
-| Local LLM integration     | 🚧 **Ollama**          | 🔴 Not core           | 🟡 Extensible               | 🔴           | 🔴           | 🔴                    |
+| Capability | AGATE | Karate | Robot Framework | Step CI | Tavern | Schemathesis |
+| --- | --- | --- | --- | --- | --- | --- |
+| REST | 🟢 **Native** | 🟢 Native | 🟡 Library | 🟢 Native | 🟢 Native | 🟢 Native |
+| SOAP | 🟢 **Native** | 🟢 Native | 🟡 Library | 🟢 Native | 🟡 Extension | 🔴 |
+| SQL / Database | 🟢 **Native** | 🟡 Integration | 🟡 Library | 🔴 | 🟡 Python | 🔴 |
+| CMD / Shell | 🟢 **Native** | 🟡 Integration | 🟢 Process Library | 🔴 | 🟡 Python | 🔴 |
+| OpenShift | 🟢 **Native** | 🟡 Custom Integration | 🟡 Library / CLI | 🔴 | 🔴 | 🔴 |
+| GUI / Browser | 🚧 | 🟢 Native | 🟡 Browser/Selenium Library | 🔴 | 🔴 | 🔴 |
+| Cross-technology scenario | 🟢 **Core concept** | 🟢 Possible | 🟢 Possible | 🟡 API focus | 🟡 API focus | 🔴 API focus |
+| Reusable business steps | 🟢 **Native** | 🟢 | 🟢 Keywords | 🟢 | 🟡 | 🔴 Different approach |
+| Data-driven testing | 🟢 **Native** | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 Generated data |
+| Deterministic OpenAPI model | 🟢 **agate-openapi** | 🟡 Ecosystem | 🟡 Extensions | 🟡 | 🔴 | 🟢 Core API-contract focus |
+| OpenAPI-driven generation | 🚧 | 🟡 Ecosystem | 🟡 Extensions | 🟡 | 🔴 | 🟢 **Core strength** |
+| Contract change analysis | 🟢 **agate-openapi** | 🔴 Not core | 🔴 Not core | 🔴 | 🔴 | 🟡 Contract focus |
+| Change → impacted tests | 🟢 **AGATE Impact Analysis** | 🔴 | 🔴 | 🔴 | 🔴 | 🟡 Different approach |
+| Tosca migration | 🟢 **AGATE Migrator** | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Local LLM integration | 🚧 **Ollama** | 🔴 Not core | 🟡 Extensible | 🔴 | 🔴 | 🔴 |
 
-**Legend**
+### Legend
 
-* 🟢 Native / first-class capability or standard component
-* 🟡 Available through libraries, extensions or custom integration
-* 🔴 Not a primary capability
-* 🚧 Under development
+- 🟢 Native / first-class capability or standard AGATE component
+- 🟡 Available through libraries, extensions or custom integration
+- 🔴 Not a primary capability
+- 🚧 Under development
 
 > **Note:** A library-based approach does not necessarily mean that testers have to write code. Frameworks such as Robot Framework provide a large ecosystem of ready-to-use libraries and keywords. AGATE takes a more opinionated approach by modeling its supported technologies directly as first-class steps of one unified execution model.
 
@@ -506,7 +579,7 @@ AGATE
 Enterprise Test Orchestration
           │
           ▼
-     Business Test
+      Business Test
           │
     ┌─────┼─────┬─────┬─────┐
     ▼     ▼     ▼     ▼     ▼
@@ -521,6 +594,49 @@ Robot Framework's library ecosystem is a major strength.
 AGATE's goal is different:
 
 > **The tester should not have to assemble a test automation technology stack before describing the business test.**
+
+---
+
+# 🔬 Contract-Aware Testing Direction
+
+AGATE's long-term direction connects deterministic API contract analysis with executable cross-technology tests.
+
+```text
+OpenAPI Specification
+        │
+        ▼
+   agate-openapi
+        │
+        ▼
+   API Contract Model
+        │
+        ▼
+   Change Detection
+        │
+        ▼
+    Impact Analysis
+        │
+        ▼
+Business / Test Contract
+        │
+        ▼
+     AGATE Tests
+        │
+   ┌────┼────┬────┬────┐
+   ▼    ▼    ▼    ▼    ▼
+ REST  SQL  SOAP  OC   GUI
+        │
+        ▼
+   Unified Report
+```
+
+This is intended to answer not only:
+
+> **Can this API call be tested?**
+
+but also:
+
+> **What changed in the contract, which tests are affected, and which business scenarios should be executed?**
 
 ---
 
@@ -566,16 +682,16 @@ The long-term direction connects:
               BUSINESS REQUIREMENTS
                        │
                        ▼
-                 API CONTRACT
+                  API CONTRACT
                        │
                        ▼
                BUSINESS CONTRACT
                        │
                        ▼
-                 TEST CONTRACT
+                  TEST CONTRACT
                        │
                        ▼
-                AGATE TESTS
+                 AGATE TESTS
                        │
           ┌────────────┼────────────┐
           ▼            ▼            ▼
@@ -586,7 +702,7 @@ The long-term direction connects:
                   UI / Systems
                        │
                        ▼
-                Unified Report
+                 Unified Report
 ```
 
 The objective is not simply to execute YAML files.
@@ -601,12 +717,12 @@ AGATE is a young project and feedback from real automation engineers and testers
 
 If you are interested in:
 
-* cross-technology test automation
-* enterprise integration testing
-* OpenAPI-driven testing
-* contract-aware test automation
-* Tosca migration
-* vendor-independent test automation
+- Cross-technology test automation
+- Enterprise integration testing
+- OpenAPI-driven testing
+- Contract-aware test automation
+- Tosca migration
+- Vendor-independent test automation
 
 try AGATE and let us know what works — and what does not.
 
