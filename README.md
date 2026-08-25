@@ -674,42 +674,129 @@ See the module documentation and demo suites for execution examples.
 
 # 🎯 Vision
 
-AGATE aims to become a lightweight, open and vendor-independent platform for enterprise test automation.
+AGATE aims to become a lightweight, open and vendor-independent platform for **enterprise test automation and intelligent test engineering**.
 
-The long-term direction connects:
+The long-term vision combines deterministic contract analysis, cross-technology test orchestration and optional AI assistance.
 
 ```text
-              BUSINESS REQUIREMENTS
-                       │
-                       ▼
-                  API CONTRACT
-                       │
-                       ▼
-               BUSINESS CONTRACT
-                       │
-                       ▼
-                  TEST CONTRACT
-                       │
-                       ▼
-                 AGATE TESTS
-                       │
-          ┌────────────┼────────────┐
-          ▼            ▼            ▼
-        APIs        Databases   Infrastructure
-          │            │            │
-          └────────────┼────────────┘
-                       ▼
-                  UI / Systems
-                       │
-                       ▼
-                 Unified Report
+                    BUSINESS REQUIREMENTS
+                    Pflichtenheft / Specs
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │   Local AI    │
+                    │ Ollama / LLM  │
+                    └───────┬───────┘
+                            │
+                            ▼
+                     BUSINESS CONTRACT
+                            │
+                            │
+        OpenAPI             │
+           │                │
+           ▼                │
+     API CONTRACT ──────────┤
+           │                │
+           └────────┬───────┘
+                    ▼
+               TEST CONTRACT
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+          ▼                   ▼
+   Deterministic         AI-assisted
+   Test Generation       Test Design
+          │                   │
+          └─────────┬─────────┘
+                    ▼
+                AGATE TESTS
+                    │
+       ┌────────────┼─────────────┐
+       ▼            ▼             ▼
+     APIs       Databases    Infrastructure
+       │            │             │
+       └────────────┼─────────────┘
+                    ▼
+               UI / Systems
+                    │
+                    ▼
+              Unified Report
 ```
 
-The objective is not simply to execute YAML files.
+AGATE follows a simple architectural principle:
 
-The objective is to connect **business intent, technical contracts and executable tests** while keeping the resulting automation transparent, version-controlled and vendor-independent.
+> **Deterministic where possible. AI where useful.**
 
----
+Deterministic components such as `agate-openapi` are responsible for facts that can be reliably derived from technical contracts:
+
+- API endpoints and operations
+- parameters
+- request and response schemas
+- validation constraints
+- contract changes
+- breaking changes
+- test impact analysis
+
+AI is intended for tasks that require semantic understanding rather than simple structural analysis.
+
+For example, a local LLM can help analyze business specifications and requirements to identify:
+
+- business rules
+- preconditions
+- expected behavior
+- dependencies between business processes
+- positive and negative scenarios
+- boundary conditions
+- missing test coverage
+- candidate test data
+- relationships between business requirements and technical API contracts
+
+The resulting knowledge can be represented as a **Business Contract** and combined with the deterministic **API Contract** to derive a **Test Contract**.
+
+```text
+Technical truth                    Business meaning
+     │                                   │
+     ▼                                   ▼
+OpenAPI / API Contract       Requirements / Business Contract
+     │                                   │
+     └────────────────┬──────────────────┘
+                      ▼
+                 TEST CONTRACT
+                      │
+                      ▼
+                 AGATE TESTS
+```
+
+## Local AI First
+
+AGATE's initial AI direction is based on **local LLM execution using Ollama**.
+
+This is particularly important for enterprise environments where API specifications, business requirements, test data or internal system documentation should not be sent to external AI services.
+
+```text
+Enterprise Documents
+OpenAPI Specifications
+Test Definitions
+        │
+        ▼
+   Local Ollama
+        │
+        ▼
+   Local LLM
+        │
+        ▼
+  AGATE AI Services
+```
+
+The goal is not to let an LLM control test execution.
+
+The goal is to use AI as an **engineering assistant** for understanding requirements, designing tests and maintaining test assets, while keeping test execution deterministic, reproducible and transparent.
+
+Ultimately, AGATE aims to connect:
+
+> **Business requirements → API contracts → business contracts → test contracts → executable cross-technology tests → deterministic results**
+
+with AI helping where human-level semantic interpretation is useful and deterministic components remaining responsible wherever exact and reproducible behavior is required.
 
 # 🤝 Feedback and Contributions
 
