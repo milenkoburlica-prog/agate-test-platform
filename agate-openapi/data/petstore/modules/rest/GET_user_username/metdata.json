@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/user/{username}",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

@@ -1,0 +1,6 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Missing_required_parameter_petId;TC004_Optional_parameter_api_key
+testcaseDescription;Baseline valid request;Full request;Missing required parameter petId;Optional parameter api_key
+apiEndpoint;/pet/{petId};/pet/{petId};/pet/{petId};/pet/{petId}
+statusCode;200;200;{NULL};200
+petId;1;1;{NULL};1
+api_key;{NULL};AAAA;{NULL};AAAA

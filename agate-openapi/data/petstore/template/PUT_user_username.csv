@@ -1,0 +1,12 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Missing_required_parameter_username
+testcaseDescription;Baseline valid request;Full request;Missing required parameter username
+apiEndpoint;/user/{username};/user/{username};/user/{username}
+statusCode;200;200;{NULL}
+username;AAAA;AAAA;{NULL}
+id;{NULL};10;{NULL}
+firstName;{NULL};John;{NULL}
+lastName;{NULL};James;{NULL}
+email;{NULL};john@email.com;{NULL}
+password;{NULL};12345;{NULL}
+phone;{NULL};12345;{NULL}
+userStatus;{NULL};1;{NULL}

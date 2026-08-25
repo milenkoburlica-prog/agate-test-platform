@@ -1,0 +1,12 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Missing_required_body_property_name;TC004_Missing_required_body_property_photoUrls;TC005_status_valid_enum_value;TC006_status_valid_enum_value;TC007_status_valid_enum_value;TC008_status_invalid_enum_value
+testcaseDescription;Baseline valid request;Full request;Missing required body property name;Missing required body property photoUrls;status valid enum value;status valid enum value;status valid enum value;status invalid enum value
+apiEndpoint;/pet;/pet;/pet;/pet;/pet;/pet;/pet;/pet
+statusCode;200;200;{NULL};{NULL};200;200;200;{NULL}
+id;{NULL};10;{NULL};{NULL};{NULL};{NULL};{NULL};{NULL}
+name;doggie;doggie;{NULL};doggie;doggie;doggie;doggie;doggie
+category.id;{NULL};1;{NULL};{NULL};{NULL};{NULL};{NULL};{NULL}
+category.name;{NULL};Dogs;{NULL};{NULL};{NULL};{NULL};{NULL};{NULL}
+photoUrls;[AAAA];[AAAA];[AAAA];{NULL};[AAAA];[AAAA];[AAAA];[AAAA]
+tags.id;{NULL};1;{NULL};{NULL};{NULL};{NULL};{NULL};{NULL}
+tags.name;{NULL};AAAA;{NULL};{NULL};{NULL};{NULL};{NULL};{NULL}
+status;{NULL};available;{NULL};{NULL};available;pending;sold;__AGATE_INVALID_ENUM__

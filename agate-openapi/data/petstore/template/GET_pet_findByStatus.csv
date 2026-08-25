@@ -1,0 +1,5 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Missing_required_parameter_status;TC003_status_valid_enum_value;TC004_status_valid_enum_value;TC005_status_valid_enum_value;TC006_status_invalid_enum_value
+testcaseDescription;Baseline valid request;Missing required parameter status;status valid enum value;status valid enum value;status valid enum value;status invalid enum value
+apiEndpoint;/pet/findByStatus;/pet/findByStatus;/pet/findByStatus;/pet/findByStatus;/pet/findByStatus;/pet/findByStatus
+statusCode;200;{NULL};200;200;200;{NULL}
+status;available;{NULL};available;pending;sold;__AGATE_INVALID_ENUM__

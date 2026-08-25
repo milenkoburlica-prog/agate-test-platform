@@ -1,0 +1,86 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Change Detection Demo
+  version: "2.0.0-b"
+
+paths:
+
+  /users:
+
+    post:
+
+      operationId: createUser
+
+      requestBody:
+        required: true
+
+        content:
+
+          application/json:
+
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+
+      responses:
+
+        '201':
+          description: User created
+
+
+  /users/{id}:
+
+    get:
+
+      operationId: getUser
+
+      parameters:
+
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: details
+          in: query
+          required: true
+          schema:
+            type: boolean
+
+      responses:
+
+        '200':
+          description: User found
+
+
+components:
+
+  schemas:
+
+    UserCreate:
+
+      type: object
+
+      required:
+        - username
+        - role
+        - tenantId
+
+      properties:
+
+        username:
+          type: string
+          minLength: 5
+          maxLength: 30
+
+        role:
+          type: string
+          enum:
+            - USER
+            - ADMIN
+            - AUDITOR
+
+        tenantId:
+          type: integer
+          format: int64

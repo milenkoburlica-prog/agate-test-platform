@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/user/logout",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

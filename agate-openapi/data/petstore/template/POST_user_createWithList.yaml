@@ -1,0 +1,26 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.POST_user_createWithList
+        endpoint: "{B[apiEndpoint]}"
+        body: "{XL[body]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[statusCode]}"

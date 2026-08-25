@@ -1,0 +1,62 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Phase 0 Content Examples Test
+  version: 1.0.0
+
+paths:
+
+  /example:
+
+    get:
+      operationId: getExample
+
+      responses:
+
+        '200':
+          description: Success
+          content:
+            application/json:
+
+              example:
+                id: 42
+                name: Test
+
+              schema:
+                type: object
+                properties:
+
+                  id:
+                    type: integer
+                    format: int64
+
+                  name:
+                    type: string
+
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+
+              examples:
+
+                invalidId:
+                  value:
+                    code: ERR-001
+                    text: Invalid ID
+
+                missingId:
+                  value:
+                    code: ERR-002
+                    text: Missing ID
+
+              schema:
+                type: object
+                properties:
+
+                  code:
+                    type: string
+
+                  text:
+                    type: string

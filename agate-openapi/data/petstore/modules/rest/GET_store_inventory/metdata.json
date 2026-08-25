@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/store/inventory",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

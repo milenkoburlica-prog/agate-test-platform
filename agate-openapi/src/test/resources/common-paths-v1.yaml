@@ -1,0 +1,50 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Common Paths
+  version: 1.0.0
+
+paths:
+
+  /alive:
+
+    get:
+      tags:
+        - alive
+
+      parameters:
+        - name: sv-system
+          in: header
+          required: false
+          schema:
+            type: string
+            maxLength: 255
+
+      responses:
+
+        '200':
+          description: Service is available.
+
+        '204':
+          description: Service is available.
+
+
+    head:
+      tags:
+        - alive
+
+      parameters:
+        - name: sv-system
+          in: header
+          required: false
+          schema:
+            type: string
+            maxLength: 255
+
+      responses:
+
+        '200':
+          description: Service is available.
+
+        '204':
+          description: Service is available.

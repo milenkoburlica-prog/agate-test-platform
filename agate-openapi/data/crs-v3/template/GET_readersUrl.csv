@@ -1,0 +1,5 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Optional_parameter_groups;TC004_groups_maximum_array_size;TC005_groups_above_maximum_array_size;TC006_groups_array_item_maximum_string_length;TC007_groups_array_item_above_maximum_string_length
+testcaseDescription;Baseline valid request;Full request;Optional parameter groups;groups maximum array size;groups above maximum array size;groups array item maximum string length;groups array item above maximum string length
+apiEndpoint;/readersUrl;/readersUrl;/readersUrl;/readersUrl;/readersUrl;/readersUrl;/readersUrl
+statusCode;200;200;200;200;{NULL};200;{NULL}
+groups;{NULL};[Gruppe-1];[Gruppe-1];[Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1];[Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1,Gruppe-1];[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA];[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]

@@ -1,0 +1,12 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request
+testcaseDescription;Baseline valid request;Full request
+apiEndpoint;/user;/user
+statusCode;200;200
+id;{NULL};10
+username;{NULL};theUser
+firstName;{NULL};John
+lastName;{NULL};James
+email;{NULL};john@email.com
+password;{NULL};12345
+phone;{NULL};12345
+userStatus;{NULL};1

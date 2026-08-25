@@ -1,0 +1,17 @@
+at\co\svc\agate\openapi\Phase2FinalConstraintsTest.class
+at\co\svc\agate\openapi\Phase2ConstraintIsolationTest.class
+at\co\svc\agate\openapi\Phase1RegressionTest.class
+at\co\svc\agate\openapi\HttpRequestBuilderTest.class
+at\co\svc\agate\openapi\Phase2ParameterArrayTest.class
+at\co\svc\agate\openapi\Phase3RegressionTest.class
+at\co\svc\agate\openapi\Phase2BodyGenerationTest.class
+at\co\svc\agate\openapi\Phase3RestModuleGenerationTest.class
+at\co\svc\agate\openapi\ExpectedResponseBuilderTest.class
+at\co\svc\agate\openapi\ParameterSerializationTest.class
+at\co\svc\agate\openapi\OpenApiChangeDetectorTest.class
+at\co\svc\agate\openapi\Phase0RegressionTest.class
+at\co\svc\agate\openapi\Phase2PatternUniqueItemsTest.class
+at\co\svc\agate\openapi\Phase3CsvGenerationTest.class
+at\co\svc\agate\openapi\AgateImpactAnalyzerTest.class
+at\co\svc\agate\openapi\TestInteractionBuilderTest.class
+at\co\svc\agate\openapi\Phase2RegressionTest.class

@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/pet/findByStatus",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

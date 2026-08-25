@@ -1,0 +1,10 @@
+{
+  "id": {B[id]},
+  "username": "{B[username]}",
+  "firstName": "{B[firstName]}",
+  "lastName": "{B[lastName]}",
+  "email": "{B[email]}",
+  "password": "{B[password]}",
+  "phone": "{B[phone]}",
+  "userStatus": {B[userStatus]}
+}

@@ -1,0 +1,6 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Missing_required_parameter_petId;TC004_Optional_parameter_additionalMetadata
+testcaseDescription;Baseline valid request;Full request;Missing required parameter petId;Optional parameter additionalMetadata
+apiEndpoint;/pet/{petId}/uploadImage;/pet/{petId}/uploadImage;/pet/{petId}/uploadImage;/pet/{petId}/uploadImage
+statusCode;200;200;{NULL};200
+petId;1;1;{NULL};1
+additionalMetadata;{NULL};AAAA;{NULL};AAAA

@@ -1,0 +1,27 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.GET_users_id
+        endpoint: "{B[apiEndpoint]}"
+        id: "{XL[id]}"
+        language: "{XL[language]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[statusCode]}"

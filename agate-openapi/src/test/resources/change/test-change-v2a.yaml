@@ -1,0 +1,125 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Change Detection Demo
+  version: 2.0.0-a
+
+paths:
+
+  /users:
+
+    post:
+
+      operationId: createUser
+
+      requestBody:
+        required: true
+
+        content:
+
+          application/json:
+
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+
+      responses:
+
+        '201':
+          description: User created
+
+
+  /users/{id}:
+
+    get:
+
+      operationId: getUser
+
+      parameters:
+
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+            format: int64
+
+        - name: details
+          in: query
+          required: false
+
+          schema:
+            type: boolean
+
+        - name: language
+          in: query
+          required: false
+
+          schema:
+            type: string
+
+            enum:
+              - de
+              - en
+
+      responses:
+
+        '200':
+          description: User found
+
+
+  /users/{id}/history:
+
+    get:
+
+      operationId: getUserHistory
+
+      parameters:
+
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+
+        '200':
+          description: User history
+
+
+components:
+
+  schemas:
+
+    UserCreate:
+
+      type: object
+
+      required:
+        - username
+
+      properties:
+
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+
+        age:
+          type: integer
+          minimum: 18
+          maximum: 120
+
+        role:
+          type: string
+
+          enum:
+            - USER
+            - ADMIN
+
+        comment:
+          type: string
+          maxLength: 200

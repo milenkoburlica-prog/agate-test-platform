@@ -1,0 +1,6 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Optional_parameter_username;TC004_Optional_parameter_password
+testcaseDescription;Baseline valid request;Full request;Optional parameter username;Optional parameter password
+apiEndpoint;/user/login;/user/login;/user/login;/user/login
+statusCode;200;200;200;200
+username;{NULL};AAAA;AAAA;{NULL}
+password;{NULL};AAAA;{NULL};AAAA

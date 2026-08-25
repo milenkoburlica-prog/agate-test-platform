@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/store/order/{orderId}",
+  "method" : "DELETE",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

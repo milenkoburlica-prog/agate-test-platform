@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/user/{username}",
+  "method" : "DELETE",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

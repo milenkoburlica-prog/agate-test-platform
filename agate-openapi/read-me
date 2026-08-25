@@ -1,0 +1,63 @@
+AGATE OpenAPI hat das Ziel, aus einer OpenAPI-Spezifikation deterministisch Testfälle als direkte Ableitung des technischen API Contracts zu generieren.
+
+Die OpenAPI-Spezifikation beschreibt jedoch ausschließlich den API Contract und enthält in der Regel weder einen vollständigen Business Contract noch ein State Model. Daher sollen die generierten Testfälle bewusst keinen vollständigen fachlichen Test ersetzen, sondern ein reproduzierbares und nachvollziehbares Test-Skeleton bereitstellen.
+
+Dieses Skeleton deckt die aus dem API Contract eindeutig ableitbaren Testfälle, Eingabedaten und Validierungsregeln ab und reduziert damit den manuellen Aufwand für Tester.
+
+Die fachliche Erweiterung bleibt bewusst beim Tester als Träger des Domänenwissens. Er ergänzt insbesondere fachliche Vorbedingungen, Testdaten, Zustände, Abhängigkeiten und Post-Checks, die aus der OpenAPI-Spezifikation nicht deterministisch abgeleitet werden können.
+
+-----------------
+
+
+--json src/test/resources/test-openapi-v1.yaml
+https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at/clv-svsc/openapi/openapi-clv-svsc-v1.yaml
+https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/crs/openapi/openapi-crs-v3.yaml
+https://petstore3.swagger.io/api/v3/openapi.yaml
+https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/cps/openapi/openapi-cps-v1.yaml
+src/test/resources/test-openapi-v11-content-examples.yaml
+
+-Djava.util.logging.manager=org.jboss.logmanager.LogManager
+
+---
+
+src/test/resources/test-openapi-v11-content-examples.yaml GET /example 200 application/json
+src/test/resources/test-openapi-v1.yaml GET /users/{id} 200 application/json
+https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/crs/openapi/openapi-crs-v3.yaml GET /readersUrl 200 application/json
+https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/crs/openapi/openapi-crs-v3.yaml GET /readersUrl 200 application/json --query groups=Gruppe-1 --query groups=Gruppe-2
+
+
+---
+src/test/resources/test-openapi-v1.yaml GET /users/{id}
+src/test/resources/test-openapi-v2.yaml POST /users
+https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/crs/openapi/openapi-crs-v3.yaml GET /readersUrl
+
+src/test/resources/test-openapi-v12-readers-url-constraints.yaml GET /readersUrl
+
+src/test/resources/test-openapi-v13-phase2-final.yaml POST /validation-demo
+
+---
+
+src/test/resources/test-openapi-v1.yaml GET /users/{id}
+--list src/test/resources/test-openapi-v1.yaml GET /users/{id}
+--test TC003_Optional_parameter_details src/test/resources/test-openapi-v1.yaml GET /users/{id}
+--dsl TC003_Optional_parameter_details src/test/resources/test-openapi-v1.yaml GET /users/{id}
+--csv src/test/resources/test-openapi-v1.yaml GET /users/{id}
+--csv src/test/resources/test-openapi-v2.yaml POST /users
+--csv https://petstore3.swagger.io/api/v3/openapi.json POST /pet
+
+--yaml https://petstore3.swagger.io/api/v3/openapi.json POST /pet2
+
+
+------
+--generate petstore https://petstore3.swagger.io/api/v3/openapi.json
+
+--generate clv-svsc-v1 https://ecs-webapps-ecs-syst-syst.ecs.ocp-stag.cloud.svc.co.at/clv-svsc/openapi/openapi-clv-svsc-v1.yaml
+--generate crs-v3 https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/crs/openapi/openapi-crs-v3.yaml
+--generate cps-v1 https://ecs-webapps-ecs-int-kvw.ecs.ocp-stag.cloud.svc.co.at/cps/openapi/openapi-cps-v1.yaml
+
+
+---
+--changes src/test/resources/change/test-change-v1.yaml src/test/resources/change/test-change-v2a.yaml
+--changes src/test/resources/change/test-change-v1.yaml src/test/resources/change/test-change-v2b.yaml
+
+--changes src/test/resources/change/test-constraints-v1.yaml src/test/resources/change/test-constraints-v2.yaml

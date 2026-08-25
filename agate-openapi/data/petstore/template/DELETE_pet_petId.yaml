@@ -1,0 +1,27 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.DELETE_pet_petId
+        endpoint: "{B[apiEndpoint]}"
+        petId: "{XL[petId]}"
+        api_key: "{XL[api_key]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[statusCode]}"

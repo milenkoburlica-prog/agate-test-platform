@@ -1,0 +1,29 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.GET_clv_svsc_v1_connections_clientIp_partner_logs
+        endpoint: "{B[apiEndpoint]}"
+        clientIp: "{XL[clientIp]}"
+        timeout: "{XL[timeout]}"
+        sv-system: "{XL[sv-system]}"
+        sv-txid: "{XL[sv-txid]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[statusCode]}"

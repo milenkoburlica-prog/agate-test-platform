@@ -1,0 +1,5 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Missing_required_parameter_orderId
+testcaseDescription;Baseline valid request;Missing required parameter orderId
+apiEndpoint;/store/order/{orderId};/store/order/{orderId}
+statusCode;200;{NULL}
+orderId;1;{NULL}

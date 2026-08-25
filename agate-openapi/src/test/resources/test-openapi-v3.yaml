@@ -1,0 +1,154 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Phase 0 Composition Test API
+  version: 1.0.0
+
+paths:
+
+  /employees:
+
+    post:
+      operationId: createEmployee
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+
+      responses:
+
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+
+  /payment:
+
+    post:
+      operationId: createPayment
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+
+      responses:
+
+        '200':
+          description: Payment accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+
+
+components:
+
+  schemas:
+
+    Person:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+
+        firstName:
+          type: string
+
+        lastName:
+          type: string
+
+
+    EmployeeData:
+      type: object
+      required:
+        - employeeNumber
+      properties:
+
+        employeeNumber:
+          type: string
+
+        department:
+          type: string
+
+
+    Employee:
+      allOf:
+
+        - $ref: '#/components/schemas/Person'
+
+        - $ref: '#/components/schemas/EmployeeData'
+
+        - type: object
+          properties:
+
+            manager:
+              $ref: '#/components/schemas/Employee'
+
+            attributes:
+              type: object
+              additionalProperties:
+                type: string
+
+
+    CreditCardPayment:
+      type: object
+      required:
+        - cardNumber
+      properties:
+
+        cardNumber:
+          type: string
+
+        holder:
+          type: string
+
+
+    BankTransferPayment:
+      type: object
+      required:
+        - iban
+      properties:
+
+        iban:
+          type: string
+
+        bic:
+          type: string
+
+
+    CashPayment:
+      type: object
+      properties:
+
+        currency:
+          type: string
+
+
+    PaymentRequest:
+      type: object
+      properties:
+
+        payment:
+          oneOf:
+
+            - $ref: '#/components/schemas/CreditCardPayment'
+
+            - $ref: '#/components/schemas/BankTransferPayment'
+
+        fallback:
+          anyOf:
+
+            - $ref: '#/components/schemas/BankTransferPayment'
+
+            - $ref: '#/components/schemas/CashPayment'

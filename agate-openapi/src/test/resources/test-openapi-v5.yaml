@@ -1,0 +1,37 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Phase 0 External API Parts Test
+  version: 1.0.0
+
+paths:
+
+  /companies/{id}:
+
+    get:
+      operationId: getCompany
+
+      parameters:
+        - $ref: './common-api-parts.yaml#/components/parameters/CompanyId'
+
+      responses:
+
+        '200':
+          $ref: './common-api-parts.yaml#/components/responses/CompanyResponse'
+
+        '404':
+          description: Company not found
+
+
+  /companies:
+
+    post:
+      operationId: createCompany
+
+      requestBody:
+        $ref: './common-api-parts.yaml#/components/requestBodies/CreateCompanyRequest'
+
+      responses:
+
+        '201':
+          $ref: './common-api-parts.yaml#/components/responses/CompanyResponse'

@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/groups",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/pet/findByTags",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

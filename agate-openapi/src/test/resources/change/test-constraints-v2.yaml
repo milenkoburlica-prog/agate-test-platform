@@ -1,0 +1,93 @@
+openapi: 3.0.3
+
+info:
+  title: Agate Constraint Change Test API
+  version: 2.0.0
+
+paths:
+
+  /users:
+
+    post:
+
+      operationId: createUser
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+
+            schema:
+              type: object
+
+              properties:
+
+                username:
+                  type: string
+                  minLength: 5
+                  maxLength: 30
+
+                age:
+                  type: integer
+                  minimum: 21
+                  maximum: 50
+
+                role:
+                  type: string
+                  enum:
+                    - USER
+
+                tags:
+                  type: array
+                  minItems: 2
+                  maxItems: 5
+
+                  items:
+                    type: string
+
+
+      responses:
+
+        '200':
+          description: User created
+
+
+  /users/{id}:
+
+    get:
+
+      operationId: getUser
+
+      parameters:
+
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+            format: int64
+            minimum: 10
+            maximum: 500
+
+
+        - name: language
+          in: query
+          required: false
+
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 20
+            enum:
+              - de
+              - en
+              - fr
+              - it
+
+
+      responses:
+
+        '200':
+          description: User found

@@ -1,0 +1,8 @@
+{
+  "url" : "{{endpoint}}/pet/{petId}/uploadImage",
+  "method" : "POST",
+  "headers" : {
+    "Content-Type" : "application/octet-stream",
+    "accept" : "application/json"
+  }
+}

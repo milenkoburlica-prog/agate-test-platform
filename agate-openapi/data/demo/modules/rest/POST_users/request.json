@@ -1,0 +1,6 @@
+{
+  "username": "{B[username]}",
+  "age": {B[age]},
+  "role": "{B[role]}",
+  "tags": {B[tags]}
+}

@@ -1,0 +1,16 @@
+{
+  "id": {B[id]},
+  "name": "{B[name]}",
+  "category": {
+    "id": {B[category.id]},
+    "name": "{B[category.name]}"
+  },
+  "photoUrls": {B[photoUrls]},
+  "tags": [
+    {
+      "id": {B[tags.id]},
+      "name": "{B[tags.name]}"
+    }
+  ],
+  "status": "{B[status]}"
+}

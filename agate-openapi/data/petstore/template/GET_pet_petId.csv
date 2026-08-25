@@ -1,0 +1,5 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Missing_required_parameter_petId
+testcaseDescription;Baseline valid request;Missing required parameter petId
+apiEndpoint;/pet/{petId};/pet/{petId}
+statusCode;200;{NULL}
+petId;1;{NULL}

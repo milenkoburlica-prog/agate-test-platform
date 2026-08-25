@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/pet/{petId}",
+  "method" : "POST",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

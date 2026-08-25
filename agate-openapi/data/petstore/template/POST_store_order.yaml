@@ -1,0 +1,31 @@
+testCases:
+
+  - id: "{XL[testcaseName]}"
+    description: "{XL[testcaseDescription]}"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+
+      apiEndpoint: "{XL[apiEndpoint]}"
+
+    steps:
+
+      - type: REST
+        op: EXEC
+        command: rest.POST_store_order
+        endpoint: "{B[apiEndpoint]}"
+        id: "{XL[id]}"
+        petId: "{XL[petId]}"
+        quantity: "{XL[quantity]}"
+        shipDate: "{XL[shipDate]}"
+        status: "{XL[status]}"
+        complete: "{XL[complete]}"
+        response: response_1
+
+      - type: REST
+        op: ASSERT
+        response: response_1
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[statusCode]}"

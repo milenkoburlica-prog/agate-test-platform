@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/clv-svsc/alive",
+  "method" : "GET",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

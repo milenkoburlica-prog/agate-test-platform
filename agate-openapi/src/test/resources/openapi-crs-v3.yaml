@@ -1,0 +1,225 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Card Reader Service (CRS)",
+    "description": "\nDieses Dokument beschreibt die Version 3 der Schnittstelle des Card Reader Service (CRS)</a>.\n\nDie <a href=\"index.html\">allgemeine Beschreibung</a> der Schnittstelle 92 ist auch für dieses Service gültig.\n\n## Inhalt\n\n\n - <a href=\"#fehlerbehandlung\">Fehlerbehandlung</a>\n - <a href=\"#changelog\">Changelog</a>\n - <a href=\"#ressourcen\">REST-Ressourcen</a>\n\n<h2 id=\"fehlerbehandlung\">Fehlerbehandlung</h2>\n\nEs existieren die folgenden Service-spezifischen Fehlersituationen (zusätzlich zu den in der <a href=\"index.html\">allgemeinen Beschreibung</a> angeführten, Service-unspezifischen Fehlersituationen):  \n<table border=1> <tr> <th>Code</th> <th>Text</th> </tr> <tr> <td>ZS-00185</td> <td>Die angegebenen Gruppennamen sind ungültig.</td> </tr> <tr> <td>ZS-00191</td> <td>Für die IP ist kein Anschluss konfiguriert.</td> </tr> </table>\n<h2 id=\"changelog\">Changelog</h2>\n\nVersion 3:\n- Version 1 wurde entfernt\n- Erweiterung von der Ressource /readersUrl um das Feld serialNumber\n- Entfernung LANCCR.\n- Fehler bei unbekannter IP.\n\n<div id=\"ressourcen\"/>\n",
+    "version": "3"
+  },
+  "servers": [
+    {
+      "url": "https://{host}/crs/3",
+      "description": "Card Reader Service",
+      "variables": {
+        "host": {
+          "default": "services.ecard.sozialversicherung.at",
+          "description": "Hostname oder IP des Service"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/groups": {
+      "get": {
+        "summary": "Abfrage der verfügbaren Kartenleser-Gruppen.",
+        "description": "Diese Abfrage retourniert alle Gruppen, die zu den verfügbaren Kartenlesern konfiguriert wurden. Die retournierten Gruppen können wiederum als Filter für die Abfrage von Kartenlesern (über die Ressource /readersUrl) verwendet werden.\n\n<br/> Die Konfiguration von Gruppen erfolgt direkt auf dem jeweiligen GINO (siehe dortige Dokumentation).\n\n<br/> Laufzeitgruppe: Mittel \n",
+        "tags": [
+          "Ressourcen"
+        ],
+        "responses": {
+          "200": {
+            "description": "verfügbare Kartenleser-Gruppen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/group"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/readersUrl": {
+      "get": {
+        "summary": "Abfrage der verfügbaren Kartenleser inklusive Aufruf-URL für GINO-API.",
+        "description": "Diese Abfrage retourniert die zum jeweiligen Anschluss verfügbaren Kartenleser inklusive der für den Aufruf der GINO-API notwendigen URL.\n\n<br/> Laufzeitgruppe: Mittel \n",
+        "tags": [
+          "Ressourcen"
+        ],
+        "parameters": [
+          {
+            "name": "groups",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/group"
+              }
+            },
+            "required": false,
+            "description": "Filterparameter für jene Gruppen, die im Response enthalten sein dürfen. Die verfügbaren, als Filterparameter anwendbaren Gruppen können über die Ressource \"/groups\" abgefragt werden. Entspricht keiner der verfügbaren Kartenleser den angegebenen Gruppen, so wird eine leere Liste retourniert.\n\n - Angabe: Kann\n\n - Format: maximal 20 Gruppennamen, jeweils maximal 50-stellig\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "verfügbare Kartenleser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/cardReaderWithUrl"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Abfrage der Service-Verfügbarkeit.",
+        "description": "Diese Abfrage kann verwendet werden, um bei Bedarf die Verfügbarkeit des Services zu überprüfen.\n\n<br/> Ob eine Verbindung für ein bestimmtes Service zum e-card-Serversystem besteht, sollte im Normalbetrieb nicht abgefragt werden. Die Abfrage sollte nur dann durchgeführt werden um festzustellen, ab wann das Service wieder online ist, wenn zuvor Verbindungsprobleme aufgetreten sind. Die empfohlene Frequenz für die Abfragen liegt in diesem Fall bei > 1 Minute.\n\n<br/> Laufzeitgruppe: Kurz \n",
+        "tags": [
+          "Ressourcen"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service-Verfügbarkeit"
+          },
+          "500": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Ressourcen"
+    }
+  ],
+  "components": {
+    "responses": {
+      "error": {
+        "description": "Fehler",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "description": "Fehlercode (für automatisierte Verarbeitung geeignet).\n- Format: maximal 10-stellig ",
+                  "type": "string",
+                  "example": "ZS-00184"
+                },
+                "detailCode": {
+                  "description": "Detail-Fehlercode (meist ident zum Fehlercode). Muss dem Benutzer angezeigt werden, sofern keine automatisierte Behandlung erfolgt.\n- Format: maximal 10-stellig ",
+                  "type": "string",
+                  "example": "ZS-00184"
+                },
+                "text": {
+                  "description": "Fehlertext. Muss dem Benutzer angezeigt werden, sofern keine automatisierte Behandlung erfolgt.",
+                  "type": "string",
+                  "example": "Es ist ein Problem bei der Bearbeitung der Anfrage aufgetreten."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "group": {
+        "description": "Kartenleser-Gruppe\n- Format: maximal 50-stellig ",
+        "type": "string",
+        "example": "Gruppe-1"
+      },
+      "cardReaderWithUrl": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Identifier des Kartenlesers",
+            "type": "string",
+            "example": "GINO-42"
+          },
+          "urlWithVersion": {
+            "description": "Liste von URLs, unter denen die REST-API des Kartenlesers angesprochen werden kann. Neben der URL ist auch die Version der GINO-API angeführt und optional die Zugriffsart.<br/> Im Normalfall enthält die Liste genau einen Eintrag, der Kartenleser ist unter der angegebenen URL erreichbar.<br/> Aus folgenden Gründen kann es mehr als einen Eintrag geben und der Kartenleser ist dann unter mehreren URLs erreichbar:<br/>  - Falls am GINO eine NAT-IP oder ein DNS als weitere Zugriffsart konfiguriert wurde, wird dafür ein weiterer Eintrag erzeugt. Nur in diesem Fall ist das Attribut zugriff gesetzt.<br/> - Falls für die GINO-API mehr als eine Version unterstützt wird. Dann würde für jede Version ein Eintrag erzeugt (auch für eine konfigurierte Zugriffsart). Für den Zugriff ist dann die URL zu wählen, die der eingesetzten Version der GINO-API entspricht. Stand jetzt (09.2024) wird für den GINO die Version 2 unterstützt, d.h. es gibt jeweils nur eine Version.<br/> Hinweis: Die Beispiele enthalten alle möglichen Varianten von Einträgen (GINO mit lokaler IP, GINO mit NAT-IP, GINO mit DNS) und können so kombiniert in der Praxis nicht auftreten.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "description": "URL für Zugriff auf die GINO-API des Kartenlesers.",
+                  "type": "string"
+                },
+                "version": {
+                  "description": "Version der GINO-API. Derzeit nur v2 vorgesehen.",
+                  "type": "string"
+                },
+                "zugriff": {
+                  "description": "Optional. Zugriffsart der Url, kann entweder NAT oder DNS als Wert enthalten.",
+                  "type": "string"
+                }
+              }
+            },
+            "example": [
+              {
+                "url": "https://192.168.0.42/gino/v2",
+                "version": "v2"
+              },
+              {
+                "url": "https://192.198.0.42/gino/v2",
+                "version": "v2",
+                "zugriff": "NAT"
+              },
+              {
+                "url": "https://gino_02bbcc.ginolan.at/gino/v2",
+                "version": "v2",
+                "zugriff": "DNS"
+              }
+            ]
+          },
+          "checkIp": {
+            "description": "Lokale IP-Adresse des Kartenlesers. Ermöglicht beim GINO Zugriff auf die GUI zur Prüfung und Konfiguration der Einstellungen.",
+            "type": "string",
+            "example": "192.168.0.42"
+          },
+          "type": {
+            "$ref": "#/components/schemas/cardReaderType"
+          },
+          "group": {
+            "$ref": "#/components/schemas/group"
+          },
+          "firmwareVersion": {
+            "description": "Firmware-Version des Kartenlesers",
+            "type": "string",
+            "example": "01.00.00"
+          },
+          "serialNumber": {
+            "description": "Seriennummer des Kartenlesers",
+            "type": "string",
+            "example": "2249105796"
+          }
+        }
+      },
+      "cardReaderType": {
+        "description": "Typ des Kartenlesers (derzeit nur GINO)",
+        "enum": [
+          "GINO"
+        ],
+        "example": "GINO"
+      }
+    }
+  }
+}

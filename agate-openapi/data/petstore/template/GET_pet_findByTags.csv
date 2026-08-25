@@ -1,0 +1,5 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Missing_required_parameter_tags
+testcaseDescription;Baseline valid request;Missing required parameter tags
+apiEndpoint;/pet/findByTags;/pet/findByTags
+statusCode;200;{NULL}
+tags;[AAAA];{NULL}

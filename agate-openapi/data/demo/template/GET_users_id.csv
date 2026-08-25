@@ -1,0 +1,6 @@
+testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Missing_required_parameter_id;TC004_id_minimum;TC005_id_below_minimum;TC006_id_maximum;TC007_id_above_maximum;TC008_Optional_parameter_language;TC009_language_valid_enum_value;TC010_language_valid_enum_value;TC011_language_valid_enum_value;TC012_language_invalid_enum_value;TC013_language_minimum_string_length;TC014_language_below_minimum_string_length;TC015_language_maximum_string_length;TC016_language_above_maximum_string_length
+testcaseDescription;Baseline valid request;Full request;Missing required parameter id;id minimum;id below minimum;id maximum;id above maximum;Optional parameter language;language valid enum value;language valid enum value;language valid enum value;language invalid enum value;language minimum string length;language below minimum string length;language maximum string length;language above maximum string length
+apiEndpoint;/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id};/users/{id}
+statusCode;200;200;{NULL};200;{NULL};200;{NULL};200;200;200;200;{NULL};200;{NULL};200;{NULL}
+id;1;1;{NULL};1;0;1000;1001;1;1;1;1;1;1;1;1;1
+language;{NULL};de;{NULL};{NULL};{NULL};{NULL};{NULL};de;de;en;fr;__AGATE_INVALID_ENUM__;AA;A;AAAAAAAAAA;AAAAAAAAAAA

@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/cps/alive",
+  "method" : "HEAD",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

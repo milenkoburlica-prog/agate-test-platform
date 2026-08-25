@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/pet/{petId}",
+  "method" : "DELETE",
+  "headers" : {
+    "accept" : "application/json"
+  }
+}

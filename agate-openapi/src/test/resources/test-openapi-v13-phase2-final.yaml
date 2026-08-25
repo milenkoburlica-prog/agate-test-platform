@@ -1,0 +1,89 @@
+openapi: 3.0.3
+
+info:
+  title: AGATE Phase 2 Final Constraints
+  version: 1.0.0
+
+paths:
+
+  /validation-demo:
+
+    post:
+
+      operationId: validationDemo
+
+      parameters:
+
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            exclusiveMinimum: true
+            maximum: 100
+            exclusiveMaximum: true
+            multipleOf: 5
+
+        - name: requestId
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
+
+      requestBody:
+
+        required: true
+
+        content:
+
+          application/json:
+
+            schema:
+
+              type: object
+
+              required:
+                - email
+                - amount
+                - created
+
+              properties:
+
+                email:
+                  type: string
+                  format: email
+
+                amount:
+                  type: number
+                  minimum: 0
+                  exclusiveMinimum: true
+                  maximum: 1000
+                  multipleOf: 0.5
+
+                created:
+                  type: string
+                  format: date-time
+
+                birthday:
+                  type: string
+                  format: date
+
+                callback:
+                  type: string
+                  format: uri
+
+                uuid:
+                  type: string
+                  format: uuid
+
+      responses:
+
+        '200':
+          description: Valid request
+
+          content:
+            application/json:
+              schema:
+                type: object

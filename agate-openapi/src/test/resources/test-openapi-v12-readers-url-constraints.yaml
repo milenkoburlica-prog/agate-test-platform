@@ -1,0 +1,150 @@
+openapi: 3.0.1
+
+info:
+  title: AGATE Phase 2 ReadersUrl Constraints Demo
+  version: 1.0.0
+  description: >
+    Demo OpenAPI specification for testing array and string
+    constraints with AGATE Phase 2.
+
+servers:
+  - url: https://services.example.com/crs/3
+
+paths:
+
+  /readersUrl:
+
+    get:
+
+      summary: Abfrage der verfügbaren Kartenleser inklusive Aufruf-URL
+
+      description: >
+        Diese Abfrage retourniert die zum jeweiligen Anschluss
+        verfügbaren Kartenleser inklusive der für den Aufruf
+        notwendigen URL.
+
+      tags:
+        - Ressourcen
+
+      parameters:
+
+        - name: groups
+          in: query
+          required: false
+
+          description: >
+            Filterparameter für jene Gruppen, die im Response
+            enthalten sein dürfen.
+
+            Maximal 20 Gruppennamen.
+            Jeder Gruppenname darf maximal 50 Zeichen enthalten.
+
+          style: form
+          explode: true
+
+          schema:
+            type: array
+
+            # Formal OpenAPI constraint:
+            # maximal 20 Gruppen
+            maxItems: 20
+
+            items:
+              $ref: '#/components/schemas/group'
+
+          example:
+            - Gruppe-1
+            - Gruppe-2
+
+      responses:
+
+        '200':
+          description: verfügbare Kartenleser
+
+          content:
+            application/json:
+
+              schema:
+                type: array
+
+                items:
+                  $ref: '#/components/schemas/cardReaderWithUrl'
+
+              example:
+                - id: GINO-42
+                  group: Gruppe-1
+                  url: https://192.168.0.42/gino/v2
+
+
+        '500':
+          description: Fehler
+
+          content:
+            application/json:
+
+              schema:
+                $ref: '#/components/schemas/error'
+
+
+components:
+
+  schemas:
+
+    group:
+
+      description: >
+        Kartenleser-Gruppe.
+        Der Gruppenname darf maximal 50 Zeichen enthalten.
+
+      type: string
+
+      # Formal OpenAPI constraint:
+      # maximal 50 Zeichen
+      maxLength: 50
+
+      example: Gruppe-1
+
+
+    cardReaderWithUrl:
+
+      type: object
+
+      required:
+        - id
+        - group
+        - url
+
+      properties:
+
+        id:
+          type: string
+          example: GINO-42
+
+        group:
+          $ref: '#/components/schemas/group'
+
+        url:
+          type: string
+          format: uri
+          example: https://192.168.0.42/gino/v2
+
+
+    error:
+
+      type: object
+
+      properties:
+
+        code:
+          type: string
+          maxLength: 10
+          example: ZS-00184
+
+        detailCode:
+          type: string
+          maxLength: 10
+          example: ZS-00184
+
+        text:
+          type: string
+          example: Es ist ein Problem bei der Bearbeitung der Anfrage aufgetreten.
