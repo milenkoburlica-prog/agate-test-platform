@@ -324,39 +324,58 @@ startTests.bat DEMOS DEMOS DEMO
 
 Conceptually:
 
+```text
 Already have AGATE tests?
         │
         ▼
    agate-server
         │
         ▼
-     Execute
+      Execute
 
 
 Have an OpenAPI specification?
         │
         ▼
-  agate-openapi
+   agate-openapi
         │
         ▼
      generate
         │
         ▼
-   AGATE tests
+    AGATE tests
         │
         ▼
    agate-server
+        │
+        ▼
+      Execute
 
 
 API contract changed?
         │
-        ├── changes
-        │      ▼
-        │  What changed?
+        ▼
+   agate-openapi
         │
-        └── impact
-               ▼
-        Which tests are affected?
+        ├── changes ──► What changed?
+        │
+        └── impact  ──► Which existing tests are affected?
+
+
+Have Tricentis Tosca tests?
+        │
+        ▼
+ agate-tosca-migrator
+        │
+        ▼
+    AGATE tests
+        │
+        ▼
+   agate-server
+        │
+        ▼
+      Execute
+```
 
 ---
 
