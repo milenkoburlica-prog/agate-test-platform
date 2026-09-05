@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/clv-svsc/v1/updates/ordinations",
-  "method" : "GET",
-  "headers" : {
-    "accept" : "application/json"
-  }
-}

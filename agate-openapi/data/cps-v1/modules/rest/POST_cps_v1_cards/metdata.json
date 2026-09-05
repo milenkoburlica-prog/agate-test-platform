@@ -1,8 +1,0 @@
-{
-  "url" : "{{endpoint}}/cps/v1/cards",
-  "method" : "POST",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8",
-    "accept" : "application/json"
-  }
-}

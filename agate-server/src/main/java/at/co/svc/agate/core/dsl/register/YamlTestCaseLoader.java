@@ -19,7 +19,6 @@ import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.model.TestStep;
 import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.utils.CsvLoader;
-import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class YamlTestCaseLoader {
 
@@ -131,7 +130,12 @@ public class YamlTestCaseLoader {
             String currentIdNum = idPrefix.isEmpty() ? String.valueOf(localIndex) : idPrefix + "." + localIndex;
 
             TestStep step = StepParserFactory.parseStep(tc, stepMap, yamlPath, localIndex, resolver);
-            step.setId("step_" + currentIdNum.replace(".", "_"));
+
+            // Keep an explicit YAML id stable. If no id is provided, generate a
+            // deterministic fallback id for backward compatibility.
+            if (step.getId() == null || step.getId().isBlank()) {
+                step.setId("step_" + currentIdNum.replace(".", "_"));
+            }
 
             // >>> POPRAVLJENI DEO: Koristimo prosleđeni boolean umesto provere "modules" <<<
             String identifier = isFragment ? yamlPath : tc.getName();
@@ -420,16 +424,23 @@ public class YamlTestCaseLoader {
         return body;
     }
     
-    public static String extractOriginalStepYaml(String yamlPath, String identifier, int targetStepIndex, boolean isFragment) {
+    public static String extractOriginalStepYaml(
+            String yamlPath,
+            String identifier,
+            int targetStepIndex,
+            boolean isFragment) {
+
         try {
             File file = new File(yamlPath);
-            if (!file.exists()) return "";
+            if (!file.exists()) {
+                return "";
+            }
 
             List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
             int startSearchIdx = -1;
             int baseIndentation = 0;
 
-            // 1. Lociranje 'steps:' sekcije za traženi TestCase/Fragment
+            // 1. Locate the relevant steps: section.
             if (!isFragment) {
                 int tcIdx = -1;
                 String cleanIdentifier = identifier.replace("\"", "").trim();
@@ -437,124 +448,153 @@ public class YamlTestCaseLoader {
                 for (int i = 0; i < lines.size(); i++) {
                     String line = lines.get(i);
                     String cleanLine = line.replace("\"", "").trim();
-                    
-                    // Provera za ID ili name
-                    if (cleanLine.startsWith("id:") || cleanLine.startsWith("- id:") || cleanLine.startsWith("name:")) {
-                        // Izvlačimo tačnu vrednost nakon dvotačke i čistimo je od navodnika i razmaka
-                        String actualValue = cleanLine.substring(cleanLine.indexOf(":") + 1).replace("\"", "").trim();
-                        
-                        // Radimo egzaktno poređenje umesto .contains() da izbegnemo lažne pogotke
+
+                    if (cleanLine.startsWith("id:")
+                            || cleanLine.startsWith("- id:")
+                            || cleanLine.startsWith("name:")) {
+
+                        String actualValue = cleanLine
+                                .substring(cleanLine.indexOf(":") + 1)
+                                .replace("\"", "")
+                                .trim();
+
                         if (actualValue.equals(cleanIdentifier)) {
                             tcIdx = i;
                             break;
                         }
                     }
                 }
-                
-                // Ako nismo našli Test Case sa ovim ID-jem, prekidamo odmah
-                if (tcIdx == -1) return "# Greška: Test Case sa ID-jem '" + identifier + "' nije pronađen u fajlu.";
 
-                // Od pronađenog Test Case-a tražimo prvu reč 'steps:' nadole
+                if (tcIdx == -1) {
+                    return "# Greška: Test Case sa ID-jem '"
+                            + identifier
+                            + "' nije pronađen u fajlu.";
+                }
+
                 for (int i = tcIdx; i < lines.size(); i++) {
                     String line = lines.get(i);
-                    if (line.trim().startsWith("steps:")) {
-                        startSearchIdx = i; // Krećemo tačno od ove linije
-                        baseIndentation = line.indexOf("steps:");
+                    String trimmed = line.trim();
+
+                    if (trimmed.startsWith("steps:")) {
+                        startSearchIdx = i;
+                        baseIndentation = indentationOf(line);
                         break;
                     }
-                    // Ako pre 'steps:' naletimo na sledeći test kejs, znači da trenutni nema steps sekciju
-                    if (i > tcIdx && (line.trim().startsWith("- id:") || line.trim().startsWith("id:"))) {
-                        return ""; 
+
+                    if (i > tcIdx
+                            && (trimmed.startsWith("- id:") || trimmed.startsWith("id:"))
+                            && indentationOf(line) <= baseIndentation) {
+                        return "";
                     }
                 }
             } else {
-                // Za fragmente tražimo prvu 'steps:' sekciju u fajlu
                 for (int i = 0; i < lines.size(); i++) {
                     if (lines.get(i).trim().startsWith("steps:")) {
                         startSearchIdx = i;
-                        baseIndentation = lines.get(i).indexOf("steps:");
+                        baseIndentation = indentationOf(lines.get(i));
                         break;
                     }
                 }
             }
 
-            if (startSearchIdx == -1 || startSearchIdx >= lines.size()) return "";
+            if (startSearchIdx == -1 || startSearchIdx >= lines.size()) {
+                return "";
+            }
 
-         // 2. Sakupljanje svih linija koje označavaju pravi početak koraka
-            List<Integer> typeLineIndices = new ArrayList<>();
-            int stepIndentation = -1; // Pamtićemo tačnu indentaciju prvog koraka
+            // 2. Detect top-level YAML list entries below steps:.
+            // This deliberately does NOT require "- type:". A step may now start
+            // with "- id:" followed by "type: SOAP". Nested lists such as ignore
+            // and unordered have greater indentation and are therefore ignored.
+            List<Integer> stepStartIndices = new ArrayList<>();
+            int stepIndentation = -1;
 
-            for (int i = startSearchIdx; i < lines.size(); i++) {
+            for (int i = startSearchIdx + 1; i < lines.size(); i++) {
                 String line = lines.get(i);
                 String trimmed = line.trim();
-                
-                if (trimmed.isEmpty()) continue;
-                if (trimmed.startsWith("steps:")) continue;
 
-                // Graničnik: Ako izađemo iz opsega trenutnog test kejsa na osnovu indentacije
-                int currentIndent = line.indexOf(trimmed.charAt(0));
-                if (!isFragment && currentIndent <= baseIndentation && (trimmed.startsWith("- id:") || trimmed.startsWith("id:"))) {
+                if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+                    continue;
+                }
+
+                int currentIndent = indentationOf(line);
+
+                if (!isFragment
+                        && currentIndent <= baseIndentation
+                        && (trimmed.startsWith("- id:")
+                                || trimmed.startsWith("id:")
+                                || trimmed.startsWith("name:"))) {
                     break;
                 }
 
-                // Ako linija počinje sa "- type:"
-                if (trimmed.startsWith("- type:")) {
-                    // Ako je ovo prvi korak, zapamti njegovu indentaciju
+                if (trimmed.startsWith("- ") && currentIndent > baseIndentation) {
                     if (stepIndentation == -1) {
-                        stepIndentation = line.indexOf("- type:");
+                        stepIndentation = currentIndent;
                     }
-                    
-                    // Korak je validan samo ako je na istoj dubini/indentaciji (preskače komentare koji slučajno sadrže tekst)
-                    if (line.indexOf("- type:") == stepIndentation) {
-                        typeLineIndices.add(i);
+
+                    if (currentIndent == stepIndentation) {
+                        stepStartIndices.add(i);
                     }
                 }
             }
-            
-            
-            // Mapiranje na traženi indeks sa konzole (1 -> indeks 0 u listi)
+
             int targetListIdx = targetStepIndex - 1;
-            if (targetListIdx < 0 || targetListIdx >= typeLineIndices.size()) {
-                return "# Greška: Korak " + targetStepIndex + " ne postoji u ovom Test Case-u. (Pronađeno ukupno: " + typeLineIndices.size() + ")";
+            if (targetListIdx < 0 || targetListIdx >= stepStartIndices.size()) {
+                return "# Greška: Korak "
+                        + targetStepIndex
+                        + " ne postoji u ovom Test Case-u. (Pronađeno ukupno: "
+                        + stepStartIndices.size()
+                        + ")";
             }
 
-            int typeLineIdx = typeLineIndices.get(targetListIdx);
+            int stepStartIdx = stepStartIndices.get(targetListIdx);
 
-            // 3. FAZA UNAZAD: Pokupi sve komentare iznad ovog koraka
-            int actualStartIdx = typeLineIdx;
-            int previousStepTypeIdx = (targetListIdx > 0) ? typeLineIndices.get(targetListIdx - 1) : startSearchIdx;
+            // 3. Include comments directly above the step, but never content from
+            // the previous step.
+            int actualStartIdx = stepStartIdx;
+            int previousStepIdx = targetListIdx > 0
+                    ? stepStartIndices.get(targetListIdx - 1)
+                    : startSearchIdx;
 
-            for (int i = typeLineIdx - 1; i > previousStepTypeIdx; i--) {
-                String trimmedPrev = lines.get(i).trim();
-                
-                if (trimmedPrev.startsWith("steps:")) {
+            for (int i = stepStartIdx - 1; i > previousStepIdx; i--) {
+                String trimmed = lines.get(i).trim();
+
+                if (trimmed.startsWith("steps:")) {
                     break;
                 }
-                if (!trimmedPrev.startsWith("#") && !trimmedPrev.isEmpty()) {
+
+                if (!trimmed.startsWith("#") && !trimmed.isEmpty()) {
                     break;
                 }
+
                 actualStartIdx = i;
             }
 
-            // 4. FAZA UNAPRED: Pokupi celo telo koraka nadole
-            int actualEndIdx = typeLineIdx + 1;
-            int nextStepTypeIdx = (targetListIdx < typeLineIndices.size() - 1) ? typeLineIndices.get(targetListIdx + 1) : lines.size();
+            // 4. The next top-level step starts the boundary of this step.
+            int actualEndIdx = targetListIdx < stepStartIndices.size() - 1
+                    ? stepStartIndices.get(targetListIdx + 1)
+                    : lines.size();
 
-            while (actualEndIdx < nextStepTypeIdx) {
-                String nextLineRaw = lines.get(actualEndIdx);
-                String nextLineTrimmed = nextLineRaw.trim();
+            // If this is the final step of a test case, stop when leaving the
+            // current test-case indentation level.
+            if (!isFragment && targetListIdx == stepStartIndices.size() - 1) {
+                for (int i = stepStartIdx + 1; i < actualEndIdx; i++) {
+                    String trimmed = lines.get(i).trim();
+                    if (trimmed.isEmpty()) {
+                        continue;
+                    }
 
-                if (!isFragment && !nextLineTrimmed.isEmpty()) {
-                    int nextIndent = nextLineRaw.indexOf(nextLineTrimmed.charAt(0));
-                    if (nextIndent <= baseIndentation && (nextLineTrimmed.startsWith("- id:") || nextLineTrimmed.startsWith("id:"))) {
+                    int currentIndent = indentationOf(lines.get(i));
+                    if (currentIndent <= baseIndentation
+                            && (trimmed.startsWith("- id:")
+                                    || trimmed.startsWith("id:")
+                                    || trimmed.startsWith("name:"))) {
+                        actualEndIdx = i;
                         break;
                     }
                 }
-                actualEndIdx++;
             }
 
-            // Čišćenje tuđih komentara sa dna ako ih ima
-            while (actualEndIdx > typeLineIdx + 1) {
+            while (actualEndIdx > stepStartIdx + 1) {
                 String lastLineTrimmed = lines.get(actualEndIdx - 1).trim();
                 if (lastLineTrimmed.startsWith("#") || lastLineTrimmed.isEmpty()) {
                     actualEndIdx--;
@@ -562,36 +602,46 @@ public class YamlTestCaseLoader {
                     break;
                 }
             }
-         // 5. Izgradnja finalnog YAML stringa sa normalizovanom indentacijom
+
+            // 5. Normalize indentation relative to the top-level step entry.
             StringBuilder sb = new StringBuilder();
-            
-            // Nalazimo kolika je indentacija same "- type:" linije da bismo je sveli na nulu
-            String typeLineRaw = lines.get(typeLineIdx);
-            int spacesToRemove = typeLineRaw.indexOf("- type:");
+            int spacesToRemove = indentationOf(lines.get(stepStartIdx));
 
             for (int i = actualStartIdx; i < actualEndIdx; i++) {
                 String currentLine = lines.get(i);
-                
+
                 if (currentLine.trim().isEmpty()) {
                     sb.append("\n");
                     continue;
                 }
 
-                // Ako linija ima dovoljno razmaka, skini tačno onoliko koliko je imala "- type:" linija
-                if (currentLine.length() >= spacesToRemove && currentLine.substring(0, spacesToRemove).trim().isEmpty()) {
+                if (currentLine.length() >= spacesToRemove
+                        && currentLine.substring(0, spacesToRemove).trim().isEmpty()) {
                     sb.append(currentLine.substring(spacesToRemove)).append("\n");
                 } else {
-                    // Za svaki slučaj, ako je neka linija (npr. komentar) manje uvučena, samo je trimuj s leve strane
                     sb.append(currentLine.stripLeading()).append("\n");
                 }
             }
 
             return sb.toString().trim();
-            
+
         } catch (Exception e) {
             return "Error extracting YAML text: " + e.getMessage();
         }
-    }    
+    }
+
+    private static int indentationOf(String line) {
+        if (line == null || line.isEmpty()) {
+            return 0;
+        }
+
+        int indentation = 0;
+        while (indentation < line.length()
+                && Character.isWhitespace(line.charAt(indentation))) {
+            indentation++;
+        }
+        return indentation;
+    }
     
     
     

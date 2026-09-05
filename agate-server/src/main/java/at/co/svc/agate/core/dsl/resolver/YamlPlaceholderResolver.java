@@ -60,6 +60,14 @@ public class YamlPlaceholderResolver {
                 return result;
             }
 
+            if ("body".equals(originalAction)) {
+
+                result = resolveBodyComplexVariables(
+                        result,
+                        variables
+                );
+            }
+            
             // Redosled je bitan: prvo R, pa onda ostali
             result = resolveR(result, currentStep);
             result = resolveB(result, vars);
@@ -87,7 +95,183 @@ public class YamlPlaceholderResolver {
 
         return result;
     }
+    private String resolveBodyComplexVariables(
+            String body,
+            Map<String,Object> variables
+    ) {
 
+        String result = body;
+
+
+        for (Map.Entry<String,Object> entry : variables.entrySet()) {
+
+            Object value = entry.getValue();
+
+
+            if (value instanceof Map) {
+
+                result = resolveNestedMap(
+                        result,
+                        entry.getKey(),
+                        (Map<?,?>) value
+                );
+            }
+
+
+            if (value instanceof List) {
+
+                result = resolveList(
+                        result,
+                        entry.getKey(),
+                        (List<?>) value
+                );
+            }
+        }
+
+
+        return result;
+    }
+    private String resolveNestedMap(
+            String body,
+            String rootName,
+            Map<?, ?> map
+    ) {
+
+        String result = body;
+
+
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+
+            String path =
+                    rootName + "." + entry.getKey();
+
+
+            String placeholder =
+                    "{B[" + path + "]}";
+
+
+            Object value = entry.getValue();
+
+
+            if (value != null) {
+
+                result = result.replace(
+                        placeholder,
+                        value.toString()
+                );
+            }
+        }
+
+
+        return result;
+    }
+    private String resolveList(
+            String body,
+            String key,
+            List<?> list
+    ) {
+
+        String placeholder =
+                "{B[" + key + "]}";
+
+
+        String jsonValue =
+                toJsonLikeString(list);
+
+
+        return body.replace(
+                placeholder,
+                jsonValue
+        );
+    }
+    private String toJsonLikeString(List<?> list) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[");
+
+
+        for (int i = 0; i < list.size(); i++) {
+
+
+            Object item = list.get(i);
+
+
+            if (i > 0) {
+                sb.append(",");
+            }
+
+
+            if (item instanceof Map) {
+
+                sb.append(mapToJson(
+                        (Map<?,?>) item
+                ));
+
+            } else {
+
+                sb.append("\"")
+                  .append(item.toString())
+                  .append("\"");
+            }
+        }
+
+
+        sb.append("]");
+
+
+        return sb.toString();
+    }
+    private String mapToJson(
+            Map<?,?> map
+    ) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+
+
+        int counter = 0;
+
+
+        for (Map.Entry<?,?> entry : map.entrySet()) {
+
+
+            if (counter > 0) {
+                sb.append(",");
+            }
+
+
+            sb.append("\"")
+              .append(entry.getKey())
+              .append("\":");
+
+
+            Object value = entry.getValue();
+
+
+            if (value instanceof Number) {
+
+                sb.append(value);
+
+            } else {
+
+                sb.append("\"")
+                  .append(value)
+                  .append("\"");
+            }
+
+
+            counter++;
+        }
+
+
+        sb.append("}");
+
+
+        return sb.toString();
+    }
+    
     /**
      * Overload metode radi kompatibilnosti sa starim pozivima koji nemaju currentStep.
      */

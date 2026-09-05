@@ -1,5 +1,0 @@
-testcaseName;TC001_Baseline_valid_request;TC002_Full_request;TC003_Optional_parameter_groups
-testcaseDescription;Baseline valid request;Full request;Optional parameter groups
-apiEndpoint;/readersUrl;/readersUrl;/readersUrl
-statusCode;200;200;200
-groups;{NULL};[Gruppe-1];[Gruppe-1]

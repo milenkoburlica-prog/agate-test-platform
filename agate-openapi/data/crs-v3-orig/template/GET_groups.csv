@@ -1,4 +1,0 @@
-testcaseName;TC001_Baseline_valid_request
-testcaseDescription;Baseline valid request
-apiEndpoint;/groups
-statusCode;200

@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/clv-svsc/v1/connections/{clientIp}/online",
-  "method" : "GET",
-  "headers" : {
-    "accept" : "application/json"
-  }
-}

@@ -27,11 +27,25 @@ import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.interfaces.TestStepEngine;
+import at.co.svc.agate.core.reference.ComparisonDifference;
+import at.co.svc.agate.core.reference.ReferenceAssertionResult;
+import at.co.svc.agate.core.reference.ReferenceCompareConfig;
+import at.co.svc.agate.core.reference.ReferenceFileStore;
+import at.co.svc.agate.core.reference.ReferencePathResolver;
+import at.co.svc.agate.core.reference.ReferenceResponseService;
+import at.co.svc.agate.core.reference.ResponseFormat;
+import at.co.svc.agate.core.reference.json.JsonResponseComparator;
 
 public class RestEngine implements TestStepEngine {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final HttpClient CLIENT = createUnsafeClient();
+
+    private static final ReferenceResponseService REFERENCE_RESPONSE_SERVICE =
+            new ReferenceResponseService(
+                    new ReferencePathResolver(),
+                    new ReferenceFileStore(),
+                    new JsonResponseComparator());
 
     @Override
     public void execute(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
@@ -272,199 +286,606 @@ public class RestEngine implements TestStepEngine {
     // =========================================================
     // ASSERT
     // =========================================================
-    private void handleAssertion(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
+    private void handleAssertion(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
 
-        RestResponse res = (RestResponse) context.getBuffer(step.getResponse());
+        RestResponse res =
+                (RestResponse) context.getBuffer(step.getResponse());
 
         String source = step.getSource();
         String action = step.getAction();
         String path = step.getPath();
 
+        // =========================================================
+        // BASIC VALIDATION
+        // =========================================================
+
+        if (res == null) {
+            throwMissingResponseDiagnostic(
+                    step,
+                    logger,
+                    printExecution,
+                    isVerbose,
+                    "ASSERT");
+        }
+
+        if (action == null || action.isBlank()) {
+            throw new RuntimeException(
+                    "action not found: " + step.getAction());
+        }
+
+        // =========================================================
+        // MATCH_REFERENCE
+        //
+        // IMPORTANT:
+        // Must be handled BEFORE expected/path/value resolution.
+        // MATCH_REFERENCE does not require:
+        //   - path
+        //   - expected
+        //   - value
+        // =========================================================
+
+        if ("MATCH_REFERENCE".equalsIgnoreCase(action)) {
+
+            handleReferenceAssertion(
+                    tc,
+                    step,
+                    res,
+                    yamlFile,
+                    logger,
+                    printExecution,
+                    isVerbose);
+
+            return;
+        }
+
+        // =========================================================
+        // NORMAL ASSERTIONS
+        // =========================================================
+
+        if (source == null || source.isBlank()) {
+            throw new RuntimeException("source not found!");
+        }
+
         Object rawExpected = step.getExpected();
-        String expected = rawExpected != null ? rawExpected.toString() : "";
-        String valueField = step.getValue(); 
+
+        String expected =
+                rawExpected != null
+                        ? rawExpected.toString()
+                        : "";
+
+        String valueField = step.getValue();
 
         boolean passed = false;
         String actual = "";
 
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-        expected = resolver.resolve(tc, expected, tc.getVariables(), yamlFile, stepIndex, "");
-        if (valueField != null) {
-            valueField = resolver.resolve(tc, valueField, tc.getVariables(), yamlFile, stepIndex, "");
+        YamlPlaceholderResolver resolver =
+                new YamlPlaceholderResolver();
+
+        if (!expected.isEmpty()) {
+            expected = resolver.resolve(
+                    tc,
+                    expected,
+                    tc.getVariables(),
+                    yamlFile,
+                    stepIndex,
+                    "expected");
         }
 
-        if (res == null) {
-            throw new RuntimeException("Response not found: " + step.getResponse());
-        }
-
-        if (source == null) {
-            throw new RuntimeException("source not found!");
+        if (valueField != null && !valueField.isBlank()) {
+            valueField = resolver.resolve(
+                    tc,
+                    valueField,
+                    tc.getVariables(),
+                    yamlFile,
+                    stepIndex,
+                    "value");
         }
 
         switch (source.toUpperCase()) {
 
         case "STATUS":
+
             int status = res.getStatusCode();
             int expStatus = Integer.parseInt(expected);
-            passed = compareNumbers(status, expStatus, action);
+
+            passed = compareNumbers(
+                    status,
+                    expStatus,
+                    action);
+
             actual = String.valueOf(status);
             break;
 
         case "BODY":
-            if ("$.Body".equalsIgnoreCase(path) && "CONTAINS".equalsIgnoreCase(action)) {
+
+            if ("$.Body".equalsIgnoreCase(path)
+                    && "CONTAINS".equalsIgnoreCase(action)) {
+
                 actual = res.getBody();
-                passed = actual != null && actual.contains(expected);
+
+                passed =
+                        actual != null
+                                && actual.contains(expected);
+
                 break;
             }
 
-            // --- NOVI JSON PATH ENGINE (Jayway JsonPath) ---
+            if (path == null || path.isBlank()) {
+                throw new RuntimeException(
+                        "REST BODY ASSERT requires 'path'. "
+                                + "Example: path: \"$.title\"");
+            }
+
             Object jsonPathResult = null;
             boolean pathExists = true;
 
             try {
-                jsonPathResult = com.jayway.jsonpath.JsonPath.read(res.getBody(), path);
+
+                jsonPathResult =
+                        com.jayway.jsonpath.JsonPath.read(
+                                res.getBody(),
+                                path);
+
             } catch (com.jayway.jsonpath.PathNotFoundException e) {
+
                 pathExists = false;
             }
 
-            // Standardna provera - ako putanja ne postoji, a akcija nije EXISTS ili COUNT
-            if (!pathExists && !"EXISTS".equalsIgnoreCase(action) && !"COUNT".equalsIgnoreCase(action)) {
-                throw new RuntimeException("Path not found: " + path);
+            if (!pathExists
+                    && !"EXISTS".equalsIgnoreCase(action)
+                    && !"COUNT".equalsIgnoreCase(action)) {
+
+                throw new RuntimeException(
+                        "Path not found: " + path);
             }
 
             switch (action.toUpperCase()) {
+
             case "EXISTS":
+
                 if (!pathExists || jsonPathResult == null) {
+
                     passed = false;
                     actual = "Path not found";
+
                 } else if (jsonPathResult instanceof java.util.List) {
-                    java.util.List<?> list = (java.util.List<?>) jsonPathResult;
+
+                    java.util.List<?> list =
+                            (java.util.List<?>) jsonPathResult;
+
                     if (expected == null || expected.isEmpty()) {
-                        // SCENARIO 1: Samo provera postojanja elemenata ($[*].something)
+
                         passed = !list.isEmpty();
-                        actual = passed ? "Found elements in path: " + path : "Path found, but array is empty";
+
+                        actual =
+                                passed
+                                        ? "Found elements in path: " + path
+                                        : "Path found, but array is empty";
+
                     } else {
-                        // SCENARIO 2: Provera da li bar jedan od sakupljenih elemenata ima traženu
-                        // vrednost
+
                         for (Object element : list) {
-                            if (element != null && element.toString().equals(expected)) {
+
+                            if (element != null
+                                    && element.toString().equals(expected)) {
+
                                 passed = true;
                                 break;
                             }
                         }
-                        actual = "Array checked for value '" + expected + "'. Found? " + passed;
+
+                        actual =
+                                "Array checked for value '"
+                                        + expected
+                                        + "'. Found? "
+                                        + passed;
                     }
+
                 } else {
-                    // Standardni objekat preko eksplicitnog indeksa ($[0].something)
+
                     passed = true;
                     actual = jsonPathResult.toString();
                 }
+
                 break;
 
             case "COUNT":
-                if (pathExists && jsonPathResult instanceof java.util.List) {
-                    java.util.List<?> list = (java.util.List<?>) jsonPathResult;
-                    if (valueField != null && !valueField.isEmpty()) {
+
+                if (pathExists
+                        && jsonPathResult instanceof java.util.List) {
+
+                    java.util.List<?> list =
+                            (java.util.List<?>) jsonPathResult;
+
+                    if (valueField != null
+                            && !valueField.isEmpty()) {
+
                         int count = 0;
+
                         for (Object element : list) {
-                            if (element != null && element.toString().equals(valueField)) {
+
+                            if (element != null
+                                    && element.toString().equals(valueField)) {
+
                                 count++;
                             }
                         }
+
                         actual = String.valueOf(count);
+
                     } else {
+
                         actual = String.valueOf(list.size());
                     }
-                    passed = compareNumbers(Integer.parseInt(actual), Integer.parseInt(expected), "EQUALS");
+
+                    passed =
+                            compareNumbers(
+                                    Integer.parseInt(actual),
+                                    Integer.parseInt(expected),
+                                    "EQUALS");
+
                 } else if (pathExists) {
-                    // Ako je putanja npr $[0] (jedan objekat), a traži se COUNT, tehnički je
-                    // rezultat 1
+
                     actual = "1";
-                    passed = compareNumbers(1, Integer.parseInt(expected), "EQUALS");
+
+                    passed =
+                            compareNumbers(
+                                    1,
+                                    Integer.parseInt(expected),
+                                    "EQUALS");
+
                 } else {
+
                     actual = "0";
-                    passed = compareNumbers(0, Integer.parseInt(expected), "EQUALS");
+
+                    passed =
+                            compareNumbers(
+                                    0,
+                                    Integer.parseInt(expected),
+                                    "EQUALS");
                 }
+
                 break;
-            // >>> NOVI CASE KOJI REŠAVA PROBLEM <<<
+
             case "CONTAINS":
+
                 if (!pathExists || jsonPathResult == null) {
+
                     passed = false;
                     actual = "Path not found";
-                } else if (jsonPathResult instanceof java.util.List) {
-                    java.util.List<?> list = (java.util.List<?>) jsonPathResult;
-                    actual = list.toString(); // Za ispis u logu tipa ["Chanda", "SIMU"...]
 
-                    // Proveravamo da li lista sadrži očekivani string
+                } else if (jsonPathResult instanceof java.util.List) {
+
+                    java.util.List<?> list =
+                            (java.util.List<?>) jsonPathResult;
+
+                    actual = list.toString();
+
                     for (Object element : list) {
-                        if (element != null && element.toString().equals(expected)) {
+
+                        if (element != null
+                                && element.toString().equals(expected)) {
+
                             passed = true;
                             break;
                         }
                     }
+
                 } else {
-                    // Ako je putanja ipak vratila jedan objekat (skalar), radi klasičan
-                    // String.contains
+
                     actual = jsonPathResult.toString();
                     passed = actual.contains(expected);
                 }
+
                 break;
+
             default:
-                // Ovo pokriva VERIFY, EQUALS, i sve ostale string komparacije
+
                 if (!pathExists || jsonPathResult == null) {
-                    throw new RuntimeException("Path not found: " + path);
+
+                    throw new RuntimeException(
+                            "Path not found: " + path);
                 }
 
                 if (jsonPathResult instanceof java.util.List) {
-                    java.util.List<?> list = (java.util.List<?>) jsonPathResult;
 
-                    // Ako je korisnik stavio [*] a koristi Verify akciju koja vraća više elemenata
+                    java.util.List<?> list =
+                            (java.util.List<?>) jsonPathResult;
+
                     if (list.size() > 1) {
-                        throw new RuntimeException("Validation failed: Path '" + path + "' returned multiple elements ("
-                                + list.size() + "). You must specify an index like $[0] or use EXISTS/COUNT action!");
+
+                        throw new RuntimeException(
+                                "Validation failed: Path '"
+                                        + path
+                                        + "' returned multiple elements ("
+                                        + list.size()
+                                        + "). You must specify an index like "
+                                        + "$[0] or use EXISTS/COUNT action!");
                     }
 
                     if (list.size() == 1) {
-                        // Ako wildcard vrati samo jedan element, dozvoljavamo "prečicu" i čitamo njega
+
                         actual = list.get(0).toString();
+
                     } else {
+
                         actual = "";
                     }
+
                 } else {
-                    // Standardni objekat/skalar iz $[0].urlWithVersion[0].url
+
                     actual = jsonPathResult.toString();
                 }
 
-                passed = compareStrings(actual, expected, action);
+                passed =
+                        compareStrings(
+                                actual,
+                                expected,
+                                action);
+
                 break;
             }
+
             break;
 
         case "HEADERS":
-            Map<String, String> headers = res.getHeadersMap();
+
+            Map<String, String> headers =
+                    res.getHeadersMap();
+
             actual = headers.get(path);
 
             if ("IS_HEADER_PRESENT".equalsIgnoreCase(action)) {
+
                 passed = headers.containsKey(path);
+
             } else {
-                throw new RuntimeException("Unsupported HEADERS action: " + action);
+
+                throw new RuntimeException(
+                        "Unsupported HEADERS action: " + action);
             }
+
             break;
 
         default:
-            throw new RuntimeException("Unsupported source: " + source);
+
+            throw new RuntimeException(
+                    "Unsupported source: " + source);
         }
 
         if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            logAssertionResult(logger, passed, action, expected, actual, passed ? null : null);
+
+            logAssertionResult(
+                    logger,
+                    passed,
+                    action,
+                    expected,
+                    actual,
+                    passed ? null : null);
         }
 
-        // 2. Ako nije prošlo, baci izuzetak (ovo prekida test)
         if (!passed) {
-            throw new RuntimeException(String.format("Assertion %s failed! Expected: %s, Actual: %s", action, expected, actual));
+
+            throw new RuntimeException(
+                    String.format(
+                            "Assertion %s failed! Expected: %s, Actual: %s",
+                            action,
+                            expected,
+                            actual));
         }
-        
+    }
+    
+
+    private void handleReferenceAssertion(
+            TestCase tc,
+            TestStep step,
+            RestResponse res,
+            String yamlFile,
+            TestLogger logger,
+            Boolean printExecution,
+            boolean isVerbose) throws Exception {
+
+        String source = step.getSource();
+
+        if (source != null && !"BODY".equalsIgnoreCase(source)) {
+            throw new RuntimeException(
+                    "MATCH_REFERENCE currently supports source BODY only. Actual source: " + source);
+        }
+
+        if (step.getId() == null || step.getId().isBlank()) {
+            throw new RuntimeException(
+                    "MATCH_REFERENCE requires a step id. "
+                            + "Define 'id' in YAML or ensure the loader creates a fallback id.");
+        }
+
+        ReferenceCompareConfig config = new ReferenceCompareConfig()
+                .addIgnore(step.getIgnore())
+                .addUnordered(step.getUnordered());
+
+        ReferenceAssertionResult result = REFERENCE_RESPONSE_SERVICE.assertResponse(
+                ResponseFormat.JSON,
+                tc,
+                step.getId(),
+                yamlFile,
+                res.getBody(),
+                config);
+
+        if (result.isCreated()) {
+            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
+                logger.info(String.format(
+                        "    %s>>> REST ASSERT REFERENCE CREATED%s : %s",
+                        ConsoleColors.YELLOW,
+                        ConsoleColors.RESET,
+                        result.getReferenceFile().toAbsolutePath()));
+
+                logger.info(String.format(
+                        "    %s>>> REVIEW REQUIRED%s : Check the generated reference response and keep/commit it only if it is correct.",
+                        ConsoleColors.YELLOW,
+                        ConsoleColors.RESET));
+            }
+            return;
+        }
+
+        if (result.isMatched()) {
+            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
+                logger.info(String.format(
+                        "    %s>>> REST ASSERT SUCCESS%s: MATCH_REFERENCE | Reference: %s",
+                        ConsoleColors.GREEN,
+                        ConsoleColors.RESET,
+                        result.getReferenceFile().toAbsolutePath()));
+            }
+            return;
+        }
+
+        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
+            logReferenceDifferences(logger, result);
+        }
+
+        throw new RuntimeException(
+                "REST MATCH_REFERENCE failed with "
+                        + result.getComparisonResult().getDifferenceCount()
+                        + " difference(s). Reference: "
+                        + result.getReferenceFile().toAbsolutePath());
+    }
+
+    private void logReferenceDifferences(
+            TestLogger logger,
+            ReferenceAssertionResult result) {
+
+        logger.info(String.format(
+                "    %s>>> REST ASSERT MATCH_REFERENCE: FAILED%s",
+                ConsoleColors.RED,
+                ConsoleColors.RESET));
+
+        logger.info(String.format(
+                "    %s>>> REFERENCE%s: %s",
+                ConsoleColors.RED,
+                ConsoleColors.RESET,
+                result.getReferenceFile().toAbsolutePath()));
+
+        int index = 1;
+
+        for (ComparisonDifference difference
+                : result.getComparisonResult().getDifferences()) {
+
+            logger.info(String.format(
+                    "    %s>>> DIFFERENCE [%d] %s%s",
+                    ConsoleColors.RED,
+                    index,
+                    difference.type(),
+                    ConsoleColors.RESET));
+
+            logger.info("        path     : " + nullSafe(difference.path()));
+            logger.info("        expected : " + nullSafe(difference.expected()));
+            logger.info("        actual   : " + nullSafe(difference.actual()));
+
+            index++;
+        }
+    }
+
+    private String nullSafe(String value) {
+        return value != null ? value : "<null>";
+    }
+
+    private void throwMissingResponseDiagnostic(
+            TestStep step,
+            TestLogger logger,
+            Boolean printExecution,
+            boolean isVerbose,
+            String operation) {
+
+        String responseName = step.getResponse();
+        String displayResponseName =
+                responseName == null || responseName.isBlank()
+                        ? "<not defined>"
+                        : responseName;
+
+        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
+            logger.info("");
+            logger.info(String.format(
+                    "    %s>>> REST %s ERROR%s",
+                    ConsoleColors.RED,
+                    operation,
+                    ConsoleColors.RESET));
+
+            logger.info(String.format(
+                    "        %sResponse '%s' was not found.%s",
+                    ConsoleColors.RED,
+                    displayResponseName,
+                    ConsoleColors.RESET));
+
+            logger.info("");
+            logger.info("        What happened:");
+            logger.info("          This REST step expects a response produced by");
+            logger.info("          a previously executed REST EXEC step, but AGATE");
+            logger.info("          cannot find that response in the current execution context.");
+
+            logger.info("");
+            logger.info(String.format(
+                    "        %sPossible causes:%s",
+                    ConsoleColors.YELLOW,
+                    ConsoleColors.RESET));
+
+            logger.info("          - the corresponding REST EXEC step was not executed");
+            logger.info("          - the EXEC step uses a different 'response:' name");
+            logger.info("          - the EXEC step was skipped because its condition was false");
+            logger.info("          - this step is placed before the corresponding EXEC step");
+
+            if (responseName == null || responseName.isBlank()) {
+                logger.info("          - this step does not define 'response:' at all");
+            }
+
+            logger.info("");
+            logger.info(String.format(
+                    "        %sHow to fix:%s",
+                    ConsoleColors.YELLOW,
+                    ConsoleColors.RESET));
+
+            if (responseName != null && !responseName.isBlank()) {
+                logger.info("          Make sure a REST EXEC step is executed before this step:");
+                logger.info("");
+                logger.info("            - type: REST");
+                logger.info("              op: EXEC");
+                logger.info("              ...");
+                logger.info("              response: \"" + responseName + "\"");
+            } else {
+                logger.info("          Define 'response:' in this step and use the same name");
+                logger.info("          in the corresponding REST EXEC step.");
+            }
+
+            logger.info("");
+            logger.info(String.format(
+                    "        %sCurrent step:%s",
+                    ConsoleColors.YELLOW,
+                    ConsoleColors.RESET));
+            logger.info("          type     : " + valueOrMissing(step.getType() != null ? step.getType().toString() : null));
+            logger.info("          op       : " + valueOrMissing(step.getOp()));
+            logger.info("          id       : " + valueOrMissing(step.getId()));
+            logger.info("          source   : " + valueOrMissing(step.getSource()));
+            logger.info("          action   : " + valueOrMissing(step.getAction()));
+            logger.info("          response : " + valueOrMissing(step.getResponse()));
+            logger.info("");
+        }
+
+        throw new RuntimeException(
+                "REST " + operation
+                        + " cannot find response '"
+                        + displayResponseName
+                        + "'. See diagnostic information above.");
+    }
+
+    private String valueOrMissing(String value) {
+        return value == null || value.isBlank()
+                ? "<not defined>"
+                : value;
     }
 
     private void logAssertionResult(TestLogger logger, boolean passed, String action, String expected, String actual, String body) {
@@ -499,7 +920,7 @@ public class RestEngine implements TestStepEngine {
         String value;
 
         if (res == null) {
-            throw new RuntimeException("Response not found: " + step.getResponse());
+            throwMissingResponseDiagnostic(step, logger, printExecution, isVerbose, "BUFFER");
         }
 
         switch (source.toUpperCase()) {

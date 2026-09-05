@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/status",
-  "method" : "GET",
-  "headers" : {
-    "accept" : "application/json"
-  }
-}

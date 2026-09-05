@@ -945,53 +945,77 @@ public class YamlTestInstantiator {
 
     }
 
-    private void replaceXLBuffer(Object obj, TCObject tc, Set<String> missingKeys) {
+    private void replaceXLBuffer(
+            Object obj,
+            TCObject tc,
+            Set<String> missingKeys) {
 
         if (obj instanceof Map) {
 
-            Map<String, Object> map = (Map<String, Object>) obj;
+            Map<String, Object> map =
+                    (Map<String, Object>) obj;
 
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
 
-                String key = entry.getKey();
+            for (Map.Entry<String, Object> entry :
+                    map.entrySet()) {
 
-                Object val = entry.getValue();
+                Object val =
+                        entry.getValue();
+
 
                 if (val instanceof String) {
 
-                    String strVal = (String) val;
+                    String strVal =
+                            (String) val;
 
-                    if (strVal.contains("{XL[")) {
 
-                        entry.setValue(processString(strVal, tc, missingKeys));
+                    /*
+                     * Replace ONLY explicit XL references.
+                     *
+                     * Example:
+                     *
+                     * {XL[id]}
+                     * {XL[name]}
+                     * {XL[testcaseDescription]}
+                     */
 
-                    }
+                    if (strVal.contains(
+                            "{XL["
+                    )) {
 
-                    else if (tc.getVariables().containsKey(key)) {
-
-                        String csvVal = tc.getVariables().get(key);
-
-                        entry.setValue(processValue(csvVal));
-
+                        entry.setValue(
+                                processString(
+                                        strVal,
+                                        tc,
+                                        missingKeys
+                                )
+                        );
                     }
 
                 } else {
 
-                    replaceXLBuffer(val, tc, missingKeys);
-
+                    replaceXLBuffer(
+                            val,
+                            tc,
+                            missingKeys
+                    );
                 }
-
             }
 
         } else if (obj instanceof List) {
 
-            for (Object item : (List<?>) obj)
-                replaceXLBuffer(item, tc, missingKeys);
+            for (Object item :
+                    (List<?>) obj) {
 
+                replaceXLBuffer(
+                        item,
+                        tc,
+                        missingKeys
+                );
+            }
         }
-
     }
-
+    
     private String processString(String str, TCObject tc, Set<String> missingKeys) {
 
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\{XL\\[(.*?)\\]\\}");

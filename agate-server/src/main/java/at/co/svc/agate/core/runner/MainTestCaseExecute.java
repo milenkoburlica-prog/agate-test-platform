@@ -89,7 +89,12 @@ public class MainTestCaseExecute {
          yamlFile = "data/AUM/Orig_Instance_meldungAnlegen_V8_SYST_AUT1.yaml";
          yamlFile = "data/AUM/Korr2_Instance_meldungAnlegen_V8_SYST_AUT1.yaml";
          yamlFile = "data/MUHI/Instance_absolutesBeschaeftigungsverbotEinmelden.yaml";
-         
+
+         yamlFile = "data/petshop/petshop_demo.yaml";
+        // yamlFile = "data/demo/rest_engine_demo.yaml";
+
+         yamlFile = "data/dmp11/Instance_dmp_11_getAdminPatientenInformationen.yaml";
+
          String user = "Milenko";
          String instance ="KVW_ECS_SYST";
          instance ="ECS_SYST_AUT1";
