@@ -12,51 +12,6 @@ within the same execution flow — using a human-readable YAML DSL.
 
 Instead of assembling separate tools, libraries and scripts for each technology, AGATE models supported technologies as **first-class test steps within one unified execution model**.
 
----
-
-## Why AGATE?
-
-Enterprise tests rarely stop at a single REST request.
-
-A real business process may require:
-```text
-REST
-  ↓
-JSON
-  ↓
-SQL
-  ↓
-SOAP
-  ↓
-WAIT
-  ↓
-OpenShift
-  ↓
-CMD
-  ↓
-PDF
-  ↓
-CALL
-  ↓
-GUI
-  ↓
-REPORT
-```
-
-For example:
-
-1. Create an entity through a REST API.
-2. Process or validate structured data using JSON.
-3. Verify the persisted data using SQL.
-4. Trigger processing through a SOAP service.
-5. Wait for asynchronous processing.
-6. Validate the application state in OpenShift.
-7. Execute a command-line verification.
-8. Validate generated PDF content.
-9. Execute a reusable test component using `CALL`.
-10. Verify the final result in the GUI.
-
-**AGATE executes all of these steps as one test case and produces one consolidated test result.**
 
 This is the core idea behind AGATE:
 
@@ -226,6 +181,8 @@ A central architectural principle is:
 
 `agate-openapi` analyzes OpenAPI contracts and derives technical test artifacts deterministically.
 
+`agate-tosca-migrator` deterministically transforms supported Tricentis Tosca test structures into AGATE test definitions.
+
 `agate-ai` adds optional AI-assisted workflows where semantic understanding can provide additional value.
 
 ---
@@ -320,6 +277,7 @@ OpenAPI Specification
                ▼
         Affected AGATE Tests
         and Test Artifacts
+```
 
 Main Capabilities
 * OpenAPI YAML/JSON loading from local files or URLs
