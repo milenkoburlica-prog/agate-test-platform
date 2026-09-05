@@ -172,48 +172,50 @@ The important part is that **different technologies participate in the same busi
 # 🏗️ Project Architecture
 
 AGATE separates deterministic test execution, deterministic API contract processing, optional AI-assisted functionality and migration tooling into dedicated components.
+
 ```text
-                             AGATE Test Platform
-                                    │
-          ┌─────────────────────────┼─────────────────────────┐
-          │                         │                         │
-          ▼                         ▼                         ▼
-    agate-server              agate-openapi               agate-ai
-          │                         │                         │
-          │                    OpenAPI Contract           AI-assisted
-          │                      Processing               Workflows
-          │                         │
-          │              ┌──────────┼──────────┐
-          │              ▼          ▼          ▼
-          │           Parsing      Test      Change &
-          │           & Model   Generation    Impact
-          │                         │
-          │                         ▼
-          │                  AGATE Test Artifacts
-          │                         │
-          │                         ▼
-          └──────────────────► agate-server
-                                    │
-                                    ▼
-                              Execution Core
-                                    │
+                              AGATE Test Platform
+                                     │
+          ┌──────────────────────────┼──────────────────────────┐
+          │                          │                          │
+          ▼                          ▼                          ▼
+    agate-server               agate-openapi          agate-tosca-migrator
+          │                          │                          │
+          │                     OpenAPI Contract          Tosca Migration
+          │                       Processing                    │
+          │                          │                          ▼
+          │               ┌──────────┼──────────┐        Tosca → AGATE DSL
+          │               ▼          ▼          ▼               │
+          │            Parsing      Test      Change &          │
+          │            & Model   Generation    Impact           │
+          │                          │                          │
+          │                          ▼                          │
+          │                   AGATE Test Artifacts ◄────────────┘
+          │                          │
+          │                          ▼
+          └───────────────────► agate-server
+                                     │
+                                     ▼
+                               Execution Core
+                                     │
  ┌────────┬───────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
  ▼        ▼       ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
 REST     SOAP     SQL    CMD   OpenShift    WAIT   JSON    PDF    CALL   GUI
-                                    │
-                                    ▼
-                              Unified Report
+                                     │
+                                     ▼
+                               Unified Report
 
 
-                         Additional Components
-                                │
-                      ┌─────────┴─────────┐
-                      ▼                   ▼
-            agate-tosca-migrator      agate-client
-                      │              (under development)
-                      │                   │
-                      ▼                   ▼
-               Tosca → AGATE DSL     Web Management UI
+                               AGATE AI
+                                  │
+                                  ▼
+                              agate-ai
+                                  │
+                                  ▼
+                         AI-assisted Workflows
+                                  │
+                                  ▼
+                    AGATE Test Platform & Artifacts
 ```
 
 A central architectural principle is:
