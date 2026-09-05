@@ -6,7 +6,7 @@
 
 A single AGATE test can combine:
 
-**REST · SOAP · SQL · OpenShift · Command Line · GUI**
+**REST · SOAP · SQL · CMD · OpenShift · CALL · JSON · PDF · WAIT**
 
 within the same execution flow — using a human-readable YAML DSL.
 
