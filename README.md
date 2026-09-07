@@ -80,47 +80,221 @@ This allows technical operations to be combined into reusable business-level tes
 
 # 🧪 Example
 
-An AGATE test is defined in YAML:
+An AGATE test is defined in a human-readable YAML DSL.
+
+A key concept is that the test case describes the **test flow**, while technical request definitions are kept in reusable modules.
+
+For example:
 
 ```yaml
-
 testCases:
 
   - id: TC_Create_And_Verify_Customer
-    description: Simple Rest POST Test
+    description: Create a customer and verify the response
     stage: '*'
-    priority: HIGH  
+    priority: HIGH
+
     variables:
+      customerName: "John Doe"
       jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
 
     steps:
-      # 1
+
       - type: REST
         op: EXEC
         command: rest.jsonplaceholder.posts
         endpoint: "{B[jsonplaceholder.endpoint]}"
-        response: response_rest2
+        response: create_customer
 
-      # 2
       - type: REST
         op: ASSERT
+        response: create_customer
         source: STATUS
         action: EQUALS
         expected: 200
-        response: response_rest2
 
-      # 3
-      - id: verify_readers_response2
-        type: REST
+      - type: REST
         op: ASSERT
-        response: response_rest2
+        response: create_customer
         source: BODY
         action: MATCH_REFERENCE
 ```
 
-The important part is not YAML itself.
+The REST step does not need to contain the complete HTTP request.
 
-The important part is that **different technologies participate in the same business test and exchange data within the same execution context**.
+Instead, the `command` references a reusable AGATE module:
+
+```text
+rest.jsonplaceholder.posts
+```
+
+Conceptually:
+
+```text
+Test Case
+   │
+   │ command: rest.jsonplaceholder.posts
+   ▼
+REST Module
+   │
+   ├── metadata.json
+   │      method
+   │      path
+   │      headers
+   │      technical configuration
+   │
+   └── request.json
+          │
+          └── parameterized request body
+```
+
+For SOAP services, the same principle applies:
+
+```text
+SOAP Module
+   │
+   ├── metadata.json
+   │
+   └── request.xml
+```
+
+## Test Flow vs. Technical Request
+
+This separation is intentional.
+
+The YAML test case should primarily describe the **business and test flow**:
+
+```text
+Create customer
+      │
+      ▼
+Validate REST response
+      │
+      ▼
+Query database
+      │
+      ▼
+Execute backend command
+      │
+      ▼
+Validate generated file
+```
+
+The technical details of a potentially large REST or SOAP request do not have to be embedded directly into that flow.
+
+Instead, they remain encapsulated in reusable modules.
+
+A parameterized `request.json` could for example contain:
+
+```json
+{
+  "name": "{B[customerName]}",
+  "email": "{B[email]}",
+  "customerType": "{XL[customerType]}"
+}
+```
+
+At runtime, AGATE resolves the placeholders using the current execution context and test data.
+
+This keeps even complex REST and SOAP tests compact and readable.
+
+## Why This Matters
+
+Enterprise REST and SOAP requests can contain hundreds of fields.
+
+Embedding those structures directly into every test case would make test definitions large, repetitive and difficult to maintain.
+
+AGATE therefore separates:
+
+```text
+WHAT is being tested
+        │
+        │  YAML Test Case
+        ▼
+Test flow, data and assertions
+
+
+HOW the technical request looks
+        │
+        │  AGATE Module
+        ▼
+metadata.json + request.json / request.xml
+```
+
+The same module can be reused by many test cases while each test supplies different data through AGATE variables, environment configuration or CSV test data.
+
+This also means that test artifacts do not necessarily have to be created manually.
+
+They can originate from different engineering workflows:
+
+```text
+                         AGATE Test Artifacts
+                                ▲
+                                │
+               ┌────────────────┼────────────────┐
+               │                │                │
+               │                │                │
+          Manual Design    AGATE OpenAPI    Tosca Migration
+               │                │                │
+               └────────────────┼────────────────┘
+                                │
+                                ▼
+                    metadata.json
+                    request.json / request.xml
+                    YAML test definitions
+                    CSV test data
+                                │
+                                ▼
+                         agate-server
+                                │
+                                ▼
+                           Execution
+```
+
+For example, `agate-openapi` can deterministically derive REST modules and test artifacts from an OpenAPI contract.
+
+A migration workflow can transform existing test assets into the same native AGATE structures.
+
+From the perspective of `agate-server`, the origin of the artifact is secondary: execution uses the same AGATE DSL and module model.
+
+## One Test – Multiple Technologies
+
+The module concept also combines naturally with AGATE's cross-technology execution model.
+
+A single test can therefore remain compact while orchestrating multiple technologies:
+
+```text
+                    AGATE Test Case
+                          │
+          ┌───────────────┼────────────────┐
+          ▼               ▼                ▼
+     REST Module       SOAP Module        SQL
+          │               │                │
+ metadata.json      metadata.json          │
+ request.json       request.xml            │
+          │               │                │
+          └───────────────┬┴────────────────┘
+                          │
+                          ▼
+                 Shared Execution Context
+                          │
+                    ┌─────┼─────┐
+                    ▼     ▼     ▼
+                   CMD   FILE  OpenShift
+                          │
+                          ▼
+                    Unified Report
+```
+
+Values produced by one step can be consumed by subsequent steps through the shared execution context.
+
+This is the important part of the example:
+
+> **AGATE keeps the test flow readable by separating reusable technical request definitions from the business test scenario, while still allowing all technologies to participate in one shared execution flow.**
+
+The tester describes the scenario.
+Reusable modules encapsulate the technical requests.
+AGATE resolves the data and orchestrates the execution.
 
 ---
 
