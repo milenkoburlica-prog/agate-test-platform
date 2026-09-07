@@ -1,0 +1,55 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT ID FROM FOTO_INFO WHERE FK_SV_NUMMER = {R[SVNR]}"
+        response: buffere_foto_id_res
+
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: ID
+        row: "0"
+        column: "0"
+        response: buffere_foto_id_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO_AUSKUNFT_HM13 WHERE FK_FOTO_INFO_ID={B[ID]}"
+        response: lösche_alle_zeilen_in_foto_info_auskunft_hm13_über_svnr_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO_AUSKUNFT WHERE FK_FOTO_INFO_ID={B[ID]}"
+        response: lösche_alle_zeilen_in_foto_info_auskunft_über_svnr_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO_HM13 WHERE FK_ID={B[ID]}"
+        response: lösche_alle_zeilen_in_foto_info_hm13_über_svnr_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO WHERE ID={B[ID]}"
+        response: lösche_alle_zeilen_in_foto_info_über_svnr_res
+

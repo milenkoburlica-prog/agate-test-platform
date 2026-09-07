@@ -1,0 +1,18 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "delete from AUM_TRANSPORT where AUFTRAGSZEITPUNKT >=sysdate-1"
+        response: lösche_alle_zeilen_in_aum_transport_von_heute_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "delete from AU_MELDUNG where LASTCHANGE >=sysdate-1"
+        response: lösche_alle_zeilen_in_au_meldung_von_heute_res
+

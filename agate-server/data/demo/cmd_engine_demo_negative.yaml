@@ -1,0 +1,12 @@
+# CMD Engine Demo
+testCases:
+  - id: TC_CMD_Timeout
+    description: Verify CMD timeout handling
+    stage: "*"
+    priority: HIGH
+    steps:
+
+      - type: CMD
+        op: EXEC
+        command: "ping 127.0.0.1 -n 10 > nul"
+        timeout: 1

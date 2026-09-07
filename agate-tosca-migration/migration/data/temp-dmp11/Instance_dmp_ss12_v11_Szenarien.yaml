@@ -1,0 +1,3317 @@
+testCases:
+
+- id: 'Gutfall: Szenario 1a, E'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: E
+      eingabeZusatz: verarbeite(1a)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: ABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJ
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: Bea
+      eingabeArt: E
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: Patient erfolgreich eingeschrieben.
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1a, A'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: verarbeite(1a)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: Leistungserbringer
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: Bea
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: Patient erfolgreich eingeschrieben.
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1a, Fehlerfall, Szenario ungültig'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: 1a
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1b, E'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: E
+      eingabeZusatz: verarbeite(1b)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '19'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Linggasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: E
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1b, A'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: verarbeite(1b)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '19'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Linggasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenarion 1b, Fehlerfall, Szenario ungültig'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: 1b
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '19'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Linggasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1c, E'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: E
+      eingabeZusatz: verarbeite(1c)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '99'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Unzelgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: E
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1c, A'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: verarbeite(1c)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '99'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Unzelgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1c, Fehlerfall, Szenario ungültig'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: 1c
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '99'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Unzelgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1d, A'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: Bestehende_Eingabe(540088,5750071265,01,11,06)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '21'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Gengasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1d, Fehlerfall, Szenario ungültig'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: verarbeite(1d)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '21'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Gengasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1e, E zu W übersteuert'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: E
+      eingabeZusatz: verarbeite(1e)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: ABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJABCDEFGHKJ
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: Bea
+      eingabeArt: E
+      eingabeArtUebersteuert: W
+      beMeldung: Patient erfolgreich eingeschrieben.
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 1e, W zu E übersteuert'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: W
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'true'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientaus
+    parameters:
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: W
+      eingabeZusatz: verarbeite(1e)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: Leistungserbringer
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: Bea
+      eingabeArt: W
+      eingabeArtUebersteuert: E
+      beMeldung: Patient erfolgreich eingeschrieben.
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: '[IN WORK] Gutfall: Szenario 1e, Fehlerfall, Szenario ungültig'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: 1a
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: Grunzgasse
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2c (DMP adm Patienteninfo einspielen) Schlechtfall: Es gibt noch keine Patienteninfo'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,3479311284,01,11,06,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2d (DMP med Patienteninfo einspielen) Schlechtfall: Es gibt noch keine Patienteninfo'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,5750071265,01,11,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: Schlechtfall Szenario 2a (DMP administrative Patienteninformation einspielen)
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo(540088,2448070399,01,12,01,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2a (DMP administrative Patienteninformation einspielen)'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo540088,3479311284,01,11,06,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: '[TF FEHLERHAFT!] Gutfall: Szenario 2a (DMP administrative Patienteninformation einspielen) mit CT-SVSV'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '{NULL}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '{NULL}'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo540088,3479311284,01,11,06,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '{NULL}'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '{NULL}'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '{NULL}'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: '[TF FEHLERHAFT!] Schlechtfall: Szenario 2a (DMP administrative Patienteninformation einspielen) mit CT-VPSV'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '{NULL}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458011470'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '6458011470'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo540088,3479311284,01,11,06,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '{NULL}'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '{NULL}'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '{NULL}'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: Schlechtfall Szenario 2b (DMP medizinische Patienteninformation einspielen)
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo(540088,5750071265,01,11,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2b (DMP medizinische Patienteninformation einspielen)'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: einf_patientinfo(540088,3479311284,01,11,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2c (DMP administrative Patienteninformation einspielen)'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,5750071265,01,11,06,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2c (DMP administrative Patienteninformation einspielen) Schlechtfall'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088575007126501,11,01,adm)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getadminpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2d (DMP medizinische Patienteninformation einspielen)'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,3479311284,01,01,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: '[TF FEHLERHAFT!] Gutfall: Szenario 2d (DMP medizinische Patienteninformation einspielen) mit CT-SVSV'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '{NULL}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '{NULL}'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,3479311284,01,01,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '{NULL}'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '{NULL}'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '{NULL}'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: '[TF FEHLERHAFT!] Schlechtfall: Szenario 2d (DMP medizinische Patienteninformation einspielen) mit CT-VPSV'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6459011480'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6459011480'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '{NULL}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458011470'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '6458011470'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,3479311284,01,01,06,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '{NULL}'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '{NULL}'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '{NULL}'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '6458011470'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Szenario 2d (DMP medizinische Patienteninformation einspielen) Schlechtfall'
+  description: dmp ss12 v11 Szenarien
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.cardtoken_generieren
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      EingabeArtCode: A
+      VSNR: '6458011470'
+      VPNR: '645010'
+      SVT: '11'
+      ProgrammCode: '01'
+      Fachgebiet: '06'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645005'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682073'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.doeingabe_request_v11
+    response: doeingabe_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      eingabeArt: A
+      eingabeZusatz: inakt_patientinfo(540088,2448070399,01,12,01,med)
+      emailAdresse: '{EMPTY}'
+      fachgebietsCode: '01'
+      leistungserbringer: '{EMPTY}'
+      svNummer: '6458011470'
+      svtCode: '11'
+      telefonNummer: '{EMPTY}'
+      adresszusatz: '{EMPTY}'
+      hausnummer: '12'
+      ort: Grunzelingen
+      plz: '1999'
+      postfachNummer: '{EMPTY}'
+      postfachText: '{EMPTY}'
+      stockTuerNummer: '{EMPTY}'
+      strasse: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: doeingabe_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='doEingabeResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '11'
+    response: doeingabe_request_v11_response
+
+  - type: CALL
+    command: reusable.soap_dmp_11_searcheingabe
+    parameters:
+      dmpCode: '01'
+      anfrageArt: Ein
+      anfrageStatus: '{NULL}'
+      eingabeArt: A
+      eingabeArtUebersteuert: '{NULL}'
+      beMeldung: '{NULL}'
+      VSNR: '6458011470'
+
+  - type: CALL
+    command: reusable.soap_dmp_11_getmedpatienteninformationen
+    parameters:
+      svNummer: '6458011470'
+      strukturierteMeldung: 'false'
+      SVNRbeiCT: '{NULL}'
+      SVNRbeiCTVPSV: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

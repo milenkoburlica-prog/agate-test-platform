@@ -1,10 +1,10 @@
 package at.co.svc.agate.engine.oc;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import at.co.svc.agate.core.command.CommandExecutionSupport;
+import at.co.svc.agate.core.command.CommandResult;
 import at.co.svc.agate.core.dsl.model.StepType;
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.model.TestStep;
@@ -16,12 +16,9 @@ import at.co.svc.agate.core.engine.AbstractStepEngine;
 import at.co.svc.agate.core.env.EnvironmentManager;
 import at.co.svc.agate.core.interfaces.TestLogger;
 
-/**
- * Universal Command Engine for local OpenShift OC commands. Supports EXEC
- * (execution), ASSERT (validation), BUFFER (data extraction), GET (get files
- * from OpensShift) and PUT (put files to OpenShift).
- */
 public class OcCmdEngine extends AbstractStepEngine {
+
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
 
     @Override
     public boolean canExecute(StepType stepType) {
@@ -29,467 +26,1126 @@ public class OcCmdEngine extends AbstractStepEngine {
     }
 
     @Override
-    public void doExecute(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
+    public void doExecute(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
 
         if (isVerbose) {
-            PrintDslStepContext.logDslStepContext(logger, step);
+            PrintDslStepContext.logDslStepContext(
+                    logger,
+                    step);
         }
 
-        String op = (step.getOp() != null) ? step.getOp().toUpperCase() : "EXEC";
+        String op =
+                step.getOp() != null
+                        ? step.getOp().toUpperCase()
+                        : "EXEC";
 
         switch (op) {
+
         case "EXEC":
-            handleExecution(tc, step, context, yamlFile, stepIndex, printExecution, logger, isVerbose);
+            handleExecution(
+                    tc,
+                    step,
+                    context,
+                    yamlFile,
+                    stepIndex,
+                    printExecution,
+                    logger,
+                    isVerbose);
             break;
+
         case "PUT":
         case "GET":
-            handleTransfer(tc, step, context, yamlFile, stepIndex, printExecution, logger, isVerbose);
+            handleTransfer(
+                    tc,
+                    step,
+                    context,
+                    yamlFile,
+                    stepIndex,
+                    printExecution,
+                    logger,
+                    isVerbose);
             break;
+
         case "ASSERT":
-            handleAssertion(step, context, stepIndex, printExecution, logger, isVerbose);
+            handleAssertion(
+                    step,
+                    context,
+                    printExecution,
+                    logger,
+                    isVerbose);
             break;
+
         case "BUFFER":
-            handleBuffer(tc, step, context, stepIndex, printExecution, logger, isVerbose);
+            handleBuffer(
+                    step,
+                    context,
+                    printExecution,
+                    logger,
+                    isVerbose);
             break;
+
         default:
-            throw new RuntimeException("Unsupported OC operation: " + op);
-        }
-    }
-
-    private void handleExecution(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
-
-        String rawCommand = step.getCommand();
-        if (rawCommand == null)
-            return;
-
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-
-        Map<String, Object> combinedVars = new HashMap<>(
-                tc.getVariables() != null ? tc.getVariables() : new HashMap<>());
-        if (context != null && context.getVars() != null) {
-            combinedVars.putAll(context.getVars());
-        }
-
-        String resolvedCommand = resolver.resolve(tc, rawCommand, combinedVars, yamlFile, stepIndex, rawCommand);
-        if (resolvedCommand != null && step.getParameters() != null) {
-            resolvedCommand = resolver.resolve(tc, resolvedCommand, step.getParameters(), yamlFile, stepIndex,
-                    "command", step);
-        }
-
-        String pod = step.getPod();
-        String namespace = step.getNamespace();
-        String namespaceEnv = EnvironmentManager.getEnvValue("env.openShift.namespace");
-        namespace = (namespace != null ? namespace : namespaceEnv);
-        String ns = resolver.resolve(tc, namespace, combinedVars, yamlFile, stepIndex, "");
-
-        String podresolved = resolver.resolve(tc, pod, step.getParameters(), yamlFile, stepIndex, "command", step);
-        podresolved = resolver.resolve(tc, podresolved, tc.getVariables(), yamlFile, stepIndex, "command");
-
-        String activePod = getActivePodName(podresolved, ns);
-
-        String execTemplate = String.format("oc exec %s --namespace %s -- bash -c \"%s\"", activePod, ns,
-                resolvedCommand);
-        String fullExecCmd = resolver.resolve(tc, execTemplate, combinedVars, yamlFile, stepIndex, resolvedCommand);
-
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            logger.info(String.format("    %s>>> OC EXEC    %s: [%s // %s]: %s", ConsoleColors.GREEN,
-                    ConsoleColors.RESET, ns, activePod, resolvedCommand));
-        }
-
-        try {
-            OcCmdResponse responseObj = runWindowsCommand(fullExecCmd);
-
-            if (isLoginRequired(responseObj.getOutput())) {
-                handleLazyLogin(tc, context, resolver, yamlFile, stepIndex, logger,
-                        printExecution != null && printExecution);
-
-                activePod = getActivePodName(pod, ns);
-                execTemplate = String.format("oc exec %s --namespace %s -- bash -c \"%s\"", activePod, ns,
-                        resolvedCommand);
-                fullExecCmd = resolver.resolve(tc, execTemplate, combinedVars, yamlFile, stepIndex, resolvedCommand);
-
-                if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                    logger.info(String.format("    %s>>> AUTH        %s: Retrying EXEC with active pod: %s",
-                            ConsoleColors.YELLOW, ConsoleColors.RESET, activePod));
-                }
-                responseObj = runWindowsCommand(fullExecCmd);
-            }
-
-            if (step.getResponse() != null) {
-                context.storeBuffer(step.getResponse(), responseObj);
-            }
-
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logNormalizedOutput(responseObj.getOutput(), logger, ConsoleColors.GREEN);
-
-                String statusColor = (responseObj.getExitCode() == 0) ? ConsoleColors.GREEN : ConsoleColors.RED;
-                logger.info(String.format("    %s>>> RESULT    %s: %s (Exit: %d)", statusColor, ConsoleColors.RESET,
-                        (responseObj.getExitCode() == 0 ? "SUCCESS" : "FAILED"), responseObj.getExitCode()));
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException("Command execution failed: " + e.getMessage());
-        }
-    }
-
-    private void handleTransfer(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
-
-        if (step.getPod() == null) {
-            throw new RuntimeException("Pod Name not defined");
-        }
-
-        Map<String, Object> combinedVars = new HashMap<>(
-                tc.getVariables() != null ? tc.getVariables() : new HashMap<>());
-        if (context != null && context.getVars() != null) {
-            combinedVars.putAll(context.getVars());
-        }
-
-        String namespace = step.getNamespace();
-        String namespaceEnv = EnvironmentManager.getEnvValue("env.openShift.namespace");
-        namespace = (namespace != null ? namespace : namespaceEnv);
-
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-        String ns = resolver.resolve(tc, namespace, combinedVars, yamlFile, stepIndex, "");
-        String op = step.getOp().toUpperCase();
-
-        String resolvedPodBase = resolver.resolve(tc, step.getPod().trim(), combinedVars, yamlFile, stepIndex, "");
-        String podName = getActivePodName(resolvedPodBase, ns);
-
-        String from = resolver.resolve(tc, step.getFrom(), combinedVars, yamlFile, stepIndex, "");
-        String to = resolver.resolve(tc, step.getTo(), combinedVars, yamlFile, stepIndex, "");
-
-        String fullCmd = op.equals("PUT")
-                ? String.format("oc cp \"%s\" %s/%s:\"%s\"", stripDriveLetter(from), ns, podName, to)
-                : String.format("oc cp %s/%s:\"%s\" \"%s\"", ns, podName, from, stripDriveLetter(to));
-
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            logger.info(String.format("    %s>>> OC %-7s%s: [%s // %s]: %s TO %s", ConsoleColors.GREEN, op,
-                    ConsoleColors.RESET, ns, podName, from, to));
-        }
-
-        try {
-            OcCmdResponse res = runWindowsCommand(fullCmd);
-
-            if (isLoginRequired(res.getOutput())) {
-                handleLazyLogin(tc, context, resolver, yamlFile, stepIndex, logger,
-                        printExecution != null && printExecution);
-
-                podName = getActivePodName(resolvedPodBase, ns);
-                fullCmd = op.equals("PUT")
-                        ? String.format("oc cp \"%s\" %s/%s:\"%s\"", stripDriveLetter(from), ns, podName, to)
-                        : String.format("oc cp %s/%s:\"%s\" \"%s\"", ns, podName, from, stripDriveLetter(to));
-
-                if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                    logger.info(String.format("    %s>>> AUTH        %s: Retrying %s with active pod: %s",
-                            ConsoleColors.YELLOW, ConsoleColors.RESET, op, podName));
-                }
-                res = runWindowsCommand(fullCmd);
-            }
-
-            if (step.getResponse() != null) {
-                context.storeBuffer(step.getResponse(), res);
-            }
-
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logNormalizedOutput(res.getOutput(), logger, ConsoleColors.GREEN);
-
-                String statusColor = (res.getExitCode() == 0) ? ConsoleColors.GREEN : ConsoleColors.RED;
-                logger.info(String.format("    %s>>> RESULT    %s: %s (Exit: %d)", statusColor, ConsoleColors.RESET,
-                        (res.getExitCode() == 0 ? "SUCCESS" : "FAILED"), res.getExitCode()));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("OC " + op + " failed: " + e.getMessage());
-        }
-    }
-
-    private void handleAssertion(TestStep step, ExecutionContext context, int stepIndex, Boolean printExecution,
-            TestLogger logger, boolean isVerbose) {
-
-        String responseKey = step.getResponse();
-        String action = (step.getAction() != null) ? step.getAction().toUpperCase() : "";
-        String expected = (step.getExpected() != null) ? step.getExpected() : "0";
-        String value = (step.getValue() != null) ? step.getValue() : "";
-
-        OcCmdResponse cachedResponse = context.getResponse(responseKey, OcCmdResponse.class);
-
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            if (action.equalsIgnoreCase("EXITCODE")) {
-                logger.info(String.format("    %s>>> ASSERT    %s: [%s] %s \"%s\"", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, responseKey, action, expected));
-            } else if (action.equalsIgnoreCase("COUNT")) {
-                logger.info(String.format("    %s>>> ASSERT    %s: [%s] %s \"%s\" (Expected: %s)", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, responseKey, action, value, expected));
-            } else {
-                logger.info(String.format("    %s>>> ASSERT    %s: [%s] %s \"%s\"", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, responseKey, action, value));
-            }
-        }
-
-        if (cachedResponse == null) {
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logger.info(String.format("    %s>>> RESULT    %s: FAILED (No response found for key: %s)",
-                        ConsoleColors.RED, ConsoleColors.RESET, responseKey));
-            }
-            throw new RuntimeException("No response found for key: " + responseKey);
-        }
-
-        boolean passed = false;
-        String actualValue = "";
-
-        if (!action.equals("EXITCODE") && !action.equals("CONTAINS") && !action.equals("NOT_CONTAINS")
-                && !action.equals("EQUALS") && !action.equals("NOT_EQUALS") && !action.equals("COUNT")) {
-            String errorMsg = "Unknown assertion type: \"" + action + "\"";
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logger.info(String.format("    %s>>> RESULT    %s: FAILED (%s)", ConsoleColors.RED, ConsoleColors.RESET,
-                        errorMsg));
-            }
-            throw new RuntimeException(errorMsg);
-        }
-
-        switch (action) {
-        case "EXITCODE":
-            String actualExit = String.valueOf(cachedResponse.getExitCode());
-            passed = (actualExit.equals(expected));
-            actualValue = "Exit: " + actualExit;
-            break;
-        case "CONTAINS":
-            passed = cachedResponse.getOutput().contains(value);
-            actualValue = passed ? "String \"" + value + "\" found" : "String \"" + value + "\" NOT found";
-            break;
-        case "NOT_CONTAINS":
-            passed = !cachedResponse.getOutput().contains(value);
-            actualValue = passed ? "String \"" + value + "\" absent" : "String \"" + value + "\" present (Error)";
-            break;
-        case "EQUALS":
-            passed = cachedResponse.getOutput().trim().equals(value.trim());
-            actualValue = passed ? "Output equals \"" + value + "\""
-                    : "Output \"" + cachedResponse.getOutput().trim() + "\" does not equal \"" + value + "\"";
-            break;
-        case "NOT_EQUALS":
-            passed = !cachedResponse.getOutput().trim().equals(value.trim());
-            actualValue = passed ? "Output does not equal \"" + value + "\""
-                    : "Output equals \"" + value + "\" (Error)";
-            break;
-        case "COUNT":
-            int actualCount = countOccurrences(cachedResponse.getOutput(), value);
-            passed = (actualCount == Integer.parseInt(expected));
-            actualValue = passed ? "String \"" + value + "\" count = " + actualCount + " (expected: " + expected + ")"
-                    : "String \"" + value + "\" count = " + actualCount + " (expected: " + expected + ")";
-            break;
-        }
-
-        if (passed) {
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logger.info(String.format("    %s>>> RESULT    %s: SUCCESS (%s)", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, actualValue));
-            }
-        } else {
-            if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                logger.info(String.format("    %s>>> RESULT    %s: FAILED (%s)", ConsoleColors.RED, ConsoleColors.RESET,
-                        actualValue));
-            }
             throw new RuntimeException(
-                    String.format("Assertion %s failed! Expected: %s, Actual: %s", action, expected, actualValue));
+                    "Unsupported OC operation: " + op);
         }
     }
 
-    private void handleBuffer(TestCase tc, TestStep step, ExecutionContext context, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) {
+    private void handleExecution(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
 
-        String responseKey = step.getResponse();
-        String action = (step.getAction() != null) ? step.getAction().toUpperCase() : "TEXT";
-        String name = step.getName();
-        String rawValue = step.getValue();
-
-        if ((rawValue == null || rawValue.trim().isEmpty()) && (action.equals("LINE") || action.equals("LAST_LINE"))) {
-            rawValue = "0";
+        if (step.getCommand() == null
+                || step.getCommand().isBlank()) {
+            throw new RuntimeException(
+                    "OC EXEC requires 'command'.");
         }
 
-        int parsedValue = 0;
-        if (action.equals("LINE") || action.equals("LAST_LINE")) {
-            try {
-                parsedValue = Integer.parseInt(rawValue);
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(
-                        "Action [" + action + "] requires a valid numeric value, but got: \"" + rawValue + "\"");
-            }
+        if (step.getPod() == null
+                || step.getPod().isBlank()) {
+            throw new RuntimeException(
+                    "OC EXEC requires 'pod'.");
         }
 
-        OcCmdResponse res = (OcCmdResponse) context.getBuffer(responseKey);
-        if (res == null) {
-            throw new RuntimeException("No response found in buffer for key: " + responseKey);
+        YamlPlaceholderResolver resolver =
+                new YamlPlaceholderResolver();
+
+        Map<String, Object> combinedVars =
+                new HashMap<>();
+
+        if (tc.getVariables() != null) {
+            combinedVars.putAll(
+                    tc.getVariables());
         }
 
-        String fullOutput = res.getOutput().trim();
-        String result = "";
+        if (context != null
+                && context.getVars() != null) {
+            combinedVars.putAll(
+                    context.getVars());
+        }
+
+        String resolvedCommand =
+                resolver.resolve(
+                        tc,
+                        step.getCommand(),
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "command");
+
+        if (step.getParameters() != null) {
+            resolvedCommand =
+                    resolver.resolve(
+                            tc,
+                            resolvedCommand,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "command",
+                            step);
+        }
+
+        String namespace =
+                step.getNamespace();
+
+        if (namespace == null
+                || namespace.isBlank()) {
+            namespace =
+                    EnvironmentManager.getEnvValue(
+                            "env.openShift.namespace");
+        }
+
+        String resolvedNamespace =
+                resolver.resolve(
+                        tc,
+                        namespace,
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "namespace");
+
+        String resolvedPod =
+                resolver.resolve(
+                        tc,
+                        step.getPod(),
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "pod");
+
+        if (step.getParameters() != null) {
+            resolvedPod =
+                    resolver.resolve(
+                            tc,
+                            resolvedPod,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "pod",
+                            step);
+        }
+
+        int timeout =
+                step.getTimeout() != null
+                        ? step.getTimeout()
+                        : DEFAULT_TIMEOUT_SECONDS;
+
+        int expectedExitCode =
+                step.getExpectedExitCode() != null
+                        ? step.getExpectedExitCode()
+                        : 0;
+
+        boolean checkExitCode =
+                step.getCheckExitCode() == null
+                        || step.getCheckExitCode();
+
+        String activePod =
+                getActivePodName(
+                        resolvedPod,
+                        resolvedNamespace,
+                        timeout);
+
+        String command =
+                String.format(
+                        "oc exec %s --namespace %s -- bash -c \"%s\"",
+                        activePod,
+                        resolvedNamespace,
+                        escapeForWindowsCommand(
+                                resolvedCommand));
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> OC EXEC   %s: [%s // %s]: %s",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET,
+                            resolvedNamespace,
+                            activePod,
+                            resolvedCommand));
+        }
+
+        CommandResult result =
+                runCommand(
+                        command,
+                        timeout);
+
+        if (isLoginRequired(
+                result.getOutput())) {
+
+            handleLazyLogin(
+                    tc,
+                    context,
+                    resolver,
+                    yamlFile,
+                    stepIndex,
+                    logger,
+                    Boolean.TRUE.equals(
+                            printExecution),
+                    timeout);
+
+            activePod =
+                    getActivePodName(
+                            resolvedPod,
+                            resolvedNamespace,
+                            timeout);
+
+            command =
+                    String.format(
+                            "oc exec %s --namespace %s -- bash -c \"%s\"",
+                            activePod,
+                            resolvedNamespace,
+                            escapeForWindowsCommand(
+                                    resolvedCommand));
+
+            result =
+                    runCommand(
+                            command,
+                            timeout);
+        }
+
+        if (step.getResponse() != null) {
+            context.storeBuffer(
+                    step.getResponse(),
+                    result);
+        }
+
+        if (step.getOutputFile() != null
+                && !step.getOutputFile().isBlank()) {
+
+            String resolvedOutputFile =
+                    resolver.resolve(
+                            tc,
+                            step.getOutputFile(),
+                            combinedVars,
+                            yamlFile,
+                            stepIndex,
+                            "outputFile");
+
+            CommandExecutionSupport.writeOutputFile(
+                    resolvedOutputFile,
+                    result.getOutput(),
+                    null);
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logNormalizedOutput(
+                    result.getOutput(),
+                    logger,
+                    ConsoleColors.GREEN);
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: Exit=%d, Timeout=%s, Duration=%d ms",
+                            result.getExitCode() == expectedExitCode
+                                            && !result.isTimedOut()
+                                    ? ConsoleColors.GREEN
+                                    : ConsoleColors.RED,
+                            ConsoleColors.RESET,
+                            result.getExitCode(),
+                            result.isTimedOut(),
+                            result.getDurationMs()));
+        }
+
+        if (result.isTimedOut()) {
+            throw new RuntimeException(
+                    "OC command timed out after "
+                            + timeout
+                            + " seconds.");
+        }
+
+        if (checkExitCode
+                && result.getExitCode()
+                        != expectedExitCode) {
+
+            throw new RuntimeException(
+                    "OC command failed. Expected exit code "
+                            + expectedExitCode
+                            + " but got "
+                            + result.getExitCode());
+        }
+    }
+
+    private void handleTransfer(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
+
+        String op =
+                step.getOp().toUpperCase();
+
+        if (step.getPod() == null
+                || step.getPod().isBlank()) {
+            throw new RuntimeException(
+                    "OC " + op + " requires 'pod'.");
+        }
+
+        if (step.getFrom() == null
+                || step.getFrom().isBlank()) {
+            throw new RuntimeException(
+                    "OC " + op + " requires 'from'.");
+        }
+
+        if (step.getTo() == null
+                || step.getTo().isBlank()) {
+            throw new RuntimeException(
+                    "OC " + op + " requires 'to'.");
+        }
+
+        Map<String, Object> combinedVars =
+                new HashMap<>();
+
+        if (tc.getVariables() != null) {
+            combinedVars.putAll(
+                    tc.getVariables());
+        }
+
+        if (context != null
+                && context.getVars() != null) {
+            combinedVars.putAll(
+                    context.getVars());
+        }
+
+        String namespace =
+                step.getNamespace();
+
+        if (namespace == null
+                || namespace.isBlank()) {
+            namespace =
+                    EnvironmentManager.getEnvValue(
+                            "env.openShift.namespace");
+        }
+
+        YamlPlaceholderResolver resolver =
+                new YamlPlaceholderResolver();
+
+        String resolvedNamespace =
+                resolver.resolve(
+                        tc,
+                        namespace,
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "namespace");
+
+        String resolvedPodBase =
+                resolver.resolve(
+                        tc,
+                        step.getPod().trim(),
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "pod");
+
+        if (step.getParameters() != null) {
+            resolvedPodBase =
+                    resolver.resolve(
+                            tc,
+                            resolvedPodBase,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "pod",
+                            step);
+        }
+
+        String from =
+                resolver.resolve(
+                        tc,
+                        step.getFrom(),
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "from");
+
+        if (step.getParameters() != null) {
+            from =
+                    resolver.resolve(
+                            tc,
+                            from,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "from",
+                            step);
+        }
+
+        String to =
+                resolver.resolve(
+                        tc,
+                        step.getTo(),
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "to");
+
+        if (step.getParameters() != null) {
+            to =
+                    resolver.resolve(
+                            tc,
+                            to,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "to",
+                            step);
+        }
+
+        int timeout =
+                step.getTimeout() != null
+                        ? step.getTimeout()
+                        : DEFAULT_TIMEOUT_SECONDS;
+
+        int expectedExitCode =
+                step.getExpectedExitCode() != null
+                        ? step.getExpectedExitCode()
+                        : 0;
+
+        boolean checkExitCode =
+                step.getCheckExitCode() == null
+                        || step.getCheckExitCode();
+
+        String podName =
+                getActivePodName(
+                        resolvedPodBase,
+                        resolvedNamespace,
+                        timeout);
+
+        String fullCommand =
+                createTransferCommand(
+                        op,
+                        resolvedNamespace,
+                        podName,
+                        from,
+                        to);
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> OC %-7s%s: [%s // %s]: %s -> %s",
+                            ConsoleColors.GREEN,
+                            op,
+                            ConsoleColors.RESET,
+                            resolvedNamespace,
+                            podName,
+                            from,
+                            to));
+        }
+
+        CommandResult result =
+                runCommand(
+                        fullCommand,
+                        timeout);
+
+        if (isLoginRequired(
+                result.getOutput())) {
+
+            handleLazyLogin(
+                    tc,
+                    context,
+                    resolver,
+                    yamlFile,
+                    stepIndex,
+                    logger,
+                    Boolean.TRUE.equals(
+                            printExecution),
+                    timeout);
+
+            podName =
+                    getActivePodName(
+                            resolvedPodBase,
+                            resolvedNamespace,
+                            timeout);
+
+            fullCommand =
+                    createTransferCommand(
+                            op,
+                            resolvedNamespace,
+                            podName,
+                            from,
+                            to);
+
+            result =
+                    runCommand(
+                            fullCommand,
+                            timeout);
+        }
+
+        if (step.getResponse() != null) {
+            context.storeBuffer(
+                    step.getResponse(),
+                    result);
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            String resultColor =
+                    result.getExitCode() == expectedExitCode
+                                    && !result.isTimedOut()
+                            ? ConsoleColors.GREEN
+                            : ConsoleColors.RED;
+
+            logNormalizedOutput(
+                    result.getOutput(),
+                    logger,
+                    resultColor);
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: Exit=%d, Timeout=%s, Duration=%d ms",
+                            resultColor,
+                            ConsoleColors.RESET,
+                            result.getExitCode(),
+                            result.isTimedOut(),
+                            result.getDurationMs()));
+        }
+
+        if (result.isTimedOut()) {
+            throw new RuntimeException(
+                    "OC "
+                            + op
+                            + " timed out after "
+                            + timeout
+                            + " seconds.");
+        }
+
+        if (checkExitCode
+                && result.getExitCode()
+                        != expectedExitCode) {
+
+            throw new RuntimeException(
+                    "OC "
+                            + op
+                            + " failed. Expected exit code "
+                            + expectedExitCode
+                            + " but got "
+                            + result.getExitCode());
+        }
+    }
+
+    private String createTransferCommand(
+            String op,
+            String namespace,
+            String podName,
+            String from,
+            String to) {
+
+        if ("PUT".equals(op)) {
+
+            String localFrom =
+                    normalizeWindowsPathForOcCp(from);
+
+            return String.format(
+                    "oc cp \"%s\" %s/%s:\"%s\"",
+                    localFrom,
+                    namespace,
+                    podName,
+                    to);
+        }
+
+        String localTo =
+                normalizeWindowsPathForOcCp(to);
+
+        return String.format(
+                "oc cp %s/%s:\"%s\" \"%s\"",
+                namespace,
+                podName,
+                from,
+                localTo);
+    }
+    
+    private String normalizeWindowsPathForOcCp(
+            String path) {
+
+        if (path == null || path.isBlank()) {
+            return path;
+        }
+
+        if (path.matches("^[A-Za-z]:\\\\.*")) {
+            return path.substring(2);
+        }
+
+        return path;
+    }
+    private void handleAssertion(
+            TestStep step,
+            ExecutionContext context,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) {
+
+        String action =
+                step.getAction() != null
+                        ? step.getAction().toUpperCase()
+                        : "";
+
+        Object raw =
+                context.getBuffer(
+                        step.getResponse());
+
+        if (raw == null) {
+            throw new RuntimeException(
+                    "No response found for key: "
+                            + step.getResponse());
+        }
+
+        CommandResult result =
+                raw instanceof CommandResult
+                        ? (CommandResult) raw
+                        : null;
+
+        String output =
+                result != null
+                        ? result.getOutput()
+                        : raw.toString();
+
+        String expected =
+                step.getExpected() != null
+                        ? step.getExpected()
+                        : "0";
+
+        String value =
+                step.getValue() != null
+                        ? step.getValue()
+                        : "";
 
         switch (action) {
+
+        case "EXITCODE":
+
+            if (result == null) {
+                throw new RuntimeException(
+                        "EXITCODE requires an OC command response.");
+            }
+
+            if (result.getExitCode()
+                    != Integer.parseInt(expected)) {
+
+                throw new RuntimeException(
+                        "Assertion EXITCODE failed. Expected "
+                                + expected
+                                + " but got "
+                                + result.getExitCode());
+            }
+
+            break;
+
+        case "CONTAINS":
+
+            if (!output.contains(value)) {
+                throw new RuntimeException(
+                        "Assertion CONTAINS failed.");
+            }
+
+            break;
+
+        case "NOT_CONTAINS":
+
+            if (output.contains(value)) {
+                throw new RuntimeException(
+                        "Assertion NOT_CONTAINS failed.");
+            }
+
+            break;
+
+        case "EQUALS":
+
+            if (!output.trim()
+                    .equals(value.trim())) {
+
+                throw new RuntimeException(
+                        "Assertion EQUALS failed.");
+            }
+
+            break;
+
+        case "NOT_EQUALS":
+
+            if (output.trim()
+                    .equals(value.trim())) {
+
+                throw new RuntimeException(
+                        "Assertion NOT_EQUALS failed.");
+            }
+
+            break;
+
         case "COUNT":
-            result = String.valueOf(countOccurrences(fullOutput, (rawValue != null ? rawValue : "")));
+
+            if (countOccurrences(
+                    output,
+                    value)
+                    != Integer.parseInt(expected)) {
+
+                throw new RuntimeException(
+                        "Assertion COUNT failed.");
+            }
+
+            break;
+
+        default:
+            throw new RuntimeException(
+                    "Unknown assertion type: "
+                            + action);
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: SUCCESS",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET));
+        }
+    }
+
+    private void handleBuffer(
+            TestStep step,
+            ExecutionContext context,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) {
+
+        Object raw =
+                context.getBuffer(
+                        step.getResponse());
+
+        if (!(raw instanceof CommandResult)) {
+            throw new RuntimeException(
+                    "No OC response found for key: "
+                            + step.getResponse());
+        }
+
+        CommandResult commandResult =
+                (CommandResult) raw;
+
+        String output =
+                commandResult.getOutput() == null
+                        ? ""
+                        : commandResult.getOutput().trim();
+
+        String action =
+                step.getAction() != null
+                        ? step.getAction().toUpperCase()
+                        : "TEXT";
+
+        String value =
+                step.getValue();
+
+        if ((value == null
+                || value.isBlank())
+                && ("LINE".equals(action)
+                        || "LAST_LINE".equals(action))) {
+
+            value = "0";
+        }
+
+        String buffered;
+
+        switch (action) {
+
+        case "TEXT":
+            buffered = output;
+            break;
+
+        case "COUNT":
+            buffered =
+                    String.valueOf(
+                            countOccurrences(
+                                    output,
+                                    value != null
+                                            ? value
+                                            : ""));
             break;
 
         case "FILTER":
-            StringBuilder filtered = new StringBuilder();
-            String[] filterLines = fullOutput.split("\\R");
-            String searchStr = (rawValue != null ? rawValue : "");
-            for (String line : filterLines) {
-                if (line.contains(searchStr)) {
-                    filtered.append(line).append("\n");
-                }
-            }
-            result = filtered.toString().trim();
-            break;
-
-        case "LAST_LINE":
-            String[] lastLines = fullOutput.split("\\R");
-            result = lastLines[lastLines.length - 1 - parsedValue].trim();
+            buffered =
+                    filterLines(
+                            output,
+                            value != null
+                                    ? value
+                                    : "");
             break;
 
         case "LINE":
-            String[] normalLines = fullOutput.split("\\R");
-            result = normalLines[parsedValue].trim();
+            buffered =
+                    getLine(
+                            output,
+                            Integer.parseInt(value));
             break;
 
-        case "TEXT":
+        case "LAST_LINE":
+            buffered =
+                    getLastLine(
+                            output,
+                            Integer.parseInt(value));
+            break;
+
         default:
-            result = fullOutput;
-            break;
+            throw new RuntimeException(
+                    "Unsupported OC BUFFER action: "
+                            + action);
         }
 
-        context.storeBuffer(name, result);
+        context.storeBuffer(
+                step.getName(),
+                buffered);
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            if ("TEXT".equals(action)) {
-                logger.info(String.format("    %s>>> BUFFER    %s: [%s] Store entire output to variable [%s]",
-                        ConsoleColors.GREEN, ConsoleColors.RESET, responseKey, name));
-            } else {
-                logger.info(String.format("    %s>>> BUFFER    %s: [%s] %s \"%s\" to variable [%s]",
-                        ConsoleColors.GREEN, ConsoleColors.RESET, responseKey, action, rawValue, name));
-            }
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
 
-            if (result != null && !result.isEmpty()) {
-                String[] resultLines = result.split("\\R");
-                for (String line : resultLines) {
-                    logger.info(String.format("    %s<<< OUT       %s: %s", ConsoleColors.GREEN, ConsoleColors.RESET,
-                            line));
-                }
-            }
-            logger.info(String.format("    %s>>> RESULT    %s: SUCCESS (Buffered)", ConsoleColors.GREEN,
-                    ConsoleColors.RESET));
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: SUCCESS (Buffered)",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET));
         }
     }
 
-    private void handleLazyLogin(TestCase tc, ExecutionContext context, YamlPlaceholderResolver res, String file,
-            int idx, TestLogger logger, boolean print) throws Exception {
+    private CommandResult runCommand(
+            String command,
+            int timeout) throws Exception {
 
-        Map<String, Object> combinedVars = new HashMap<>(
-                tc.getVariables() != null ? tc.getVariables() : new HashMap<>());
-        if (context != null && context.getVars() != null) {
-            combinedVars.putAll(context.getVars());
-        }
-
-        String server = res.resolve(tc, "{E[env.openShift.loginServer]}", combinedVars, file, idx, "");
-        String username = res.resolve(tc, "{E[env.openShift.username]}", combinedVars, file, idx, "");
-        String password = res.resolve(tc, "{E[env.openShift.password]}", combinedVars, file, idx, "");
-
-        if (print) {
-            logger.info(String.format("    %s>>> AUTH       %s: Session expired. Lazy Login Triggered...",
-                    ConsoleColors.YELLOW, ConsoleColors.RESET));
-            logger.info(String.format("    %s>>> AUTH       %s: Server: %s | User: %s | Pwd: ****",
-                    ConsoleColors.YELLOW, ConsoleColors.RESET, server, username));
-        }
-
-        String loginCmd = String.format("oc login %s --username=%s --password=%s --insecure-skip-tls-verify", server,
-                username, password);
-        OcCmdResponse loginRes = runWindowsCommand(loginCmd);
-
-        if (print && loginRes.getOutput() != null) {
-            String[] loginLines = loginRes.getOutput().trim().split("\\r?\\n");
-            for (String line : loginLines) {
-                if (!line.trim().isEmpty()) {
-                    logger.info(String.format("    %s<<< OUT       %s: [AUTH] %s", ConsoleColors.YELLOW,
-                            ConsoleColors.RESET, line.trim()));
-                }
-            }
-        }
-
-        String targetNamespace = res.resolve(tc, "{E[env.openShift.namespace]}", combinedVars, file, idx, "");
-        if (targetNamespace == null || targetNamespace.trim().isEmpty() || targetNamespace.contains("{E[")) {
-            targetNamespace = "kvw-int-app";
-        }
-
-        if (print) {
-            logger.info(String.format("    %s>>> AUTH       %s: Setting active project to: %s", ConsoleColors.YELLOW,
-                    ConsoleColors.RESET, targetNamespace));
-        }
-        runWindowsCommand("oc project " + targetNamespace);
+        return CommandExecutionSupport.executeWindowsShell(
+                command,
+                null,
+                timeout);
     }
 
-    private void logNormalizedOutput(String output, TestLogger logger, String color) {
-        if (output == null || output.trim().isEmpty())
-            return;
-        String[] lines = output.trim().split("\\R");
-        for (String line : lines) {
-            logger.info(String.format("    %s<<< OUT       %s: %s", color, ConsoleColors.RESET, line));
-        }
-    }
+    private String getActivePodName(
+            String service,
+            String namespace,
+            int timeout) throws Exception {
 
-    private OcCmdResponse runWindowsCommand(String command) {
-        StringBuilder output = new StringBuilder();
-        try {
-            Process p = new ProcessBuilder("cmd.exe", "/c", command).redirectErrorStream(true).start();
-            try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-                String line;
-                while ((line = r.readLine()) != null)
-                    output.append(line).append("\n");
-            }
-            return new OcCmdResponse(p.waitFor(), output.toString());
-        } catch (Exception e) {
-            return new OcCmdResponse(1, "SHELL_ERROR: " + e.getMessage());
-        }
-    }
+        String command =
+                String.format(
+                        "oc get pods -n %s --field-selector=status.phase=Running -o custom-columns=:metadata.name --no-headers",
+                        namespace);
 
-    private String stripDriveLetter(String path) {
-        if (path != null && path.length() > 1 && path.charAt(1) == ':')
-            return path.substring(2);
-        return path;
-    }
+        CommandResult result =
+                runCommand(
+                        command,
+                        timeout);
 
-    private String getActivePodName(String service, String ns) throws Exception {
-        String cmd = String.format(
-                "oc get pods -n %s --field-selector=status.phase=Running -o custom-columns=:metadata.name --no-headers",
-                ns);
-        OcCmdResponse res = runWindowsCommand(cmd);
-        String[] lines = res.getOutput().split("\\r?\\n");
-        for (String line : lines) {
-            if (line.trim().startsWith(service))
+        for (String line :
+                result.getOutput()
+                        .split("\\R")) {
+
+            if (line.trim()
+                    .startsWith(service)) {
                 return line.trim();
+            }
         }
+
         return service;
     }
 
-    private boolean isLoginRequired(String out) {
-        if (out == null || out.trim().isEmpty()) {
+    private void handleLazyLogin(
+            TestCase tc,
+            ExecutionContext context,
+            YamlPlaceholderResolver resolver,
+            String yamlFile,
+            int stepIndex,
+            TestLogger logger,
+            boolean print,
+            int timeout) throws Exception {
+
+        Map<String, Object> combinedVars =
+                new HashMap<>();
+
+        if (tc.getVariables() != null) {
+            combinedVars.putAll(
+                    tc.getVariables());
+        }
+
+        if (context != null
+                && context.getVars() != null) {
+            combinedVars.putAll(
+                    context.getVars());
+        }
+
+        String server =
+                resolver.resolve(
+                        tc,
+                        "{E[env.openShift.loginServer]}",
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "loginServer");
+
+        String username =
+                resolver.resolve(
+                        tc,
+                        "{E[env.openShift.username]}",
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "username");
+
+        String password =
+                resolver.resolve(
+                        tc,
+                        "{E[env.openShift.password]}",
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "password");
+
+        String loginCommand =
+                String.format(
+                        "oc login %s --username=%s --password=%s --insecure-skip-tls-verify",
+                        server,
+                        username,
+                        password);
+
+        runCommand(
+                loginCommand,
+                timeout);
+
+        String namespace =
+                resolver.resolve(
+                        tc,
+                        "{E[env.openShift.namespace]}",
+                        combinedVars,
+                        yamlFile,
+                        stepIndex,
+                        "namespace");
+
+        if (namespace != null
+                && !namespace.isBlank()
+                && !namespace.contains("{E[")) {
+
+            runCommand(
+                    "oc project "
+                            + namespace,
+                    timeout);
+        }
+
+        if (print) {
+            logger.info(
+                    String.format(
+                            "    %s>>> AUTH      %s: Login completed",
+                            ConsoleColors.YELLOW,
+                            ConsoleColors.RESET));
+        }
+    }
+
+    private boolean isLoginRequired(
+            String output) {
+
+        if (output == null
+                || output.isBlank()) {
             return false;
         }
-        String lowerOut = out.toLowerCase();
-        return lowerOut.contains("you must be logged in") || lowerOut.contains("unauthorized")
-                || lowerOut.contains("system:anonymous") || lowerOut.contains("log in")
-                || lowerOut.contains("forbidden");
+
+        String lower =
+                output.toLowerCase();
+
+        return lower.contains(
+                        "you must be logged in")
+                || lower.contains(
+                        "unauthorized")
+                || lower.contains(
+                        "system:anonymous")
+                || lower.contains(
+                        "forbidden");
     }
 
-    private int countOccurrences(String text, String search) {
-        if (text == null || search == null || search.isEmpty())
-            return 0;
-        int count = 0, idx = 0;
-        while ((idx = text.indexOf(search, idx)) != -1) {
-            count++;
-            idx += search.length();
+    private String escapeForWindowsCommand(
+            String value) {
+
+        return value.replace(
+                "\"",
+                "\\\"");
+    }
+
+    private void logNormalizedOutput(
+            String output,
+            TestLogger logger,
+            String color) {
+
+        if (output == null
+                || output.isBlank()) {
+            return;
         }
+
+        for (String line :
+                output.trim().split("\\R")) {
+
+            logger.info(
+                    String.format(
+                            "    %s<<< OUT       %s: %s",
+                            color,
+                            ConsoleColors.RESET,
+                            line));
+        }
+    }
+
+    private String filterLines(
+            String text,
+            String search) {
+
+        StringBuilder result =
+                new StringBuilder();
+
+        for (String line :
+                text.split("\\R")) {
+
+            if (line.contains(search)) {
+                result.append(line)
+                        .append(System.lineSeparator());
+            }
+        }
+
+        return result.toString().trim();
+    }
+
+    private String getLine(
+            String text,
+            int index) {
+
+        String[] lines =
+                text.split("\\R");
+
+        if (index < 0
+                || index >= lines.length) {
+
+            throw new RuntimeException(
+                    "LINE index out of bounds: "
+                            + index);
+        }
+
+        return lines[index].trim();
+    }
+
+    private String getLastLine(
+            String text,
+            int offset) {
+
+        String[] lines =
+                text.split("\\R");
+
+        int index =
+                lines.length - 1 - offset;
+
+        if (index < 0
+                || index >= lines.length) {
+
+            throw new RuntimeException(
+                    "LAST_LINE index out of bounds: "
+                            + offset);
+        }
+
+        return lines[index].trim();
+    }
+
+    private int countOccurrences(
+            String text,
+            String search) {
+
+        if (text == null
+                || search == null
+                || search.isEmpty()) {
+            return 0;
+        }
+
+        int count = 0;
+        int index = 0;
+
+        while ((index =
+                text.indexOf(
+                        search,
+                        index)) != -1) {
+
+            count++;
+            index += search.length();
+        }
+
         return count;
     }
-
 }

@@ -1,0 +1,649 @@
+testCases:
+
+- id: 'GF: valid_VP1'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Eintritt der AU im Urlaub
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '01'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Krankenhausaufenthalt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '02'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Versäumnis des Versicherten
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '04'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Vertretungsarzt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '05'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Geschlossene Ordination
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '07'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Glaubhaft vom Patienten vorgetragen
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '08'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Sonstiges
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '09'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Feiertag
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '10'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Versäumnis Arzt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '11'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'GF: valid_VP2'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293096'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682594'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Eintritt der AU im Urlaub
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '01'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Krankenhausaufenthalt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '02'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Versäumnis des Versicherten
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '04'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Vertretungsarzt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '05'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Geschlossene Ordination
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '07'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Glaubhaft vom Patienten vorgetragen
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '08'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Sonstiges
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '09'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Feiertag
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '10'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='beschreibung']
+    action: EQUALS
+    expected: Versäumnis Arzt
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getRueckdatierungsgrundCodesResponse']/*[local-name()='return']/*[local-name()='code']
+    action: EQUALS
+    expected: '11'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'FF: DialogId Länge (33)'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'FF: DialogId not existing'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'FF: DialogId NULL'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: '{NULL}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'FF: DialogId leer'
+  description: getRueckdatierungsgrundCodes_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.getrueckdatierungsgrundcodes_request
+    response: getrueckdatierungsgrundcodes_request_response
+    parameters:
+      dialogId: '{EMPTY}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: getrueckdatierungsgrundcodes_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

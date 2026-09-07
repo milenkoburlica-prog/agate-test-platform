@@ -1,0 +1,50 @@
+name: deletemeldungenfromvpnr_bp
+steps:
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "select AUSPRAEGUNG_ID from HVB_AUSPRAEGUNG join HVB_VPNR on HVB_AUSPRAEGUNG.FK_VP_ID=HVB_VPNR.FK_VP_ID where VPNR='{R[VPNR]}'"
+        response: buffere_ausprägungsid_res
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: auspraegungId
+        row: "1"
+        column: "0"
+        response: buffere_ausprägungsid_res
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "('{B[#1]}'=='True')"
+        command: "select ID from MH_MELDUNG where FK_AUSPRAEGUNG_ID='{B[auspraegungId]}'"
+        response: buffere_meldungsid_res
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: meldungsId
+        row: "1"
+        column: "0"
+        response: buffere_meldungsid_res
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "('{B[#1]}'=='True')"
+        command: "delete from MH_TRANSPORT where FK_MELDUNG_ID='{B[meldungsId]}'"
+        response: lösche_meldung_in_transport_res
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "('{B[#1]}'=='True')"
+        command: "delete from MH_MELDUNG where ID='{B[meldungsId]}'"
+        response: lösche_meldung_res
+

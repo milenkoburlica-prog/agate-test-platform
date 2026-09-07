@@ -1,0 +1,164 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1c16b4-7d05-cc3a-bb06-860bb6bdb96d",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Zeit-austauschen_in-TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1c16b2-d3bc-c156-6802-e876d3b12ad0" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRW7P6EHPXQPNECS7D7" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "3a1c16b2-d3bc-c156-6802-e876d3b12ad0",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Zeit-austauschen_in-TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1c16a9-b7b9-39f5-29d8-e6b8cff49fd0" ],
+    "ParentFolder" : [ "3a1c16b4-7d05-cc3a-bb06-860bb6bdb96d" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1c16a9-b7b9-39f5-29d8-e6b8cff49fd0",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - powershell - Replace-Zeit.ps1"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1c16a9-b7b9-da58-f491-55ce503af991", "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0", "3a1c16a9-b7b9-adc3-26f1-7e049e08301f" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1c16b2-d3bc-c156-6802-e876d3b12ad0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-da58-f491-55ce503af991",
+    "Value" : "cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "3a1c16a9-b7b9-da58-f491-55ce503af991"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-9a88-adac-60fb792fcf40",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-9a88-adac-60fb792fcf40"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-87fb-b2e0-3af0f4574bd4",
+    "Value" : "powershell",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-87fb-b2e0-3af0f4574bd4"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-0925-c2c5-6de97b950fa5",
+    "Value" : "-ExecutionPolicy",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-0925-c2c5-6de97b950fa5"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-edb9-73ff-48be2c47315a",
+    "Value" : "Bypass",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-edb9-73ff-48be2c47315a"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-2155-6ab9-954e59dd59d8",
+    "Value" : "-File",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-2155-6ab9-954e59dd59d8"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-a74c-97ac-7b7fd7e73f77",
+    "Value" : "{B[KS_Bin_Folder]}\\Replace-Zeit.ps1",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-a74c-97ac-7b7fd7e73f77"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-e37f-2029-860e13b2987c",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\{B[FILENAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1c16a9-b7b9-0cd5-bd93-c840ffe280a0.3a1c16a9-b7b9-e37f-2029-860e13b2987c"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-9e8f-3c36-591155c684c8",
+    "Value" : "{B[G_LogDir]}\\LfNr_PROD.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "3a1c16a9-b7b9-adc3-26f1-7e049e08301f.3a1c16a9-b7b9-9e8f-3c36-591155c684c8"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-45e6-08b9-da7100413386",
+    "Value" : "3000",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.TimeoutForExit",
+    "ToscaPathID" : "3a1c16a9-b7b9-adc3-26f1-7e049e08301f.3a1c16a9-b7b9-45e6-08b9-da7100413386"
+  } ]
+} ]

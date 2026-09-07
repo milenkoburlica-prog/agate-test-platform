@@ -1,0 +1,1701 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "01KV5E9EZ06AR0ENJ3P0E6MYEZ",
+  "Attributes" : {
+    "IncludeForSynchronization" : "1",
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "132717",
+    "DerivedFromName" : "",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "PST_Export"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TemplateDetail" : [ "01KV5E9EZB1X33T5MT71QBGDGT" ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "01KV5E9EZ26XZ654JZP1229YAQ", "01KV5E9EZ87KV1RY013DJEBYEN", "01KV5E9EZB1X33T5MT71QBGDGS" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "01KR37D860F3RCGVXH1GSX7J94" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ26XZ654JZP1229YAR",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "TC_ID",
+    "value" : "{XL[TC_NAME]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "TC_ID",
+    "toscaPathID" : "01KV5E9EZ26XZ654JZP1229YAS"
+  }, {
+    "name" : "tc_name",
+    "value" : "{B[TC_ID]}_{DATETIME}",
+    "actionMode" : "Insert",
+    "toscaPath" : "tc_name",
+    "toscaPathID" : "01KV5E9EZ26XZ654JZP1229YAT"
+  }, {
+    "name" : "TEST_DATA_PACKET_DIR",
+    "value" : "{B[TC_ID]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "TEST_DATA_PACKET_DIR",
+    "toscaPathID" : "01KV5E9EZ26XZ654JZP1229YAV"
+  }, {
+    "name" : "referenze2",
+    "value" : "XX",
+    "actionMode" : "Insert",
+    "toscaPath" : "referenze2",
+    "toscaPathID" : "01KV5E9EZ26XZ654JZP1229YAW"
+  }, {
+    "name" : "task",
+    "value" : "job",
+    "actionMode" : "Insert",
+    "toscaPath" : "task",
+    "toscaPathID" : "01KV5E9EZ26XZ654JZP1229YAX"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "01_execute_ssh_Reference - pst import",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ26XZ654JZP1229YAY",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "buffer",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "pst import",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQYV",
+  "condition" : null,
+  "reusableSurrogate" : "01KP5FGX3H8KJAQD1AF60K8CKS",
+  "reusableName" : "database_unverarbeitete_bestände_loeschen",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQYW",
+  "condition" : "Preparation.Auftrag.VUNEUTESTNR20260101.aktive == \"y\"",
+  "reusableSurrogate" : "01KNAFYRT4C6ZNFJ75150V2DFQ",
+  "reusableName" : "PST_XML_VUNEUTESTNR20260101_Create_1_OK______Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQYX",
+  "condition" : "Preparation.Auftrag.STPETEST_BKFDHTESTNR20260101.aktive == \"y\"",
+  "reusableSurrogate" : "01KNKW19CW26N6V0H2BFW7RF2K",
+  "reusableName" : "PST_XML_BKFDHTESTNR20260101_Create_1_OK_Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQYY",
+  "condition" : "Preparation.Auftrag.STPTETEST_TELEMEDIZINISCHEKONSULTATIONPERSONALISIERT.aktive == \"y\"",
+  "reusableSurrogate" : "01KNKXMH0KAT3T2YGT0955RW51",
+  "reusableName" : "PST_TSV_STPTETEST_TELEMEDIZINISCHEKONSULTATIONPERSONALISIERT_Create_1_OK_Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQYZ",
+  "condition" : "Preparation.Auftrag.INPVPTEST_KRANKENANSTALTENAUFNAHMEEREIGNISBMGPERSONALISIERT_1.aktive == \"y\"",
+  "reusableSurrogate" : "01KNKY7X13CRR8J8TEYNPCEBZ6",
+  "reusableName" : "PST_TSV_INPVPTEST_KRANKENANSTALTENAUFNAHMEEREIGNISBMGPERSONALISIERT_Create_1_OK_Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ0",
+  "condition" : "Preparation.Auftrag.DWHSTTEST_DWHSTATPERSONALISIERT_1.aktive == \"y\"",
+  "reusableSurrogate" : "01KNKYK0SH44D6SQSZTRGCQD9C",
+  "reusableName" : "PST_TSV_DWHSTTEST_DWHSTATPERSONALISIERT_Create_1_OK_Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ1",
+  "condition" : "Preparation.Auftrag.STPDWTEST_KALLEISTUNGSERBRINGERPERSONALISIERT.aktive == \"y\"",
+  "reusableSurrogate" : "01KNKZ2HM6D147B6N66ND014N3",
+  "reusableName" : "PST_TSV_STPDWTEST_KALLEISTUNGSERBRINGERPERSONALISIERT_Create_1_OK_Bestand",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ2",
+  "condition" : "Preparation.Auftrag.VUNEUTESTNR20260101_OK_OK.aktive == \"y\"",
+  "reusableSurrogate" : "01KNAFYX8KDZ42REV152HM9T1X",
+  "reusableName" : "PST_XML_VUNEUTESTNR20260101_Create_2_OK__OK_Bestande",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ3",
+  "condition" : "Preparation.Auftrag.VUNEUTESTNR2026010_OK_NOK.aktive == \"y\"",
+  "reusableSurrogate" : "01KNAFZ09DC8X0TFF09HCZZ82P",
+  "reusableName" : "PST_XML_VUNEUTESTNR20260101_Create_2_OK_NOK_Bestande",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Error Manipulacija 1 - paketinfo_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ4",
+  "condition" : "ErrorManipulation == \"1\"",
+  "reusableSurrogate" : "01KPDWPC3F3CXJZD2MVNWS65VD",
+  "reusableName" : "Error Manipulacija 1 - paketinfo",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Error Manipulacija 2 - bestand.xml_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ5",
+  "condition" : "ErrorManipulation == \"2\"",
+  "reusableSurrogate" : "01KPDWPP34EBGR3YMTMJTVZ8DP",
+  "reusableName" : "Error Manipulacija 2 - bestand.xml",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ6",
+  "condition" : "ErrorManipulation == \"3\"",
+  "reusableSurrogate" : "01KPETTJST9BK2CPF90QKAEX0D",
+  "reusableName" : "Error Manipulacija 3 - xml node ",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ34FY3C1VGEVSGTQZ7",
+  "condition" : "ErrorManipulation == \"4\"",
+  "reusableSurrogate" : "01KPETTYA5CPHER9363R898XK3",
+  "reusableName" : "Error Manipulacija 4 - xml node ",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYE0",
+  "condition" : "ErrorManipulation == \"5\"",
+  "reusableSurrogate" : "01KPETV713ASZFJ9NJPV1YW2W8",
+  "reusableName" : "Error Manipulacija 5 - xml node ",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYE2",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "logging_path",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "logging_path",
+    "toscaPathID" : "01KV5E9EZ87KV1RY013DJEBYE3"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Create Logging DIR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYE4",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C mkdir {B[logging_path]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Copy to Logging Dir POD Log",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYEC",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C copy {B[PST_BASE_PATH_TEMP_OUTPUT]}\\* {B[logging_path]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYEP",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+  "reusableName" : "02_execute_file_transfer",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "put",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "WindowsFilePath" : {
+      "value" : "{B[DDAU_FILE_NAME_FOR_OC_CP]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "UnixFilePath" : {
+      "value" : "{B[PST_VAR_DOWNLOAD_FOLDER]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "01_execute_ssh_Reference - pst import",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ87KV1RY013DJEBYEW",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "buffer",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "pst import",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "backup-pod_log_Reference - import",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G70",
+  "condition" : null,
+  "reusableSurrogate" : "01KNHV2HFW1DRW0CHFPEG8QF0R",
+  "reusableName" : "backup-pod_log_file",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "operation" : {
+      "value" : "import",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer - Set Path",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G74",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "log_to_check",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}\\{B[tc_name]}-pod-log-import.txt",
+    "actionMode" : "Insert",
+    "toscaPath" : "log_to_check",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G75"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G78",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check01.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G79"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT1 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G7A",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check01.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check01.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT2",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G7G",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check02.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G7H"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT2 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G7J",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check02.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check02.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT3",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G7R",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check03.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G7S"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT3in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G7T",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check03.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check03.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT4",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G80",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check04.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G81"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT4 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G82",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check04.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check04.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT5",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G88",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check05.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G89"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT5 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G8A",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check05.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check05.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT6",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G8G",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check06.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G8H"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT6 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G8J",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check06.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check06.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT7",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G8R",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check07.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G8S"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT7 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G8T",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check07.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check07.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT8",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZ9F7B6637MQQWX1G90",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check08.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZ9F7B6637MQQWX1G91"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT8 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N19",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check08.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check08.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT9",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N1F",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ImportChecks.Check09.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N1G"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT9 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N1H",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ImportChecks.Check09.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ImportChecks.Check09.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "01_execute_ssh_Reference - pst job",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N1P",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "buffer",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "pst job -pwd pstint_all",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "backup-pod_log_Reference - import",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N1X",
+  "condition" : null,
+  "reusableSurrogate" : "01KNHV2HFW1DRW0CHFPEG8QF0R",
+  "reusableName" : "backup-pod_log_file",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "operation" : {
+      "value" : "job",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer - Set Path",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N21",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "log_to_check",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}\\{B[tc_name]}-pod-log-job.txt",
+    "actionMode" : "Insert",
+    "toscaPath" : "log_to_check",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N22"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N25",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check01.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N26"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT1 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N27",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check01.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check01.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT3",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2D",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check03.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N2E"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT3in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2F",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check03.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check03.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT4",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2N",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check04.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N2P"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT4 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2Q",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check04.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check04.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT5",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2X",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check05.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N2Y"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT5 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N2Z",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check05.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check05.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT6",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N35",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check06.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N36"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT6 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N37",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check06.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check06.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT7",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N3D",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check07.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N3E"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT7 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N3F",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check07.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check07.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT8",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N3N",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check08.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZAA3P5B7HDWRVB4N3P"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT8 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZAA3P5B7HDWRVB4N3Q",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check08.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check08.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT9",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZB1X33T5MT71QBGDGJ",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "PstChecks.Check09.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5E9EZB1X33T5MT71QBGDGK"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT9 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5E9EZB1X33T5MT71QBGDGM",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[PstChecks.Check09.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[PstChecks.Check09.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "01_execute_ssh_Reference - pst export",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0148A22JWZCT42M70B",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "buffer",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "pst export",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "backup-pod_log_Reference - export",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0148A22JWZCT42M70J",
+  "condition" : null,
+  "reusableSurrogate" : "01KNHV2HFW1DRW0CHFPEG8QF0R",
+  "reusableName" : "backup-pod_log_file",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "operation" : {
+      "value" : "export",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer - Set Path",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0148A22JWZCT42M70P",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "log_to_check",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}\\{B[tc_name]}-pod-log-export.txt",
+    "actionMode" : "Insert",
+    "toscaPath" : "log_to_check",
+    "toscaPathID" : "01KV5EZX0148A22JWZCT42M70Q"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7WX",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check01.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7WY"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT1 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7WZ",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check01.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check01.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT2",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7X5",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check02.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7X6"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT2 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7X7",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check02.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check02.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT3",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XD",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check03.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7XE"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT3 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XF",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check03.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check03.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT4",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XN",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check04.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7XP"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT4 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XQ",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check04.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check04.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT5",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XX",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check05.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7XY"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT5 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7XZ",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check05.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check05.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT6",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7Y5",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check06.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7Y6"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT6 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7Y7",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check06.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check06.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT7",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7YD",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check07.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7YE"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT7 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7YF",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check07.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check07.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "PitStop - Check Logs PtstJob TEXT8",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7YN",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "ExportChecks.Check08.Key != NULL",
+  "values" : [ {
+    "name" : "pitStop",
+    "value" : "pitStop",
+    "actionMode" : "Insert",
+    "toscaPath" : "pitStop",
+    "toscaPathID" : "01KV5EZX0278PSXGFZA5ACW7YP"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "PS: Check Number of Occurance TEXT8 in File_2_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KV5EZX0278PSXGFZA5ACW7YQ",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[log_to_check]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "{XL[ExportChecks.Check08.Key]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "{XL[ExportChecks.Check08.Value]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+} ]

@@ -1,0 +1,989 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "01KPETV713ASZFJ9NJPV1YW2W8",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Error Manipulacija 5 - xml node "
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ],
+    "Library" : [ "01KNAFYJ56D0BDKZQQ64YKC17X" ],
+    "UsedBy" : [ "01KV5E9EZ87KV1RY013DJEBYE0" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FB",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Error Manipulacija 5 - xml node "
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KNQCKGGQ4T25AH8YMWYHD6FC", "01KNQCKGGQ4T25AH8YMWYHD6FQ", "01KNQCKGGRDG1TBZ3ACBERRCEB", "01KNQCKGGRDG1TBZ3ACBERRCEQ", "01KNQCKGGRDG1TBZ3ACBERRCF8", "01KNQCKGGRDG1TBZ3ACBERRCFP", "01KNQCKGGRDG1TBZ3ACBERRCG2", "01KNQCKGGRDG1TBZ3ACBERRCGB", "01KNQCKGGRDG1TBZ3ACBERRCGF" ],
+    "ParentFolder" : [ "01KPETV713ASZFJ9NJPV1YW2W8" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FC",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - clean temp folder"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGQ4T25AH8YMWYHD6FD", "01KNQCKGGQ4T25AH8YMWYHD6FE", "01KNQCKGGQ4T25AH8YMWYHD6FM" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FD",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FD"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FF",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FE.01KNQCKGGQ4T25AH8YMWYHD6FF"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FG",
+    "Value" : "del",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FE.01KNQCKGGQ4T25AH8YMWYHD6FG"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FH",
+    "Value" : "/Q",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FE.01KNQCKGGQ4T25AH8YMWYHD6FH"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FJ",
+    "Value" : "/S",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FE.01KNQCKGGQ4T25AH8YMWYHD6FJ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FK",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FE.01KNQCKGGQ4T25AH8YMWYHD6FK"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FN",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FM.01KNQCKGGQ4T25AH8YMWYHD6FN"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FP",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGQ4T25AH8YMWYHD6FM.01KNQCKGGQ4T25AH8YMWYHD6FP"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGQ4T25AH8YMWYHD6FQ",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - copy gz from output to temp"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCE2", "01KNQCKGGRDG1TBZ3ACBERRCE3", "01KNQCKGGRDG1TBZ3ACBERRCE8" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE2",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE2"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE4",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE3.01KNQCKGGRDG1TBZ3ACBERRCE4"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE5",
+    "Value" : "copy",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE3.01KNQCKGGRDG1TBZ3ACBERRCE5"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE6",
+    "Value" : "{B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE3.01KNQCKGGRDG1TBZ3ACBERRCE6"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE7",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE3.01KNQCKGGRDG1TBZ3ACBERRCE7"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCE9",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE8.01KNQCKGGRDG1TBZ3ACBERRCE9"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEA",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCE8.01KNQCKGGRDG1TBZ3ACBERRCEA"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEB",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - unzip ddausNY frm output to temp"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCEC", "01KNQCKGGRDG1TBZ3ACBERRCED", "01KNQCKGGRDG1TBZ3ACBERRCEM" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEC",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCEC"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEE",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEE"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEF",
+    "Value" : "java",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEF"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEG",
+    "Value" : "-jar",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEG"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEH",
+    "Value" : "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEH"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEJ",
+    "Value" : "--unpack",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEJ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEK",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCED.01KNQCKGGRDG1TBZ3ACBERRCEK"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEN",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCEM.01KNQCKGGRDG1TBZ3ACBERRCEN"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEP",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCEM.01KNQCKGGRDG1TBZ3ACBERRCEP"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEQ",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "delete Paketkopf.Erstellungsdatum"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KNQCKGGRDG1TBZ3ACBERRCER" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCER",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - delete Paketkopf.Erstellungsdatum"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCES", "01KNQCKGGRDG1TBZ3ACBERRCET", "01KNQCKGGRDG1TBZ3ACBERRCF5" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGRDG1TBZ3ACBERRCEQ" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCES",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCES"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEV",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCEV"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEW",
+    "Value" : "java",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCEW"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEX",
+    "Value" : "-jar",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCEX"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEY",
+    "Value" : "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCEY"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCEZ",
+    "Value" : "--input",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCEZ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KW97HTNXAD59FN4C5Y01WYVD",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[TSV_DATEI_INPUT_12]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KW97HTNXAD59FN4C5Y01WYVD"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF1",
+    "Value" : "--nodekey",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCF1"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF2",
+    "Value" : "Paketkopf.Erstellungsdatum",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCF2"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF3",
+    "Value" : "--nodevalue",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCF3"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF4",
+    "Value" : "NULL",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCET.01KNQCKGGRDG1TBZ3ACBERRCF4"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF6",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCF5.01KNQCKGGRDG1TBZ3ACBERRCF6"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF7",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCF5.01KNQCKGGRDG1TBZ3ACBERRCF7"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF8",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - zip ddausNY frm output to temp"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCF9", "01KNQCKGGRDG1TBZ3ACBERRCFA", "01KNQCKGGRDG1TBZ3ACBERRCFK" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCF9",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCF9"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFB",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFB"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFC",
+    "Value" : "java",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFC"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFD",
+    "Value" : "-jar",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFD"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFE",
+    "Value" : "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFE"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFF",
+    "Value" : "--pack",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFF"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFG",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFG"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFH",
+    "Value" : "--format",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFH"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFJ",
+    "Value" : "NY",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFA.01KNQCKGGRDG1TBZ3ACBERRCFJ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFM",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFK.01KNQCKGGRDG1TBZ3ACBERRCFM"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFN",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFK.01KNQCKGGRDG1TBZ3ACBERRCFN"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFP",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Get DDAU EU Filename"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCFQ", "01KNQCKGGRDG1TBZ3ACBERRCFR", "01KNQCKGGRDG1TBZ3ACBERRCFZ" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFQ",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFQ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFS",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFS"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFT",
+    "Value" : "java",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFT"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFV",
+    "Value" : "-jar",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFV"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFW",
+    "Value" : "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFW"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFX",
+    "Value" : "--file",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFX"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCFY",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFR.01KNQCKGGRDG1TBZ3ACBERRCFY"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG0",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.StandardOutputFile",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFZ.01KNQCKGGRDG1TBZ3ACBERRCG0"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG1",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCFZ.01KNQCKGGRDG1TBZ3ACBERRCG1"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG2",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Remove EOL"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCG3", "01KNQCKGGRDG1TBZ3ACBERRCG4", "01KNQCKGGRDG1TBZ3ACBERRCG9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG3",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG3"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG5",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG4.01KNQCKGGRDG1TBZ3ACBERRCG5"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG6",
+    "Value" : "powershell",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG4.01KNQCKGGRDG1TBZ3ACBERRCG6"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG7",
+    "Value" : "-Command",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG4.01KNQCKGGRDG1TBZ3ACBERRCG7"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCG8",
+    "Value" : "(Get-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -NoNewline",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG4.01KNQCKGGRDG1TBZ3ACBERRCG8"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGA",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCG9.01KNQCKGGRDG1TBZ3ACBERRCGA"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGB",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Read/Create File"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCGC", "01KNQCKGGRDG1TBZ3ACBERRCGD", "01KNQCKGGRDG1TBZ3ACBERRCGE" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca12-20fa-841b-58d4b8e3af98" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGC",
+    "Value" : "{B[G_LogDir]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Directory",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGC"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGD",
+    "Value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "File",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGD"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGE",
+    "Value" : "DDAU_FILE_NAME_NEU",
+    "ExplicitName" : "",
+    "ActionMode" : "Buffer",
+    "ActionProperty" : "",
+    "ToscaPath" : "Text",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGE"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGF",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "1",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Copy file"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KNQCKGGRDG1TBZ3ACBERRCGG", "01KNQCKGGRDG1TBZ3ACBERRCGH", "01KNQCKGGRDG1TBZ3ACBERRCGQ" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KNQCKGGQ4T25AH8YMWYHD6FB" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGG",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGG"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGJ",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGH.01KNQCKGGRDG1TBZ3ACBERRCGJ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGK",
+    "Value" : "copy",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGH.01KNQCKGGRDG1TBZ3ACBERRCGK"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGM",
+    "Value" : "/Y",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGH.01KNQCKGGRDG1TBZ3ACBERRCGM"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGN",
+    "Value" : "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME_NEU]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGH.01KNQCKGGRDG1TBZ3ACBERRCGN"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGP",
+    "Value" : "{B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGH.01KNQCKGGRDG1TBZ3ACBERRCGP"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KNQCKGGRDG1TBZ3ACBERRCGR",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KNQCKGGRDG1TBZ3ACBERRCGQ.01KNQCKGGRDG1TBZ3ACBERRCGR"
+  } ]
+} ]

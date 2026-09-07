@@ -1,0 +1,80 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1a13da-ee7f-c123-3344-ef1ffbe91910",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "execute-psql-script_atomic_1_0"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a1a13da-ef3a-93f2-2098-f7a13339124f" ],
+    "Items" : [ "3a1aa1ac-79c6-199f-421e-805fde5db2bc" ],
+    "Library" : [ "3a1a1b6f-d03d-d58d-4df1-a76bf1a07d9c" ],
+    "UsedBy" : [ "3a1a9260-9cba-2670-1220-402c3d1c39a5", "3a1a9cc6-47fb-3180-1aa3-6495c8884873", "3a1a9cc7-409f-0273-6527-5c16f5ecc3b2", "3a1a9cc7-4cd0-7985-246b-608bb02666a2" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "psqlFilename",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1a13da-f027-790e-10fd-5d195ee017a0",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "filename",
+    "value" : "{PL[psqlFilename]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "filename",
+    "toscaPathID" : "3a1a13da-f027-af78-9ed2-bf446de8e69e"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1a13da-f027-59f1-cf6f-c6b109595b9c",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "psql.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\log_{B[filename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "-h {B[G_KS_DB_URL]} -U {B[G_KS_DB_USER]} -d {B[G_KS_DB_DSN]} -f {B[KS_Testdaten_BaseDir]}\\db_scripte\\{B[filename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+} ]

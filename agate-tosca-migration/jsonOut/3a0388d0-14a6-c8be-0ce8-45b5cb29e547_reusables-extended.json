@@ -1,0 +1,1601 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "3a0388d0-14a6-c8be-0ce8-45b5cb29e547",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "Karte stecken (für O-Card oder e-Card)",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "o-/e-Card stecken"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParameterLayer": [
+        "3a0388d0-649d-06fa-b040-ca4b0d893624"
+      ],
+      "Items": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99",
+        "3a038e12-924b-fd69-fc05-be294e1d4f78"
+      ],
+      "Library": [
+        "3a0388cf-a31e-a30f-36d2-54a18b123a9d"
+      ],
+      "UsedBy": [
+        "3a03a08e-b5c0-403a-dce7-ffa452f5c613",
+        "3a03a5b9-12d7-cd14-c304-78695901dcbb",
+        "3a03a580-d930-1d11-91cd-559068176983"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a07f-06f7-156f-40bd-6689b6bdabf9",
+        "3a03a07f-06f7-b318-854a-0fce5ed94370",
+        "3a03a07f-06f8-6237-2b7e-6612663e4789",
+        "3a03a07f-06f8-8ffd-c6f4-c7baa7210941",
+        "3a03a07f-06f8-7a95-a8d3-8121f6dd9ad1"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ],
+      "ParentFolder": [
+        "3a0388d0-14a6-c8be-0ce8-45b5cb29e547"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a07f-06f7-156f-40bd-6689b6bdabf9",
+    "Attributes": {
+      "ExplicitName": "GinoCardSlot",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[B_CardReaderSimulatorSlot]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a07f-06f7-b318-854a-0fce5ed94370",
+    "Attributes": {
+      "ExplicitName": "Kartenlesername",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[B_Kartenlesername]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a07f-06f8-6237-2b7e-6612663e4789",
+    "Attributes": {
+      "ExplicitName": "KartenleserIP",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[B_KartenleserIP]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a07f-06f8-8ffd-c6f4-c7baa7210941",
+    "Attributes": {
+      "ExplicitName": "Kartenlesersimulator",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a07f-06f8-7a95-a8d3-8121f6dd9ad1",
+    "Attributes": {
+      "ExplicitName": "cdfName",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{PL[cdfName]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e12-924b-fd69-fc05-be294e1d4f78",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "GINOSim - API"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a038e1b-0423-e99c-6997-ee0a83224467",
+        "3a038e1b-5efa-8815-7a75-da209ef3352e",
+        "3a038e1b-bc93-5267-7386-55dbeaf5266e",
+        "3a038e1e-a4f1-2870-8a28-4c0429f25e77"
+      ],
+      "ParentFolder": [
+        "3a0388d0-14a6-c8be-0ce8-45b5cb29e547"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1b-0423-e99c-6997-ee0a83224467",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "RemoveCard_baseContact"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a33e-0a85-3fde-6744-c4c57a6117fb",
+        "3a03a33e-1f88-2c86-5ce6-abdf67ffd472"
+      ],
+      "ParentFolder": [
+        "3a038e12-924b-fd69-fc05-be294e1d4f78"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-0a85-3fde-6744-c4c57a6117fb",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a340-b4cf-a502-f7f1-d8af41b6c6db",
+        "3a03a33e-f73c-76d4-22fd-562da1c8c19b",
+        "3a03a342-5b52-a269-060a-9890547a4f9b"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-baea-c396-44ded79366b5"
+      ],
+      "ParentFolder": [
+        "3a038e1b-0423-e99c-6997-ee0a83224467"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a340-b4cf-a502-f7f1-d8af41b6c6db",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-0a85-3fde-6744-c4c57a6117fb"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3022-7e7d-113171e5bc3c"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a33e-f73c-76d4-22fd-562da1c8c19b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "baseContact",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-0a85-3fde-6744-c4c57a6117fb"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3b2a-8368-4d675147f926"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a342-5b52-a269-060a-9890547a4f9b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-0a85-3fde-6744-c4c57a6117fb"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-948a-d062-be9940de676a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-1f88-2c86-5ce6-abdf67ffd472",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b"
+      ],
+      "ParentFolder": [
+        "3a038e1b-0423-e99c-6997-ee0a83224467"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1b-5efa-8815-7a75-da209ef3352e",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "RemoveCard_baseNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a33e-4379-6fbd-3262-2123f0033f19",
+        "3a03a33e-4558-58a4-8a93-2510a91a92ac"
+      ],
+      "ParentFolder": [
+        "3a038e12-924b-fd69-fc05-be294e1d4f78"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-4379-6fbd-3262-2123f0033f19",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a340-d286-3790-28a2-7f70506c4076",
+        "3a03a33f-8a26-0722-c589-5de8c4ffc2b7",
+        "3a03a342-c482-0419-4e7f-5febdf230aed"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-baea-c396-44ded79366b5"
+      ],
+      "ParentFolder": [
+        "3a038e1b-5efa-8815-7a75-da209ef3352e"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a340-d286-3790-28a2-7f70506c4076",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-4379-6fbd-3262-2123f0033f19"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3022-7e7d-113171e5bc3c"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a33f-8a26-0722-c589-5de8c4ffc2b7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "baseNfc",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-4379-6fbd-3262-2123f0033f19"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3b2a-8368-4d675147f926"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a342-c482-0419-4e7f-5febdf230aed",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-4379-6fbd-3262-2123f0033f19"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-948a-d062-be9940de676a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-4558-58a4-8a93-2510a91a92ac",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b"
+      ],
+      "ParentFolder": [
+        "3a038e1b-5efa-8815-7a75-da209ef3352e"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1b-bc93-5267-7386-55dbeaf5266e",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "RemoveCard_satelliteNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a33e-74a8-6326-b41c-083100e93db5",
+        "3a03a33e-7677-bcbc-938b-d06e0d0423a0"
+      ],
+      "ParentFolder": [
+        "3a038e12-924b-fd69-fc05-be294e1d4f78"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-74a8-6326-b41c-083100e93db5",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a341-7290-f8b3-aa33-7dcdb0989f6e",
+        "3a03a33f-485b-4c36-6c27-4b5abb155aef",
+        "3a03a342-e097-5898-be4c-030afbc4740b"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-baea-c396-44ded79366b5"
+      ],
+      "ParentFolder": [
+        "3a038e1b-bc93-5267-7386-55dbeaf5266e"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a341-7290-f8b3-aa33-7dcdb0989f6e",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-74a8-6326-b41c-083100e93db5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3022-7e7d-113171e5bc3c"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a33f-485b-4c36-6c27-4b5abb155aef",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "satelliteNfc",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-74a8-6326-b41c-083100e93db5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-3b2a-8368-4d675147f926"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a342-e097-5898-be4c-030afbc4740b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a33e-74a8-6326-b41c-083100e93db5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b818-948a-d062-be9940de676a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a33e-7677-bcbc-938b-d06e0d0423a0",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "remove_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b"
+      ],
+      "ParentFolder": [
+        "3a038e1b-bc93-5267-7386-55dbeaf5266e"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowItem",
+    "Surrogate": "3a038e1e-a4f1-2870-8a28-4c0429f25e77",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "MaximumRepetitions": "",
+      "StatementType": "1",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "If Gino Card Slot baseContact"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ControlFlowFolders": [
+        "3a038e1e-a5b5-b233-9720-e19f0f1d2ce6",
+        "3a038e1e-a5f2-cdff-3455-ec546554745b",
+        "3a038e1f-f1c7-d59f-7d02-a606c09f8a7d"
+      ],
+      "ParentFolder": [
+        "3a038e12-924b-fd69-fc05-be294e1d4f78"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e1e-a5b5-b233-9720-e19f0f1d2ce6",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "0",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Condition"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e1e-a4f1-2870-8a28-4c0429f25e77"
+      ],
+      "Items": [
+        "3a03a36f-d02c-f510-f806-f9bb725f59be"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a36f-d02c-f510-f806-f9bb725f59be",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a36f-d02c-0669-b8bc-d0b553f8aade"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ],
+      "ParentFolder": [
+        "3a038e1e-a5b5-b233-9720-e19f0f1d2ce6"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a36f-d02c-0669-b8bc-d0b553f8aade",
+    "Attributes": {
+      "ExplicitName": "GinoCardSlot",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "baseContact",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a36f-d02c-f510-f806-f9bb725f59be"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e1e-a5f2-cdff-3455-ec546554745b",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "1",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Then Gino Card Slot baseContact"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e1e-a4f1-2870-8a28-4c0429f25e77"
+      ],
+      "Items": [
+        "3a038e1d-da71-62e2-2980-28dea7375d06"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1d-da71-62e2-2980-28dea7375d06",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "InsertCard_baseContact"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a348-5e2d-f2fd-7836-281d25bda4a1",
+        "3a03a348-5f18-06e5-6086-9186fd8a0535"
+      ],
+      "ParentFolder": [
+        "3a038e1e-a5f2-cdff-3455-ec546554745b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-5e2d-f2fd-7836-281d25bda4a1",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a349-3218-218a-fa61-140b752f59c2",
+        "3a03a34a-a735-0ed2-10f2-523d0bd77bcf",
+        "3a03a34c-2c6f-904a-c988-ffbde034f080",
+        "3a03a34a-5fee-9d64-e1e8-8662862d1e23"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b816-aab5-9d53-5e15a82b8384"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-62e2-2980-28dea7375d06"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a349-3218-218a-fa61-140b752f59c2",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-5e2d-f2fd-7836-281d25bda4a1"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b816-6801-b72d-33009e944d06"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34a-a735-0ed2-10f2-523d0bd77bcf",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "baseContact",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-5e2d-f2fd-7836-281d25bda4a1"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-9f81-0a04-d7d17c526383"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34c-2c6f-904a-c988-ffbde034f080",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[cdfName]}.cdf",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-5e2d-f2fd-7836-281d25bda4a1"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-c2c5-6757-8b587eb4f757"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34a-5fee-9d64-e1e8-8662862d1e23",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-5e2d-f2fd-7836-281d25bda4a1"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-6099-8146-9e4116712a38"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-5f18-06e5-6086-9186fd8a0535",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b817-a140-1958-67f6aa830fa7"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-62e2-2980-28dea7375d06"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e1f-f1c7-d59f-7d02-a606c09f8a7d",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "2",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Else if Gino Card Slot baseNfc or satelliteNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e1e-a4f1-2870-8a28-4c0429f25e77"
+      ],
+      "Items": [
+        "3a038e20-f50b-006d-0b5d-c67c486a757f"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowItem",
+    "Surrogate": "3a038e20-f50b-006d-0b5d-c67c486a757f",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "MaximumRepetitions": "",
+      "StatementType": "1",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "If if Gino Card Slot baseNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ControlFlowFolders": [
+        "3a038e20-f56e-885e-6008-9de0de9393f3",
+        "3a038e20-f58e-fc70-d31a-2f4b058123d8",
+        "3a038e21-9998-56ac-5276-ffbde4f197e8"
+      ],
+      "ParentFolder": [
+        "3a038e1f-f1c7-d59f-7d02-a606c09f8a7d"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e20-f56e-885e-6008-9de0de9393f3",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "0",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Condition"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e20-f50b-006d-0b5d-c67c486a757f"
+      ],
+      "Items": [
+        "3a03a371-e0d6-cb5a-da10-bdfd735c18fe"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a371-e0d6-cb5a-da10-bdfd735c18fe",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a371-e0d6-2701-f0bc-0d123f386c20"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ],
+      "ParentFolder": [
+        "3a038e20-f56e-885e-6008-9de0de9393f3"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a371-e0d6-2701-f0bc-0d123f386c20",
+    "Attributes": {
+      "ExplicitName": "GinoCardSlot",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "baseNfc",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a371-e0d6-cb5a-da10-bdfd735c18fe"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e20-f58e-fc70-d31a-2f4b058123d8",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "1",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Then Gino Card Slot baseNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e20-f50b-006d-0b5d-c67c486a757f"
+      ],
+      "Items": [
+        "3a038e1d-da71-bc8c-385d-d34976e34113"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1d-da71-bc8c-385d-d34976e34113",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "InsertCard_baseNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a348-8a14-373d-94cd-d2649304c242",
+        "3a03a348-8ae7-d98c-9131-2ccef9abbb8a"
+      ],
+      "ParentFolder": [
+        "3a038e20-f58e-fc70-d31a-2f4b058123d8"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-8a14-373d-94cd-d2649304c242",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a349-5545-528c-ce7a-f1d061c0c97b",
+        "3a03a34a-e657-ec5d-00d2-994717f56395",
+        "3a03a34b-fdaa-f5a1-a969-e5789d0e4f3e",
+        "3a03a34a-354a-f6e2-11a5-69adcd243842"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b816-aab5-9d53-5e15a82b8384"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-bc8c-385d-d34976e34113"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a349-5545-528c-ce7a-f1d061c0c97b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-8a14-373d-94cd-d2649304c242"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b816-6801-b72d-33009e944d06"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34a-e657-ec5d-00d2-994717f56395",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "baseNfc",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-8a14-373d-94cd-d2649304c242"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-9f81-0a04-d7d17c526383"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34b-fdaa-f5a1-a969-e5789d0e4f3e",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[cdfName]}.cdf",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-8a14-373d-94cd-d2649304c242"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-c2c5-6757-8b587eb4f757"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34a-354a-f6e2-11a5-69adcd243842",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-8a14-373d-94cd-d2649304c242"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-6099-8146-9e4116712a38"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-8ae7-d98c-9131-2ccef9abbb8a",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b817-a140-1958-67f6aa830fa7"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-bc8c-385d-d34976e34113"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a038e21-9998-56ac-5276-ffbde4f197e8",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "2",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Else Gino Card Slot satelliteNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a038e20-f50b-006d-0b5d-c67c486a757f"
+      ],
+      "Items": [
+        "3a038e1d-da71-8e20-fcd5-0bcd0d7a4564"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a038e1d-da71-8e20-fcd5-0bcd0d7a4564",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "InsertCard_satelliteNfc"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a03a348-a6dd-6d43-d6d4-0357256a68f5",
+        "3a03a348-a7fd-9bff-9f2a-12c65eaa64c4"
+      ],
+      "ParentFolder": [
+        "3a038e21-9998-56ac-5276-ffbde4f197e8"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-a6dd-6d43-d6d4-0357256a68f5",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a03a349-c519-283e-9bcc-42f139661e66",
+        "3a03a34b-2689-1424-2edb-02d26d5e709d",
+        "3a03a34b-e73b-449b-569b-25d4e51e532b",
+        "3a03a34a-0b10-4e70-47f6-ff217274bff7"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b816-aab5-9d53-5e15a82b8384"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-8e20-fcd5-0bcd0d7a4564"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a349-c519-283e-9bcc-42f139661e66",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[B_Seriennummer]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-a6dd-6d43-d6d4-0357256a68f5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b816-6801-b72d-33009e944d06"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34b-2689-1424-2edb-02d26d5e709d",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "satelliteNfc",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-a6dd-6d43-d6d4-0357256a68f5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-9f81-0a04-d7d17c526383"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34b-e73b-449b-569b-25d4e51e532b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[cdfName]}.cdf",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-a6dd-6d43-d6d4-0357256a68f5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-c2c5-6757-8b587eb4f757"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a03a34a-0b10-4e70-47f6-ff217274bff7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "http://{B[B_Kartenlesersimulator]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a03a348-a6dd-6d43-d6d4-0357256a68f5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "3a03a2c7-b817-6099-8146-9e4116712a38"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a03a348-a7fd-9bff-9f2a-12c65eaa64c4",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "insert_card Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "3a03a2c7-b817-a140-1958-67f6aa830fa7"
+      ],
+      "ParentFolder": [
+        "3a038e1d-da71-8e20-fcd5-0bcd0d7a4564"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "ParameterLayer",
+    "Surrogate": "3a0388d0-649d-06fa-b040-ca4b0d893624",
+    "Attributes": {
+      "Name": "Business Parameters"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "Parameters": [
+        "3a0388d1-2864-f79e-5cc0-a2b718cb1dfa"
+      ],
+      "ParameterLayerReferences": [
+        "3a03a2e1-190f-819b-3604-9f8a26d41aab",
+        "3a03a580-d930-6466-8b1d-75d2ce0f0de9",
+        "3a03a5b9-12d7-c59b-bcd9-606ef8c339dd"
+      ],
+      "ReuseableTestStepBlock": [
+        "3a0388d0-14a6-c8be-0ce8-45b5cb29e547"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "Parameter",
+    "Surrogate": "3a0388d1-2864-f79e-5cc0-a2b718cb1dfa",
+    "Attributes": {
+      "Description": "",
+      "ValueSelectionGroup": "",
+      "Name": "cdfName"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "Parameters": [],
+      "ParameterReferences": [
+        "3a03a2e1-1a58-5cf2-191a-65bcaabec7d4",
+        "3a03a580-d930-0262-7fae-3ed3ad879385",
+        "3a03a5b9-12d7-19c8-7ba4-fe5936b52a83"
+      ],
+      "ParameterLayer": [
+        "3a0388d0-649d-06fa-b040-ca4b0d893624"
+      ],
+      "Properties": []
+    }
+  }
+]

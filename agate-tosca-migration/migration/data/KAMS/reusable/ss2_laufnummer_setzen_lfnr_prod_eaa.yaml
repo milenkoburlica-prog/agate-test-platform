@@ -1,0 +1,27 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarName
+        value: "LfNr_PROD_EAA"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarGruppe
+        value: "ALL"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarWert
+        value: "{B[LfNr_PROD_EAA]}"
+
+========== REUSABLE CALL CREATE ==========
+[CALL-CREATE] step name        = ChVarSys_Reference _set LfNr_PROD_EAA
+[CALL-CREATE] reusable rawName = 'ChSysVar'
+[CALL-CREATE] generated command = 'reusable.chsysvar'
+==========================================
+
+      - type: CALL
+        command: 'reusable.chsysvar'

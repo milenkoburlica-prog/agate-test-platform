@@ -1,0 +1,954 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Option
+        value: "{R[Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Command
+        value: "{R[Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Verify
+        value: "not-set"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Servicename
+        value: "{R[Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_System
+        value: "ecard"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Target
+        value: "openshift"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_PATH
+        value: "{S[SVC.Projekt root path]}\Tosca\Daten\Excel\Umgebungsdaten_KVW1\bin"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_DATA
+        value: "{S[SVC.Projekt root path]}\Tosca\Daten\Excel\Umgebungsdaten_KVW1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_08
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\removeLSSHResponseLF.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_07
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\plink_utf8.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_06
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\prepare_dest_path.ps1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_04
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\checkOcccurance.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_03
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\csv_reader.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_02
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\removeLF3forSingleSpecLines.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_01
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\removeLF3forSingleSpecLines.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_05
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\remove_disk_id.ps1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-ftp')"
+        name: L_Target
+        value: "ftp"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-nfs')"
+        name: L_Target
+        value: "nfs"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-simu')"
+        name: L_Target
+        value: "simu"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Namespace
+        value: "{E[env.openShift.namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-aut')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-aut')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-man')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-man')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-file-gateway')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-file-gateway')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')"
+        name: L_UmgebungsTyp
+        value: "cloud"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift')))"
+        name: L_UmgebungsTyp
+        value: "legacy"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostName
+        value: "{B[KS_APP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostUser
+        value: "{B[KS_APP_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostPassword
+        value: "{B[KS_APP_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostName
+        value: "{B[EC_BAT_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostUser
+        value: "{B[EC_BAT_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostPassword
+        value: "{B[EC_BAT_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostName
+        value: "{B[KS_FTP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostUser
+        value: "{B[KS_FTP_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostPassword
+        value: "{B[KS_FTP_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostName
+        value: "{B[EC_FTP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostUser
+        value: "{B[EC_FTP_SERVER_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostPassword
+        value: "{B[EC_FTP_SERVER_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostName
+        value: "{B[KS_SIMU_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostUser
+        value: "{B[KS_SIMU_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHHostPassword
+        value: "{B[KS_SIMU_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHCommand
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHOption
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHVerify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostName
+        value: "{B[EC_SIMU_BAT_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostUser
+        value: "{B[EC_SIMU_BAT_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHHostPassword
+        value: "{B[EC_SIMU_BAT_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHProcessingFlag
+        value: "0"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogDir
+        value: "{B[B_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: SSHLogFile
+        value: "{B[B_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')"
+        name: L_UmgebungsTyp
+        value: "cloud"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostName
+        value: "{E[env.openShift.namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostUser
+        value: "{E[env.openShift.username]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostPassword
+        value: "{E[env.openShift.password]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_LoginServer
+        value: "{E[env.openShift.loginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_Namespace
+        value: "{E[env.openShift.namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_LogDir
+        value: "{B[G_EC_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_LogFile
+        value: "{B[G_EC_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Lokal_POD_Name
+        value: "--init-value--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Lokal_Servicename
+        value: "{B[L_Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Lokal_CMD
+        value: "{B[L_Command]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_Option
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_Verify
+        value: "{B[L_Verify]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_HostUser
+        value: "{B[G_KS_OpenShift_Username]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_HostPassword
+        value: "{B[G_KS_OpenShift_Password]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_LoginServer
+        value: "{B[G_KS_OpenShift_Loginserver]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_LogDir
+        value: "{B[G_KS_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_LogFile
+        value: "{B[G_KS_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Lokal_CMD
+        value: "--init-value--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Lokal_Servicename
+        value: "{B[L_Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_Option
+        value: "{B[L_Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_Verify
+        value: "{B[L_Verify]}"
+
+
+      # Execute Command: TBox Start Program - execute plink
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy')"
+        command: |
+            {b[sshlogdir]}{B[TOOL_PATH_PLINK]} {B[SSHHostUser]} "{B[SSHHostPassword]}" {B[SSHHostName]} {B[L_Command]} {B[SSHLogDir]}\\{B[SSHLogFile]}
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - count lines
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command (Get-Content -Path {B[SSHLogDir]}\\{B[SSHLogFile]} -Raw | Measure-Object -Line).Lines"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - remove EndOfLine - utf-8 default - CHANGED
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command (Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]}_Count) | Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_Count -NoNewline"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - get Count-1 lines
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -First ([Math]::Max(0, (Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]}).Length - 1)) | Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - get Last lines
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -Last 1 | Out-File -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_2 -Encoding UTF8 -NoNewline"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - merge files
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1 -InputObject $(type {B[SSHLogDir]}\\{B[SSHLogFile]}_2) -NoNewline -Append"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - get Last lines
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))"
+        command: "powershell -Command -command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -Last 1 | Out-File -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1 -Encoding UTF8 -NoNewline"
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - get response from log file is handled by the Request step
+
+      # [Merged] TBox Set Buffer - verify response (exact) is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] TBox Set Buffer - buffer response is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact')))"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] NEW TBox Set Buffer - setResponse is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] TBox Read/Create File - get response from log file is handled by the Request step
+
+      # [Merged] TBox Set Buffer - buffer response is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[SSHOption]}' == 'verify-contains'))"
+        name: SSHProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-no'))"
+        name: SSHProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: ASSERT
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND ('{B[SSHProcessingFlag]}'=='0')"
+        name: SSHExceptionInfoText
+        action: EQUALS
+        expected: "User-Error. Please check how sind Parameters for ResusableStepModule set!!"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: LogTimeStamp
+        value: "{DATE[][][yyyy-MM-ddTHH:mm:ss]}"
+
+
+      # Execute CMD Command: OpenShift Start Batch
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        command: |
+            oc exec deployment/{B[L_Servicename]} --namespace {B[L_Namespace]} -- bash -c "{B[B_OpenShift_Lokal_CMD]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: neu TBox Start Program - remove CR LF
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "{B[G_UMGEBUNGSSCRIPT_SCRIPT_08]} {B[L_LogDir]}\\{B[L_LogFile]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: neu TBox Start Program - ren Openshift_Log_ohne_CRLF
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "{b[l_logdir]}del {B[L_LogDir]}\\{B[L_LogFile]} & ren {B[L_LogFile]}_ohne_CRLF {B[L_LogFile]}"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - count lines
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command (Get-Content -Path {B[L_LogDir]}\\{B[L_LogFile]} -Raw | Measure-Object -Line).Lines"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - powershell - remove EndOfLine - utf-8 default
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))"
+        command: "powershell -Command -command (Get-Content -Encoding UTF8 -Path {B[L_LogDir]}\\{B[L_LogFile]}_Count) | Out-File -Encoding UTF8 -FilePath {B[L_LogDir]}\\{B[L_LogFile]}_Count -NoNewline"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+      # [Merged] TBox Start Program - powershell - response is multiline is handled by the Request step
+
+      # [Merged] TBox Read/Create File - get response from log file is handled by the Request step
+
+      # [Merged] TBox Set Buffer - verify response (exact) is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (true) AND ('{B[L_Option]}' == 'verify-exact')"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] TBox Set Buffer - buffer response is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact'))) AND (true) AND (NOT (('{B[L_Option]}' == 'verify-exact')))"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] TBox Set Buffer - setResponse is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))"
+        name: SSHProcessingFlag
+        value: "1"
+
+      # [Merged] TBox Read/Create File - get response from log file is handled by the Request step
+
+      # [Merged] TBox Set Buffer - buffer response is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-contains'))"
+        name: SSHProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-no'))"
+        name: SSHProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: ASSERT
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND ('{B[SSHProcessingFlag]}'=='0')"
+        name: SSHExceptionInfoText
+        action: EQUALS
+        expected: "User-Error. Please check how sind Parameters for ResusableStepModule set!!"

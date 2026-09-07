@@ -1,0 +1,881 @@
+testCases:
+
+- id: 'Fehlerfall: DialogId Länge (33)'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+      aufId: '{B[MeldungsID1]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: DialogId not existing'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+      aufId: '{B[MeldungsID1]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: DialogId NULL'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{NULL}'
+      aufId: '{B[MeldungsID1]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: DialogId leer'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: 'false'
+      aufId: '{B[MeldungsID1]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: aufId not existing'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '4711'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03012
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '128'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die gesuchte Meldung existiert nicht (mehr) im e-card-System.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: aufId negative'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '-1'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03453
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '45'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von AUFM Id ist ungültig.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: Meldung kann nicht mehr geändert werden'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '202048'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03011
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '107'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Meldung kann nicht geändert oder gelöscht werden, weil sie nicht existiert bzw. inzwischen geändert oder gelöscht wurde. Bitte aktualisieren Sie Ihren Datenbestand.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: aufIdVersion negative'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '{B[MeldungsID1]}'
+      aufIdVersion: '-2'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03463
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '55'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Version ist ungültig.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.storniere_meldung_mit_id_version1
+    parameters:
+      aufId: '{B[MeldungsID3]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: MeldungStornieren, Arzt nur NES Vertrag, Patient ÖGK-W'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293013'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694589'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '30'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '{B[MeldungsID30]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: MeldungStornieren, Arzt nur NES Vertrag, Patient BVAEB-OEB'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293014'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694590'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '31'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '{B[MeldungsID31]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: MeldungStornieren, Arzt nur NES Vertrag (mehrere SVT-L/SVT-V), Patient BVAEB-EB'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '32'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '{B[MeldungsID32]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: MeldungStornieren, Arzt mit KU & REZ & NES Vertrag'
+  description: meldungStornieren_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293012'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694588'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '30'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.meldungstornieren_request
+    response: meldungstornieren_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      aufId: '{B[MeldungsID30]}'
+      aufIdVersion: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

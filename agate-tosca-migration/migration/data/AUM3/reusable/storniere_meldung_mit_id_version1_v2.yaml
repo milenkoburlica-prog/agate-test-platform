@@ -1,0 +1,9 @@
+steps:
+      # meldungStornieren_Direkte Erreichbarkeit
+      - type: SOAP
+        op: EXEC
+        endpoint: ""
+        command: soap.aum.8.meldungstornieren_request
+        response: soap.aum.8.meldungstornieren_request_response
+
+      # [Merged] meldungStornieren Response is handled by the Request step

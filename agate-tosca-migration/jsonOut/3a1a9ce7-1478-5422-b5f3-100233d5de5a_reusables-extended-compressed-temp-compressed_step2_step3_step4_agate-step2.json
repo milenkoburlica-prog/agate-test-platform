@@ -1,0 +1,47 @@
+{
+  "name" : "000_datatenbank_preparation-all_1_0",
+  "surrogate" : "3a1a9ce7-1478-5422-b5f3-100233d5de5a",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KCP6VGJ3AXM27V8ZZ4HVX0KC",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "101_DELETE dynamischedaten_1_0",
+    "reusableSurrogate" : "3a1a9ce5-92f0-ca06-db54-445081431b99",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KCP6X4ZQ47NVZ520N9NK2APZ",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "102_DELETE statischendaten_1_0",
+    "reusableSurrogate" : "3a1a9ce6-3b05-68a4-c587-407faf351b6b",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 3,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KCP6XEERAND3TY1JEXE7AKBB",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "103_INSERT statischendaten_1_0",
+    "reusableSurrogate" : "3a1a9ce6-95b8-f5a2-a505-f4e268d59b07",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

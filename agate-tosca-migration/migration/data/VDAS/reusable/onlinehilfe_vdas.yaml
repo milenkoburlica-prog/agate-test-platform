@@ -1,0 +1,12 @@
+name: onlinehilfe_vdas
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        condition: "(OnlineHilfeCheck=='ja')"
+        name: ONLINE_HILFE_APPL
+        value: "VDAS"
+
+      - type: CALL
+        command: "reusable.online_hilfe_aufrufen_de"
+        parameters: {}

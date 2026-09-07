@@ -1,0 +1,281 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a04cdb7-db89-7158-f019-48bf7c2e917b",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "soap dmp ss30 schreibeDMPPatientEin AUT1 only"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a04cdb7-dc95-3e7c-6303-f9a7a6220e04" ],
+    "Items" : [ "01KV5E0XHP2120MGNX6R249NJN", "01KV5E1AVZ49ESNJ132WQ54CDY" ],
+    "Library" : [ "3a04cdbf-89bf-80bb-9cbe-f536135514fe" ],
+    "UsedBy" : [ "01KERZT0JX15X64528YG7SJ26Y" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "EingabeArtCode",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "VSNR",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "VPNR",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "SVT",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "ProgrammCode",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "Fachgebiet",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "BEAntragsdatum",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "EingabeArtUebersteuert_Bool",
+    "ValueSelectionGroup" : "true;false"
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KV5E1AVZ49ESNJ132WQ54CDY",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "V2"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KV5E1WR2CE972V4WJSTD498N", "01KV5E20TCASWV6T5X6X9SJN8Y" ],
+    "ParentFolder" : [ "3a04cdb7-db89-7158-f019-48bf7c2e917b" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KV5E1WR2CE972V4WJSTD498N",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "schreibeDMPPatientEinV2 Request"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KV5E2SYPAK9X6PPZFMJXJW12", "01KV5E39WK9SR011G5XFZFFK4C", "01KV5E3MDD1AHCTK9TNTDENZ74", "01KV5E3XENCARXY624HWBV5FXJ", "01KV5E43T30SCZXHWSAQCQ1HMP", "01KV5E4A4B84FDE5GTWHX5VV8K", "01KV5E4W4WFNNY0FKQRN1SPKCK", "01KV5E504X7PXFYQ4C0E8D6RM7", "01KV5E53SM7YZ50Y3DFQ6H8D23", "01KV5E57KXDW30S9GFEVBGEW7E", "01KV5E5MJDATN7H36MGWW2NZC6", "01KV5E5X8Z8C34JEFT43AX6RAQ", "01KV5KC79DASQWBV79BZYXMPWD" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "01KV5DA3MH27B1VB9X1P903XT2" ],
+    "ParentFolder" : [ "01KV5E1AVZ49ESNJ132WQ54CDY" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E2SYPAK9X6PPZFMJXJW12",
+    "Value" : "https://{B[WS_Server]}",
+    "ExplicitName" : "Endpoint",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Endpoint",
+    "ToscaPathID" : "01KV5E2SYPAK9X6PPZFMJXJW12"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BetreuungsVerhaeltnis']/*[local-name()='VSNR']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E39WK9SR011G5XFZFFK4C",
+    "Value" : "{PL[VSNR]}",
+    "ExplicitName" : "VSNR",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "VSNR",
+    "ToscaPathID" : "01KV5E39WK9SR011G5XFZFFK4C"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BetreuungsVerhaeltnis']/*[local-name()='BetreuungsBerechtigung']/*[local-name()='VPNR']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E3MDD1AHCTK9TNTDENZ74",
+    "Value" : "{PL[VPNR]}",
+    "ExplicitName" : "VPNR",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "VPNR",
+    "ToscaPathID" : "01KV5E3MDD1AHCTK9TNTDENZ74"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BetreuungsVerhaeltnis']/*[local-name()='BetreuungsBerechtigung']/*[local-name()='SVT']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E3XENCARXY624HWBV5FXJ",
+    "Value" : "{PL[SVT]}",
+    "ExplicitName" : "SVT",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "SVT",
+    "ToscaPathID" : "01KV5E3XENCARXY624HWBV5FXJ"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BetreuungsVerhaeltnis']/*[local-name()='BetreuungsBerechtigung']/*[local-name()='ProgrammCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E43T30SCZXHWSAQCQ1HMP",
+    "Value" : "{PL[ProgrammCode]}",
+    "ExplicitName" : "ProgrammCode",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "ProgrammCode",
+    "ToscaPathID" : "01KV5E43T30SCZXHWSAQCQ1HMP"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BetreuungsVerhaeltnis']/*[local-name()='BetreuungsBerechtigung']/*[local-name()='Fachgebiet']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E4A4B84FDE5GTWHX5VV8K",
+    "Value" : "{PL[Fachgebiet]}",
+    "ExplicitName" : "Fachgebiet",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Fachgebiet",
+    "ToscaPathID" : "01KV5E4A4B84FDE5GTWHX5VV8K"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BEInfo']/*[local-name()='BezirkskennzeichenDmpArzt']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E4W4WFNNY0FKQRN1SPKCK",
+    "Value" : "DM2",
+    "ExplicitName" : "BezirkskennzeichenDmpArzt",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "BezirkskennzeichenDmpArzt",
+    "ToscaPathID" : "01KV5E4W4WFNNY0FKQRN1SPKCK"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BEInfo']/*[local-name()='PlzDmpArzt']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E504X7PXFYQ4C0E8D6RM7",
+    "Value" : "1010",
+    "ExplicitName" : "PlzDmpArzt",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "PlzDmpArzt",
+    "ToscaPathID" : "01KV5E504X7PXFYQ4C0E8D6RM7"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BEInfo']/*[local-name()='BezirkskennzeichenPatient']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E53SM7YZ50Y3DFQ6H8D23",
+    "Value" : "dm2",
+    "ExplicitName" : "BezirkskennzeichenPatient",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "BezirkskennzeichenPatient",
+    "ToscaPathID" : "01KV5E53SM7YZ50Y3DFQ6H8D23"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BEInfo']/*[local-name()='PlzPatient']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E57KXDW30S9GFEVBGEW7E",
+    "Value" : "1011",
+    "ExplicitName" : "PlzPatient",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "PlzPatient",
+    "ToscaPathID" : "01KV5E57KXDW30S9GFEVBGEW7E"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='BEAntragsdatum']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E5MJDATN7H36MGWW2NZC6",
+    "Value" : "{PL[BEAntragsdatum]}",
+    "ExplicitName" : "BEAntragsdatum",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "BEAntragsdatum",
+    "ToscaPathID" : "01KV5E5MJDATN7H36MGWW2NZC6"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='EingabeArtCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E5X8Z8C34JEFT43AX6RAQ",
+    "Value" : "{PL[EingabeArtCode]}",
+    "ExplicitName" : "EingabeArtCode",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "EingabeArtCode",
+    "ToscaPathID" : "01KV5E5X8Z8C34JEFT43AX6RAQ"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30EinschreibungTypeV2']/*[local-name()='EingabeArtUebersteuert']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5KC79DASQWBV79BZYXMPWD",
+    "Value" : "{PL[EingabeArtUebersteuert_Bool]}",
+    "ExplicitName" : "EingabeArtUebersteuert",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "EingabeArtUebersteuert",
+    "ToscaPathID" : "01KV5KC79DASQWBV79BZYXMPWD"
+  }, {
+    "ModuleAttributeSurrogate" : "01KV5DSTK26EQQNMCXXQP984VC",
+    "Value" : "{NULL}",
+    "ExplicitName" : "AdministrativesBundesland",
+    "ActionMode" : "Insert"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KV5E20TCASWV6T5X6X9SJN8Y",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "schreibeDMPPatientEinV2 Response"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KV5E75MD7KBZBMADPG66E6GA", "01KV5E7C6YFHF57K54ACHYAX0K", "01KV5E7MQM80PCF77WJTM5HTMK" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "01KV5DA3MH27B1VB9X1P903XT6" ],
+    "ParentFolder" : [ "01KV5E1AVZ49ESNJ132WQ54CDY" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E75MD7KBZBMADPG66E6GA",
+    "Value" : "200 OK",
+    "ExplicitName" : "StatusCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "StatusCode",
+    "ToscaPathID" : "01KV5E75MD7KBZBMADPG66E6GA"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30VerarbeitungsQuittungType']/*[local-name()='VerarbeitungsCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E7C6YFHF57K54ACHYAX0K",
+    "Value" : "30-00000",
+    "ExplicitName" : "VerarbeitungsCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "VerarbeitungsCode",
+    "ToscaPathID" : "01KV5E7C6YFHF57K54ACHYAX0K"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='SS30VerarbeitungsQuittungType']/*[local-name()='VerarbeitungsFehlertext']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KV5E7MQM80PCF77WJTM5HTMK",
+    "Value" : "Transaktion erfolgreich.",
+    "ExplicitName" : "VerarbeitungsFehlertext",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "VerarbeitungsFehlertext",
+    "ToscaPathID" : "01KV5E7MQM80PCF77WJTM5HTMK"
+  }, {
+    "ModuleAttributeSurrogate" : "01KV5DTHNZ1TXB1SDCY2TJRT3B",
+    "Value" : "{NULL}",
+    "ExplicitName" : "ResponseTime",
+    "ActionMode" : "Verify"
+  } ]
+} ]

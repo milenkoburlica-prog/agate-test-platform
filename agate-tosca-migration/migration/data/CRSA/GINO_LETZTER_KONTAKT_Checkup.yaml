@@ -1,0 +1,72 @@
+testCases: 
+
+  - id: "GF:_GINO_LETZTER_KONTAKT_Checkup"
+    description: "GF: GINO LETZTER_KONTAKT Checkup"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+      - type: CALL
+        command: "reusable.protokoll_https_de"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        condition: ""
+        value: "135679"
+
+      - type: CALL
+        command: "reusable.b_karte_o_oder_e_card_stecken_de"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "URL"
+        condition: ""
+        value: "https://{B[B_URL_direkteErreichbarkeit]}"
+
+      - type: CALL
+        command: "reusable.start_browser_edge"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.protokoll_https_de"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        condition: ""
+        value: "135679"
+
+      - type: CALL
+        command: "reusable.b_karte_o_oder_e_card_stecken_de"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "URL"
+        condition: ""
+        value: "https://{B[B_URL_direkteErreichbarkeit]}"
+
+      - type: CALL
+        command: "reusable.start_browser_edge"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "URL"
+        condition: ""
+        value: "https://{B[B_URL_direkteErreichbarkeit]}cardReader.xhtml?JS=1"
+
+      - type: CALL
+        command: "reusable.start_browser_edge"
+        parameters: {}
+      - type: BUFFER
+        op: EXEC
+        name: "URL"
+        condition: ""
+        value: "https://{B[B_URL_direkteErreichbarkeit]}cardReader.xhtml?JS=1"
+
+      - type: CALL
+        command: "reusable.start_browser_edge"
+        parameters: {}

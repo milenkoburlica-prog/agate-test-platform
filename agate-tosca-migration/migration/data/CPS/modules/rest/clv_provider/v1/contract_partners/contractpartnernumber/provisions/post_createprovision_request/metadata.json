@@ -1,0 +1,7 @@
+{
+  "url" : "{{endpoint}}/clv-provider/v1/contract-partners/{B[contractPartnerNumber]}/provisions",
+  "method" : "POST",
+  "headers" : {
+    "Content-Type" : "application/json;charset=UTF-8"
+  }
+}

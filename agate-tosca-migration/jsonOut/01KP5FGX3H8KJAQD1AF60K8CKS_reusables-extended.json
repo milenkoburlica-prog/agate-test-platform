@@ -1,0 +1,243 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "01KP5FGX3H8KJAQD1AF60K8CKS",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "database_unverarbeitete_bestände_loeschen"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "01KP5FGN3G33K74HZ8BK0XZRN1"
+      ],
+      "Library": [
+        "01KNAKCYM4BHYAYPZK8T5EGB8E"
+      ],
+      "UsedBy": [
+        "01KV5E9EZ34FY3C1VGEVSGTQYV"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "01KP5FGN3G33K74HZ8BK0XZRN1",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Datenbank - unverarbeitete Bestände löschen"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "01KP5FBH062CE7ZMCEZP5BFN2H"
+      ],
+      "ParentFolder": [
+        "01KP5FGX3H8KJAQD1AF60K8CKS"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KP5FBH062CE7ZMCEZP5BFN2H",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox DB Expert module _unverarbeitete Bestände löschen - Bereingung vor Beginn"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KP5FV7575TTN4RTNX6QFTZSG",
+        "01KP5FBH062CE7ZMCEZP5BFN2P",
+        "01KP5FBH062CE7ZMCEZP5BFN2Q"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "01KP5FGN3G33K74HZ8BK0XZRN1"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FV7575TTN4RTNX6QFTZSG",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KP5FBH062CE7ZMCEZP5BFN2H"
+      ],
+      "SubValues": [
+        "01KP5FV77N9H76EBJ2TD2XEAG8"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FV77N9H76EBJ2TD2XEAG8",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[G_EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "01KP5FVG6KBF75Y0JKAJ2NSRYZ",
+        "01KP5FVY1Y0HDV018T8M7CMZ15"
+      ],
+      "ParentValue": [
+        "01KP5FV7575TTN4RTNX6QFTZSG"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FVG6KBF75Y0JKAJ2NSRYZ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[G_EC_DB_USER]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KP5FV77N9H76EBJ2TD2XEAG8"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FVY1Y0HDV018T8M7CMZ15",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[G_EC_DB_PASSWORD]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KP5FV77N9H76EBJ2TD2XEAG8"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FBH062CE7ZMCEZP5BFN2P",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "update PST_DATEN_BESTAND set status \u003d \u0027FE\u0027 where STATUS not in (\u0027FE\u0027,\u0027EX\u0027)",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KP5FBH062CE7ZMCEZP5BFN2H"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KP5FBH062CE7ZMCEZP5BFN2Q",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KP5FBH062CE7ZMCEZP5BFN2H"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  }
+]

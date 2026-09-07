@@ -1,0 +1,2584 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "01KPDWPC3F3CXJZD2MVNWS65VD",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Error Manipulacija 1 - paketinfo"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ],
+      "Library": [
+        "01KNAFYJ56D0BDKZQQ64YKC17X"
+      ],
+      "UsedBy": [
+        "01KV5E9EZ34FY3C1VGEVSGTQZ4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "01KNPVPARJ0NHC7CJNVQKJEBY4",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Error Manipulacija 1 - paketinfo"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "01KNPVTJ4X034QXJMP0T7ZSWZ1",
+        "01KNPW2DPYER8W2XN9KVF46P5N",
+        "01KNPVZ31F0ZBYCNVY6S7CSARC",
+        "01KNPW6Z2RFPC4K4ET9QXXQKBD",
+        "01KNPW7QKF50Q5QG0J0T3X727B",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZF",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZV",
+        "01KNPWHDWZ5TDBTFCEC1GE4C04",
+        "01KNPVRA0FDTCVWX8EXQ2H670Z"
+      ],
+      "ParentFolder": [
+        "01KPDWPC3F3CXJZD2MVNWS65VD"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPVTJ4X034QXJMP0T7ZSWZ1",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - clean temp folder"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAA",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAJ"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAA",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVTJ4X034QXJMP0T7ZSWZ1"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAB",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVTJ4X034QXJMP0T7ZSWZ1"
+      ],
+      "SubValues": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAC",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAD",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAE",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAF",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAC",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAD",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "del",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAE",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/Q",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAF",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/S",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAH",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAB"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAJ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVTJ4X034QXJMP0T7ZSWZ1"
+      ],
+      "SubValues": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAK",
+        "01KNPVTJ4YA9GE6X5NV82R3ZAM"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAK",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAJ"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVTJ4YA9GE6X5NV82R3ZAM",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVTJ4YA9GE6X5NV82R3ZAJ"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5N",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - copy gz from output to temp"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPW2DPYER8W2XN9KVF46P5P",
+        "01KNPW2DPYER8W2XN9KVF46P5Q",
+        "01KNPW2DPYER8W2XN9KVF46P5Y"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5P",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW2DPYER8W2XN9KVF46P5N"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5Q",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW2DPYER8W2XN9KVF46P5N"
+      ],
+      "SubValues": [
+        "01KNPW2DPYER8W2XN9KVF46P5R",
+        "01KNPW2DPYER8W2XN9KVF46P5S",
+        "01KNPW2DPYER8W2XN9KVF46P5T",
+        "01KNPW2DPYER8W2XN9KVF46P5V"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5R",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Q"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5S",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "copy",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Q"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5T",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Q"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5V",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Q"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5Y",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW2DPYER8W2XN9KVF46P5N"
+      ],
+      "SubValues": [
+        "01KNPW2DPYER8W2XN9KVF46P5Z",
+        "01KNPW2DPYER8W2XN9KVF46P60"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P5Z",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Y"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW2DPYER8W2XN9KVF46P60",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW2DPYER8W2XN9KVF46P5Y"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARC",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - unzip ddausNY frm output to temp"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARD",
+        "01KNPVZ31F0ZBYCNVY6S7CSARE",
+        "01KNPVZ31F0ZBYCNVY6S7CSARN"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARD",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARC"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARE",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARC"
+      ],
+      "SubValues": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARF",
+        "01KNPVZ31F0ZBYCNVY6S7CSARG",
+        "01KNPVZ31F0ZBYCNVY6S7CSARH",
+        "01KNPVZ31F0ZBYCNVY6S7CSARJ",
+        "01KNPVZ31F0ZBYCNVY6S7CSARK",
+        "01KNPVZ31F0ZBYCNVY6S7CSARM"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARF",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARG",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "java",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARH",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "-jar",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARJ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARK",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "--unpack",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARM",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARE"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARN",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARC"
+      ],
+      "SubValues": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARP",
+        "01KNPVZ31F0ZBYCNVY6S7CSARQ"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARP",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARN"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVZ31F0ZBYCNVY6S7CSARQ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVZ31F0ZBYCNVY6S7CSARN"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "01KNPW6Z2RFPC4K4ET9QXXQKBD",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "delete paket info"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "01KNPWDHA38RK4VQCNGHRQV3KW"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3KW",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - clean temp folder"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPWDHA38RK4VQCNGHRQV3KX",
+        "01KNPWDHA38RK4VQCNGHRQV3KY",
+        "01KNPWDHA38RK4VQCNGHRQV3M4"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPW6Z2RFPC4K4ET9QXXQKBD"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3KX",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWDHA38RK4VQCNGHRQV3KW"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3KY",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWDHA38RK4VQCNGHRQV3KW"
+      ],
+      "SubValues": [
+        "01KNPWDHA38RK4VQCNGHRQV3KZ",
+        "01KNPWDHA38RK4VQCNGHRQV3M0",
+        "01KNPWDHA38RK4VQCNGHRQV3M1",
+        "01KNPWDHA38RK4VQCNGHRQV3M3",
+        "01KW97D4E2F8NP32WSK34AXK36"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3KZ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3KY"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3M0",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "del",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3KY"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3M1",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/Q",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3KY"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KW97D4E2F8NP32WSK34AXK36",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[TSV_DATEI_INPUT_12]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3KY"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3M4",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWDHA38RK4VQCNGHRQV3KW"
+      ],
+      "SubValues": [
+        "01KNPWDHA38RK4VQCNGHRQV3M5",
+        "01KNPWDHA38RK4VQCNGHRQV3M6"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3M5",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3M4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWDHA38RK4VQCNGHRQV3M6",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWDHA38RK4VQCNGHRQV3M4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPW7QKF50Q5QG0J0T3X727B",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - zip ddausNY in temp"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPW7QKF50Q5QG0J0T3X727C",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFP"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKF50Q5QG0J0T3X727C",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW7QKF50Q5QG0J0T3X727B"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFF",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW7QKF50Q5QG0J0T3X727B"
+      ],
+      "SubValues": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFG",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFH",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFJ",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFK",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFM",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFN",
+        "01KNPW9BFW4GD3SBB9YM78J2J7",
+        "01KNPW9HGXA9643S70X5KKRWBG"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFG",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFH",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "java",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFJ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "-jar",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFK",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFM",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "--pack",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFN",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW9BFW4GD3SBB9YM78J2J7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "--format",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW9HGXA9643S70X5KKRWBG",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "NY",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFF"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFP",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPW7QKF50Q5QG0J0T3X727B"
+      ],
+      "SubValues": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFQ",
+        "01KNPW7QKG4Y9P4S5MQQE0GNFR"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFQ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFP"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPW7QKG4Y9P4S5MQQE0GNFR",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPW7QKG4Y9P4S5MQQE0GNFP"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZF",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - Get DDAU EU Filename"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZG",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZR"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZG",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZF"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZH",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZF"
+      ],
+      "SubValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZJ",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZK",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZM",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZN",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZP",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZQ"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZJ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZK",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "java",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZM",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "-jar",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZN",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZP",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "--file",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZQ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZH"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZR",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZF"
+      ],
+      "SubValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZS",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZT"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZS",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "515",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZR"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-87ba-a1f5-1c41167c481f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZT",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZR"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZV",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - Remove EOL"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZW",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZX",
+        "01KNPWHDWZ5TDBTFCEC1GE4C02"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZW",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZV"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZX",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZV"
+      ],
+      "SubValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZY",
+        "01KNPWHDWZ5TDBTFCEC1GE4BZZ",
+        "01KNPWHDWZ5TDBTFCEC1GE4C00",
+        "01KNPWHDWZ5TDBTFCEC1GE4C01"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZY",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZX"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4BZZ",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "powershell",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZX"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C00",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "-Command",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZX"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C01",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "(Get-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -NoNewline",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZX"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C02",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4BZV"
+      ],
+      "SubValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C03"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C03",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C02"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C04",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Read/Create File"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C05",
+        "01KNPWHDWZ5TDBTFCEC1GE4C06",
+        "01KNPWHDWZ5TDBTFCEC1GE4C07"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca12-20fa-841b-58d4b8e3af98"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C05",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C04"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-c3d8-7429-a7ee9fafbbaa"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C06",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C04"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-92e8-fe4a-906831e6e61f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWHDWZ5TDBTFCEC1GE4C07",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "165",
+      "Operator": "0",
+      "Value": "DDAU_FILE_NAME_NEU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPWHDWZ5TDBTFCEC1GE4C04"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-4cd9-1582-ff6993e47c60"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H670Z",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "1",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program - Copy file"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01KNPVRA0FDTCVWX8EXQ2H6710",
+        "01KNPVRA0FDTCVWX8EXQ2H6711",
+        "01KNPVRA0G71ZES91GPQAR4V0W"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "01KNPVPARJ0NHC7CJNVQKJEBY4"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H6710",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "C:\\Windows\\system32\\cmd.exe",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVRA0FDTCVWX8EXQ2H670Z"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H6711",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVRA0FDTCVWX8EXQ2H670Z"
+      ],
+      "SubValues": [
+        "01KNPVRA0FDTCVWX8EXQ2H6712",
+        "01KNPVRA0FDTCVWX8EXQ2H6713",
+        "01KNPWZH8X1DA1PPQ35Y2DP0MP",
+        "01KNPVRA0FDTCVWX8EXQ2H6715",
+        "01KNPVRA0G71ZES91GPQAR4V0T"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H6712",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/C",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0FDTCVWX8EXQ2H6711"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H6713",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "copy",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0FDTCVWX8EXQ2H6711"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPWZH8X1DA1PPQ35Y2DP0MP",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "/Y",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0FDTCVWX8EXQ2H6711"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0FDTCVWX8EXQ2H6715",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME_NEU]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0FDTCVWX8EXQ2H6711"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0G71ZES91GPQAR4V0T",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "{B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0FDTCVWX8EXQ2H6711"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0G71ZES91GPQAR4V0W",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "01KNPVRA0FDTCVWX8EXQ2H670Z"
+      ],
+      "SubValues": [
+        "01KNPVRA0G71ZES91GPQAR4V0Y"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01KNPVRA0G71ZES91GPQAR4V0Y",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "1",
+      "Value": "0",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "01KNPVRA0G71ZES91GPQAR4V0W"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ],
+      "ExecutionLogs": []
+    }
+  }
+]

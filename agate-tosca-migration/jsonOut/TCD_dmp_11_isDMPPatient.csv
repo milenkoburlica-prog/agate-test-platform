@@ -1,0 +1,30 @@
+Parameter Name;Gutfall: Ungültige SvNummer angegeben. Liefert keinen Fehler weil SVNR gültige Prüfziffer hat;Schlechtfall: Ungültige SvNummer angegeben CL-02003;Schlechtfall: Ungültige SvNummer (Falsche Prüfziffer) angegeben CL-02003;Schlechtfall: Keine SvNummer angegeben CL-02003;Schlechtfall: Null als SvNummer angegeben CL-02003;Gutfall: Gültige SvNummer angegeben aber nicht in der DB. Kein Fehler, da nicht überprüft wird ob SVNummer in DB vorhanden;Gutfall: Gültige SvNummer angegeben.;Gutfall: Gültige SvNummer angegeben. Diesmal gibt es kein Betreuungsverhältnis;Gutfall: Gültige SvNummer angegeben. Diesmal gibt es kein Betreuungsverhältnis, weil storniert
+Instanz;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL
+Vertragspartner.VPNR;645031;645031;645031;645031;645031;645031;645031;645031;645031
+Vertragspartner.Ord_id;15682076;15682076;15682076;15682076;15682076;15682076;15682076;15682076;15682076
+Vertragspartner.OrdinationsId;99;99;99;99;99;99;99;99;99
+dialogId;{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]}
+SVPerson.SVNR;0000000000;aaaabbccdd;1234567890;{EMPTY};{NULL};0000000000;6456010511;6459010541;6454010550
+SVPerson.Name.Titel_vorne;;;;;;;;;
+SVPerson.Name.Vorname;;;;;;;Hubert;Waldemar;Carola
+SVPerson.Name.Nachname;;;;;;;Havelka-DMP-SS12;Walesa-DMP-SS12;Duitsch-DMP-SS12
+SVPerson.Name.Titel_hinten;;;;;;;;;
+SVPerson.Druckname.Titel_vorne;;;;;;;;;
+SVPerson.Druckname.Vorname;;;;;;;;Waldemar;
+SVPerson.Druckname.Nachname;;;;;;;;Walęsa-DMP-SS12;
+SVPerson.Druckname.Titel_hinten;;;;;;;;;
+SVPerson.Geschlecht;;;;;;;W;W;M
+SVPerson.Geburtsdatum;;;;;;;08.11.1941;09.09.1999;02.02.1987
+IstPatient;false;false;false;false;false;false;true;false;false
+Einschreiben.SVT;;;;;;;11;;
+Einschreiben.FG;;;;;;;07;;
+EingabeArtUebersteuert_Bool;false;false;false;false;false;false;false;false;false
+DmpInvalidParameterException;;CL-02003;CL-02003;CL-02003;CL-02003;;;;
+DmpException;;;;;;;;;
+DialogException;;;;;;;;;
+AccessException;;;;;;;;;
+DmpInvalidParameterException.ExceptionName;;DmpInvalidParameterException;DmpInvalidParameterException;DmpInvalidParameterException;DmpInvalidParameterException;;;;
+DmpInvalidParameterException.ExceptionTyp;;INVALID_SV_NUMBER;INVALID_SV_NUMBER;INVALID_SV_NUMBER;INVALID_SV_NUMBER;;;;
+DmpInvalidParameterException.ExceptionCode;;3;3;3;3;;;;
+DmpInvalidParameterException.InfoCode;;CL-02003;CL-02003;CL-02003;CL-02003;;;;
+DmpInvalidParameterException.InfoText;;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;;;;

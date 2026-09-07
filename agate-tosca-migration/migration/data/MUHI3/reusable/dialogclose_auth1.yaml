@@ -1,0 +1,29 @@
+name: dialogclose_auth1
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: dialogid
+        value: "{R[dialogId]}"
+
+      - type: BUFFER
+        op: EXEC
+        name: URL_HIGH
+        value: "{E[env.ecard.service]}"
+
+      # closeDialog Request
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{B[URL_HIGH]}"
+        command: soap.auth.1.closedialog_request
+        response: soap.auth.1.closedialog_request_response
+        paramters:
+          dialogId: "{B[dialogid]}"
+      # .  
+      - type: REST
+        op: ASSERT
+        response: soap.auth.1.closedialog_request_response
+        source: STATUS
+        action: EQUALS
+        expected: 200
+ 

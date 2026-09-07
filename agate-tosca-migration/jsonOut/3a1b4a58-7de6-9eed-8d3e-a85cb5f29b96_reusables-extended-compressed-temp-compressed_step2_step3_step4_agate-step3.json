@@ -1,0 +1,51 @@
+{
+  "name" : "Tx_PC_TxFilesToKams-KPtoCMS",
+  "surrogate" : "3a1b4a58-7de6-9eed-8d3e-a85cb5f29b96",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4a58-7ef0-e9a1-5a5a-221270d17168",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "DIRPC",
+      "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\.",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPC",
+      "toscaPathID" : "3a1b4a58-7ef0-7df2-20e3-add45f23a00a"
+    }, {
+      "name" : "DIRPOD",
+      "value" : "{B[KS_File-Gateway_Basedir]}{B[OMS.SS40_KP.TransferServerPathQuittung]}/.",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPOD",
+      "toscaPathID" : "3a1b4a58-7ef0-a36d-d2bc-1c42823d7f1a"
+    }, {
+      "name" : "PODNAME",
+      "value" : "{B[KS_POD_Filegateway_Name]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODNAME",
+      "toscaPathID" : "3a1b4a58-7ef0-abcd-7002-d6f4ed48640a"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4a58-7ef0-9605-6cac-c5707eaa91d3",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "02_execute_file_transfer",
+    "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

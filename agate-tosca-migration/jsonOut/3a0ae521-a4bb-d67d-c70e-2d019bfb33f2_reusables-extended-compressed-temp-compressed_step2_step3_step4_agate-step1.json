@@ -1,0 +1,139 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a0ae521-a4bb-d67d-c70e-2d019bfb33f2",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "dialogClose_auth1"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a0ae525-475f-c334-dce2-9686fa315ee7" ],
+    "Items" : [ "3a0ae521-a4be-35cc-77c8-54293485dbad", "3a0ae521-a4be-c124-c821-fad8d9d2a4ab", "3a0ae521-a4bf-c2db-e592-66b820b6e5cf", "3a0ae521-a4bf-8ee9-7c75-f5a45bb01bcc", "3a0ae521-a4bf-e7ba-8805-2edbb039747b", "3a0ae523-6559-d446-db49-950105764619" ],
+    "Library" : [ "3a038dd5-ffb2-1c5e-cc06-e05c7ab68553" ],
+    "UsedBy" : [ "01KERZT0JX15X64528YG7SJ28P", "01KERZT0JX15X64528YG7SJ26P", "3a0d4e18-e5c8-676e-9d75-c1750e4230e2" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VpNummer",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "OrdinationsId",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae521-a4be-35cc-77c8-54293485dbad",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "URL_HIGH",
+    "value" : "{B[B_URL_HIGH]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "URL_HIGH",
+    "toscaPathID" : "3a0ae521-a4be-7a50-211a-4e9f61050878"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae521-a4be-c124-c821-fad8d9d2a4ab",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "URL_HIGH",
+    "value" : "https://{B[B_URL_DE_HTTPS_HIGH]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "URL_HIGH",
+    "toscaPathID" : "3a0ae521-a4be-b3b7-ce33-477f033884fe"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "closeDialog Request",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae521-a4bf-c2db-e592-66b820b6e5cf",
+  "moduleSurrogate" : "39f32cfc-2934-35c8-dd7c-0e63cfd1e2c5",
+  "module" : "closeDialog Request",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "Endpoint",
+    "value" : "{B[URL_HIGH]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Endpoint",
+    "toscaPathID" : "3a0ae521-a4bf-21c8-57f9-9e64e30824d0"
+  }, {
+    "name" : "dialogId",
+    "value" : "{B[dialogId]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "dialogId",
+    "toscaPathID" : "3a0ae521-a4bf-ff16-12ac-1debb5b7e94f",
+    "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='closeDialog']/*[local-name()='dialogId']"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "closeDialog Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae521-a4bf-8ee9-7c75-f5a45bb01bcc",
+  "moduleSurrogate" : "39f32cfc-2934-0713-9c52-cf94d3241300",
+  "module" : "closeDialog Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "StatusCode",
+    "value" : "200 OK",
+    "actionMode" : "Verify",
+    "toscaPath" : "StatusCode",
+    "toscaPathID" : "3a0ae521-a4bf-d028-c891-0fd9a5e1dc9f"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Delete Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae521-a4bf-e7ba-8805-2edbb039747b",
+  "moduleSurrogate" : "39e342b2-6ec7-0f30-678c-aec82a472007",
+  "module" : "TBox Delete Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Delete Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0ae523-6559-d446-db49-950105764619",
+  "moduleSurrogate" : "39e342b2-6ec7-0f30-678c-aec82a472007",
+  "module" : "TBox Delete Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+} ]

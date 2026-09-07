@@ -1,0 +1,19 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Header>
+    <TransactionId>{B[TransactionId]}</TransactionId>
+  </s:Header>
+  <s:Body>
+    <retrieveVersichertendatenPerStichtag xmlns="http://soap.vdas.client.chipkarte.at">
+      <dialogId>{B[dialogId]}</dialogId>
+      <suchKriterien>
+        <abteilungsFunktionsCode>{B[abteilungsFunktionsCode]}</abteilungsFunktionsCode>
+        <forceExecution>{B[forceExecution]}</forceExecution>
+        <svNummer>{B[svNummer]}</svNummer>
+        <svNummerAbgeleitet>{B[svNummerAbgeleitet]}</svNummerAbgeleitet>
+        <svtCode>{B[svtCode]}</svtCode>
+        <stichtagsdatum>{B[stichtagsdatum]}</stichtagsdatum>
+      </suchKriterien>
+      <cardToken>{B[cardToken]}</cardToken>
+    </retrieveVersichertendatenPerStichtag>
+  </s:Body>
+</s:Envelope>

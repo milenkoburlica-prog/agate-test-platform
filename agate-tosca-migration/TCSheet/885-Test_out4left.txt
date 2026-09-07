@@ -1,0 +1,12 @@
+Name				
+""				
+	"VpNummer"			
+	"SvNummer"			
+	"Attr"			
+		"Attr.doAusschreiben"		
+			"Attr.doAusschreiben.Endpoint"	
+			"Attr.doAusschreiben.dialogId"	
+			"Attr.doAusschreiben.ausschreibeParameter"	
+				"Attr.doAusschreiben.ausschreibeParameter.ausschreibeGrund"
+				"Attr.doAusschreiben.ausschreibeParameter.dmpCode"
+				"Attr.doAusschreiben.ausschreibeParameter.svNummer"

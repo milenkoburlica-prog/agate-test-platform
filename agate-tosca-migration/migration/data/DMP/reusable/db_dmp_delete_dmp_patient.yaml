@@ -1,0 +1,10 @@
+steps:
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: BVID
+        row: "0"
+        column: "0"
+        response: bvid_aus_dmp_betreuungsverhaeltnis_buffern_res
+

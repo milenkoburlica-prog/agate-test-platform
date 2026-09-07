@@ -1,0 +1,49 @@
+[ {
+  "insatanceSurrogate" : "01KERZQSJ0465K5X0PZXBK1YPW",
+  "TC_NO" : "1",
+  "Name" : "Gutfall: Ungültige SvNummer angegeben. Kein Fehler weil die SV-Nummer eine gültige Prüfzimmer hat",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ0465K5X0PZXBK1YQ3",
+  "TC_NO" : "2",
+  "Name" : "Schlechtfall: Ungültige SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ0465K5X0PZXBK1YQB",
+  "TC_NO" : "3",
+  "Name" : "Schlechtfall: Ungültige SvNummer (Falsche Prüfziffer) angegeben CL-02003",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ41TRVSDTZT29WY8XT",
+  "TC_NO" : "4",
+  "Name" : "Schlechtfall: Keine SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ41TRVSDTZT29WY8Y2",
+  "TC_NO" : "5",
+  "Name" : "Schlechtfall: Null als SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ41TRVSDTZT29WY8YA",
+  "TC_NO" : "6",
+  "Name" : "Gutfall:  Gültige SvNummer angegeben-ist aber nicht in DB. Kein Fehler da nicht überprüft wird ob SVNummer in DB ",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ41TRVSDTZT29WY8YH",
+  "TC_NO" : "7",
+  "Name" : "Gutfall:  Gültige SvNummer angegeben.",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERZQSJ41TRVSDTZT29WY8Z6",
+  "TC_NO" : "8",
+  "Name" : "Gutfall:  Gültige SvNummer angegeben. Diesmal explizit StrukturierteInfo = „true",
+  "testSheetSurrogate" : "01KERZQSHZ5GD7ZWNK88ZE72RC",
+  "TDInstance" : { }
+} ]

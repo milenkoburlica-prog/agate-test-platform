@@ -1,0 +1,201 @@
+
+  - id: "dmp_11_getAdminPatientenInformationen"
+    description: "dmp_11_getAdminPatientenInformationen"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+      - type: CALL
+        command: 'reusable.db_dmp_lösche_aus_6_tabellen_ausser_dmp_anfrage_alle_datensätze_zu_svnr'
+        condition: ''searchAnfragenBasisdaten' != NULL'
+        parameters: 
+          VSNR: '{XL[searchAnfragenBasisdaten.SvNummer]}'
+
+      - type: CALL
+        command: 'reusable.soap_dmp_ss30_schreibedmppatientein_aut1_only'
+        condition: ''searchAnfragenBasisdaten' != NULL'
+        parameters: 
+          VSNR: '{XL[searchAnfragenBasisdaten.SvNummer]}'
+          VPNR: '{XL[Vertragspartner.VPNR]}'
+          EingabeArtCode: 'Einschreibung'
+          SVT: '{XL[searchAnfragenBasisdaten.SVT]}'
+          Fachgebiet: '{XL[searchAnfragenBasisdaten.Fachgebietscode]}'
+          ProgrammCode: '{XL[searchAnfragenBasisdaten.DmpCode]}'
+          BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+          EingabeArtUebersteuert_Bool: '{XL[EingabeArtUebersteuert_Bool]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        condition: ""
+        value: "{XL[Vertragspartner.VPNR]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "B_OrdinationsId"
+        condition: ""
+        value: "{XL[Vertragspartner.Ord_id]}"
+
+      - type: CALL
+        command: 'reusable.ru_dialog_aufbau_mit_ordid'
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+          cardSlot: 'baseContact'
+
+      # getAdminPatientenInformationen Request V11
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.dmp.11.getadminpatienteninformationen_request_v11
+        response: getadminpatienteninformationen_request_v11_response
+        parameters: 
+          dialogId: "{B[dialogId]}"
+          svNummer: "{XL[SVPerson.SVNR]}"
+          strukturierteMeldung: "{XL[StrukturierteInfo]}"
+
+      # getAdminPatientenInformationen Response V11 - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DmpInvalidParameterException == NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "500"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.InfoCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.ExceptionCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DialogException.InfoText]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DmpException.InfoCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DmpException.ExceptionCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DmpException.InfoText]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DmpInvalidParameterException.InfoCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DmpInvalidParameterException.ExceptionCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DmpInvalidParameterException.InfoText]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.InfoCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.ExceptionCode]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[AccessException.InfoText]}"
+        response: getadminpatienteninformationen_request_v11_response
+
+      - type: CALL
+        command: 'reusable.dialogclose_auth1'
+        parameters:
+          dialogId: '{B[dialogId]}'

@@ -1,0 +1,181 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b49df-bd70-6ef2-24e2-dc19117b5811",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Tx_PC_TxFilesToKams-CKVtoCMS"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b49e0-d5cf-fab4-8684-7ce8164af6d0", "3a1b49e1-1aba-0c02-c01a-179c89f5a66f" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRTD33Z21E6B9J304PK" ]
+  },
+  "BusinessParameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b49e0-d5cf-fab4-8684-7ce8164af6d0",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b49e0-d5cf-60e2-7bcc-de79d12d4236", "3a1b49e0-d5cf-0384-ef79-b55b5efbfa67", "3a1b49e2-31f0-7c91-2785-e5b794f6c7e9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1b49df-bd70-6ef2-24e2-dc19117b5811" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49e0-d5cf-60e2-7bcc-de79d12d4236",
+  "Attributes" : {
+    "ExplicitName" : "DIRPC",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\.",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49e0-d5cf-fab4-8684-7ce8164af6d0" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49e0-d5cf-0384-ef79-b55b5efbfa67",
+  "Attributes" : {
+    "ExplicitName" : "DIRPOD",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[OMS.SS2_CKVtoCMS.TransferVerzeichnis]}/",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49e0-d5cf-fab4-8684-7ce8164af6d0" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49e2-31f0-7c91-2785-e5b794f6c7e9",
+  "Attributes" : {
+    "ExplicitName" : "PODNAME",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[KS_POD_Name]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49e0-d5cf-fab4-8684-7ce8164af6d0" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1b49e1-1aba-0c02-c01a-179c89f5a66f",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b49e1-1aba-e3d2-8595-bf91f3570462" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a6fe-2171-c8d2-da02-80b57899d454" ],
+    "ParentFolder" : [ "3a1b49df-bd70-6ef2-24e2-dc19117b5811" ]
+  }
+}, {
+  "ObjectClass" : "ParameterLayerReference",
+  "Surrogate" : "3a1b49e1-1aba-e3d2-8595-bf91f3570462",
+  "Attributes" : {
+    "Name" : "Business Parameters"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepFolderReference" : [ "3a1b49e1-1aba-0c02-c01a-179c89f5a66f" ],
+    "AllParameterReferences" : [ "3a1b49e1-1aba-e448-3821-8db10a0cce20", "3a1b49e1-1aba-1a89-4f8e-cdd6a060b542", "3a1b49e1-1aba-dbf0-86d3-64a07d5ab924", "3a1b49e1-1aba-0768-f698-1e1dd39e8d66" ],
+    "ParameterLayer" : [ "3a13a6fe-9b5b-59bd-2b6b-e65111cab840" ]
+  }
+}, {
+  "ObjectClass" : "ParameterReference",
+  "Surrogate" : "3a1b49e1-1aba-e448-3821-8db10a0cce20",
+  "Attributes" : {
+    "Value" : "put"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b49e1-1aba-e3d2-8595-bf91f3570462" ],
+    "Parameter" : [ "3a13a6fe-ab7a-c0c1-6c7f-e42626aa27a6" ]
+  }
+}, {
+  "ObjectClass" : "ParameterReference",
+  "Surrogate" : "3a1b49e1-1aba-1a89-4f8e-cdd6a060b542",
+  "Attributes" : {
+    "Value" : "{B[DIRPC]}"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b49e1-1aba-e3d2-8595-bf91f3570462" ],
+    "Parameter" : [ "3a13a6fe-f352-4824-d93b-7d85fc97552f" ]
+  }
+}, {
+  "ObjectClass" : "ParameterReference",
+  "Surrogate" : "3a1b49e1-1aba-dbf0-86d3-64a07d5ab924",
+  "Attributes" : {
+    "Value" : "{B[DIRPOD]}"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b49e1-1aba-e3d2-8595-bf91f3570462" ],
+    "Parameter" : [ "3a13a6ff-4828-6d88-697d-24799d6f1b2f" ]
+  }
+}, {
+  "ObjectClass" : "ParameterReference",
+  "Surrogate" : "3a1b49e1-1aba-0768-f698-1e1dd39e8d66",
+  "Attributes" : {
+    "Value" : "{B[PODNAME]}"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b49e1-1aba-e3d2-8595-bf91f3570462" ],
+    "Parameter" : [ "3a13a6ff-fdc0-aea4-e193-92acd9ff9260" ]
+  }
+} ]

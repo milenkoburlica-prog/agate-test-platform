@@ -1,0 +1,167 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b49cb-82ae-b06c-bf9e-1668fb2c03a2",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Cleanup_TxFilesToKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b49cc-2291-4a09-79f9-385ae9b489e1", "3a1b49cc-2291-44bf-d606-a6489090f806" ],
+    "Library" : [ "3a1b49cb-54f2-9f66-25d6-3041daa326d8" ],
+    "UsedBy" : [ "01M1BBZFRSE1R0KEDR5XTAEQZP", "01M1BBZFRV69E4J1S86EB70P5Y" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b49cc-2291-4a09-79f9-385ae9b489e1",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program  - Remove all Subfolders in TxFilesToKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b49cc-2291-bcc5-9199-f999018c3289", "3a1b49cc-2291-0b49-ed97-a5a02bda1eff", "3a1b49cc-2291-b893-c5b8-101b262b9ed5", "3a1b49cc-2291-d673-ed5d-3022f0a883f5" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1b49cb-82ae-b06c-bf9e-1668fb2c03a2" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-bcc5-9199-f999018c3289",
+    "Value" : "cmd",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "3a1b49cc-2291-bcc5-9199-f999018c3289"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-0b49-ed97-a5a02bda1eff",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Directory",
+    "ToscaPathID" : "3a1b49cc-2291-0b49-ed97-a5a02bda1eff"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-2658-1a45-13af1e25a47c",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1b49cc-2291-b893-c5b8-101b262b9ed5.3a1b49cc-2291-2658-1a45-13af1e25a47c"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-0f2f-9689-4d0df7d989dd",
+    "Value" : "for /D %i in ({B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\*) do rmdir /S /Q \"\"\"\"%i\\\"\"\"\"",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1b49cc-2291-b893-c5b8-101b262b9ed5.3a1b49cc-2291-0f2f-9689-4d0df7d989dd"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-0581-35a1-9824be4b5f12",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "3a1b49cc-2291-d673-ed5d-3022f0a883f5.3a1b49cc-2291-0581-35a1-9824be4b5f12"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b49cc-2291-44bf-d606-a6489090f806",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Remove all Files in TxFilesToKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b49cc-2291-45b8-9cc6-0990819b4936", "3a1b49cc-2292-b40c-5e5f-1629d9f4f028", "3a1b49cc-2292-ab4e-7a77-1e2fffe7b7e8", "3a1b49cc-2292-9991-e460-a4ac04e122d9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1b49cb-82ae-b06c-bf9e-1668fb2c03a2" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2291-45b8-9cc6-0990819b4936",
+    "Value" : "cmd",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "3a1b49cc-2291-45b8-9cc6-0990819b4936"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2292-b40c-5e5f-1629d9f4f028",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Directory",
+    "ToscaPathID" : "3a1b49cc-2292-b40c-5e5f-1629d9f4f028"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2292-6092-af7d-3c3c696f9707",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1b49cc-2292-ab4e-7a77-1e2fffe7b7e8.3a1b49cc-2292-6092-af7d-3c3c696f9707"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2292-9b6e-a0cf-b80cca25a8da",
+    "Value" : "del /F /Q {B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\*",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "3a1b49cc-2292-ab4e-7a77-1e2fffe7b7e8.3a1b49cc-2292-9b6e-a0cf-b80cca25a8da"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b49cc-2292-6abf-5ce8-852ba9527113",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "3a1b49cc-2292-9991-e460-a4ac04e122d9.3a1b49cc-2292-6abf-5ce8-852ba9527113"
+  } ]
+} ]

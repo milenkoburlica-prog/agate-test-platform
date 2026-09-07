@@ -1,0 +1,70 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: B_Karte
+        value: "{XL[Vertragspartner.VPNR_Fremdmeldung]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: B_OrdinationsId
+        value: "{XL[Vertragspartner.Ord_Id_Fremdmeldung]}"
+
+      - type: CALL
+        command: "reusable.ru_dialog_aufbau_mit_ordid"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+
+      # meldungAnlegen_Direkte Erreichbarkeit
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.aum.8.meldunganlegen
+        response: soap.aum.8.meldunganlegen_response
+        parameters:
+          abweichendeAusgehzeitBis1: ""
+          abweichendeAusgehzeitBis2: ""
+          abweichendeAusgehzeitVon1: ""
+          abweichendeAusgehzeitVon2: ""
+          arbeitsunfaehigBis: ""
+          berufskrankheit: "0"
+          besondereArbeitsunfaehigkeitsursacheCode: ""
+          besondereMitteilungAnSVT: "Heilung erfolgt"
+          bettruhe: "false"
+          diagnose: "Oberschenkel geheilt"
+          diagnoseCode: ""
+          diagnoseCodeTyp: ""
+          krankenhausaufenthaltBis: ""
+          krankenhausaufenthaltVon: ""
+          ort: "BasisOrt_id_2"
+          plz: "1234"
+          rueckdatierungsgrundCode: ""
+          staatencode: "AUT"
+          strasse: "Basisstrasse"
+          stromunfall: "false"
+          svtCode: "05"
+          voraussichtlichArbeitsunfaehigBis: ""
+          wiederbestellung: ""
+          zusatzdiagnoseCode: ""
+          meldungsArt: "AU"
+          druckVorname: ""
+          druckZuname: ""
+          ekvkNummer: ""
+          ekvkTraeger: ""
+          geburtsdatum: ""
+          geschlecht: ""
+          vorname: ""
+          zuname: ""
+          forceExecution: "false"
+          ungeprueft: "false"
+          offeneMeldungenSuchen: "false"
+
+      # [Merged] meldungAnlegen Response is handled by the Request step
+
+      - type: CALL
+        command: "reusable.dialogclose_auth1"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'

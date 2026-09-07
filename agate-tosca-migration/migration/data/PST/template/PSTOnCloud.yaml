@@ -1,0 +1,978 @@
+
+  - id: "PSTOnCloud"
+    description: "PSTOnCloud"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: ""
+        value: "pitStop"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "td_id"
+        condition: ""
+        value: "{XL[TechnischeDaten.Id]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pk_packen"
+        condition: ""
+        value: "{XL[Paket.Packen]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pk_referenznummer"
+        condition: ""
+        value: "{XL[Paket.Referenznummer]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "em_generiert"
+        condition: ""
+        value: "{XL[Empfangsbestaetigungsdatei.Generiert]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "em_error1"
+        condition: ""
+        value: "{XL[Empfangsbestaetigungsdatei.Error1]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "em_error2"
+        condition: ""
+        value: "{XL[Empfangsbestaetigungsdatei.Error2]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "LogDir"
+        condition: ""
+        value: "C:\TCLogs"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: ""
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: ""
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "td_verzeichnisreferenz"
+        condition: ""
+        value: "{XL[TechnischeDaten.Verzeichnisreferenz]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_FTP_DOWNLOADS_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/ftpSimulator/data/downloads"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_FTP_UPLOADS_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/ftpSimulator/data/uploads"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_DOWNLOAD_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/downloads"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_DONE_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/done"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_UPLOADS_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/uploads"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_FAILED_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/failed"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_IN_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/in"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "PST_VAR_OUT_FOLDER"
+        condition: ""
+        value: "/cloud/pst/pst/var/out"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_IN_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_FTP_DOWNLOADS_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_FTP_UPLOADS_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_DOWNLOAD_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_DONE_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_UPLOADS_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_FAILED_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Option: 'verify-no'
+          Command: 'rm -rf  {B[PST_VAR_OUT_FOLDER]}/*'
+          Servicename: 'systpst-ftp'
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "update PST_DATEN_BESTAND set status = 'FE'where STATUS not in ('FE','EX')"
+        response: tbox_db_expert_module__unverarbeitete_bestände_löschen_-_bereingung_vor_beginn_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT MAX(REFERENZNUMMER_EIN)+1 FROM PST_DATEN_BESTAND"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: MAX_REFERENZNUMMER
+        row: "0"
+        column: "0"
+        response: tbox_db_expert_module_res
+
+      #[Pending] No mapping for: TBox Read/Create File
+
+
+      # Execute PowerShell Command: TBox Start Program- set counter
+      - type: CMD
+        op: EXEC
+        command: "powershell -Command -Command Set-Content -NoNewline -Path '{S[SVC.Projekt root path]}\\Tosca\\Daten\\Files\\pst\\pstsyst\\test\\bin\\counter' -Value '{B[MAX_REFERENZNUMMER]}'"
+        response: cmd_response
+
+
+      # Execute Command: TBox Start Program - prepare PST Tesdaten . execute pst_test.bat
+      - type: CMD
+        op: EXEC
+        command: "{b[logdir]}{B[td_id]} {B[td_verzeichnisreferenz]} {B[pk_packen]} {B[pk_referenznummer]} {S[SVC.Release]}"
+        response: cmd_response
+      #[Pending] No mapping for: TBox Read/Create File
+      #[Pending] No mapping for: TBox Read/Create File
+
+
+      # Execute Command: TBox Start Program - execute pst_unix2windows.bat
+      - type: CMD
+        op: EXEC
+        command: "{s[svc.projekt root path]}\tosca\daten\files\pst\pstsyst\test\bin{S[SVC.Projekt root path]}\\Tosca\\Daten\\Files\\pst\\pstsyst\\test\\bin {B[lastProcessedFolder]}"
+        response: cmd_response
+      #[Pending] No mapping for: TBox Read/Create File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "lastProcessedFolder_windows"
+        condition: ""
+        value: "{B[lastProcessedFolder]}"
+
+      - type: CALL
+        command: 'reusable.02_execute_file_transfer'
+        parameters: 
+          UnixFilePath: '{B[PST_FTP_DOWNLOADS_FOLDER]}/{B[lastProcessedFile]}'
+          WindowsFilePath: '{B[lastProcessedFolder]}\{B[lastProcessedFile]}'
+          Option: 'put'
+          Servicename: 'systpst-ftp'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-FTPGET"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Servicename: 'kvw-pst-pst'
+          Option: 'verify-no'
+          Command: 'pst ftp get'
+      #[Pending] No mapping for: TBox Copy File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung1.Text != NULL)) AND (FTPGet.Meldung1.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung1.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung1.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung2.Text != NULL)) AND (FTPGet.Meldung2.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung2.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung2.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung3.Text != NULL)) AND (FTPGet.Meldung3.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung3.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung3.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung4.Text != NULL)) AND (FTPGet.Meldung4.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung4.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung4.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung5.Text != NULL)) AND (FTPGet.Meldung5.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung5.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung5.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung6.Text != NULL)) AND (FTPGet.Meldung6.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung6.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung6.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPGet.Meldung7.Text != NULL)) AND (FTPGet.Meldung7.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPGet.Meldung7.Text]}'
+          no-occurance: '{XL[FTPGet.Meldung7.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: "Import.Ausfuehren = 'ja'"
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: "Import.Ausfuehren = 'ja'"
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-IMPORT"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "Import.Ausfuehren = 'ja'"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Servicename: 'kvw-pst-pst'
+          Option: 'verify-no'
+          Command: 'pst import'
+      #[Pending] No mapping for: TBox Copy File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung1.Text != NULL)) AND (Import.Meldung1.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung1.Text]}'
+          no-occurance: '{XL[Import.Meldung1.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung2.Text != NULL)) AND (Import.Meldung2.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung2.Text]}'
+          no-occurance: '{XL[Import.Meldung2.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung3.Text != NULL)) AND (Import.Meldung3.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung3.Text]}'
+          no-occurance: '{XL[Import.Meldung3.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung4.Text != NULL)) AND (Import.Meldung4.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung4.Text]}'
+          no-occurance: '{XL[Import.Meldung4.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung5.Text != NULL)) AND (Import.Meldung5.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung5.Text]}'
+          no-occurance: '{XL[Import.Meldung5.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung6.Text != NULL)) AND (Import.Meldung6.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung6.Text]}'
+          no-occurance: '{XL[Import.Meldung6.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung7.Text != NULL)) AND (Import.Meldung7.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung7.Text]}'
+          no-occurance: '{XL[Import.Meldung7.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung8.Text != NULL)) AND (Import.Meldung8.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung8.Text]}'
+          no-occurance: '{XL[Import.Meldung8.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung8.Text != NULL)) AND (Import.Meldung8.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung9.Text]}'
+          no-occurance: '{XL[Import.Meldung9.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung10.Text != NULL)) AND (Import.Meldung10.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung10.Text]}'
+          no-occurance: '{XL[Import.Meldung10.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Import.Ausfuehren = 'ja') AND (Import.Meldung11.Text != NULL)) AND (Import.Meldung11.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Import.Meldung11.Text]}'
+          no-occurance: '{XL[Import.Meldung11.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: "Job.Ausfuehren = 'ja'"
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: "Job.Ausfuehren = 'ja'"
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-JOB"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "JobArgs"
+        condition: "Job.Ausfuehren = 'ja'"
+        value: "-pwd {B[job_pwd]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "JobArgs"
+        condition: "(true)"
+        value: "{B[JobArgs]} -{XL[Job.Prio]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "JobArgs"
+        condition: "(true)"
+        value: "{B[JobArgs]} -{XL[Job.Threads]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "Job.Ausfuehren = 'ja'"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Servicename: 'kvw-pst-pst'
+          Option: 'verify-no'
+          Command: 'pst job  {B[JobArgs]}'
+      #[Pending] No mapping for: TBox Copy File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung1.Text != NULL)) AND (Job.Meldung1.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung1.Text]}'
+          no-occurance: '{XL[Job.Meldung1.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung2.Text != NULL)) AND (Job.Meldung2.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung2.Text]}'
+          no-occurance: '{XL[Job.Meldung2.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung3.Text != NULL)) AND (Job.Meldung3.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung3.Text]}'
+          no-occurance: '{XL[Job.Meldung3.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung4.Text != NULL)) AND (Job.Meldung4.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung4.Text]}'
+          no-occurance: '{XL[Job.Meldung4.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung5.Text != NULL)) AND (Job.Meldung5.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung5.Text]}'
+          no-occurance: '{XL[Job.Meldung5.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung6.Text != NULL)) AND (Job.Meldung6.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung6.Text]}'
+          no-occurance: '{XL[Job.Meldung6.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung7.Text != NULL)) AND (Job.Meldung7.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung7.Text]}'
+          no-occurance: '{XL[Job.Meldung7.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung8.Text != NULL)) AND (Job.Meldung8.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung8.Text]}'
+          no-occurance: '{XL[Job.Meldung8.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung8.Text != NULL)) AND (Job.Meldung8.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung9.Text]}'
+          no-occurance: '{XL[Job.Meldung9.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung10.Text != NULL)) AND (Job.Meldung10.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung10.Text]}'
+          no-occurance: '{XL[Job.Meldung10.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Job.Ausfuehren = 'ja') AND (Job.Meldung11.Text != NULL)) AND (Job.Meldung11.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Job.Meldung11.Text]}'
+          no-occurance: '{XL[Job.Meldung11.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: "Export.Ausfuehren = 'ja'"
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: "Export.Ausfuehren = 'ja'"
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-EXPORT"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "ExportArgs"
+        condition: "Export.Ausfuehren = 'ja'"
+        value: "{EMPTY}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "ExportArgs"
+        condition: "(true)"
+        value: "{B[ExportArgs]} -{XL[Export.Prio]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "ExportArgs"
+        condition: "(true)"
+        value: "{B[ExportArgs]} -{XL[Export.Format]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "Export.Ausfuehren = 'ja'"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Servicename: 'kvw-pst-pst'
+          Option: 'verify-no'
+          Command: 'pst export {B[ExportArgs]}'
+      #[Pending] No mapping for: TBox Copy File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung1.Text != NULL)) AND (Export.Meldung1.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung1.Text]}'
+          no-occurance: '{XL[Export.Meldung1.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung2.Text != NULL)) AND (Export.Meldung2.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung2.Text]}'
+          no-occurance: '{XL[Export.Meldung2.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung3.Text != NULL)) AND (Export.Meldung3.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung3.Text]}'
+          no-occurance: '{XL[Export.Meldung3.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung4.Text != NULL)) AND (Export.Meldung4.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung4.Text]}'
+          no-occurance: '{XL[Export.Meldung4.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung5.Text != NULL)) AND (Export.Meldung5.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung5.Text]}'
+          no-occurance: '{XL[Export.Meldung5.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung6.Text != NULL)) AND (Export.Meldung6.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung6.Text]}'
+          no-occurance: '{XL[Export.Meldung6.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((Export.Ausfuehren = 'ja') AND (Export.Meldung7.Text != NULL)) AND (Export.Meldung7.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[Export.Meldung7.Text]}'
+          no-occurance: '{XL[Export.Meldung7.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogDir"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "{B[LogDir]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "OCLogFile"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-FTPPUT"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "FTPGet.Ausfuehren = 'ja'"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'
+        parameters: 
+          Servicename: 'kvw-pst-pst'
+          Option: 'verify-no'
+          Command: 'pst ftp put'
+      #[Pending] No mapping for: TBox Copy File
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung1.Text != NULL)) AND (FTPPut.Meldung1.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung1.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung1.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung2.Text != NULL)) AND (FTPPut.Meldung2.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung2.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung2.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung3.Text != NULL)) AND (FTPPut.Meldung3.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung3.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung3.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung4.Text != NULL)) AND (FTPPut.Meldung4.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung4.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung4.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung5.Text != NULL)) AND (FTPPut.Meldung5.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung5.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung5.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung6.Text != NULL)) AND (FTPPut.Meldung6.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung6.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung6.Counter]}'
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "pitStop"
+        condition: "((FTPGet.Ausfuehren = 'ja') AND (FTPPut.Meldung7.Text != NULL)) AND (FTPPut.Meldung7.Text != NULL)"
+        value: "pitStop"
+
+      - type: CALL
+        command: 'reusable.03_openshift_consolecheck'
+        parameters: 
+          log-file: '{B[OCLogDir]}\{B[OCLogFile]}_0_Podname.txt'
+          search-string: '{XL[FTPPut.Meldung7.Text]}'
+          no-occurance: '{XL[FTPPut.Meldung7.Counter]}'
+
+
+      # Execute CMD Command: TBox Start Program - backup result  files
+      - type: CMD
+        op: EXEC
+        command: "copy {B[OCLogDir]}\\{XL[GROUP]}-{XL[TechnischeDaten.Verzeichnisreferenz]}-* {B[lastProcessedFolder_windows]}"
+        response: cmd_response

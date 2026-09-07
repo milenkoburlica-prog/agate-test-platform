@@ -1,0 +1,70 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "SELECT BVID FROM DMP_BETREUUNGSVERHAELTNIS WHERE FK_SV_NUMMER = '{R[VSNR]}'"
+        response: bvid_aus_dmp_betreuungsverhaeltnis_buffern_res
+
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: BVID
+        row: "0"
+        column: "0"
+        response: bvid_aus_dmp_betreuungsverhaeltnis_buffern_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "DELETE FROM DMP_MED_PATIENTENINFO WHERE FK_BVID='{B[BVID]}'"
+        response: lösche_aus_dmp_med_patienteninfo_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "DELETE FROM DMP_ADMIN_PATIENTENINFO WHERE FK_BVID='{B[BVID]}'"
+        response: lösche_aus_dmp_admin_patienteninfo_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "DELETE FROM DBAS_DMP_ABRECHNUNGSDATEN WHERE FK_BVID='{B[BVID]}'"
+        response: lösche_aus_dbas_dmp_abrechnungsdaten_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "DELETE FROM DMP_BETREUUNGSVERHAELTNIS_HM13 WHERE FK_BVID='{B[BVID]}'"
+        response: lösche_aus_dmp_betreuungsverhaeltnis_hm13_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "(true)"
+        command: "DELETE FROM DMP_BETREUUNGSVERHAELTNIS WHERE BVID='{B[BVID]}'"
+        response: lösche_aus_dmp_betreuungsverhaeltnis_res
+

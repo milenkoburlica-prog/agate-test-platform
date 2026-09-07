@@ -1,0 +1,67 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a58-7de6-9eed-8d3e-a85cb5f29b96",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Tx_PC_TxFilesToKams-KPtoCMS"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b4a58-7ef0-e9a1-5a5a-221270d17168", "3a1b4a58-7ef0-9605-6cac-c5707eaa91d3" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P61" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a58-7ef0-e9a1-5a5a-221270d17168",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "DIRPC",
+    "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\.",
+    "actionMode" : "Insert",
+    "toscaPath" : "DIRPC",
+    "toscaPathID" : "3a1b4a58-7ef0-7df2-20e3-add45f23a00a"
+  }, {
+    "name" : "DIRPOD",
+    "value" : "{B[KS_File-Gateway_Basedir]}{B[OMS.SS40_KP.TransferServerPathQuittung]}/.",
+    "actionMode" : "Insert",
+    "toscaPath" : "DIRPOD",
+    "toscaPathID" : "3a1b4a58-7ef0-a36d-d2bc-1c42823d7f1a"
+  }, {
+    "name" : "PODNAME",
+    "value" : "{B[KS_POD_Filegateway_Name]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "PODNAME",
+    "toscaPathID" : "3a1b4a58-7ef0-abcd-7002-d6f4ed48640a"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a58-7ef0-9605-6cac-c5707eaa91d3",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+  "reusableName" : "02_execute_file_transfer",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+} ]

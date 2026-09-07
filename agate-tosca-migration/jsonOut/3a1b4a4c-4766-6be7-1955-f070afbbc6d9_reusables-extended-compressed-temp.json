@@ -1,0 +1,211 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a4c-4766-6be7-1955-f070afbbc6d9",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Run_SS40-SS43-Simu"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1addb9-6c35-b721-b86c-7165376207dc" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P5X" ]
+  },
+  "BusinessParameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1addb9-6c35-b721-b86c-7165376207dc",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program _SS40/SS43 Simulator Quittung erzeugen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1addb9-6c35-6692-09cc-a8361725e784", "3a1addb9-6c35-7ded-e954-43fa981f2c24", "3a1addb9-6c35-fa8d-9135-9b507daf8cb8", "3a1addb9-6c35-17cd-35e2-4e97d4d33158" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1b4a4c-4766-6be7-1955-f070afbbc6d9" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-6692-09cc-a8361725e784",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "cmd",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1addb9-6c35-b721-b86c-7165376207dc" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-1bc5-1af2-09cd056d5f96" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-7ded-e954-43fa981f2c24",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{S[SVC.Projekt root path]}\\Tosca\\Tools\\{B[Simulator]}\\testSuite\\SS40TestSuite\\",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1addb9-6c35-b721-b86c-7165376207dc" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-c5a7-666c-0683771a33fc" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-fa8d-9135-9b507daf8cb8",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "{NULL}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1addb9-6c35-b721-b86c-7165376207dc" ],
+    "SubValues" : [ "3a1addb9-6c35-b5b4-1ca6-1101b0042978", "3a1addb9-6c35-bb1e-24e9-3ea3ce632977" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-be3c-2fff-7ad6b553cb24" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-b5b4-1ca6-1101b0042978",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "/C",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1addb9-6c35-fa8d-9135-9b507daf8cb8" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-bb1e-24e9-3ea3ce632977",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : ".\\emulator.cmd",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1addb9-6c35-fa8d-9135-9b507daf8cb8" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-17cd-35e2-4e97d4d33158",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "True",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1addb9-6c35-b721-b86c-7165376207dc" ],
+    "SubValues" : [ "3a1addb9-6c35-68b9-992f-cf3761424341", "3a1addb9-6c35-9349-f6b4-06d2d6a8f7f7" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-95dd-f5e7-223624b8941b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-68b9-992f-cf3761424341",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "2",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "10000",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1addb9-6c35-17cd-35e2-4e97d4d33158" ],
+    "ModuleAttribute" : [ "39ef0b81-cb89-9919-9bd2-0569cdf935f6" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1addb9-6c35-9349-f6b4-06d2d6a8f7f7",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "69",
+    "Operator" : "1",
+    "Value" : "0",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1addb9-6c35-17cd-35e2-4e97d4d33158" ],
+    "ModuleAttribute" : [ "39ef0b81-cb89-981e-88c4-38f385243957" ],
+    "ExecutionLogs" : [ ]
+  }
+} ]

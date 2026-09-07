@@ -1,0 +1,15 @@
+
+  - id: "meldungAnlegen_short_2"
+    description: "meldungAnlegen_short_2"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+      - type: CALL
+        command: "reusable.storniere_meldung_mit_id_version1_v2"
+        parameters: 
+          aufId: "{B[MeldungsID]}"
+          test2: "{B[MeldungsX]}"

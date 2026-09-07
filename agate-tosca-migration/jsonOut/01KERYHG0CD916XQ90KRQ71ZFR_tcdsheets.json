@@ -1,0 +1,826 @@
+[
+  {
+    "ObjectClass": "TestSheet",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFR",
+    "Attributes": {
+      "IncludeForSynchronization": "1",
+      "CheckoutWorkspace": "",
+      "Description": "DMP_V10",
+      "SynchronizationPolicy": "2",
+      "Revision": "128934",
+      "CheckOutState": "1",
+      "Name": "isDMPPatient"
+    },
+    "Assocs": {
+      "Instances": [
+        "01KERYHG0DE6G6G6D2Y285GJ0M"
+      ],
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Relations": [],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZFS",
+        "01KERYHG0CD916XQ90KRQ71ZFT",
+        "01KERYHG0CD916XQ90KRQ71ZFY",
+        "01KERYHG0CD916XQ90KRQ71ZFZ",
+        "01KERYHG0CD916XQ90KRQ71ZGD",
+        "01KERYHG0CD916XQ90KRQ71ZGE",
+        "01KV5MN8Y3CYYPKEM1TD3F64MD",
+        "01KERYHG0CD916XQ90KRQ71ZGH",
+        "01KERYHG0DE6G6G6D2Y285GJ0H",
+        "01KERYHG0DE6G6G6D2Y285GJ0J",
+        "01KERYHG0DE6G6G6D2Y285GJ0K"
+      ],
+      "Properties": [],
+      "AttachedFiles": [],
+      "ParentFolder": [
+        "01KERRE0266NE8SAJB0KA11T0M"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFS",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "0",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Instanz"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ15",
+        "01KERYHG0DE6G6G6D2Y285GJ1Q",
+        "01KERYHG0DE6G6G6D2Y285GJ20",
+        "01KERYHG0DE6G6G6D2Y285GJ0W",
+        "01KERYHG0DE6G6G6D2Y285GJ2P",
+        "01KERYHG0DE6G6G6D2Y285GJ1E",
+        "01KERYHG0E98ADEC9WJA4KZ4GC",
+        "01KERYHG0E98ADEC9WJA4KZ4GR",
+        "01KERYHG0DE6G6G6D2Y285GJ28"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFT",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Vertragspartner"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZFV",
+        "01KERYHG0CD916XQ90KRQ71ZFW",
+        "01KERYHG0CD916XQ90KRQ71ZFX"
+      ],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFV",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "VPNR"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ11",
+        "01KERYHG0DE6G6G6D2Y285GJ1A",
+        "01KERYHG0DE6G6G6D2Y285GJ1W",
+        "01KERYHG0DE6G6G6D2Y285GJ2E",
+        "01KERYHG0E98ADEC9WJA4KZ4GG",
+        "01KERYHG0DE6G6G6D2Y285GJ1K",
+        "01KERYHG0DE6G6G6D2Y285GJ0R",
+        "01KERYHG0DE6G6G6D2Y285GJ2T",
+        "01KERYHG0DE6G6G6D2Y285GJ24"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFT"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFW",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Ord_id"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ12",
+        "01KERYHG0DE6G6G6D2Y285GJ1X",
+        "01KERYHG0DE6G6G6D2Y285GJ0S",
+        "01KERYHG0DE6G6G6D2Y285GJ2F",
+        "01KERYHG0DE6G6G6D2Y285GJ1B",
+        "01KERYHG0E98ADEC9WJA4KZ4GH",
+        "01KERYHG0DE6G6G6D2Y285GJ1M",
+        "01KERYHG0DE6G6G6D2Y285GJ2V",
+        "01KERYHG0DE6G6G6D2Y285GJ25"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFT"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFX",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "OrdinationsId"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ13",
+        "01KERYHG0DE6G6G6D2Y285GJ1N",
+        "01KERYHG0DE6G6G6D2Y285GJ1Y",
+        "01KERYHG0DE6G6G6D2Y285GJ0T",
+        "01KERYHG0DE6G6G6D2Y285GJ2G",
+        "01KERYHG0DE6G6G6D2Y285GJ1C",
+        "01KERYHG0E98ADEC9WJA4KZ4GJ",
+        "01KERYHG0DE6G6G6D2Y285GJ2W",
+        "01KERYHG0DE6G6G6D2Y285GJ26"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFT"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFY",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "dialogId"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ17",
+        "01KERYHG0DE6G6G6D2Y285GJ1S",
+        "01KERYHG0DE6G6G6D2Y285GJ2A",
+        "01KERYHG0DE6G6G6D2Y285GJ2R",
+        "01KERYHG0DE6G6G6D2Y285GJ0Y",
+        "01KERYHG0E98ADEC9WJA4KZ4GE",
+        "01KERYHG0DE6G6G6D2Y285GJ1G",
+        "01KERYHG0DE6G6G6D2Y285GJ0P",
+        "01KERYHG0DE6G6G6D2Y285GJ22"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZFZ",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "SVPerson"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZG0",
+        "01KERYHG0CD916XQ90KRQ71ZG1",
+        "01KERYHG0CD916XQ90KRQ71ZG6",
+        "01KERYHG0CD916XQ90KRQ71ZGB",
+        "01KERYHG0CD916XQ90KRQ71ZGC"
+      ],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG0",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "SVNR"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ14",
+        "01KERYHG0DE6G6G6D2Y285GJ1P",
+        "01KERYHG0DE6G6G6D2Y285GJ1Z",
+        "01KERYHG0DE6G6G6D2Y285GJ0V",
+        "01KERYHG0DE6G6G6D2Y285GJ2H",
+        "01KERYHG0DE6G6G6D2Y285GJ1D",
+        "01KERYHG0E98ADEC9WJA4KZ4GK",
+        "01KERYHG0DE6G6G6D2Y285GJ27",
+        "01KERYHG0DE6G6G6D2Y285GJ2X"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFZ"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG1",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Name"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFZ"
+      ],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZG2",
+        "01KERYHG0CD916XQ90KRQ71ZG3",
+        "01KERYHG0CD916XQ90KRQ71ZG4",
+        "01KERYHG0CD916XQ90KRQ71ZG5"
+      ],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG2",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Titel_vorne"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG1"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG3",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Vorname"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2J",
+        "01KERYHG0E98ADEC9WJA4KZ4GM",
+        "01KERYHG0DE6G6G6D2Y285GJ2Y"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG1"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG4",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Nachname"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2K",
+        "01KERYHG0DE6G6G6D2Y285GJ2Z",
+        "01KERYHG0E98ADEC9WJA4KZ4GN"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG1"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG5",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Titel_hinten"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG1"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG6",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Druckname"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFZ"
+      ],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZG7",
+        "01KERYHG0CD916XQ90KRQ71ZG8",
+        "01KERYHG0CD916XQ90KRQ71ZG9",
+        "01KERYHG0CD916XQ90KRQ71ZGA"
+      ],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG7",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Titel_vorne"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG6"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG8",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Vorname"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ30"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG6"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZG9",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Nachname"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0E98ADEC9WJA4KZ4G9"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG6"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGA",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Titel_hinten"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZG6"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGB",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Geschlecht"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2M",
+        "01KERYHG0E98ADEC9WJA4KZ4GA",
+        "01KERYHG0E98ADEC9WJA4KZ4GP"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFZ"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGC",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Geburtsdatum"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2N",
+        "01KERYHG0E98ADEC9WJA4KZ4GB",
+        "01KERYHG0E98ADEC9WJA4KZ4GQ"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZFZ"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGD",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "IstPatient"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ10",
+        "01KERYHG0DE6G6G6D2Y285GJ19",
+        "01KERYHG0DE6G6G6D2Y285GJ1V",
+        "01KERYHG0DE6G6G6D2Y285GJ2B",
+        "01KERYHG0E98ADEC9WJA4KZ4GF",
+        "01KERYHG0DE6G6G6D2Y285GJ1J",
+        "01KERYHG0DE6G6G6D2Y285GJ0Q",
+        "01KERYHG0DE6G6G6D2Y285GJ2S",
+        "01KERYHG0DE6G6G6D2Y285GJ23"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGE",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "Einschreiben"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [],
+      "Items": [
+        "01KERYHG0CD916XQ90KRQ71ZGF",
+        "01KERYHG0CD916XQ90KRQ71ZGG"
+      ],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGF",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "SVT"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2C"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZGE"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGG",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "FG"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ2D"
+      ],
+      "ParentItem": [
+        "01KERYHG0CD916XQ90KRQ71ZGE"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KV5MN8Y3CYYPKEM1TD3F64MD",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "EingabeArtUebersteuert_Bool"
+    },
+    "Assocs": {
+      "Instances": [
+        "01KV5MN8Y5DZGHF2GRWCHRDV18"
+      ],
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01KV5MNQ535DR2JQE3JRHJW6CK",
+        "01KV5MNQ535DR2JQE3JRHJW6CM",
+        "01KV5MNQ535DR2JQE3JRHJW6CN",
+        "01KV5MNQ535DR2JQE3JRHJW6CP",
+        "01KV5MNQ535DR2JQE3JRHJW6CQ",
+        "01KV5MNQ535DR2JQE3JRHJW6CR",
+        "01KV5MNQ535DR2JQE3JRHJW6CS",
+        "01KV5MNQ535DR2JQE3JRHJW6CH",
+        "01KV5MNQ535DR2JQE3JRHJW6CJ"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0CD916XQ90KRQ71ZGH",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "DmpInvalidParameterException"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "ReferencedClass": [
+        "39f95f4a-2a87-a61f-1fd9-3f316c10297c"
+      ],
+      "Values": [
+        "01KERYHG0DE6G6G6D2Y285GJ0Z",
+        "01KERYHG0DE6G6G6D2Y285GJ18",
+        "01KERYHG0DE6G6G6D2Y285GJ1T",
+        "01KERYHG0DE6G6G6D2Y285GJ1H"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0DE6G6G6D2Y285GJ0H",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "DmpException"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "ReferencedClass": [
+        "39f95f4a-2a87-0830-0dfc-e050ef7c9115"
+      ],
+      "Values": [],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0DE6G6G6D2Y285GJ0J",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "DialogException"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "ReferencedClass": [
+        "39f95f4a-298d-a1f0-da8f-236c08cc8512"
+      ],
+      "Values": [],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01KERYHG0DE6G6G6D2Y285GJ0K",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "2",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "AccessException"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01KERYHG0CD916XQ90KRQ71ZFR"
+      ],
+      "ConfigurationLinks": [],
+      "ReferencedClass": [
+        "39f95f4a-299c-3566-db95-3e38ff22539a"
+      ],
+      "Values": [],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  }
+]

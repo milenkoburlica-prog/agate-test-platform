@@ -1,0 +1,36 @@
+Parameter Name;Gutfall: Ungültige SvNummer angegeben. Kein Fehler weil die SV-Nummer eine gültige Prüfzimmer hat;Schlechtfall: Ungültige SvNummer angegeben CL-02003;Schlechtfall: Ungültige SvNummer (Falsche Prüfziffer) angegeben CL-02003;Schlechtfall: Keine SvNummer angegeben CL-02003;Schlechtfall: Null als SvNummer angegeben CL-02003;Gutfall:  Gültige SvNummer angegeben-ist aber nicht in DB. Kein Fehler da nicht überprüft wird ob SVNummer in DB ;Gutfall:  Gültige SvNummer angegeben.;Gutfall:  Gültige SvNummer angegeben. Diesmal explizit StrukturierteInfo = „true
+Instanz;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL
+EingabeArtUebersteuert_Bool;false;false;false;false;false;false;false;false
+Vertragspartner.VPNR;645031;645031;645031;645031;645031;645031;645031;645031
+Vertragspartner.Ord_id;15682076;15682076;15682076;15682076;15682076;15682076;15682076;15682076
+Vertragspartner.OrdinationsId;99;99;99;99;99;99;99;99
+SVPerson.SVNR;0000000000;aaaabbccdd;123456789;{EMPTY};{NULL};0000000000;6457010521;6457010521
+SVPerson.Name.Titel_vorne;;;;;;;;
+SVPerson.Name.Vorname;;;;;;;Elias;Elias
+SVPerson.Name.Nachname;;;;;;;Töröcsik-DMP-SS12;Töröcsik-DMP-SS12
+SVPerson.Name.Titel_hinten;;;;;;;;
+SVPerson.Druckname.Titel_vorne;;;;;;;;
+SVPerson.Druckname.Vorname;;;;;;;Éliás;Éliás
+SVPerson.Druckname.Nachname;;;;;;;Törőcsik-DMP-SS12;Törőcsik-DMP-SS12
+SVPerson.Druckname.Titel_hinten;;;;;;;;
+SVPerson.Geschlecht;;;;;;;W;W
+SVPerson.Geburtsdatum;;;;;;;11.10.1955;11.10.1955
+StrukturierteInfo;false;false;false;false;false;false;false;true
+searchAnfragenBasisdaten.SvNummer;;;;;;;6457010521;6457010521
+searchAnfragenBasisdaten.Vorname;;;;;;;Elias;Elias
+searchAnfragenBasisdaten.Nachname;;;;;;;Töröcsik-DMP-SS12;Töröcsik-DMP-SS12
+searchAnfragenBasisdaten.Fachgebietscode;;;;;;;07;07
+searchAnfragenBasisdaten.DmpCode;;;;;;;01;01
+searchAnfragenBasisdaten.Betreuungsstatus;;;;;;;Ein;Ein
+searchAnfragenBasisdaten.EinschreibungSeit;;;;;;;{DATE[][][]};{DATE[][][]}
+searchAnfragenBasisdaten.AusschreibungSeit;;;;;;;;
+searchAnfragenBasisdaten.SVT;;;;;;;12;12
+DmpInvalidParameterException;;CL-02003;CL-02003;CL-02003;CL-02003;;;
+DmpException;;;;;;;;
+DialogException;;;;;;;;
+AccessException;;;;;;;;
+DmpInvalidParameterException.ExceptionName;;DmpInvalidParameterException;DmpInvalidParameterException;DmpInvalidParameterException;DmpInvalidParameterException;;;
+DmpInvalidParameterException.ExceptionTyp;;INVALID_SV_NUMBER;INVALID_SV_NUMBER;INVALID_SV_NUMBER;INVALID_SV_NUMBER;;;
+DmpInvalidParameterException.ExceptionCode;;3;3;3;3;;;
+DmpInvalidParameterException.InfoCode;;CL-02003;CL-02003;CL-02003;CL-02003;;;
+DmpInvalidParameterException.InfoText;;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;Der Wert in SV-Nummer ist ungültig oder fehlt.;;;

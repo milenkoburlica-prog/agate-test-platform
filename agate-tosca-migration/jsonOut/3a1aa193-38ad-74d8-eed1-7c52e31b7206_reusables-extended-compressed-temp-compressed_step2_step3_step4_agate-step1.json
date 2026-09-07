@@ -1,0 +1,55 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1aa193-38ad-74d8-eed1-7c52e31b7206",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS2AuftragAA"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1aa1a9-8ad6-7941-3c6f-2ff480b2df4b" ],
+    "Library" : [ "3a1aa111-cec2-df26-4b80-a3604bc798c6" ],
+    "UsedBy" : [ "01M1BBZFRTD33Z21E6B9J304PT" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1aa193-3b5b-ab05-550c-c371fa27f468",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "CMD",
+    "value" : "kams SS2AuftragAA",
+    "actionMode" : "Insert",
+    "toscaPath" : "CMD",
+    "toscaPathID" : "3a1aa193-3b5c-3d74-41ca-e2d588133e72"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1aa193-3b5c-98a8-ceec-b1fceda5fbcf",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+} ]

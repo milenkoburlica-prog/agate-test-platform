@@ -1,0 +1,188 @@
+# This file contains steps that can be called by any TestCase
+steps:
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: vpNummer
+        value: "{R[vpNummer]}"
+
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: cardSlot
+        value: "{R[cardSlot]}"
+
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: ordination_id
+        value: "{R[ORD_ID]}"
+
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: cdfName
+        value: "{R[vpNummer]}"
+
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: sigType
+        value: "vp"
+
+      # 1. --- REST SECTION ---
+      - type: BUFFER
+        op: EXEC
+        name: pin
+        value: "1111"
+
+      - type: REST
+        op: EXEC
+        command: rest.simulatord.remove_card.remove_card_request
+        endpoint: http://{E[users.serverip]}
+        parameters: 
+          card_slot: "baseContact"
+        response: res_remove
+
+      - type: REST
+        op: EXEC
+        command: rest.simulatord.remove_card.remove_card_request
+        endpoint: http://{E[users.serverip]}
+        parameters: 
+          card_slot: "baseNfc"
+        response: res_remove
+
+      - type: REST
+        op: EXEC
+        command: rest.simulatord.remove_card.remove_card_request
+        endpoint: http://{E[users.serverip]}
+        parameters: 
+          card_slot: "satelliteNfc"
+        response: res_remove
+
+      # 2. 
+      - type: REST
+        op: ASSERT
+        response: res_remove
+        source: STATUS
+        action: EQUALS
+        expected: 204
+
+      # 3.
+      #- type: WAIT
+      #  value: 300
+
+      # 4.
+      - type: REST
+        op: EXEC
+        command: rest.simulatord.insert_card.insert_card_request
+        endpoint: http://{E[users.serverip]}
+        response: res_insert
+        parameters: 
+          card_slot: "{B[cardSlot]}"
+          vpNummer: "{B[vpNummer]}"
+
+      # 5.
+      - type: REST
+        op: ASSERT
+        response: res_insert
+        source: STATUS
+        action: EQUALS
+        expected: 204
+
+      # 6.
+      - type: REST
+        op: EXEC
+        command: rest.gino.v2.status.cardtoken_vpsig_basecontact_request
+        endpoint: https://{E[users.ginoip]}
+        response: res_token
+
+      # 7. 
+      - type: REST
+        op: ASSERT
+        response: res_token
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+      # 8.
+      - type: REST
+        op: BUFFER
+        name: token
+        source: BODY
+        selector: JSON_PATH
+        path: status.baseContact.token.value
+        response: res_token
+
+
+      # --- SOAP SECTION ---
+      # 9. 
+      - type: SOAP
+        op: EXEC
+        command: soap.auth.1.authenticatedialog_request
+        endpoint: https://{E[env.ecard.service]}
+        response: res_auth
+        parameters:
+          token: "{B[token]}"
+      
+      # 10.
+      - type: SOAP
+        op: ASSERT
+        response: res_auth
+        source: STATUS
+        action: EQUALS
+        expected: 200
+      
+      # 11. 
+      - type: SOAP
+        op: BUFFER
+        name: dialogid
+        response: res_auth
+        source: BODY
+        selector: XPATH
+        path: "//dialogId"
+      
+      # 11. closeDialog expects dialogId
+      - type: SOAP
+        op: BUFFER
+        name: dialogId
+        response: res_auth
+        source: BODY
+        selector: XPATH
+        path: "//dialogId"
+
+      # 12.
+      - type: BUFFER
+        op: EXEC
+        name: ordinationid
+        value: "{B[ordination_id]}"
+
+
+      # 13.
+      - type: SOAP
+        op: BUFFER
+        name: taetigkeitsbereichid
+        response: res_auth
+        source: BODY
+        selector: XPATH
+        path: "//ordination[ordinationId='{B[ordination_id]}']/taetigkeitsBereich/id"
+
+      # 14. 
+      - type: SOAP
+        op: EXEC
+        command: soap.auth.1.setdialogaddress_request
+        endpoint: https://{E[env.ecard.service]}
+        parameters:
+          dialogId: "{B[dialogid]}"
+          ORD_ID: "{B[ordinationid]}"
+          taetigkeitsBereich: "{B[taetigkeitsbereichid]}"
+        response: res_addr
+
+      # 15. 
+      - type: SOAP
+        op: ASSERT
+        response: res_addr
+        source: STATUS
+        action: EQUALS
+        expected: 200
+ 

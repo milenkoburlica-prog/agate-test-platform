@@ -1,0 +1,24 @@
+
+- id: "CheckStatus"
+    description: "CheckStatus"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "Service"
+        condition: ""
+        value: "{XL[Service]}"
+      - type: BUFFER
+        op: EXEC
+        name: "Service_Version"
+        condition: ""
+        value: "{XL[Version]}"
+
+      - type: CALL
+        command: "reusable.checkstatus_des_service"
+        parameters: 
+          Endpoint: "https://{E[env.ecard.service]}/{B[Service]}/{B[Service_Version]}/status"

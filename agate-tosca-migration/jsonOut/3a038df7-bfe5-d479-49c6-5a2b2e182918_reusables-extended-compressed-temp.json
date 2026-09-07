@@ -1,0 +1,635 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a038df7-bfe5-d479-49c6-5a2b2e182918",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "dialogaufbauByOrdid_auth_1"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a038e28-2278-c676-479d-d30736e909e0" ],
+    "Items" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ],
+    "Library" : [ "3a038dd5-ffb2-1c5e-cc06-e05c7ab68553" ],
+    "UsedBy" : [ "3a03a1ae-dfe0-b15c-e713-9a37decacaea" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VpNummer",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "ORD_ID",
+    "ValueSelectionGroup" : ""
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "createDialogId"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a038e32-a99b-0290-d31c-cbd7fdbd9201", "3a188496-708e-4bde-2e27-796e59065189", "3a038e50-91ca-e39a-cdd1-0d3f62f8ce34", "3a038dcd-f865-b3d9-782a-0917a85d1d69", "3a038dcd-f8dc-4b4a-e347-cf44669520cb", "3a038dcd-f921-ad97-e888-7971250aa055", "3a038e3d-741c-511f-6fe3-a078fb16a322", "3a038e32-e0cc-d1a9-cf5c-3b95e77fd92b" ],
+    "ParentFolder" : [ "3a038df7-bfe5-d479-49c6-5a2b2e182918" ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038e32-a99b-0290-d31c-cbd7fdbd9201",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038e34-1989-762a-a98c-eeb560eb16b8", "3a03a2ee-bc57-4061-827a-4b1da00d0b07" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038e34-1989-762a-a98c-eeb560eb16b8",
+  "Attributes" : {
+    "ExplicitName" : "URL_HIGH",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[B_URL_HIGH]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e32-a99b-0290-d31c-cbd7fdbd9201" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a03a2ee-bc57-4061-827a-4b1da00d0b07",
+  "Attributes" : {
+    "ExplicitName" : "VpNummer",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "1",
+    "Value" : "{PL[VpNummer]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e32-a99b-0290-d31c-cbd7fdbd9201" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a188496-708e-4bde-2e27-796e59065189",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a188496-708e-697c-7f44-dfc9c5045d72" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a188496-708e-697c-7f44-dfc9c5045d72",
+  "Attributes" : {
+    "ExplicitName" : "URL_HIGH",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[B_URL_DE_HTTPS_HIGH]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a188496-708e-4bde-2e27-796e59065189" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-c955-70bb-aba1-58b76349c91b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a038e50-91ca-e39a-cdd1-0d3f62f8ce34",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a03a2e0-1011-e5f1-fdae-a8daebfe743d" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a038e43-fc3e-1322-e18b-12076572e859" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "ParameterLayerReference",
+  "Surrogate" : "3a03a2e0-1011-e5f1-fdae-a8daebfe743d",
+  "Attributes" : {
+    "Name" : "Business Parameters"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepFolderReference" : [ "3a038e50-91ca-e39a-cdd1-0d3f62f8ce34" ],
+    "AllParameterReferences" : [ "3a03a2e0-10d2-8cd8-4f64-f4cf37adf4f2" ],
+    "ParameterLayer" : [ "3a039e83-16b5-bc8e-b589-e6435f1da401" ]
+  }
+}, {
+  "ObjectClass" : "ParameterReference",
+  "Surrogate" : "3a03a2e0-10d2-8cd8-4f64-f4cf37adf4f2",
+  "Attributes" : {
+    "Value" : "{B[B_Karte]}"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a03a2e0-1011-e5f1-fdae-a8daebfe743d" ],
+    "Parameter" : [ "3a039e83-2bf4-dfab-6fb7-31fbbe910a34" ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038dcd-f865-b3d9-782a-0917a85d1d69",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "authenticateDialog Request"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038dcd-f86c-bfb1-964c-f786c4ccb06d", "3a038dcd-f870-df25-fac2-5633e13d09b8", "01K7EV1KPAD9FG7VYX45366KTR" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39f32cfc-2933-fade-e1fd-ca5f3ce7aa1d" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f86c-bfb1-964c-f786c4ccb06d",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "https://{B[URL_HIGH]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f865-b3d9-782a-0917a85d1d69" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32cfc-637b-2c24-3015-565c808caa91" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f870-df25-fac2-5633e13d09b8",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "{B[token]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f865-b3d9-782a-0917a85d1d69" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32cfc-7884-6c1a-b5e7-11e4fc3316b9" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038dcd-f8dc-4b4a-e347-cf44669520cb",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "authenticateDialog Response"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038dcd-f8dc-3d69-f0f0-15c75a9c398c", "3a038dcd-f8dd-e550-55f8-75a824f6bff5", "3a038dcd-f8dd-1728-2887-e6c8a0835ddc" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39f32cfc-2933-b146-4af3-c6f74c8d6077" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8dc-3d69-f0f0-15c75a9c398c",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "69",
+    "Operator" : "1",
+    "Value" : "200 OK",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f8dc-4b4a-e347-cf44669520cb" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32cfc-9ba6-2b33-8073-007501426103" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8dd-e550-55f8-75a824f6bff5",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "165",
+    "Operator" : "0",
+    "Value" : "dialogId",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f8dc-4b4a-e347-cf44669520cb" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32cfc-aef6-db75-ad69-55e33f893025" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8dd-1728-2887-e6c8a0835ddc",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "{NULL}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f8dc-4b4a-e347-cf44669520cb" ],
+    "SubValues" : [ "3a038dcd-f8e1-aa53-aa4c-70d86dddf936", "3a038dcd-f8e1-e4f4-5bc1-0765f6ebd227" ],
+    "ModuleAttribute" : [ "39f32cfc-decf-2355-1e8e-793083c747ab" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8e1-aa53-aa4c-70d86dddf936",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "519",
+    "Operator" : "1",
+    "Value" : "{PL[ORD_ID]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a038dcd-f8dd-1728-2887-e6c8a0835ddc" ],
+    "ModuleAttribute" : [ "39f32cfc-df0a-9ccf-aba5-5ebc55fba7f9" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8e1-e4f4-5bc1-0765f6ebd227",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "{NULL}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ "3a038dcd-f8e9-701f-d52a-a25214680a4c" ],
+    "ParentValue" : [ "3a038dcd-f8dd-1728-2887-e6c8a0835ddc" ],
+    "ModuleAttribute" : [ "39f32cfc-df5e-4646-d262-97d2cc1e98a4" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f8e9-701f-d52a-a25214680a4c",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "165",
+    "Operator" : "0",
+    "Value" : "taetigkeitsBereich",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a038dcd-f8e1-e4f4-5bc1-0765f6ebd227" ],
+    "ModuleAttribute" : [ "39f32cfc-df6a-76f6-866b-2eb17f6f2b02" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038dcd-f921-ad97-e888-7971250aa055",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "setDialogAddress Request"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038dcd-f92b-bad0-5f6a-d935744f79e4", "3a038dcd-f92f-bd9f-df1e-56e4527c47e3", "3a038dcd-f933-886f-564b-86161c49339e", "3a038dcd-f937-9af6-5e32-916f8ef85cb8", "01K7EV29QPBBXMW97M3K02FDNK" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39f32cfc-2934-2dd1-9331-629da5ffda7f" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f92b-bad0-5f6a-d935744f79e4",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "https://{B[URL_HIGH]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f921-ad97-e888-7971250aa055" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32d0e-056d-4d5c-b7e8-a981ec610f6d" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f92f-bd9f-df1e-56e4527c47e3",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "{B[dialogId]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f921-ad97-e888-7971250aa055" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32d03-b902-c886-f051-91a5ecb4cfac" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f933-886f-564b-86161c49339e",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "{PL[ORD_ID]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f921-ad97-e888-7971250aa055" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32d03-b917-94f7-dc43-43576f86cf86" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038dcd-f937-9af6-5e32-916f8ef85cb8",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "515",
+    "Operator" : "0",
+    "Value" : "{B[taetigkeitsBereich]}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038dcd-f921-ad97-e888-7971250aa055" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32d03-b933-2fd9-a7aa-20d014f9231a" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038e3d-741c-511f-6fe3-a078fb16a322",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "setDialogAddress Response"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038e3f-9a9f-6a70-4e30-bfea15ac22c2" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39f32cfc-2935-9f3d-9163-963adf1714bf" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038e3f-9a9f-6a70-4e30-bfea15ac22c2",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "69",
+    "Operator" : "1",
+    "Value" : "200 OK",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e3d-741c-511f-6fe3-a078fb16a322" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39f32d0f-1085-30ab-c2f4-c4023650c0f1" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038e32-e0cc-d1a9-cf5c-3b95e77fd92b",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Delete Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038e3a-c96d-ab32-0ddf-1499effc8f94", "3a038e3a-e702-1859-d90d-c58066e30cd2", "3a03a2ef-2004-eb89-fc7c-fb36e870516c" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39e342b2-6ec7-0f30-678c-aec82a472007" ],
+    "ParentFolder" : [ "3a038dcd-f7fc-91b7-60b7-dbd779ac5e94" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038e3a-c96d-ab32-0ddf-1499effc8f94",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "1",
+    "Operator" : "1",
+    "Value" : "CardReaderAccessTyp",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e32-e0cc-d1a9-cf5c-3b95e77fd92b" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39e342b2-958e-07fe-764b-7bfacc713c70" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a038e3a-e702-1859-d90d-c58066e30cd2",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "1",
+    "Operator" : "1",
+    "Value" : "URL_HIGH",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e32-e0cc-d1a9-cf5c-3b95e77fd92b" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39e342b2-958e-07fe-764b-7bfacc713c70" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a03a2ef-2004-eb89-fc7c-fb36e870516c",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "1",
+    "Operator" : "1",
+    "Value" : "VpNummer",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a038e32-e0cc-d1a9-cf5c-3b95e77fd92b" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39e342b2-958e-07fe-764b-7bfacc713c70" ],
+    "ExecutionLogs" : [ ]
+  }
+} ]

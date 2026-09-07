@@ -1,0 +1,91 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b49cf-ac12-15ce-9166-20b6132ae035",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Cleanup_TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c", "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "Library" : [ "3a1b49cb-54f2-9f66-25d6-3041daa326d8" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P5Q", "01M1BBZFRW7P6EHPXQPNECS7D4" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program  - Remove all Subfolders in TxFilesFromKams",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b49cf-ad34-5519-05fc-1862ab817f9c",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "cmd",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "Directory" : {
+      "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Directory"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C for /D %i in ({B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\*) do rmdir /S /Q \"\"\"\"%i\\\"\"\"\"",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove all Files in TxFilesToKams",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b49cf-ad34-6724-54ea-7f5561c9972e",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "cmd",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "Directory" : {
+      "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Directory"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C del /F /Q {B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\*",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+} ]

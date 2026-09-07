@@ -1,0 +1,234 @@
+{
+  "name" : "PST_REPORT_GF_001_with_default_output_filename",
+  "surrogate" : "01KRGT425T41E0E1D9F2BGZ167",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01KVDF7V5AFCH3A5TXDR5G168P",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "TC_ID",
+      "value" : "PST_REPORT_GF_001",
+      "actionMode" : "Insert",
+      "toscaPath" : "TC_ID",
+      "toscaPathID" : "01KVDF7V5AFCH3A5TXDR5G168Q"
+    }, {
+      "name" : "tc_name",
+      "value" : "{B[TC_ID]}_{DATETIME}",
+      "actionMode" : "Insert",
+      "toscaPath" : "tc_name",
+      "toscaPathID" : "01KVDF7V5AFCH3A5TXDR5G168R"
+    }, {
+      "name" : "TEST_DATA_PACKET_DIR",
+      "value" : "{B[TC_ID]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "TEST_DATA_PACKET_DIR",
+      "toscaPathID" : "01KVDF7V5AFCH3A5TXDR5G168S"
+    }, {
+      "name" : "referenze2",
+      "value" : "XX",
+      "actionMode" : "Insert",
+      "toscaPath" : "referenze2",
+      "toscaPathID" : "01KVDF7V5AFCH3A5TXDR5G168T"
+    }, {
+      "name" : "task",
+      "value" : "job",
+      "actionMode" : "Insert",
+      "toscaPath" : "task",
+      "toscaPathID" : "01KVDF7V5AFCH3A5TXDR5G168V"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01KVDF7V5B9E1A7V92A1PJF00Y",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "logging_path",
+      "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "logging_path",
+      "toscaPathID" : "01KVDF7V5B9E1A7V92A1PJF00Z"
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "TBox Start Program - Create Logging DIR",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01KVDF7V5B9E1A7V92A1PJF010",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "/C mkdir {B[logging_path]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 4,
+    "name" : "01_execute_ssh_Reference delete report file",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KVDH5JVV1FZWKTQZWZ9BK2B7",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "Option",
+      "value" : "verify-no",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Command",
+      "value" : "rm {B[PST_OUTPUT_FOLDER]}/report.txt",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Servicename",
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Verify",
+      "value" : "",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "02_execute_ssh_Reference pst report -dateFrom=20260601 -dateTo=20260630",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KVDFH9S8FAB0C76GNP1H17B7",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "Option",
+      "value" : "verify-contains",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Command",
+      "value" : "pst report -dateFrom={DATE[][][yyyyMM]}01 -dateTo={DATE[][][yyyyMM]}30;echo $?",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Servicename",
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Verify",
+      "value" : "0",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 6,
+    "name" : "03_execute_file_transfer_Reference",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KVDF7V5C8WKBBGJ8RC17YVAA",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "02_execute_file_transfer",
+    "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "Option",
+      "value" : "get",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Servicename",
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "WindowsFilePath",
+      "value" : "{B[logging_path]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "UnixFilePath",
+      "value" : "{B[PST_OUTPUT_FOLDER]}\\report.txt",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 7,
+    "name" : "04_execute_ssh_Reference check report file",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "01KVDN1DC79JCMJX1J5K1JAPN1",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "Option",
+      "value" : "verify-exact",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Command",
+      "value" : "ls -ltr {B[PST_OUTPUT_FOLDER]}/report.txt | wc -l",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Servicename",
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "Verify",
+      "value" : "1",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  } ]
+}

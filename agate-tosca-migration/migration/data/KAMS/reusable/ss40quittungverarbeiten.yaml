@@ -1,0 +1,15 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: CMD
+        value: "kams SS40QuittungVerarbeiten"
+
+========== REUSABLE CALL CREATE ==========
+[CALL-CREATE] step name        = 
+[CALL-CREATE] reusable rawName = '01_execute_ssh'
+[CALL-CREATE] generated command = 'reusable.01_execute_ssh'
+==========================================
+
+      - type: CALL
+        command: 'reusable.01_execute_ssh'

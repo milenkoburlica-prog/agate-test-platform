@@ -1,0 +1,78 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a5d-a16d-f0c7-a690-1cb887a5395f",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40-/SS43-Laufnummer-ermitteln"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b4a5e-2da2-2091-1679-48623ad2bf37", "3a1b4a5d-f3e9-2ced-4334-da970b3b1b32" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P62" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b4a5e-2da2-2091-1679-48623ad2bf37",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b4a5e-2da2-9d6a-5388-11eda97a67c1" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1b4a5d-a16d-f0c7-a690-1cb887a5395f" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b4a5e-2da2-9d6a-5388-11eda97a67c1",
+    "Value" : "TxFilesToKams",
+    "ExplicitName" : "DIRPC",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "DIRPC",
+    "ToscaPathID" : "3a1b4a5e-2da2-9d6a-5388-11eda97a67c1"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1b4a5d-f3e9-2ced-4334-da970b3b1b32",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b4a5e-e54c-a04a-dcb0-91371d68fe54" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a1adcf5-cdcd-facd-cb12-54d4b36227ce" ],
+    "ParentFolder" : [ "3a1b4a5d-a16d-f0c7-a690-1cb887a5395f" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{B[DIRPC]}",
+    "ExplicitName" : ""
+  } ]
+} ]

@@ -1,0 +1,16 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <eigeneMeldungenSuchen xmlns="http://soap.muhi.client.chipkarte.at">
+      <dialogId>{B[dialogId]}</dialogId>
+      <suchparameter>
+        <art>{B[art]}</art>
+        <erstelltAb>{B[erstelltAb]}</erstelltAb>
+        <erstelltBis>{B[erstelltBis]}</erstelltBis>
+        <typ>{B[typ]}</typ>
+        <voraussichtlicherGeburtsterminAb>{B[voraussichtlicherGeburtsterminAb]}</voraussichtlicherGeburtsterminAb>
+        <voraussichtlicherGeburtsterminBis>{B[voraussichtlicherGeburtsterminBis]}</voraussichtlicherGeburtsterminBis>
+        <vsnr>{B[vsnr]}</vsnr>
+      </suchparameter>
+    </eigeneMeldungenSuchen>
+  </s:Body>
+</s:Envelope>

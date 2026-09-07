@@ -1,0 +1,30 @@
+testCases: 
+
+- id: "CheckStatus_MUHI_V1"
+    description: "CheckStatus_MUHI_V1"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "Service"
+        condition: ""
+        value: "muhi"
+      - type: BUFFER
+        op: EXEC
+        name: "Service_Version"
+        condition: ""
+        value: "1"
+
+      - type: CALL
+        command: "reusable.checkstatus_des_service"
+        parameters: 
+          Endpoint: "https://{E[env.ecard.service]}/{B[Service]}/{B[Service_Version]}/status"
+
+      - type: CALL
+        command: "reusable.checkstatus_des_service"
+        parameters: 
+          Endpoint: "https://{B[GINA_IP]}/{B[Service]}/{B[Service_Version]}/status"

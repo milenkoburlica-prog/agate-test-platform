@@ -1,0 +1,5 @@
+name: karte_stecken_ocard_durchführung_de
+steps:
+      - type: CALL
+        command: "reusable.o_e_card_stecken"
+        parameters: {}

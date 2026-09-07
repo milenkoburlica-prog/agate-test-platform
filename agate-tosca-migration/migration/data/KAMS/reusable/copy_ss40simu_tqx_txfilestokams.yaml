@@ -1,0 +1,7 @@
+steps:
+
+      # Execute CMD Command: TBox Start Program _Simulator Quittung kopieren auf TxFilesToKams - TQx
+      - type: CMD
+        op: EXEC
+        command: "{s[svc.projekt root path]}\tosca\tools\{b[simulator]}\files\copy {S[SVC.Projekt root path]}\\Tosca\\Tools\\{B[Simulator]}\\files\\TQ* {B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\"
+        response: cmd_response

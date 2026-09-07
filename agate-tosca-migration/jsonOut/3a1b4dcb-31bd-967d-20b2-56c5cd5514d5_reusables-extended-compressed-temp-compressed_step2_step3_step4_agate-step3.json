@@ -1,0 +1,51 @@
+{
+  "name" : "Tx_CMStoCKV-PC_TxFilesFromKams",
+  "surrogate" : "3a1b4dcb-31bd-967d-20b2-56c5cd5514d5",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4dcb-32bb-b3e2-23b8-c972d8d980c7",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "DIRPC",
+      "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\.",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPC",
+      "toscaPathID" : "3a1b4dcb-32bb-a1d7-39db-2343d0656ba1"
+    }, {
+      "name" : "DIRPOD",
+      "value" : "{B[OMS.SS2_CMStoCKV.TransferVerzeichnis]}/.",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPOD",
+      "toscaPathID" : "3a1b4dcb-32bb-e7e9-7c45-b170407e391c"
+    }, {
+      "name" : "PODNAME",
+      "value" : "{B[KS_POD_Name]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODNAME",
+      "toscaPathID" : "3a1b4dcb-32bb-fba1-e50f-fad295af8e46"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4dcb-32bb-eb08-119c-badb5c458e13",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "02_execute_file_transfer",
+    "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

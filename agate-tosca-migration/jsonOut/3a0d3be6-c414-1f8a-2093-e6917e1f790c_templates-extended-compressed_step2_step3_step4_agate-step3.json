@@ -1,0 +1,460 @@
+{
+  "name" : "anspruchPruefen",
+  "surrogate" : "3a0d3be6-c414-1f8a-2093-e6917e1f790c",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a0d3be6-c414-f2d7-ca18-d890d9664f49",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "B_Karte",
+      "value" : "{XL[Vertragspartner.VPNR]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_Karte",
+      "toscaPathID" : "3a0d3be6-c414-9004-1dc6-dc71449d8463"
+    }, {
+      "name" : "B_OrdinationsId",
+      "value" : "{XL[Vertragspartner.Ord_id]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OrdinationsId",
+      "toscaPathID" : "3a0d3be6-c414-dbda-4854-1ae122fd8eb7"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a0d3be6-c415-ca7c-f29e-a7cab8c3ddfb",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "dialogaufbauByOrdid_buffered_auth_1",
+    "reusableSurrogate" : "3a038dd7-d4a3-b171-7df8-b09108480534",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "ORD_ID",
+      "value" : "{B[B_OrdinationsId]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "VpNummer",
+      "value" : "{B[B_Karte]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a0d3be6-c415-2e48-3139-2492a655122b",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "create_cardToken_svSig_e_card",
+    "reusableSurrogate" : "3a03a580-d929-d98e-1117-22d0f20e50ec",
+    "condition" : "'CardToken.SVNR-Karte' != NULL",
+    "action" : null,
+    "values" : [ {
+      "name" : "SvNummer",
+      "value" : "{XL[CardToken.SVNR-Karte]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "VpNummer",
+      "value" : "{XL[CardToken.VPNR]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 4,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a0d3be6-c415-a418-7590-01cd9fac659f",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "create_cardToken_vpSig_o_card",
+    "reusableSurrogate" : "3a038e43-fc3e-1322-e18b-12076572e859",
+    "condition" : "CardToken.Tokentyp == \"VPVP\"",
+    "action" : null,
+    "values" : [ {
+      "name" : "VpNummer",
+      "value" : "{XL[CardToken.VPNR-Karte]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a0d3be6-c415-e6c7-f41f-6b2d2a6ed87a",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "create_cardToken_svSig_o_card",
+    "reusableSurrogate" : "3a03a5b9-12d3-dee7-98c7-b17482f2288f",
+    "condition" : "CardToken.Tokentyp == \"VPSV\"",
+    "action" : null,
+    "values" : [ {
+      "name" : "VpNummer",
+      "value" : "{XL[CardToken.VPNR-Karte]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "SvNummer",
+      "value" : "{XL[CardToken.SVNR]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 6,
+    "name" : "anspruchPruefen Request Direkte Errreichbarkeit",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a0d3be6-c416-cbde-1fd5-874d3dd7ba4d",
+    "module" : "anspruchPruefen Request",
+    "moduleSurrogate" : "39fa944c-43ec-df2b-c41d-8d00b07694e0",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "Endpoint",
+      "value" : "https://{B[B_URL_DE_HTTPS_HIGH]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a0d3be6-c416-5e12-995b-2975723b3318"
+    }, {
+      "name" : "dialogId",
+      "value" : "{XL[DialogID]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "dialogId",
+      "toscaPathID" : "3a0d3be6-c416-0a46-e523-8e097172f38c",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='dialogId']"
+    }, {
+      "name" : "vsnr",
+      "value" : "{XL[SVPerson.SVNR]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "vsnr",
+      "toscaPathID" : "3a0d3be6-c416-61bc-a869-b7a986c044c3",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='vsnr']"
+    }, {
+      "name" : "cardToken",
+      "value" : "",
+      "actionMode" : "Insert",
+      "toscaPath" : "cardToken",
+      "toscaPathID" : "3a0d3be6-c416-163f-f558-17ca6f688e8e",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='cardToken']",
+      "xCondition" : "'CardToken.SVNR-Karte' == NULL AND 'CardToken.VPNR-Karte' == NULL AND 'CardToken.TokenWert' == NULL  AND 'CardToken.TokenWert' ==\"{NULL}\""
+    }, {
+      "name" : "voraussichtlicherGeburtstermin",
+      "value" : "{XL[Vorraussichtlicher_Geburtstermin.Datum]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "voraussichtlicherGeburtstermin",
+      "toscaPathID" : "3a0d3be6-c416-7e04-07c7-2ad3e6fb467e",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='voraussichtlicherGeburtstermin']"
+    }, {
+      "name" : "cardToken",
+      "value" : "{B[token]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "cardToken",
+      "toscaPathID" : "3a0d3be6-c416-cbdc-e32d-91b1b52fa37f",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='cardToken']",
+      "xCondition" : "'CardToken.SVNR-Karte' != NULL OR 'CardToken.VPNR-Karte' != NULL AND 'CardToken.TokenWert' == NULL"
+    }, {
+      "name" : "cardToken",
+      "value" : "{XL[CardToken.TokenWert]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "cardToken",
+      "toscaPathID" : "3a0d3be6-c416-b1ee-f76f-d930158d0cc4",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='cardToken']",
+      "xCondition" : "'CardToken.TokenWert' != NULL"
+    } ]
+  }, {
+    "index" : 7,
+    "name" : "anspruchPruefen Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a0d3be6-c417-a560-6d01-71dc039aaeb2",
+    "module" : "anspruchPruefen Response",
+    "moduleSurrogate" : "39fa944c-43ec-73c6-93b4-842eba7837ea",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL",
+    "action" : null,
+    "values" : [ {
+      "name" : "geburtsdatum",
+      "value" : "{XL[SVPerson.Geburtsdatum]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.geburtsdatum",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-72e2-63e4-777719faf45d",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']"
+    }, {
+      "name" : "titelHinten",
+      "value" : "{XL[SVPerson.Druckname.Titel_hinten]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.titelHinten",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-794f-781e-0f63cf82193c",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='titelHinten']"
+    }, {
+      "name" : "titelVorne",
+      "value" : "{XL[SVPerson.Name.Titel_vorne]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.titelVorne",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-1860-be95-7099a0c2d32b",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='titelVorne']",
+      "xCondition" : "SVPerson.Druckname.Titel_vorne==NULL"
+    }, {
+      "name" : "vorname",
+      "value" : "{XL[SVPerson.Name.Vorname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.vorname",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-ccee-5ba2-96ed418889f9",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']",
+      "xCondition" : "SVPerson.Druckname.Vorname==NULL"
+    }, {
+      "name" : "vsnr",
+      "value" : "{XL[SVPerson.SVNR]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.vsnr",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-08c2-a551-63cbc793531e",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']"
+    }, {
+      "name" : "zuname",
+      "value" : "{XL[SVPerson.Name.Nachname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.zuname",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-0a86-141a-d6cab4cd74de",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']",
+      "xCondition" : "SVPerson.Druckname.Nachname==NULL"
+    }, {
+      "name" : "vorname",
+      "value" : "{XL[SVPerson.Druckname.Vorname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.vorname",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-56d7-26c8-6f821ed58721",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']",
+      "xCondition" : "SVPerson.Druckname.Vorname!=NULL"
+    }, {
+      "name" : "zuname",
+      "value" : "{XL[SVPerson.Druckname.Nachname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.zuname",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-4621-f91f-7957726d32a5",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']",
+      "xCondition" : "SVPerson.Druckname.Nachname!=NULL"
+    }, {
+      "name" : "titelVorne",
+      "value" : "{XL[SVPerson.Druckname.Titel_vorne]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.titelVorne",
+      "toscaPathID" : "3a0d3be6-c417-3f44-b162-82558d2d5636.3a0d3be6-c417-0cd1-6fb4-a4e3b840cbcc",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='titelVorne']",
+      "xCondition" : "SVPerson.Druckname.Titel_vorne!=NULL"
+    }, {
+      "name" : "schwangerschaftswoche",
+      "value" : "{XL[Vorraussichtlicher_Geburtstermin.Schwangerschaftswoche]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "schwangerschaftswoche",
+      "toscaPathID" : "3a0d3be6-c417-7438-14aa-226be2dce1e0",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']"
+    }, {
+      "name" : "StatusCode",
+      "value" : "200 OK",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode",
+      "toscaPathID" : "3a0d3be6-c417-f1ac-0c31-fd4011f5a07f"
+    }, {
+      "name" : "ResponseTime",
+      "value" : "{NULL}",
+      "actionMode" : "Verify",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 8,
+    "name" : "MUHI Exception Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a0d3be6-c417-4758-9ace-0ccae772248b",
+    "module" : "MUHI Exception Response",
+    "moduleSurrogate" : "39fa9dcc-4295-1129-a512-9e098bf6f0f8",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "500 Internal Server Error",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode",
+      "toscaPathID" : "3a0d3be6-c417-ddca-09ba-e8ad314efd0d"
+    }, {
+      "name" : "DialogException",
+      "value" : "{XL[DialogException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "DialogException",
+      "toscaPathID" : "3a0d3be6-c417-9575-8b52-f8df003db764",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']",
+      "xCondition" : "DialogException != NULL"
+    }, {
+      "name" : "code",
+      "value" : "{XL[DialogException.InfoCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "DialogException.code",
+      "toscaPathID" : "3a0d3be6-c417-9575-8b52-f8df003db764.3a0d3be6-c417-c3d1-9f4c-74f1d9459d57",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']",
+      "xCondition" : "DialogException != NULL"
+    }, {
+      "name" : "errorCode",
+      "value" : "{XL[DialogException.ExceptionCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "DialogException.errorCode",
+      "toscaPathID" : "3a0d3be6-c417-9575-8b52-f8df003db764.3a0d3be6-c417-6f84-b855-16cfe851494f",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']",
+      "xCondition" : "DialogException != NULL"
+    }, {
+      "name" : "message",
+      "value" : "*{XL[DialogException.InfoText]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "DialogException.message",
+      "toscaPathID" : "3a0d3be6-c417-9575-8b52-f8df003db764.3a0d3be6-c417-c30e-f893-0ac2bc48d62d",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']",
+      "xCondition" : "DialogException != NULL"
+    }, {
+      "name" : "CardException",
+      "value" : "{XL[CardException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "CardException",
+      "toscaPathID" : "3a0d3be6-c417-a9ca-babf-ba073dbd46f7",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']",
+      "xCondition" : "CardException != NULL"
+    }, {
+      "name" : "code",
+      "value" : "{XL[CardException.InfoCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "CardException.code",
+      "toscaPathID" : "3a0d3be6-c417-a9ca-babf-ba073dbd46f7.3a0d3be6-c418-ebd4-b0a5-8905dc353b29",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='code']",
+      "xCondition" : "CardException != NULL"
+    }, {
+      "name" : "errorCode",
+      "value" : "{XL[CardException.ExceptionCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "CardException.errorCode",
+      "toscaPathID" : "3a0d3be6-c417-a9ca-babf-ba073dbd46f7.3a0d3be6-c418-aef7-f467-550eca0c41b1",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='errorCode']",
+      "xCondition" : "CardException != NULL"
+    }, {
+      "name" : "message",
+      "value" : "*{XL[CardException.InfoText]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "CardException.message",
+      "toscaPathID" : "3a0d3be6-c417-a9ca-babf-ba073dbd46f7.3a0d3be6-c418-9034-6f70-8ddbb5f89b0e",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='message']",
+      "xCondition" : "CardException != NULL"
+    }, {
+      "name" : "MuhiException",
+      "value" : "{XL[MuhiException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "MuhiException",
+      "toscaPathID" : "3a0d3be6-c418-2b91-0b51-7b2212520a05",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']",
+      "xCondition" : "MuhiException != NULL"
+    }, {
+      "name" : "code",
+      "value" : "{XL[MuhiException.InfoCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "MuhiException.code",
+      "toscaPathID" : "3a0d3be6-c418-2b91-0b51-7b2212520a05.3a0d3be6-c418-87e6-0cad-351bb5536aac",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']",
+      "xCondition" : "MuhiException != NULL"
+    }, {
+      "name" : "errorCode",
+      "value" : "{XL[MuhiException.ExceptionCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "MuhiException.errorCode",
+      "toscaPathID" : "3a0d3be6-c418-2b91-0b51-7b2212520a05.3a0d3be6-c418-313c-7b94-c2437c4017ae",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']",
+      "xCondition" : "MuhiException != NULL"
+    }, {
+      "name" : "message",
+      "value" : "*{XL[MuhiException.InfoText]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "MuhiException.message",
+      "toscaPathID" : "3a0d3be6-c418-2b91-0b51-7b2212520a05.3a0d3be6-c418-e350-992c-97cca3a2eb33",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']",
+      "xCondition" : "MuhiException != NULL"
+    }, {
+      "name" : "AccessException",
+      "value" : "{XL[AccessException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "AccessException",
+      "toscaPathID" : "3a0d3be6-c418-78fb-023c-cbad83c13a71",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']",
+      "xCondition" : "AccessException != NULL"
+    }, {
+      "name" : "code",
+      "value" : "{XL[AccessException.InfoCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.code",
+      "toscaPathID" : "3a0d3be6-c418-78fb-023c-cbad83c13a71.3a0d3be6-c418-6125-8eef-d260af768e38",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']",
+      "xCondition" : "AccessException != NULL"
+    }, {
+      "name" : "errorCode",
+      "value" : "{XL[AccessException.ExceptionCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.errorCode",
+      "toscaPathID" : "3a0d3be6-c418-78fb-023c-cbad83c13a71.3a0d3be6-c418-d2a5-3a5c-b402eddf1569",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']",
+      "xCondition" : "AccessException != NULL"
+    }, {
+      "name" : "message",
+      "value" : "*{XL[AccessException.InfoText]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.message",
+      "toscaPathID" : "3a0d3be6-c418-78fb-023c-cbad83c13a71.3a0d3be6-c418-1278-6737-b0c42f3ec915",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']",
+      "xCondition" : "AccessException != NULL"
+    } ]
+  }, {
+    "index" : 9,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a0d4e18-e5c8-676e-9d75-c1750e4230e2",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "dialogClose_auth1",
+    "reusableSurrogate" : "3a0ae521-a4bb-d67d-c70e-2d019bfb33f2",
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "VpNummer",
+      "value" : "{XL[Vertragspartner.VPNR]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    }, {
+      "name" : "OrdinationsId",
+      "value" : "{XL[Vertragspartner.Ord_id]}",
+      "actionMode" : "BusinessParameter",
+      "toscaPath" : ""
+    } ]
+  } ]
+}

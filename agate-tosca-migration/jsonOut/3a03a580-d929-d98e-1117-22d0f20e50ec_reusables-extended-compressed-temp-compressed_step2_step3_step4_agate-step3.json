@@ -1,0 +1,295 @@
+{
+  "name" : "create_cardToken_svSig_e_card",
+  "surrogate" : "3a03a580-d929-d98e-1117-22d0f20e50ec",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a580-d930-aa1e-cb74-270be4cea66c",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "GinoCardSlot",
+      "value" : "{B[B_CardReaderSimulatorSlot]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "GinoCardSlot",
+      "toscaPathID" : "3a03a580-d930-3ada-5011-31511f0e335c"
+    }, {
+      "name" : "Kartenlesername",
+      "value" : "{B[B_Kartenlesername]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesername",
+      "toscaPathID" : "3a03a580-d930-e4c6-0f41-cdbcbcc2842a"
+    }, {
+      "name" : "KartenleserIP",
+      "value" : "{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "KartenleserIP",
+      "toscaPathID" : "3a03a580-d930-49a9-d139-a7adeaba8215"
+    }, {
+      "name" : "Kartenlesersimulator",
+      "value" : "{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesersimulator",
+      "toscaPathID" : "3a03a580-d930-f3e6-1600-34e459ba43d6"
+    }, {
+      "name" : "VpNummer",
+      "value" : "{PL[VpNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "VpNummer",
+      "toscaPathID" : "3a03a580-d930-d5eb-9b4a-a621551131c4"
+    }, {
+      "name" : "SvNummer",
+      "value" : "{PL[SvNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SvNummer",
+      "toscaPathID" : "3a03a5b3-ae63-fca4-0724-fc3ef8c38b00"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a03a580-d930-1d11-91cd-559068176983",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "o-/e-Card stecken",
+    "reusableSurrogate" : "3a0388d0-14a6-c8be-0ce8-45b5cb29e547",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 3,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a580-d931-d857-89bd-03c96148aba4",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "GinoCardSlot",
+      "value" : "{B[B_CardReaderSimulatorSlot]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "GinoCardSlot",
+      "toscaPathID" : "3a03a580-d931-4653-0447-620f9ee38e81"
+    }, {
+      "name" : "Kartenlesername",
+      "value" : "{B[B_Kartenlesername]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesername",
+      "toscaPathID" : "3a03a580-d931-e1e2-83e3-2b8ddacd19ab"
+    }, {
+      "name" : "KartenleserIP",
+      "value" : "{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "KartenleserIP",
+      "toscaPathID" : "3a03a580-d931-8570-6368-6d1fb0bf3eb7"
+    }, {
+      "name" : "Kartenlesersimulator",
+      "value" : "{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesersimulator",
+      "toscaPathID" : "3a03a580-d931-2f89-b2c0-3210d4415bf3"
+    }, {
+      "name" : "VpNummer",
+      "value" : "{PL[VpNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "VpNummer",
+      "toscaPathID" : "3a03a580-d932-7e2b-ba2a-c19abf6d93e2"
+    }, {
+      "name" : "SvNummer",
+      "value" : "{PL[SvNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SvNummer",
+      "toscaPathID" : "3a03a5ba-225e-374b-aece-dd33250bac6f"
+    } ]
+  }, {
+    "index" : 4,
+    "name" : "cardToken_svSig_e_card_baseContact Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-7977-c2af-8c60-2d9ebbf89653",
+    "module" : "cardToken_svSig_e_card_baseContact Request",
+    "moduleSurrogate" : "3a03a5b1-5df2-3592-ee8f-38cf43cbe8a5",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('{B[B_CardReaderSimulatorSlot]}'=='baseContact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "Endpoint",
+      "value" : "https://{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a5bc-753d-609b-5ed4-91d9501d3ff2"
+    }, {
+      "name" : "vpnr",
+      "value" : "{B[VpNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "vpnr",
+      "toscaPathID" : "3a03a60f-278b-4154-6f71-5e46bb0555e5",
+      "jsonPath" : "vpnr"
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "cardToken_svSig_e_card_baseContact Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-7a45-f915-1d83-9bdea4188ff5",
+    "module" : "cardToken_svSig_e_card_baseContact Response",
+    "moduleSurrogate" : "3a03a5b1-5df2-af84-83f1-a4011d2a6661",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('{B[B_CardReaderSimulatorSlot]}'=='baseContact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "200 OK",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode",
+      "toscaPathID" : "3a03a5bd-596e-ad45-17cf-36932df34cf1"
+    }, {
+      "name" : "value",
+      "value" : "token",
+      "actionMode" : "Buffer",
+      "toscaPath" : "value",
+      "toscaPathID" : "3a03a5bd-3838-7511-16af-74f5ba59067e",
+      "jsonPath" : "status.baseContact.token.value"
+    } ]
+  }, {
+    "index" : 6,
+    "name" : "cardToken_svSig_e_card_baseNfc Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-9779-a206-bcc2-f4b58b91d320",
+    "module" : "cardToken_svSig_e_card_baseNfc Request",
+    "moduleSurrogate" : "3a03a5b1-5df4-ff89-5721-9a5798d29883",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND ('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')",
+    "action" : null,
+    "values" : [ {
+      "name" : "Endpoint",
+      "value" : "https://{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a5bc-643a-7b30-79d8-b0f9503314a2"
+    }, {
+      "name" : "vpnr",
+      "value" : "{B[VpNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "vpnr",
+      "toscaPathID" : "3a03a60f-6208-71f7-4a67-4d4aef665b35",
+      "jsonPath" : "vpnr"
+    } ]
+  }, {
+    "index" : 7,
+    "name" : "cardToken_svSig_e_card_baseNfc Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-9828-cce6-d4a8-ff6cad289fb7",
+    "module" : "cardToken_svSig_e_card_baseNfc Response",
+    "moduleSurrogate" : "3a03a5b1-5df5-96f1-9bf6-9688908e885b",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND ('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "200 OK",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode",
+      "toscaPathID" : "3a03a5bc-f4ed-06f7-3591-c84dbe513495"
+    }, {
+      "name" : "value",
+      "value" : "token",
+      "actionMode" : "Buffer",
+      "toscaPath" : "value",
+      "toscaPathID" : "3a03a5bc-d228-d2bc-b5c9-dbb2cb50e593",
+      "jsonPath" : "status.baseNfc.token.value"
+    } ]
+  }, {
+    "index" : 8,
+    "name" : "cardToken_svSig_e_card_satelliteNfc Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-c29b-0c44-5189-ad521a2a33fe",
+    "module" : "cardToken_svSig_e_card_satelliteNfc Request",
+    "moduleSurrogate" : "3a03a5b1-5df6-7cd4-e1bd-023a3c114f71",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND (NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Endpoint",
+      "value" : "https://{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a5bc-5011-2913-2476-6c482475842f"
+    }, {
+      "name" : "vpnr",
+      "value" : "{B[VpNummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "vpnr",
+      "toscaPathID" : "3a03a60e-ce84-974f-f589-6d266f143b80",
+      "jsonPath" : "vpnr"
+    } ]
+  }, {
+    "index" : 9,
+    "name" : "cardToken_svSig_e_card_satelliteNfc Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a5bb-c35a-0d8f-7bb7-690d05ca6b77",
+    "module" : "cardToken_svSig_e_card_satelliteNfc Response",
+    "moduleSurrogate" : "3a03a5b1-5df7-eef2-162a-9bc557df8a9a",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND (NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "200 OK",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode",
+      "toscaPathID" : "3a03a5bc-c6d4-a52d-a604-cd1393a3066f"
+    }, {
+      "name" : "value",
+      "value" : "token",
+      "actionMode" : "Buffer",
+      "toscaPath" : "value",
+      "toscaPathID" : "3a03a5bc-9cda-e366-bd27-a41be7da1c64",
+      "jsonPath" : "status.satellite.token.value"
+    } ]
+  }, {
+    "index" : 10,
+    "name" : "TBox Delete Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a580-d935-bb02-8e6f-be695e6b5455",
+    "module" : "TBox Delete Buffer",
+    "moduleSurrogate" : "39e342b2-6ec7-0f30-678c-aec82a472007",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

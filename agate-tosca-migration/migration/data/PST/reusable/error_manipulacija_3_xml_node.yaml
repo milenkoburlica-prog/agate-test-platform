@@ -1,0 +1,57 @@
+steps:
+
+      # Execute CMD Command: TBox Start Program - clean temp folder
+      - type: CMD
+        op: EXEC
+        command: "del /Q /S {B[PST_BASE_PATH_TEMP_TEMP]}\\"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - copy gz from output to temp
+      - type: CMD
+        op: EXEC
+        command: "copy {B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]} {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - unzip ddausNY frm output to temp
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --unpack {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - delete Paketkopf.ZielpartnerCode
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --input {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[TSV_DATEI_INPUT_12]} --nodekey Paketkopf.ZielpartnerCode --nodevalue NULL"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - zip ddausNY frm output to temp
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --pack {B[PST_BASE_PATH_TEMP_TEMP]} --format NY"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Get DDAU EU Filename
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --file {B[PST_BASE_PATH_TEMP_TEMP]}\\"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Remove EOL
+      - type: CMD
+        op: EXEC
+        command: "powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -NoNewline"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - Copy file
+      - type: CMD
+        op: EXEC
+        command: "copy /Y {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME_NEU]} {B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}"
+        response: cmd_response

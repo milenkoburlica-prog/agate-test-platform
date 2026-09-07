@@ -1,0 +1,330 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "3a0d3be6-c414-1f8a-2093-e6917e1f790c",
+  "Attributes" : {
+    "IncludeForSynchronization" : "1",
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "121140",
+    "TCProperties" : "H4sIAAAAAAAACsySPU4DQQxGrzJyD4GOIkuEVuGnQVFmhUQ52ZgwaHY88nhQlvNwCwoKDsQVcFCyUJCadNbT58+v8Ofb+3iy7oJ5Rs6eYgWnxydgMLa09HFVQZGHozOYnI+besaUkMVjrikEbEXzv3hvbl2HFTR9AnPnQtH5ogh1Tnz2GlCqwyJsMlwQzBzdkmLoK7h0ISuwJTFmrU8/7LtJO3XLCqvTFlncKlwxlVQBmOk6EUtDtiwyyu7I6A/FGXtiLx+vMpheU/t4OII3MYuLL4PdtLb3tjkcvzmuNnd0eVB8cv+mN9rzm18AAAD//wMAif7bzd0CAAA=",
+    "DerivedFromName" : "",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "anspruchPruefen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TemplateDetail" : [ "3a0d3be6-c418-bbbf-05a6-88ee55aa5a37" ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "3a0d3be6-c414-d370-8302-996ded18dc13", "3a0d3be6-c415-c17e-7e76-a598576c8c9a", "3a0d4e17-5bc5-a6d0-1243-0be102ad077a" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "3a0d3be6-c414-a6b5-0028-24691d573476" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c414-f2d7-ca18-d890d9664f49",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "B_Karte" : {
+      "value" : "{XL[Vertragspartner.VPNR]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_Karte"
+    },
+    "B_OrdinationsId" : {
+      "value" : "{XL[Vertragspartner.Ord_id]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OrdinationsId"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c415-ca7c-f29e-a7cab8c3ddfb",
+  "reusableSurrogate" : "3a038dd7-d4a3-b171-7df8-b09108480534",
+  "reusableName" : "dialogaufbauByOrdid_buffered_auth_1",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "ORD_ID" : {
+      "value" : "{B[B_OrdinationsId]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "VpNummer" : {
+      "value" : "{B[B_Karte]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c415-2e48-3139-2492a655122b",
+  "reusableSurrogate" : "3a03a580-d929-d98e-1117-22d0f20e50ec",
+  "reusableName" : "create_cardToken_svSig_e_card",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "SvNummer" : {
+      "value" : "{XL[CardToken.SVNR-Karte]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "VpNummer" : {
+      "value" : "{XL[CardToken.VPNR]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c415-a418-7590-01cd9fac659f",
+  "reusableSurrogate" : "3a038e43-fc3e-1322-e18b-12076572e859",
+  "reusableName" : "create_cardToken_vpSig_o_card",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "VpNummer" : {
+      "value" : "{XL[CardToken.VPNR-Karte]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c415-e6c7-f41f-6b2d2a6ed87a",
+  "reusableSurrogate" : "3a03a5b9-12d3-dee7-98c7-b17482f2288f",
+  "reusableName" : "create_cardToken_svSig_o_card",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "VpNummer" : {
+      "value" : "{XL[CardToken.VPNR-Karte]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "SvNummer" : {
+      "value" : "{XL[CardToken.SVNR]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "anspruchPruefen Request Direkte Errreichbarkeit",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c416-cbde-1fd5-874d3dd7ba4d",
+  "moduleSurrogate" : "39fa944c-43ec-df2b-c41d-8d00b07694e0",
+  "module" : "anspruchPruefen Request",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Endpoint" : {
+      "value" : "https://{B[B_URL_DE_HTTPS_HIGH]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint"
+    },
+    "dialogId" : {
+      "value" : "{XL[DialogID]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "dialogId",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='dialogId']"
+    },
+    "vsnr" : {
+      "value" : "{XL[SVPerson.SVNR]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "vsnr",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='vsnr']"
+    },
+    "cardToken" : {
+      "value" : "{XL[CardToken.TokenWert]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "cardToken",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='cardToken']"
+    },
+    "voraussichtlicherGeburtstermin" : {
+      "value" : "{XL[Vorraussichtlicher_Geburtstermin.Datum]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "voraussichtlicherGeburtstermin",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefen']/*[local-name()='voraussichtlicherGeburtstermin']"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "anspruchPruefen Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c417-a560-6d01-71dc039aaeb2",
+  "moduleSurrogate" : "39fa944c-43ec-73c6-93b4-842eba7837ea",
+  "module" : "anspruchPruefen Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL",
+  "values" : {
+    "patientin" : {
+      "value" : "{NULL}",
+      "actionMode" : "Constraint",
+      "toscaPath" : "patientin",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']"
+    },
+    "geburtsdatum" : {
+      "value" : "{XL[SVPerson.Geburtsdatum]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.geburtsdatum",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']"
+    },
+    "titelHinten" : {
+      "value" : "{XL[SVPerson.Druckname.Titel_hinten]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.titelHinten",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='titelHinten']"
+    },
+    "titelVorne" : {
+      "value" : "{XL[SVPerson.Druckname.Titel_vorne]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.titelVorne",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='titelVorne']"
+    },
+    "vorname" : {
+      "value" : "{XL[SVPerson.Druckname.Vorname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.vorname",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']"
+    },
+    "vsnr" : {
+      "value" : "{XL[SVPerson.SVNR]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.vsnr",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']"
+    },
+    "zuname" : {
+      "value" : "{XL[SVPerson.Druckname.Nachname]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "patientin.zuname",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']"
+    },
+    "schwangerschaftswoche" : {
+      "value" : "{XL[Vorraussichtlicher_Geburtstermin.Schwangerschaftswoche]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "schwangerschaftswoche",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']"
+    },
+    "StatusCode" : {
+      "value" : "200 OK",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode"
+    },
+    "ResponseTime" : {
+      "value" : "{NULL}",
+      "actionMode" : "Verify"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "MUHI Exception Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d3be6-c417-4758-9ace-0ccae772248b",
+  "moduleSurrogate" : "39fa9dcc-4295-1129-a512-9e098bf6f0f8",
+  "module" : "MUHI Exception Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL",
+  "values" : {
+    "StatusCode" : {
+      "value" : "500 Internal Server Error",
+      "actionMode" : "Verify",
+      "toscaPath" : "StatusCode"
+    },
+    "DialogException" : {
+      "value" : "{XL[DialogException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "DialogException",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']"
+    },
+    "code" : {
+      "value" : "{XL[AccessException.InfoCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.code",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']"
+    },
+    "errorCode" : {
+      "value" : "{XL[AccessException.ExceptionCode]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.errorCode",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']"
+    },
+    "message" : {
+      "value" : "*{XL[AccessException.InfoText]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "AccessException.message",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']"
+    },
+    "CardException" : {
+      "value" : "{XL[CardException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "CardException",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']"
+    },
+    "MuhiException" : {
+      "value" : "{XL[MuhiException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "MuhiException",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']"
+    },
+    "AccessException" : {
+      "value" : "{XL[AccessException]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "AccessException",
+      "xmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a0d4e18-e5c8-676e-9d75-c1750e4230e2",
+  "reusableSurrogate" : "3a0ae521-a4bb-d67d-c70e-2d019bfb33f2",
+  "reusableName" : "dialogClose_auth1",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "VpNummer" : {
+      "value" : "{XL[Vertragspartner.VPNR]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "OrdinationsId" : {
+      "value" : "{XL[Vertragspartner.Ord_id]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+} ]

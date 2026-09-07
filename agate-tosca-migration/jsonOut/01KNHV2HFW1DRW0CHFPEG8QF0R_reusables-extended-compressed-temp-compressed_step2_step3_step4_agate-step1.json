@@ -1,0 +1,104 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "01KNHV2HFW1DRW0CHFPEG8QF0R",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "backup-pod_log_file"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "01KNPBKN9283RG9AT2MRT7XAA3" ],
+    "Items" : [ "01KNFTQD2933GZ4XA1M02NK6S0" ],
+    "Library" : [ "01KNC5JPN3004KNF05X9PA2V7S" ],
+    "UsedBy" : [ "01KV5E9EZ9F7B6637MQQWX1G70", "01KV5E9EZAA3P5B7HDWRVB4N1X", "01KV5EZX0148A22JWZCT42M70J" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "operation",
+    "ValueSelectionGroup" : "import;job;export;prio"
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNFTQD2933GZ4XA1M02NK6S1",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "logging_path",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "logging_path",
+    "toscaPathID" : "01KNFTQD2933GZ4XA1M02NK6S2"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Create Logging DIR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNFTQD2933GZ4XA1M02NK6S3",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "TimeoutForExit" : {
+      "value" : "1000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    },
+    "arguments" : {
+      "value" : "/C mkdir {B[logging_path]} 2>nul",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Copy to Logging Dir POD Log",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNFTQD2933GZ4XA1M02NK6SB",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C copy {B[L_LogDir]}\\{B[L_LogFile]} {B[logging_path]}\\{B[tc_name]}-pod-log-{PL[operation]}.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+} ]

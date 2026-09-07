@@ -1,0 +1,39 @@
+{
+  "name" : "Ermittle Filename im POD:TESTPROD_*",
+  "surrogate" : "3a1c16b2-8c32-a727-70f0-59487759f443",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set POD_CMD Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1c16a9-b7b9-0400-b783-aaddf373c599",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "POD_CMD",
+      "value" : "basename `ls -tr {B[OMS.SS2_CMStoCKV.TransferVerzeichnis]}/TESTPROD_* | tail -1`",
+      "actionMode" : "Insert",
+      "toscaPath" : "POD_CMD",
+      "toscaPathID" : "3a1c16a9-b7b9-921e-084e-41a8ccd12a13"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "01_execute_ssh_Reference _eruiere Filename",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1c16a9-b7b9-34ce-aeb3-9354a9506b0f",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

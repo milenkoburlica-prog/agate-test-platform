@@ -1,0 +1,64 @@
+name: create_cardtoken_vpsig_o_card
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: GinoCardSlot
+        value: "{R[cardSlot]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesername
+        value: "{E[users.seriennummer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: KartenleserIP
+        value: "{E[users.ginoip]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesersimulator
+        value: "{E[users.serverip]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: VpNummer
+        value: "{R[VpNummer]}"
+
+      - type: CALL
+        command: "reusable.o_e_card_stecken"
+        parameters: 
+          cdfName: "{B[VpNummer]}"
+          cardSlot: "{R[cardSlot]}"
+
+      # cardToken_vpSig_baseContact Request
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='baseContact')"
+        endpoint: "https://{E[users.ginoip]}"
+        command: rest.gino.v2.status.cardtoken_vpsig_basecontact_request
+        response: rest.gino.v2.status.cardtoken_vpsig_basecontact_request_response
+
+
+      # cardToken_vpSig_baseNfc Request
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='baseNfc')"
+        endpoint: "https://{E[users.ginoip]}"
+        command: rest.gino.v2.status.cardtoken_vpsig_basenfc_request
+        response: rest.gino.v2.status.cardtoken_vpsig_basenfc_request_response
+
+
+      # cardToken_vpSig_satelliteNfc Request
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='satelliteNfc')"
+        endpoint: "https://{E[users.ginoip]}"
+        command: rest.gino.v2.status.cardtoken_vpsig_satellitenfc_request
+        response: rest.gino.v2.status.cardtoken_vpsig_satellitenfc_request_response
+

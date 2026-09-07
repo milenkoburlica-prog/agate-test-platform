@@ -1,0 +1,59 @@
+{
+  "name" : "execute-psql-script_atomic_1_0",
+  "surrogate" : "3a1a13da-ee7f-c123-3344-ef1ffbe91910",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1a13da-f027-790e-10fd-5d195ee017a0",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "filename",
+      "value" : "{PL[psqlFilename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "filename",
+      "toscaPathID" : "3a1a13da-f027-af78-9ed2-bf446de8e69e"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "TBox Start Program",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1a13da-f027-59f1-cf6f-c6b109595b9c",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "psql.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "StandardOutputFile",
+      "value" : "{B[G_LogDir]}\\log_{B[filename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "-h {B[G_KS_DB_URL]} -U {B[G_KS_DB_USER]} -d {B[G_KS_DB_DSN]} -f {B[KS_Testdaten_BaseDir]}\\db_scripte\\{B[filename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  } ]
+}

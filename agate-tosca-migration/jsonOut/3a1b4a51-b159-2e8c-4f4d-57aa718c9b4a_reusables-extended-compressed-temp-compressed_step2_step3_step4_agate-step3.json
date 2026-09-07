@@ -1,0 +1,45 @@
+{
+  "name" : "Cleanup_KPtoCMS",
+  "surrogate" : "3a1b4a51-b159-2e8c-4f4d-57aa718c9b4a",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4a51-b268-8dda-3542-75eb7b50a894",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "PODCMD",
+      "value" : "rm -f {B[KS_File-Gateway_Basedir]}{B[OMS.SS40_KP.TransferServerPathQuittung]}/*",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODCMD",
+      "toscaPathID" : "3a1b4a51-b268-519b-c2e0-b8cbb7f2bb9e"
+    }, {
+      "name" : "PODNAME",
+      "value" : "{B[KS_POD_Filegateway_Name]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODNAME",
+      "toscaPathID" : "3a1b4a51-b268-0107-adce-43d31383534e"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "01_execute_ssh_Reference _PodCmd_VerifyNo",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4a51-b268-1a17-820f-fe0b7cdea7d3",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

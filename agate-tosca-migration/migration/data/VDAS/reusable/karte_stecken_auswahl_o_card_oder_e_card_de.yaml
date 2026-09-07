@@ -1,0 +1,11 @@
+name: karte_stecken_auswahl_o_card_oder_e_card_de
+steps:
+      - type: CALL
+        command: "reusable.karte_stecken_ocard_durchführung_de"
+        condition: "Patientendaten.Karte.Vertragspartner!=NULL"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.karte_stecken_ecard_durchführung_de"
+        condition: "Patientendaten.Karte.SVPerson!=NULL"
+        parameters: {}

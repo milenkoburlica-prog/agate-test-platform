@@ -1,0 +1,45 @@
+{
+  "name" : "Cleanup_CMStoCKV",
+  "surrogate" : "3a1b4a67-dba8-6580-0d8c-70576f24b78d",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4a67-dcb6-be4a-b674-bbc4d129b197",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "PODCMD",
+      "value" : "rm -f {B[OMS.SS2_CMStoCKV.TransferVerzeichnis]}/*",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODCMD",
+      "toscaPathID" : "3a1b4a67-dcb6-56c5-8c97-d1e55ba4e8c7"
+    }, {
+      "name" : "PODNAME",
+      "value" : "{B[KS_POD_Name]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "PODNAME",
+      "toscaPathID" : "3a1b4a67-dcb6-b864-5ce4-6f4912fde6d2"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "01_execute_ssh_Reference _PodCmd_VerifyNo",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4a67-dcb6-a839-a1cb-e2b1f7bad064",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

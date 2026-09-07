@@ -1,0 +1,373 @@
+{
+  "name" : "o-/e-Card stecken",
+  "surrogate" : "3a0388d0-14a6-c8be-0ce8-45b5cb29e547",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a07f-06f5-e7cf-df6f-cb4b3753cd99",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "GinoCardSlot",
+      "value" : "{B[B_CardReaderSimulatorSlot]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "GinoCardSlot",
+      "toscaPathID" : "3a03a07f-06f7-156f-40bd-6689b6bdabf9"
+    }, {
+      "name" : "Kartenlesername",
+      "value" : "{B[B_Kartenlesername]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesername",
+      "toscaPathID" : "3a03a07f-06f7-b318-854a-0fce5ed94370"
+    }, {
+      "name" : "KartenleserIP",
+      "value" : "{B[B_KartenleserIP]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "KartenleserIP",
+      "toscaPathID" : "3a03a07f-06f8-6237-2b7e-6612663e4789"
+    }, {
+      "name" : "Kartenlesersimulator",
+      "value" : "{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Kartenlesersimulator",
+      "toscaPathID" : "3a03a07f-06f8-8ffd-c6f4-c7baa7210941"
+    }, {
+      "name" : "cdfName",
+      "value" : "{PL[cdfName]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "cdfName",
+      "toscaPathID" : "3a03a07f-06f8-7a95-a8d3-8121f6dd9ad1"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "remove_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-0a85-3fde-6744-c4c57a6117fb",
+    "module" : "remove_card Request",
+    "moduleSurrogate" : "3a03a2c7-b818-baea-c396-44ded79366b5",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a340-b4cf-a502-f7f1-d8af41b6c6db",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "baseContact",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a33e-f73c-76d4-22fd-562da1c8c19b",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a342-5b52-a269-060a-9890547a4f9b"
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "remove_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-1f88-2c86-5ce6-abdf67ffd472",
+    "module" : "remove_card Response",
+    "moduleSurrogate" : "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 4,
+    "name" : "remove_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-4379-6fbd-3262-2123f0033f19",
+    "module" : "remove_card Request",
+    "moduleSurrogate" : "3a03a2c7-b818-baea-c396-44ded79366b5",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a340-d286-3790-28a2-7f70506c4076",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "baseNfc",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a33f-8a26-0722-c589-5de8c4ffc2b7",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a342-c482-0419-4e7f-5febdf230aed"
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "remove_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-4558-58a4-8a93-2510a91a92ac",
+    "module" : "remove_card Response",
+    "moduleSurrogate" : "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 6,
+    "name" : "remove_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-74a8-6326-b41c-083100e93db5",
+    "module" : "remove_card Request",
+    "moduleSurrogate" : "3a03a2c7-b818-baea-c396-44ded79366b5",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a341-7290-f8b3-aa33-7dcdb0989f6e",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "satelliteNfc",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a33f-485b-4c36-6c27-4b5abb155aef",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a342-e097-5898-be4c-030afbc4740b"
+    } ]
+  }, {
+    "index" : 7,
+    "name" : "remove_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a33e-7677-bcbc-938b-d06e0d0423a0",
+    "module" : "remove_card Response",
+    "moduleSurrogate" : "3a03a2c7-b818-e5ac-5dcb-651bfcac1f5b",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 8,
+    "name" : "insert_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-5e2d-f2fd-7836-281d25bda4a1",
+    "module" : "insert_card Request",
+    "moduleSurrogate" : "3a03a2c7-b816-aab5-9d53-5e15a82b8384",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('{B[GinoCardSlot]}'=='baseContact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a349-3218-218a-fa61-140b752f59c2",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "baseContact",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a34a-a735-0ed2-10f2-523d0bd77bcf",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "cdffile",
+      "value" : "{B[cdfName]}.cdf",
+      "actionMode" : "Insert",
+      "toscaPath" : "cdffile",
+      "toscaPathID" : "3a03a34c-2c6f-904a-c988-ffbde034f080",
+      "jsonPath" : "cdffile"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a34a-5fee-9d64-e1e8-8662862d1e23"
+    } ]
+  }, {
+    "index" : 9,
+    "name" : "insert_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-5f18-06e5-6086-9186fd8a0535",
+    "module" : "insert_card Response",
+    "moduleSurrogate" : "3a03a2c7-b817-a140-1958-67f6aa830fa7",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('{B[GinoCardSlot]}'=='baseContact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "{NULL}",
+      "actionMode" : "Verify",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 10,
+    "name" : "insert_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-8a14-373d-94cd-d2649304c242",
+    "module" : "insert_card Request",
+    "moduleSurrogate" : "3a03a2c7-b816-aab5-9d53-5e15a82b8384",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[GinoCardSlot]}'=='baseContact'))) AND ('{B[GinoCardSlot]}'=='baseNfc')",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a349-5545-528c-ce7a-f1d061c0c97b",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "baseNfc",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a34a-e657-ec5d-00d2-994717f56395",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "cdffile",
+      "value" : "{B[cdfName]}.cdf",
+      "actionMode" : "Insert",
+      "toscaPath" : "cdffile",
+      "toscaPathID" : "3a03a34b-fdaa-f5a1-a969-e5789d0e4f3e",
+      "jsonPath" : "cdffile"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a34a-354a-f6e2-11a5-69adcd243842"
+    } ]
+  }, {
+    "index" : 11,
+    "name" : "insert_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-8ae7-d98c-9131-2ccef9abbb8a",
+    "module" : "insert_card Response",
+    "moduleSurrogate" : "3a03a2c7-b817-a140-1958-67f6aa830fa7",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[GinoCardSlot]}'=='baseContact'))) AND ('{B[GinoCardSlot]}'=='baseNfc')",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "{NULL}",
+      "actionMode" : "Verify",
+      "toscaPath" : ""
+    } ]
+  }, {
+    "index" : 12,
+    "name" : "insert_card Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-a6dd-6d43-d6d4-0357256a68f5",
+    "module" : "insert_card Request",
+    "moduleSurrogate" : "3a03a2c7-b816-aab5-9d53-5e15a82b8384",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[GinoCardSlot]}'=='baseContact'))) AND (NOT (('{B[GinoCardSlot]}'=='baseNfc')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "seriennummer",
+      "value" : "{B[B_Seriennummer]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "seriennummer",
+      "toscaPathID" : "3a03a349-c519-283e-9bcc-42f139661e66",
+      "jsonPath" : "seriennummer"
+    }, {
+      "name" : "card_slot",
+      "value" : "satelliteNfc",
+      "actionMode" : "Insert",
+      "toscaPath" : "card_slot",
+      "toscaPathID" : "3a03a34b-2689-1424-2edb-02d26d5e709d",
+      "jsonPath" : "card_slot"
+    }, {
+      "name" : "cdffile",
+      "value" : "{B[cdfName]}.cdf",
+      "actionMode" : "Insert",
+      "toscaPath" : "cdffile",
+      "toscaPathID" : "3a03a34b-e73b-449b-569b-25d4e51e532b",
+      "jsonPath" : "cdffile"
+    }, {
+      "name" : "Endpoint",
+      "value" : "http://{B[B_Kartenlesersimulator]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "3a03a34a-0b10-4e70-47f6-ff217274bff7"
+    } ]
+  }, {
+    "index" : 13,
+    "name" : "insert_card Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a03a348-a7fd-9bff-9f2a-12c65eaa64c4",
+    "module" : "insert_card Response",
+    "moduleSurrogate" : "3a03a2c7-b817-a140-1958-67f6aa830fa7",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "(NOT (('{B[GinoCardSlot]}'=='baseContact'))) AND (NOT (('{B[GinoCardSlot]}'=='baseNfc')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "{NULL}",
+      "actionMode" : "Verify",
+      "toscaPath" : ""
+    } ]
+  } ]
+}

@@ -1,0 +1,262 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "01KNAFYRT4C6ZNFJ75150V2DFQ",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "PST_XML_VUNEUTESTNR20260101_Create_1_OK______Bestand"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KNAF3SFDCE12EMBEV1CXR47X" ],
+    "Library" : [ "01KNAFYJ56D0BDKZQQ64YKC17X" ],
+    "UsedBy" : [ "01KV5E9EZ34FY3C1VGEVSGTQYW" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Clean output folder",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAC69V362PVE6BCGF8K7J2E",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C del /q {B[PST_BASE_PATH_TEMP_OUTPUT]}\\*",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Start encrypting",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAB61F32724MS8E1WSMD2SA",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} encrypt -k {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_01]} -K {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_02]} -s {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_03]} -i {B[XML_DATEI_INPUT_01]} -o {B[PST_BASE_PATH_TEMP_OUTPUT]}\\bestand1.xml",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Start pdg",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNACS70ME3ZBE4HFBG0HYCER",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} pdg -d {B[PST_BASE_PATH_TEMP_OUTPUT]}\\ -i \"\"\"\"text/xml\"\"\"\" -k 07 -p VU -u 34 -z NY",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Get DDAU Filename",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAD6K1H36NR684PHD620BBN",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --directory {B[PST_BASE_PATH_TEMP_OUTPUT]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove EOL",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAE4XB2ATAT2Z7K81JNR6KW",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Read/Create File",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNADNCXK30FJCZFZK08HA4B5",
+  "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+  "module" : "TBox Read/Create File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Get DDAU Filename",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAP7W1R0RBA22X8WSTNEJZW",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --file {B[PST_BASE_PATH_TEMP_OUTPUT]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove EOL",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAP7W1R0RBA22X8WSTNEK08",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Read/Create File",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAP7W1R0RBA22X8WSTNEK0H",
+  "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+  "module" : "TBox Read/Create File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+} ]

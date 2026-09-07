@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <insertCard xmlns="urn:lanccr_soap">
+      <ipAddresses xmlns="">{B[KartenleserIP]}</ipAddresses>
+      <cdfName xmlns="">{B[cdfName]}</cdfName>
+    </insertCard>
+  </s:Body>
+</s:Envelope>

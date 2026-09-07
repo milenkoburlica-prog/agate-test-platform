@@ -1,0 +1,17 @@
+
+  - id: meldungAnlegen_short_1
+    description: "meldungAnlegen_short_1"
+    stage: "*"
+    priority: HIGH
+    variables:
+      {}
+
+    steps:
+
+      - type: CALL
+        command: "reusable.storniere_meldung_mit_id_version1"
+        condition: "DialogException == NULL AND AumInvalidParameterException == NULL AND CardException == NULL AND AumException == NULL AND AccessException == NULL"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+          cardSlot: 'baseContact'

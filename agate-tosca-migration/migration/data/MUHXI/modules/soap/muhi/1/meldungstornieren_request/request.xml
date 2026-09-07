@@ -1,0 +1,11 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Header>
+    <TransactionId>{B[TransactionId]}</TransactionId>
+  </s:Header>
+  <s:Body>
+    <meldungStornieren xmlns="http://soap.muhi.client.chipkarte.at">
+      <dialogId>{B[dialogId]}</dialogId>
+      <meldungsId>{B[meldungsId]}</meldungsId>
+    </meldungStornieren>
+  </s:Body>
+</s:Envelope>

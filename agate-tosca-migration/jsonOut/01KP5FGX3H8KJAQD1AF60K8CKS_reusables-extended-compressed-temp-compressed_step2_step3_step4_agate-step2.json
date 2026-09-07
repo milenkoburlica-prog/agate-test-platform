@@ -1,0 +1,25 @@
+{
+  "name" : "database_unverarbeitete_bestände_loeschen",
+  "surrogate" : "01KP5FGX3H8KJAQD1AF60K8CKS",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox DB Expert module _unverarbeitete Bestände löschen - Bereingung vor Beginn",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01KP5FBH062CE7ZMCEZP5BFN2H",
+    "module" : "TBox DB Expert module",
+    "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "SQL Statement",
+      "value" : "update PST_DATEN_BESTAND set status = 'FE' where STATUS not in ('FE','EX')",
+      "actionMode" : "Constraint",
+      "toscaPath" : "SQL Statement",
+      "toscaPathID" : "01KP5FBH062CE7ZMCEZP5BFN2P"
+    } ]
+  } ]
+}

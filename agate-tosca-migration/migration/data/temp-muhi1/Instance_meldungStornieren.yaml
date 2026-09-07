@@ -1,0 +1,1053 @@
+testCases:
+
+- id: 'Fehlerfall: DialogId Länge (33)'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+      meldungsId: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: DialogId not existing'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+      meldungsId: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: DialogId leer'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{EMPTY}'
+      meldungsId: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Eigene absolute Meldung stornieren'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336047'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682603'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.absolutesbeschaeftigungsverboteinmelden_meldungstornieren
+
+  - type: BUFFER
+    op: EXEC
+    name: B_FileName
+    value: MUHI_{DATE}_{RND[5]}.pdf
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '{B[B_meldungsId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='meldungStornierenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='storniertAm']
+    action: CONTAINS
+    expected: '{DATETIME[][][dd.MM.yyyy HH:mm:]}'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='meldungStornierenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='storniertAm']
+    action: CONTAINS
+    expected: '{DATETIME[][][dd.MM.yyyy HH:mm:]}'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Gutfall: Eigene individuelle Meldung stornieren'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336047'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682603'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.individuellesbeschaeftigungsverboteinmelden_meldungstornieren
+
+  - type: BUFFER
+    op: EXEC
+    name: B_FileName
+    value: MUHI_{DATE}_{RND[5]}.pdf
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '{B[B_meldungsId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='meldungStornierenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='storniertAm']
+    action: CONTAINS
+    expected: '{DATETIME[][][dd.MM.yyyy HH:mm:]}'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='meldungStornierenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='storniertAm']
+    action: CONTAINS
+    expected: '{DATETIME[][][dd.MM.yyyy HH:mm:]}'
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: Fremde absolute Meldung stornieren'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336047'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682603'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: EXEC
+    command: SELECT * FROM MH_MELDUNG where TYP='A'and FK_AUSPRAEGUNG_ID<>(select AUSPRAEGUNG_ID from HVB_AUSPRAEGUNG join HVB_VPNR on HVB_AUSPRAEGUNG.FK_VP_ID=HVB_VPNR.FK_VP_ID where HVB_VPNR.VPNR='336047')
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: ASSERT
+    action: EQUALS
+    expected: A
+    row: '0'
+    column: TYP
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '{B[B_meldungsId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3390028
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '54'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Sie dürfen die angegebene Meldung nicht lesen oder verändern, da sie nicht von Ihnen erstellt wurde.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: Fremde individuelle Meldung stornieren'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336047'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682603'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: EXEC
+    command: SELECT * FROM MH_MELDUNG where TYP='I'and FK_AUSPRAEGUNG_ID<>(select AUSPRAEGUNG_ID from HVB_AUSPRAEGUNG join HVB_VPNR on HVB_AUSPRAEGUNG.FK_VP_ID=HVB_VPNR.FK_VP_ID where HVB_VPNR.VPNR='336047')
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: ASSERT
+    action: EQUALS
+    expected: I
+    row: '0'
+    column: TYP
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '{B[B_meldungsId]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3390028
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '54'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Sie dürfen die angegebene Meldung nicht lesen oder verändern, da sie nicht von Ihnen erstellt wurde.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: Ungültige MeldungsId'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336047'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682603'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '1'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3390027
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '53'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es existiert keine Meldung mit der angegebenen Nummer.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'Fehlerfall: Kein Recht MUHI.Core'
+  description: meldungStornieren
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336026'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682601'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SQL
+    op: BUFFER
+    name: B_VSNR
+    row: '0'
+    column: FK_SV_NUMMER
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Strasse
+    row: '0'
+    column: PATIENTIN_STRASSE
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Plz
+    row: '0'
+    column: PATIENTIN_PLZ
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Ort
+    row: '0'
+    column: PATIENTIN_ORT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_Staatencode
+    row: '0'
+    column: PATIENTIN_STAAT
+    response: suche_meldung_in_db_res
+
+  - type: SQL
+    op: BUFFER
+    name: B_meldungsId
+    row: '0'
+    column: ID
+    response: suche_meldung_in_db_res
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.meldungstornieren_request
+    response: meldungstornieren_request_response
+    download:
+    - method: MTOM
+      targetPath: ..\Tosca\Daten\Files\MUHI\{B[B_FileName]}
+    parameters:
+      dialogId: '{B[dialogId]}'
+      meldungsId: '7019'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-A0005
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '62'
+    response: meldungstornieren_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es existiert keine Berechtigung zum Aufruf dieser Funktion.
+    response: meldungstornieren_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

@@ -1,0 +1,837 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "01M1BBZ5BA9WAN9X6XYK2SPNP6",
+  "Attributes" : {
+    "IncludeForSynchronization" : "1",
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "135531",
+    "DerivedFromName" : "",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "PrKartenStatusManuell"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "01M1BBZP2663KACE5TEH7ZXJ2F", "01M1BC2S5200WPB7CMMT76GKYM" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "01M1BBYQRH6HQBZFN95Y79DSQB" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "DELETE dynamischedaten_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRSE1R0KEDR5XTAEQZM",
+  "condition" : null,
+  "reusableSurrogate" : "3a1a9ce5-92f0-ca06-db54-445081431b99",
+  "reusableName" : "101_DELETE dynamischedaten_1_0",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRSE1R0KEDR5XTAEQZP",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49cb-82ae-b06c-bf9e-1668fb2c03a2",
+  "reusableName" : "Cleanup_TxFilesToKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Copy File _EAA",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRSE1R0KEDR5XTAEQZQ",
+  "moduleSurrogate" : "39ef0b81-ca12-f4ee-3518-51a06726f2a3",
+  "module" : "TBox Copy File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Cleanup_CKVtoCMS_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PJ",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49da-c1c3-7bde-fafb-85f6968f10d2",
+  "reusableName" : "Cleanup_CKVtoCMS",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PK",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49df-bd70-6ef2-24e2-dc19117b5811",
+  "reusableName" : "Tx_PC_TxFilesToKams-CKVtoCMS",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer - SVNR 1342170282",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PM",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SVNR",
+    "value" : "1342170282",
+    "actionMode" : "Insert",
+    "toscaPath" : "SVNR",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304PN"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PP",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a2e-048c-e25f-8a07-ccdd3b8b9f54",
+  "reusableName" : "SS2-Laufnummer-ermitteln",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PQ",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4e38-d164-7e64-acc9-939c96d63542",
+  "reusableName" : "SS2-Laufnummer-setzen_LfNr_PROD_EAA",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PT",
+  "condition" : null,
+  "reusableSurrogate" : "3a1aa193-38ad-74d8-eed1-7c52e31b7206",
+  "reusableName" : "SS2AuftragAA",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _check Tabelle KARTE - nach SS2",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRTD33Z21E6B9J304PV",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "select * from karte where identifikationsmerkmal='{B[SVNR]}'",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304Q1"
+  }, {
+    "name" : "lifecyclestatus",
+    "value" : "N",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.lifecyclestatus",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304Q2.01M1BBZFRTD33Z21E6B9J304Q3.01M1BBZFRTD33Z21E6B9J304Q4"
+  }, {
+    "name" : "folgenummer",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.folgenummer",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304Q2.01M1BBZFRTD33Z21E6B9J304Q3.01M1BBZFRTD33Z21E6B9J304Q5"
+  }, {
+    "name" : "version",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.version",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304Q2.01M1BBZFRTD33Z21E6B9J304Q3.01M1BBZFRTD33Z21E6B9J304Q6"
+  }, {
+    "name" : "kartentyp_code",
+    "value" : "G6e",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.kartentyp_code",
+    "toscaPathID" : "01M1BBZFRTD33Z21E6B9J304Q2.01M1BBZFRTD33Z21E6B9J304Q3.01M1BBZFRTD33Z21E6B9J304Q7"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P56",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49eb-3dad-3eb3-35b1-6e88e31335b5",
+  "reusableName" : "Cleanup_CMStoKP",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P57",
+  "condition" : null,
+  "reusableSurrogate" : "3a1abe72-f6d0-734e-03d5-6eb8cdf53962",
+  "reusableName" : "OMS.ZukuenftigeVerarbeitungSS40_J",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P58",
+  "condition" : null,
+  "reusableSurrogate" : "3a1aa6e8-b86f-db37-c2f0-354a87cf00e1",
+  "reusableName" : "SS40DateiBereitstellen",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _check Tabelle KARTE - nach SS40-Auftrag / SVNR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P59",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "select * from karte where identifikationsmerkmal='{B[SVNR]}'",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P5F"
+  }, {
+    "name" : "lifecyclestatus",
+    "value" : "IP",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.lifecyclestatus",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P5G.01M1BBZFRV69E4J1S86EB70P5H.01M1BBZFRV69E4J1S86EB70P5J"
+  }, {
+    "name" : "folgenummer",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.folgenummer",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P5G.01M1BBZFRV69E4J1S86EB70P5H.01M1BBZFRV69E4J1S86EB70P5K"
+  }, {
+    "name" : "version",
+    "value" : "2",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.version",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P5G.01M1BBZFRV69E4J1S86EB70P5H.01M1BBZFRV69E4J1S86EB70P5M"
+  }, {
+    "name" : "kartentyp_code",
+    "value" : "G6e",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.kartentyp_code",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P5G.01M1BBZFRV69E4J1S86EB70P5H.01M1BBZFRV69E4J1S86EB70P5N"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5Q",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49cf-ac12-15ce-9166-20b6132ae035",
+  "reusableName" : "Cleanup_TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5R",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a43-34f6-64a1-9a6b-94426fbc02ed",
+  "reusableName" : "Tx_CMStoKP-PC_TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5V",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a48-cdaf-d3ba-364b-c3269ae20e18",
+  "reusableName" : "Cleanup_SS40-Simu-Files",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5W",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a4a-5318-a9f8-a27c-9ae85f721b6c",
+  "reusableName" : "Copy_TxFilesFromKams-SS40Simu",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5X",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a4c-4766-6be7-1955-f070afbbc6d9",
+  "reusableName" : "Run_SS40-SS43-Simu",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5Y",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49cb-82ae-b06c-bf9e-1668fb2c03a2",
+  "reusableName" : "Cleanup_TxFilesToKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P5Z",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a4d-f4da-714d-bb42-c6e1db2c6635",
+  "reusableName" : "Copy_SS40Simu_TQx-TxFilesToKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P60",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a51-b159-2e8c-4f4d-57aa718c9b4a",
+  "reusableName" : "Cleanup_KPtoCMS",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P61",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a58-7de6-9eed-8d3e-a85cb5f29b96",
+  "reusableName" : "Tx_PC_TxFilesToKams-KPtoCMS",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P62",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a5d-a16d-f0c7-a690-1cb887a5395f",
+  "reusableName" : "SS40-/SS43-Laufnummer-ermitteln",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P63",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a60-3eeb-f1fd-3054-cd3bad353783",
+  "reusableName" : "SS40-Laufnummer-setzen_LfNr_SS40_QK",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P64",
+  "condition" : null,
+  "reusableSurrogate" : "3a1abd9d-21fd-8868-b445-126c5f3550c7",
+  "reusableName" : "SS40QuittungVerarbeiten",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _check Tabelle KARTE - nach SS40-Quittung / SVNR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P65",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "select * from karte where identifikationsmerkmal='{B[SVNR]}'",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6B"
+  }, {
+    "name" : "lifecyclestatus",
+    "value" : "IU",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.lifecyclestatus",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6C.01M1BBZFRV69E4J1S86EB70P6D.01M1BBZFRV69E4J1S86EB70P6E"
+  }, {
+    "name" : "folgenummer",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.folgenummer",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6C.01M1BBZFRV69E4J1S86EB70P6D.01M1BBZFRV69E4J1S86EB70P6F"
+  }, {
+    "name" : "version",
+    "value" : "3",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.version",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6C.01M1BBZFRV69E4J1S86EB70P6D.01M1BBZFRV69E4J1S86EB70P6G"
+  }, {
+    "name" : "kartentyp_code",
+    "value" : "G6e",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.kartentyp_code",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6C.01M1BBZFRV69E4J1S86EB70P6D.01M1BBZFRV69E4J1S86EB70P6H"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _check Tabelle AUFTRAG - nach SS40-Quittung / SVNR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P6K",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "SELECT * FROM auftrag where fk_karten_id in (SELECT karten_id FROM karte where identifikationsmerkmal='{B[SVNR]}')",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6S"
+  }, {
+    "name" : "abgeschlossen",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.abgeschlossen",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6T.01M1BBZFRV69E4J1S86EB70P6V.01M1BBZFRV69E4J1S86EB70P6W"
+  }, {
+    "name" : "zurueckgemeldet",
+    "value" : "0",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.zurueckgemeldet",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6T.01M1BBZFRV69E4J1S86EB70P6V.01M1BBZFRV69E4J1S86EB70P6X"
+  }, {
+    "name" : "fehlercode",
+    "value" : "",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.fehlercode",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6T.01M1BBZFRV69E4J1S86EB70P6V.01M1BBZFRV69E4J1S86EB70P6Y"
+  }, {
+    "name" : "fehlertext",
+    "value" : "",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.fehlertext",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P6T.01M1BBZFRV69E4J1S86EB70P6V.01M1BBZFRV69E4J1S86EB70P6Z"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P72",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4a67-dba8-6580-0d8c-70576f24b78d",
+  "reusableName" : "Cleanup_CMStoCKV",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P73",
+  "condition" : null,
+  "reusableSurrogate" : "3a1ad770-57d3-5ca5-802e-a288768cf883",
+  "reusableName" : "SS2QuittungAA",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _check Tabelle AUFTRAG - nach SS2-Quittung",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRV69E4J1S86EB70P74",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "SELECT * FROM auftrag where fk_karten_id in (SELECT karten_id FROM karte where identifikationsmerkmal='{B[SVNR]}')",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P7A"
+  }, {
+    "name" : "abgeschlossen",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.abgeschlossen",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P7B.01M1BBZFRV69E4J1S86EB70P7C.01M1BBZFRV69E4J1S86EB70P7D"
+  }, {
+    "name" : "zurueckgemeldet",
+    "value" : "1",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.zurueckgemeldet",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P7B.01M1BBZFRV69E4J1S86EB70P7C.01M1BBZFRV69E4J1S86EB70P7E"
+  }, {
+    "name" : "fehlercode",
+    "value" : "",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.fehlercode",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P7B.01M1BBZFRV69E4J1S86EB70P7C.01M1BBZFRV69E4J1S86EB70P7F"
+  }, {
+    "name" : "fehlertext",
+    "value" : "",
+    "actionMode" : "Verify",
+    "toscaPath" : "#1.fehlertext",
+    "toscaPathID" : "01M1BBZFRV69E4J1S86EB70P7B.01M1BBZFRV69E4J1S86EB70P7C.01M1BBZFRV69E4J1S86EB70P7G"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "RES_CIN-austauschen_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D1",
+  "condition" : null,
+  "reusableSurrogate" : "3a1c16b2-265f-fcf0-ecc0-233d796c4425",
+  "reusableName" : "RES_CIN-austauschen",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "RES_Datum-austauschen_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D2",
+  "condition" : null,
+  "reusableSurrogate" : "3a1c16b2-62c4-26b2-ae13-b5b7e7b70342",
+  "reusableName" : "RES_Datum-austauschen",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D4",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b49cf-ac12-15ce-9166-20b6132ae035",
+  "reusableName" : "Cleanup_TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D5",
+  "condition" : null,
+  "reusableSurrogate" : "3a1b4dcb-31bd-967d-20b2-56c5cd5514d5",
+  "reusableName" : "Tx_CMStoCKV-PC_TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Ermittle Filename im POD:TESTPROD_*_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D6",
+  "condition" : null,
+  "reusableSurrogate" : "3a1c16b2-8c32-a727-70f0-59487759f443",
+  "reusableName" : "Ermittle Filename im POD:TESTPROD_*",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Zeit-austauschen_in-TxFilesFromKams_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D7",
+  "condition" : null,
+  "reusableSurrogate" : "3a1c16b4-7d05-cc3a-bb06-860bb6bdb96d",
+  "reusableName" : "Zeit-austauschen_in-TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "Certs-austauschen_in-TxFilesFromKams_Reference",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D8",
+  "condition" : null,
+  "reusableSurrogate" : "3a1c1836-b801-590e-017b-4dda5d45e6fc",
+  "reusableName" : "Certs-austauschen_in-TxFilesFromKams",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox File Compare vs TESTPROD_QEAA_4301_20250901111812.RES_referenzNoCerts",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BBZFRW7P6EHPXQPNECS7D9",
+  "moduleSurrogate" : "39ef0b81-ca12-67a7-6065-a19e007bbad8",
+  "module" : "TBox File Compare",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer CIN",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BD1RBV4KEDA69EB2G8Y32R",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "CIN",
+    "value" : "{B[CIN]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "CIN",
+    "toscaPathID" : "01M1BD2GTM6GQMJQT70RF234X8"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox DB Expert module _karten_id+CIN ermitteln",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BC3X8B6ZWFBMTNMN9BYHE5",
+  "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+  "module" : "TBox DB Expert module",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SQL Statement",
+    "value" : "select * FROM karte WHERE CIN='{B[CIN]}'",
+    "actionMode" : "Constraint",
+    "toscaPath" : "SQL Statement",
+    "toscaPathID" : "01M1BC3X8B6ZWFBMTNMN9BYHEB"
+  }, {
+    "name" : "karten_id",
+    "value" : "KartenID",
+    "actionMode" : "Buffer",
+    "toscaPath" : "#1.karten_id",
+    "toscaPathID" : "01M1BC3X8B6ZWFBMTNMN9BYHEC.01M1BC3X8B6ZWFBMTNMN9BYHED.01M1BC3X8B6ZWFBMTNMN9BYHEE"
+  }, {
+    "name" : "cin",
+    "value" : "CIN",
+    "actionMode" : "Buffer",
+    "toscaPath" : "#1.cin",
+    "toscaPathID" : "01M1BC3X8B6ZWFBMTNMN9BYHEC.01M1BC3X8B6ZWFBMTNMN9BYHED.01M1BC3X8B6ZWFBMTNMN9BYHEF"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BDJ1PK6JNN9B9AJH7DJ2T1",
+  "condition" : null,
+  "reusableSurrogate" : "01M1BD68T3F5KMY30NTBZC3TST",
+  "reusableName" : "PrKartenStatusManuell",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "cin" : {
+      "value" : "{B[CIN]}",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "03-openShift_consolecheck_Reference - CIN New",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BE38B3EJ6CED17EZBYDW31",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "80040000002310007674;New;",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "1",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "03-openShift_consolecheck_Reference - CIN In Production",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BE6SA7A3MTTRGWVVXP7KV5",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "80040000002310007674;In Production;",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "1",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "03-openShift_consolecheck_Reference - CIN In Use",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01M1BE6V96CB6GQNT947JG1JYX",
+  "condition" : null,
+  "reusableSurrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "reusableName" : "03-openShift_consolecheck",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "log-file" : {
+      "value" : "{B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "search-string" : {
+      "value" : "80040000002310007674;In Use;",
+      "actionMode" : "BusinessParameter"
+    },
+    "no-occurance" : {
+      "value" : "1",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+} ]

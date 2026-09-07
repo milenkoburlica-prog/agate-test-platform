@@ -1,0 +1,488 @@
+
+  - id: "detaildatenAbfragen"
+    description: "detaildatenAbfragen"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        value: "{XL[Vertragspartner.VPNR]}"
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "B_OrdinationsId"
+        value: "{XL[Vertragspartner.Ord_id]}"
+
+      - type: CALL
+        command: 'reusable.ru_dialog_aufbau_mit_ordid'
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+          cardSlot: 'baseContact'
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        command: "SELECT * FROM MH_MELDUNG where TYP='{XL[meldungsTyp]}'and FK_AUSPRAEGUNG_ID=(select AUSPRAEGUNG_ID from HVB_AUSPRAEGUNG join HVB_VPNR on HVB_AUSPRAEGUNG.FK_VP_ID=HVB_VPNR.FK_VP_ID where HVB_VPNR.VPNR='{XL[Vertragspartner.VPNR]}')"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: FK_SV_NUMMER
+      - type: SQL
+        op: BUFFER
+        name: B_VSNR
+        row: "0"
+        column: "FK_SV_NUMMER"
+        response: suche_meldung_in_db_res
+
+
+
+
+      # DB Check: TYP
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[meldungsTyp]}"
+        row: "0"
+        column: "TYP"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_STRASSE
+      - type: SQL
+        op: BUFFER
+        name: B_Strasse
+        row: "0"
+        column: "PATIENTIN_STRASSE"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_PLZ
+      - type: SQL
+        op: BUFFER
+        name: B_Plz
+        row: "0"
+        column: "PATIENTIN_PLZ"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_ORT
+      - type: SQL
+        op: BUFFER
+        name: B_Ort
+        row: "0"
+        column: "PATIENTIN_ORT"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_STAAT
+      - type: SQL
+        op: BUFFER
+        name: B_Staatencode
+        row: "0"
+        column: "PATIENTIN_STAAT"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: ID
+      - type: SQL
+        op: BUFFER
+        name: B_meldungsId
+        row: "0"
+        column: "ID"
+        response: suche_meldung_in_db_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "DialogException == NULL  AND AccessException == NULL AND CardException == NULL AND MuhiException.InfoCode =='ZS-3390028'"
+        command: "SELECT * FROM MH_MELDUNG where TYP='{XL[meldungsTyp]}'and FK_AUSPRAEGUNG_ID<>(select AUSPRAEGUNG_ID from HVB_AUSPRAEGUNG join HVB_VPNR on HVB_AUSPRAEGUNG.FK_VP_ID=HVB_VPNR.FK_VP_ID where HVB_VPNR.VPNR='{XL[Vertragspartner.VPNR]}')"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: FK_SV_NUMMER
+      - type: SQL
+        op: BUFFER
+        name: B_VSNR
+        row: "0"
+        column: "FK_SV_NUMMER"
+        response: suche_meldung_in_db_res
+
+
+
+
+      # DB Check: TYP
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL  AND AccessException == NULL AND CardException == NULL AND MuhiException.InfoCode =='ZS-3390028'"
+        action: EQUALS
+        expected: "{XL[meldungsTyp]}"
+        row: "0"
+        column: "TYP"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_STRASSE
+      - type: SQL
+        op: BUFFER
+        name: B_Strasse
+        row: "0"
+        column: "PATIENTIN_STRASSE"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_PLZ
+      - type: SQL
+        op: BUFFER
+        name: B_Plz
+        row: "0"
+        column: "PATIENTIN_PLZ"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_ORT
+      - type: SQL
+        op: BUFFER
+        name: B_Ort
+        row: "0"
+        column: "PATIENTIN_ORT"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: PATIENTIN_STAAT
+      - type: SQL
+        op: BUFFER
+        name: B_Staatencode
+        row: "0"
+        column: "PATIENTIN_STAAT"
+        response: suche_meldung_in_db_res
+
+
+
+      # DB Check: ID
+      - type: SQL
+        op: BUFFER
+        name: B_meldungsId
+        row: "0"
+        column: "ID"
+        response: suche_meldung_in_db_res
+
+ 
+      - type: BUFFER
+        op: EXEC
+        name: "B_FileName"
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        value: "MUHI_{DATE}_{RND[5]}.pdf"
+
+      # detaildatenAbfragen Request Gina Direkte Erreichbarkeit
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.muhi.1.detaildatenabfragen_request
+        response: detaildatenabfragen_request_response
+        download: 
+          - method: MTOM
+            targetPath: "..\\Tosca\\Daten\\Files\\MUHI\\{B[B_FileName]}"
+        parameters: 
+          dialogId: "{XL[DialogID]}"
+          meldungsId: 
+            - condition: "MuhiException.InfoCode !="ZS-3390027""
+              value: "{B[B_meldungsId]}"
+            - condition: "MuhiException.InfoCode =="ZS-3390027""
+              value: "1"
+
+      # detaildatenAbfragen Response - ort (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='ort']"
+        action: "EQUALS"
+        expected: "{B[B_Ort]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - postleitzahl (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='postleitzahl']"
+        action: "EQUALS"
+        expected: "{B[B_Plz]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - staatencode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='staatencode']"
+        action: "EQUALS"
+        expected: "{B[B_Staatencode]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - strasse (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='strasse']"
+        action: "EQUALS"
+        expected: "{B[B_Strasse]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - meldungsId (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='meldungsId']"
+        action: "EQUALS"
+        expected: "{B[B_meldungsId]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - vsnr (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungIndividuell']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='vsnr']"
+        action: "EQUALS"
+        expected: "{B[B_VSNR]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - ort (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='ort']"
+        action: "EQUALS"
+        expected: "{B[B_Ort]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - postleitzahl (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='postleitzahl']"
+        action: "EQUALS"
+        expected: "{B[B_Plz]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - staatencode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='staatencode']"
+        action: "EQUALS"
+        expected: "{B[B_Staatencode]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - strasse (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='strasse']"
+        action: "EQUALS"
+        expected: "{B[B_Strasse]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - meldungsId (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='meldungsId']"
+        action: "EQUALS"
+        expected: "{B[B_meldungsId]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - vsnr (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='detaildatenAbfragenResponse']/*[local-name()='return']/*[local-name()='meldungAbsolut']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='vsnr']"
+        action: "EQUALS"
+        expected: "{B[B_VSNR]}"
+        response: detaildatenabfragen_request_response
+
+      # detaildatenAbfragen Response - Attachments (FileUpload)
+      # [Warning] Skipped Attachments. Unsupported ActionMode: FileUpload
+
+      # MUHI Exception Response - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "500"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((DialogException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.InfoCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((DialogException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.ExceptionCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((DialogException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DialogException.InfoText]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((CardException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[CardException.InfoCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((CardException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[CardException.ExceptionCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((CardException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='CardException']/*[local-name()='message']"
+        action: "EQUALS"
+        expected: "{XL[CardException.InfoText]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - MuhiException (Unknown_Insert)
+      # [Warning] Skipped MuhiException. Unsupported ActionMode: Unknown_Insert
+
+      # MUHI Exception Response - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((MuhiException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[MuhiException.InfoCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((MuhiException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[MuhiException.ExceptionCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((MuhiException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[MuhiException.InfoText]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((AccessException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.InfoCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((AccessException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.ExceptionCode]}"
+        response: detaildatenabfragen_request_response
+
+      # MUHI Exception Response - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL) AND ((AccessException != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[AccessException.InfoText]}"
+        response: detaildatenabfragen_request_response
+      #[Pending] No mapping for: C:\Tosca_Projects\Testmanagement\R21a\Tosca\Daten\MUHI\MUHI_02.03.2021_21910.pdf
+      #[Pending] No mapping for: TBox Partial Buffer
+      #[Pending] No mapping for: TBox Partial Buffer
+      #[Pending] No mapping for: C:\Tosca_Projects\Testmanagement\R21a\Tosca\Daten\Files\MUHI\MUHI_02.03.2021_90245.pdf
+
+      - type: CALL
+        command: 'reusable.dialogclose_auth1'
+        parameters:
+          dialogId: '{B[dialogId]}'

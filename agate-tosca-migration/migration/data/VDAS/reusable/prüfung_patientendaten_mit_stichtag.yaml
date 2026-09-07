@@ -1,0 +1,6 @@
+name: prüfung_patientendaten_mit_stichtag
+steps:
+      - type: CALL
+        command: "reusable.prüfung_patientendaten"
+        parameters: {}
+Unprocessed moduleName=Versichertendatenabfrage - Ergebnisdetail (408)

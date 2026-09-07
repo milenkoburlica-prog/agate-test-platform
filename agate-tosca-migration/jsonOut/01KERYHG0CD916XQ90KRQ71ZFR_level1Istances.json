@@ -1,0 +1,55 @@
+[ {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ0N",
+  "TC_NO" : "1",
+  "Name" : "Gutfall: Ungültige SvNummer angegeben. Liefert keinen Fehler weil SVNR gültige Prüfziffer hat",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ0X",
+  "TC_NO" : "2",
+  "Name" : "Schlechtfall: Ungültige SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ16",
+  "TC_NO" : "3",
+  "Name" : "Schlechtfall: Ungültige SvNummer (Falsche Prüfziffer) angegeben CL-02003",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ1F",
+  "TC_NO" : "4",
+  "Name" : "Schlechtfall: Keine SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ1R",
+  "TC_NO" : "5",
+  "Name" : "Schlechtfall: Null als SvNummer angegeben CL-02003",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ21",
+  "TC_NO" : "6",
+  "Name" : "Gutfall: Gültige SvNummer angegeben aber nicht in der DB. Kein Fehler, da nicht überprüft wird ob SVNummer in DB vorhanden",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ29",
+  "TC_NO" : "7",
+  "Name" : "Gutfall: Gültige SvNummer angegeben.",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0DE6G6G6D2Y285GJ2Q",
+  "TC_NO" : "8",
+  "Name" : "Gutfall: Gültige SvNummer angegeben. Diesmal gibt es kein Betreuungsverhältnis",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+}, {
+  "insatanceSurrogate" : "01KERYHG0E98ADEC9WJA4KZ4GD",
+  "TC_NO" : "9",
+  "Name" : "Gutfall: Gültige SvNummer angegeben. Diesmal gibt es kein Betreuungsverhältnis, weil storniert",
+  "testSheetSurrogate" : "01KERYHG0CD916XQ90KRQ71ZFR",
+  "TDInstance" : { }
+} ]

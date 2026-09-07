@@ -1,0 +1,23 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Header>
+    <TransactionId>{B[TransactionId]}</TransactionId>
+  </s:Header>
+  <s:Body>
+    <absolutesBeschaeftigungsverbotEinmelden xmlns="http://soap.muhi.client.chipkarte.at">
+      <dialogId>{B[dialogId]}</dialogId>
+      <req>
+        <commonData>
+          <adressePatientin>
+            <ort>{B[ort]}</ort>
+            <postleitzahl>{B[postleitzahl]}</postleitzahl>
+            <staatencode>{B[staatencode]}</staatencode>
+            <strasse>{B[strasse]}</strasse>
+          </adressePatientin>
+          <cardToken>{B[cardToken]}</cardToken>
+          <voraussichtlicherGeburtstermin>{B[voraussichtlicherGeburtstermin]}</voraussichtlicherGeburtstermin>
+          <vsnr>{B[vsnr]}</vsnr>
+        </commonData>
+      </req>
+    </absolutesBeschaeftigungsverbotEinmelden>
+  </s:Body>
+</s:Envelope>

@@ -1,0 +1,9 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "Insert into wks_kontakt VALUES ((SELECT MAX(Kontakt_id) + 1 FROM wks_kontakt), {R[SVNR]}, {R[VPNR]}, SYSTIMESTAMP - INTERVAL '5'MINUTE, null, null, 0, SYSDATE, {R[User_Id]}, '{R[Herkunft]}', '{R[Kontakt_Typ]}', '01', '99', '{R[CIN]}', null)"
+        response: setze_wks_kontakt_als_abgelaufen_(vergangens_quartal)_für_svnr_res
+

@@ -25,6 +25,12 @@ set TEST_PRIORITY=%6
 if "%TEST_PRIORITY%"=="" set TEST_PRIORITY=""
 
 REM 
+REM startTests.bat instantiate MUHI CheckStatus.yaml CheckStatus.csv
+REM startTests.bat Milenko ECS_SYST_AUT1 MUHI Instance_CheckStatus
+REM startTests.bat instantiate MUHI absolutesBeschaeftigungsverbotEinmelden.yaml absolutesBeschaeftigungsverbotEinmelden.csv
+REM startTests.bat  Milenko ECS_SYST_AUT1 MUHI Instance_absolutesBeschaeftigungsverbotEinmelden.yaml
+REM startTests.bat  Milenko ECS_SYST_AUT1 CRS CRS_V3.yaml
+REM 
 echo ======================================================================
 echo             Starting Agate Test Suite via Windows CMD
 echo ======================================================================

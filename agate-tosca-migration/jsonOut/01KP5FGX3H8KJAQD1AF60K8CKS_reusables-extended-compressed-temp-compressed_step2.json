@@ -1,0 +1,114 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "01KP5FGX3H8KJAQD1AF60K8CKS",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "database_unverarbeitete_bestände_loeschen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KP5FGN3G33K74HZ8BK0XZRN1" ],
+    "Library" : [ "01KNAKCYM4BHYAYPZK8T5EGB8E" ],
+    "UsedBy" : [ "01KV5E9EZ34FY3C1VGEVSGTQYV" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KP5FGN3G33K74HZ8BK0XZRN1",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Datenbank - unverarbeitete Bestände löschen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KP5FBH062CE7ZMCEZP5BFN2H" ],
+    "ParentFolder" : [ "01KP5FGX3H8KJAQD1AF60K8CKS" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KP5FBH062CE7ZMCEZP5BFN2H",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox DB Expert module _unverarbeitete Bestände löschen - Bereingung vor Beginn"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KP5FV7575TTN4RTNX6QFTZSG", "01KP5FBH062CE7ZMCEZP5BFN2P", "01KP5FBH062CE7ZMCEZP5BFN2Q" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "01KP5FGN3G33K74HZ8BK0XZRN1" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KP5FV7575TTN4RTNX6QFTZSG",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "01KP5FV7575TTN4RTNX6QFTZSG"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KP5FV77N9H76EBJ2TD2XEAG8",
+    "Value" : "{B[G_EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "01KP5FV7575TTN4RTNX6QFTZSG.01KP5FV77N9H76EBJ2TD2XEAG8"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KP5FVG6KBF75Y0JKAJ2NSRYZ",
+    "Value" : "{B[G_EC_DB_USER]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "01KP5FV7575TTN4RTNX6QFTZSG.01KP5FV77N9H76EBJ2TD2XEAG8.01KP5FVG6KBF75Y0JKAJ2NSRYZ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KP5FVY1Y0HDV018T8M7CMZ15",
+    "Value" : "{B[G_EC_DB_PASSWORD]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "01KP5FV7575TTN4RTNX6QFTZSG.01KP5FV77N9H76EBJ2TD2XEAG8.01KP5FVY1Y0HDV018T8M7CMZ15"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KP5FBH062CE7ZMCEZP5BFN2P",
+    "Value" : "update PST_DATEN_BESTAND set status = 'FE' where STATUS not in ('FE','EX')",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "01KP5FBH062CE7ZMCEZP5BFN2P"
+  } ]
+} ]

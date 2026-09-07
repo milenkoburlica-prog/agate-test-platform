@@ -1,0 +1,67 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a60-3eeb-f1fd-3054-cd3bad353783",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40-Laufnummer-setzen_LfNr_SS40_QK"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b4a60-fe54-1a71-8513-571c771a3649", "3a1b4a61-d941-844f-05b7-eb38b67ec064" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P63" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a60-fe54-1a71-8513-571c771a3649",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "SysVarName",
+    "value" : "LfNr_SS40_QK",
+    "actionMode" : "Insert",
+    "toscaPath" : "SysVarName",
+    "toscaPathID" : "3a1b4a60-fe5e-7c40-7bba-d2bd8a933a28"
+  }, {
+    "name" : "SysVarGruppe",
+    "value" : "{B[KS_KARTENGENERATION]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "SysVarGruppe",
+    "toscaPathID" : "3a1b4a60-fe5e-aa28-e24a-c6cc7e3edbe7"
+  }, {
+    "name" : "SysVarWert",
+    "value" : "{B[LfNr_SS40_QK]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "SysVarWert",
+    "toscaPathID" : "3a1b4a60-fe5e-726a-4a8a-480799112ebe"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a61-d941-844f-05b7-eb38b67ec064",
+  "condition" : null,
+  "reusableSurrogate" : "3a1aa111-dc62-d395-7ae7-776c2fbb397f",
+  "reusableName" : "ChSysVar",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+} ]

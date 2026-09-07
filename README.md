@@ -6,7 +6,7 @@
 
 A single AGATE test can combine:
 
-**REST · SOAP · SQL · CMD · OpenShift · CALL · JSON · PDF · WAIT**
+**REST · SOAP · SQL · CMD · FILE · OpenShift · CALL · JSON · PDF · WAIT**
 
 within the same execution flow — using a human-readable YAML DSL.
 
@@ -25,7 +25,7 @@ This is the core idea behind AGATE:
 
 * ✅ Human-readable YAML test definitions
 * ✅ Cross-technology test execution
-* ✅ REST, SOAP, SQL, CMD, OpenShift, JSON, PDF and WAIT test steps and CALL reusable test steps.
+* ✅ REST, SOAP, SQL, CMD, FILE, OpenShift, JSON, PDF and WAIT test steps and CALL reusable test steps.
 * ✅ YAML templates and CSV-based test data
 * ✅ Assertions and reference-based response validation
 * ✅ Detailed execution logging and HTML reports
@@ -62,15 +62,15 @@ Its primary goal is to orchestrate complete enterprise business tests across het
                                     ▼
                               Execution Core
                                     │
- ┌────────┬───────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
- ▼        ▼       ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
-REST     SOAP     SQL    CMD   OpenShift    WAIT   JSON    PDF    CALL   GUI
+ ┌────────┬───────┬──────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
+ ▼        ▼       ▼      ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
+REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   GUI
                                     │
                                     ▼
                               Unified Report
 ```
 
-REST, SOAP, SQL, command-line, OpenShift, WAIT, JSON and PDF operations — together with reusable `CALL` steps — are not external concepts that the tester has to combine manually.
+REST, SOAP, SQL, CMD, FILE, OpenShift, WAIT, JSON and PDF operations — together with reusable `CALL` steps — are not external concepts that the tester has to combine manually.
 
 They are part of the **AGATE execution model**.
 
@@ -153,9 +153,9 @@ AGATE separates deterministic test execution, deterministic API contract process
                                      ▼
                                Execution Core
                                      │
- ┌────────┬───────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
- ▼        ▼       ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
-REST     SOAP     SQL    CMD   OpenShift    WAIT   JSON    PDF    CALL   GUI
+ ┌────────┬───────┬──────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
+ ▼        ▼       ▼      ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
+REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   GUI
                                      │
                                      ▼
                                Unified Report
@@ -217,6 +217,7 @@ It loads AGATE YAML test suites, resolves configuration and test data, executes 
 | 🏢 SOAP      | SOAP service execution and validation      | **Native**            |
 | 🗄️ SQL      | Database queries and assertions            | **Native**            |
 | 🖥️ CMD      | Command-line execution                     | **Native**            |
+| 📁 FILE      | Local file operations, content extraction and validation | **Native**            |
 | ☸️ OpenShift | OpenShift CLI operations and validation    | **Native**            |
 | ⏳ WAIT       | Synchronization and asynchronous workflows | **Native**            |
 | 📑 JSON      | JSON processing and validation             | **Native**            |
@@ -539,4 +540,20 @@ AGATE Test Platform is released under the MIT License.
 * Added OpenAPI test impact analysis for existing AGATE applications. 
 * Added mapping of contract changes to CSV, YAML and REST request artifacts. 
 * Added detection of affected test cases and incompatible test data.
+
+## 2026-09-08
+
+### CMD, OpenShift and FILE Engine Improvements
+
+* Extended the CMD Engine with configurable `expectedExitCode`, `checkExitCode`, `timeout` and `outputFile` support.
+* Added automatic exit-code validation and timeout handling for CMD command execution.
+* Extended the OpenShift Engine with the same configurable exit-code and timeout handling for `EXEC`, `PUT` and `GET`.
+* Added local `outputFile` support for OpenShift `EXEC` command output.
+* Improved OpenShift file-transfer handling for local Windows paths.
+* Added the new native FILE Engine for local filesystem operations.
+* Added FILE `EXEC` actions: `READ`, `WRITE`, `APPEND`, `COPY`, `MOVE`, `DELETE` and `EXISTS`.
+* Added FILE `BUFFER` actions: `TEXT`, `FILTER`, `LINE`, `LAST_LINE` and `COUNT`.
+* Added FILE `ASSERT` actions: `EXISTS`, `NOT_EXISTS`, `CONTAINS`, `NOT_CONTAINS`, `EQUALS`, `NOT_EQUALS` and `COUNT`.
+* Added shared command execution infrastructure for timeout handling, exit-code validation and command results.
+* Added and validated extended CMD, OpenShift and FILE Engine demo scenarios.
 

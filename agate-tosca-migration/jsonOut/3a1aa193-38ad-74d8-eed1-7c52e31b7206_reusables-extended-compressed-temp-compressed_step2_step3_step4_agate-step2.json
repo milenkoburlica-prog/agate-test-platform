@@ -1,0 +1,39 @@
+{
+  "name" : "SS2AuftragAA",
+  "surrogate" : "3a1aa193-38ad-74d8-eed1-7c52e31b7206",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1aa193-3b5b-ab05-550c-c371fa27f468",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "CMD",
+      "value" : "kams SS2AuftragAA",
+      "actionMode" : "Insert",
+      "toscaPath" : "CMD",
+      "toscaPathID" : "3a1aa193-3b5c-3d74-41ca-e2d588133e72"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1aa193-3b5c-98a8-ceec-b1fceda5fbcf",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "01_execute_ssh",
+    "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

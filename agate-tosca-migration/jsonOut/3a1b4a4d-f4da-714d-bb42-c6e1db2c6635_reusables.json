@@ -1,0 +1,274 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "3a1b4a4d-f4da-714d-bb42-c6e1db2c6635",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Copy_SS40Simu_TQx-TxFilesToKams"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a1addb9-6c35-1981-8514-eb9c80395779"
+      ],
+      "Library": [
+        "3a1ab3e4-9134-a5b8-9a89-5523569acd05"
+      ],
+      "UsedBy": [
+        "01M1BBZFRV69E4J1S86EB70P5Z"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a1addb9-6c35-1981-8514-eb9c80395779",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Start Program _Simulator Quittung kopieren auf TxFilesToKams - TQx"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a1addb9-6c35-dd2d-d3d1-beb621f51907",
+        "3a1addb9-6c35-8c42-20e7-2d392181dc7c",
+        "3a1addb9-6c35-2bc1-dc39-d69fe2844433",
+        "3a1addb9-6c36-fe7b-5ddb-b8020099fa1e"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-ca32-4c01-9327-9a9501ec8de7"
+      ],
+      "ParentFolder": [
+        "3a1b4a4d-f4da-714d-bb42-c6e1db2c6635"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c35-dd2d-d3d1-beb621f51907",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "cmd",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "3a1addb9-6c35-1981-8514-eb9c80395779"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-1bc5-1af2-09cd056d5f96"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c35-8c42-20e7-2d392181dc7c",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "{S[SVC.Projekt root path]}\\Tosca\\Tools\\{B[Simulator]}\\files\\",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "3a1addb9-6c35-1981-8514-eb9c80395779"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-c5a7-666c-0683771a33fc"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c35-2bc1-dc39-d69fe2844433",
+    "Attributes": {
+      "Operator": "1",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "517",
+      "Value": "{NULL}",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "3a1addb9-6c35-1981-8514-eb9c80395779"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a1addb9-6c36-27b7-eac9-136cc025f54f",
+        "3a1addb9-6c36-e0b0-8fef-b4f4f89ee6b1"
+      ],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-be3c-2fff-7ad6b553cb24"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c36-27b7-eac9-136cc025f54f",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "/C",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParentValue": [
+        "3a1addb9-6c35-2bc1-dc39-d69fe2844433"
+      ],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c36-e0b0-8fef-b4f4f89ee6b1",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "copy {S[SVC.Projekt root path]}\\Tosca\\Tools\\{B[Simulator]}\\files\\TQ* {B[KS_Testdaten_BaseDir]}\\TxFilesToKams\\",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParentValue": [
+        "3a1addb9-6c35-2bc1-dc39-d69fe2844433"
+      ],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca8f-027d-747e-9d787bd944f5"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c36-fe7b-5ddb-b8020099fa1e",
+    "Attributes": {
+      "Operator": "1",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "517",
+      "Value": "True",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "3a1addb9-6c35-1981-8514-eb9c80395779"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a1addb9-6c36-9dd3-b1e6-501ba257d3c1",
+        "3a1addb9-6c36-fc79-8c8c-cbe19ced85e1"
+      ],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-ca32-95dd-f5e7-223624b8941b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c36-9dd3-b1e6-501ba257d3c1",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "10000",
+      "DataType": "2"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParentValue": [
+        "3a1addb9-6c36-fe7b-5ddb-b8020099fa1e"
+      ],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-9919-9bd2-0569cdf935f6"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1addb9-6c36-fc79-8c8c-cbe19ced85e1",
+    "Attributes": {
+      "Operator": "1",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "69",
+      "Value": "0",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParentValue": [
+        "3a1addb9-6c36-fe7b-5ddb-b8020099fa1e"
+      ],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-cb89-981e-88c4-38f385243957"
+      ]
+    }
+  }
+]

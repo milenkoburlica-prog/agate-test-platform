@@ -1,0 +1,106 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1c16b2-62c4-26b2-ae13-b5b7e7b70342",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "RES_Datum-austauschen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1c16a9-b7b9-2bed-8645-56aaeaa7cbdc" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRW7P6EHPXQPNECS7D2" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "3a1c16a9-b7b9-2bed-8645-56aaeaa7cbdc",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "RES_Datum-austauschen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1c16a9-b7b9-3494-585b-eff2c4311fe1", "3a1c16a9-b7b9-cca1-2143-38bf7b813503", "3a1c16a9-b7b9-dd63-c076-e7bc955e4086" ],
+    "ParentFolder" : [ "3a1c16b2-62c4-26b2-ae13-b5b7e7b70342" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1c16a9-b7b9-3494-585b-eff2c4311fe1",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set POD_CMD Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1c16a9-b7b9-30ee-9628-04cf277eebff" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1c16a9-b7b9-2bed-8645-56aaeaa7cbdc" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1c16a9-b7b9-30ee-9628-04cf277eebff",
+    "Value" : "umask 0000 ; cd {B[OMS.SS2_CMStoCKV.TransferVerzeichnis]}/ ; sed -i 's/{DATE[][][ddMMyyyy]}/31123999/g' TESTPROD_*.RES",
+    "ExplicitName" : "POD_CMD",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "POD_CMD",
+    "ToscaPathID" : "3a1c16a9-b7b9-30ee-9628-04cf277eebff"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1c16a9-b7b9-dd63-c076-e7bc955e4086",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "01_execute_ssh_Reference _RES-File CIN austauschen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1c16a9-b7b9-6c83-bbcb-3bc712142330" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "3a1c16a9-b7b9-2bed-8645-56aaeaa7cbdc" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-exact",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[POD_CMD]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[KS_POD_Name]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "<leer>",
+    "ExplicitName" : ""
+  } ]
+} ]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <SS30EinschreibungType xmlns="http://www.svc.co.at/ns/if/dmp/1/5/DMP_SS30_Schema_1_5">
+      <BetreuungsVerhaeltnis>{NULL}</BetreuungsVerhaeltnis>
+      <BEInfo>{NULL}</BEInfo>
+      <BEAntragsdatum>{R[BEAntragsdatum]}</BEAntragsdatum>
+      <EingabeArtCode>{R[EingabeArtCode]}</EingabeArtCode>
+    </SS30EinschreibungType>
+  </s:Body>
+</s:Envelope>

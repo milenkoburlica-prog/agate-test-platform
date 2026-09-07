@@ -1,0 +1,401 @@
+
+- id: "individuellesBeschaeftigungsverbotEinmelden"
+    description: "individuellesBeschaeftigungsverbotEinmelden"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        condition: ""
+        value: "{XL[Vertragspartner.VPNR]}"
+      - type: BUFFER
+        op: EXEC
+        name: "B_OrdinationsId"
+        condition: ""
+        value: "{XL[Vertragspartner.Ord_id]}"
+
+      - type: CALL
+        command: "reusable.ru_dialog_aufbau_mit_ordid"
+        parameters: 
+          ORD_ID: "{B[B_OrdinationsId]}"
+          vpNummer: "{B[B_Karte]}"
+          cardSlot: "baseContact"
+
+      - type: CALL
+        command: "reusable.create_cardtoken_svsig_e_card"
+        condition: "'CardToken.SVNR-Karte' != NULL"
+        parameters: 
+          SvNummer: "{XL[CardToken.SVNR-Karte]}"
+          VpNummer: "{XL[CardToken.VPNR]}"
+          cardSlot: "baseContact"
+
+      - type: CALL
+        command: "reusable.create_cardtoken_vpsig_o_card"
+        condition: "CardToken.Tokentyp == "VPVP""
+        parameters: 
+          VpNummer: "{XL[CardToken.VPNR-Karte]}"
+          cardSlot: "baseContact"
+
+      - type: CALL
+        command: "reusable.create_cardtoken_svsig_o_card"
+        condition: "CardToken.Tokentyp == "VPSV""
+        parameters: 
+          VpNummer: "{XL[CardToken.VPNR-Karte]}"
+          SvNummer: "{XL[CardToken.SVNR]}"
+          cardSlot: "baseContact"
+      - type: BUFFER
+        op: EXEC
+        name: "B_FileName"
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        value: "MUHI_{DATE}_{RND[5]}.pdf"
+
+      # individuellesBeschaeftigungsverbotEinmelden Request Direkte Erreichbarkeit
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.muhi.1.individuellesbeschaeftigungsverboteinmelden_request
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+        parameters: 
+          individuellesBeschaeftigungsverbotEinmelden: "{NULL}"
+          dialogId: "{XL[DialogID]}"
+          req: "{NULL}"
+          beginnIndividuellesBeschaeftigungsverbot: "{XL[BeginnIndividuellesBeschaeftigungsverbot]}"
+          begruendung: "{XL[Begruendung.Begruendung_kurz]}"
+          begruendungVordatierung: "{XL[BegruendungVordatierung]}"
+          commonData: "{NULL}"
+          adressePatientin: "{NULL}"
+          ort: "{XL[Adresse_Patientin.Ort]}"
+          postleitzahl: "{XL[Adresse_Patientin.Postleitzahl]}"
+          staatencode: "{XL[Adresse_Patientin.Staatencode]}"
+          strasse: "{XL[Adresse_Patientin.Strasse]}"
+          cardToken: "{XL[CardToken.TokenWert]}"
+          voraussichtlicherGeburtstermin: "{XL[Vorraussichtlicher_Geburtstermin.Datum]}"
+          vsnr: "{XL[SVPerson.SVNR]}"
+          dauer: "{XL[Dauer]}"
+          kzDauerBisAbsolut: "{XL[KzDauerBisAbsolut]}"
+          zusatzbegruendung: "{XL[Zusatzbegruendung]}"
+          Header: "{NULL}"
+          TransactionId: "3d001cef-a9c3-4c72-be8e-0ae91226aa90"
+          kzVordatiert: "true"
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - beginnIndividuellesBeschaeftigungsverbot (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='beginnIndividuellesBeschaeftigungsverbot']"
+        action: "EQUALS"
+        expected: "{XL[BeginnIndividuellesBeschaeftigungsverbot_Response]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - begruendung (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='begruendung']"
+        action: "EQUALS"
+        expected: "{XL[Begruendung.Begruendung_kurz]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - begruendungVordatierung (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='begruendungVordatierung']"
+        action: "EQUALS"
+        expected: "{XL[BegruendungVordatierung]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - ort (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='ort']"
+        action: "EQUALS"
+        expected: "{XL[Adresse_Patientin.Ort]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - postleitzahl (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='postleitzahl']"
+        action: "EQUALS"
+        expected: "{XL[Adresse_Patientin.Postleitzahl]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - staatencode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='staatencode']"
+        action: "EQUALS"
+        expected: "{XL[Adresse_Patientin.Staatencode]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - strasse (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='adressePatientin']/*[local-name()='strasse']"
+        action: "EQUALS"
+        expected: "{XL[Adresse_Patientin.Strasse]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - meldungsId (Buffer)
+      - type: SOAP
+        op: BUFFER
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        name: B_meldungsId
+        source: BODY
+        selector: JSON_PATH
+        path: "$.commonData.meldungsId"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - geburtsdatum (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='geburtsdatum']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.Geburtsdatum]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - titelHinten (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='titelHinten']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.Name.Titel_hinten]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - titelVorne (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='titelVorne']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.Name.Titel_vorne]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - vorname (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='vorname']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.Druckname.Vorname]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - vsnr (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='vsnr']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.SVNR]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - zuname (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='patientin']/*[local-name()='zuname']"
+        action: "EQUALS"
+        expected: "{XL[SVPerson.Druckname.Nachname]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - voraussichtlicherGeburtstermin (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='commonData']/*[local-name()='voraussichtlicherGeburtstermin']"
+        action: "EQUALS"
+        expected: "{XL[Vorraussichtlicher_Geburtstermin.Datum]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - dauer (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='dauer']"
+        action: "EXISTS"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - kzDauerBisAbsolut (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='kzDauerBisAbsolut']"
+        action: "EQUALS"
+        expected: "true"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - zusatzbegruendung (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='individuellesBeschaeftigungsverbotEinmeldenResponse']/*[local-name()='return']/*[local-name()='zusatzbegruendung']"
+        action: "EQUALS"
+        expected: "{XL[Zusatzbegruendung]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # individuellesBeschaeftigungsverbotEinmelden Response - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # MUHI Exception Response - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "500"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # MUHI Exception Response - DialogException (Unknown_Insert)
+      # [Warning] Skipped DialogException. Unsupported ActionMode: Unknown_Insert
+
+      # MUHI Exception Response - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.InfoCode]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # MUHI Exception Response - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.ExceptionCode]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # MUHI Exception Response - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL  OR MuhiException != NULL OR AccessException != NULL OR CardException != NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.InfoText]}"
+        response: individuellesbeschaeftigungsverboteinmelden_request_response
+
+      # MUHI Exception Response - CardException (Unknown_Insert)
+      # [Warning] Skipped CardException. Unsupported ActionMode: Unknown_Insert
+
+      # MUHI Exception Response - MuhiException (Unknown_Insert)
+      # [Warning] Skipped MuhiException. Unsupported ActionMode: Unknown_Insert
+
+      # MUHI Exception Response - AccessException (Unknown_Insert)
+      # [Warning] Skipped AccessException. Unsupported ActionMode: Unknown_Insert
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        command: "SELECT * FROM MH_MELDUNG where ID='{B[B_meldungsId]}'"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: FK_SV_NUMMER
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[SVPerson.SVNR]}"
+        row: "1"
+        column: "FK_SV_NUMMER"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: TYP
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "I"
+        row: "1"
+        column: "TYP"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: PATIENTIN_STRASSE
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[Adresse_Patientin.Strasse]}"
+        row: "1"
+        column: "PATIENTIN_STRASSE"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: PATIENTIN_PLZ
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[Adresse_Patientin.Postleitzahl]}"
+        row: "1"
+        column: "PATIENTIN_PLZ"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: PATIENTIN_ORT
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[Adresse_Patientin.Ort]}"
+        row: "1"
+        column: "PATIENTIN_ORT"
+        response: prüfe_meldung_in_db_res
+
+
+      # DB Check: PATIENTIN_STAAT
+      - type: SQL
+        op: ASSERT
+        condition: "DialogException == NULL AND MuhiException == NULL AND AccessException == NULL AND CardException == NULL"
+        action: EQUALS
+        expected: "{XL[Adresse_Patientin.Staatencode]}"
+        row: "1"
+        column: "PATIENTIN_STAAT"
+        response: prüfe_meldung_in_db_res
+
+
+      - type: CALL
+        command: "reusable.dialogclose_auth1"
+        parameters:
+          dialogId: "{B[dialogId]}"

@@ -1,0 +1,33 @@
+{
+  "name" : "103_INSERT statischendaten_1_0",
+  "surrogate" : "3a1a9ce6-95b8-f5a2-a505-f4e268d59b07",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "execute-psql-script_1_0_Reference - INSERT statischendaten - common",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1a9cc7-409f-0273-6527-5c16f5ecc3b2",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "execute-psql-script_atomic_1_0",
+    "reusableSurrogate" : "3a1a13da-ee7f-c123-3344-ef1ffbe91910",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 2,
+    "name" : "execute-psql-script_1_0_Reference - INSERT statischendaten - instance specific",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1a9cc7-4cd0-7985-246b-608bb02666a2",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "execute-psql-script_atomic_1_0",
+    "reusableSurrogate" : "3a1a13da-ee7f-c123-3344-ef1ffbe91910",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

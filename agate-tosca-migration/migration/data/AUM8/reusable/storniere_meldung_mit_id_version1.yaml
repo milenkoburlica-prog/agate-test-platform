@@ -1,0 +1,11 @@
+steps:
+      # meldungStornieren_Direkte Erreichbarkeit
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.aum.8.meldungstornieren_request
+        response: soap.aum.8.meldungstornieren_request_response
+        parameters:
+          aufIdVersion: "1"
+
+      # [Merged] meldungStornieren Response is handled by the Request step

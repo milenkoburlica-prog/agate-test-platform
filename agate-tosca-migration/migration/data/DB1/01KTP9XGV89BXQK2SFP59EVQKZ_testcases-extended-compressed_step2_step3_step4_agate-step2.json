@@ -1,0 +1,37 @@
+{
+  "name" : "TBox DB WithConstraint",
+  "surrogate" : "01KTP9XGV89BXQK2SFP59EVQKZ",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox DB Expert module _unverarbeitete Bestände löschen - Bereingung vor Beginn",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01KTP9ZE8MAVKZW8QXXTG3307B",
+    "module" : "TBox DB Expert module",
+    "moduleSurrogate" : "39ef0b81-e4e4-5f42-f86d-b8917810ae1a",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "SQL Statement",
+      "value" : "SELECT * FROM PST_AUFTRAG",
+      "actionMode" : "Constraint",
+      "toscaPath" : "SQL Statement",
+      "toscaPathID" : "01KTP9ZE8P1R4EKKWARSVVAK5N"
+    }, {
+      "name" : "SIG_QUELLE_PUB_KEY",
+      "value" : "sig_dbas_vuneu_v05_test",
+      "actionMode" : "519",
+      "toscaPath" : "#2.SIG_QUELLE_PUB_KEY",
+      "toscaPathID" : "01KTPA0WT626X233ZFFVP1DBNM.01KTPA0WW75QSN0M37RY6MWDQQ.01KTPA1191AZTXNC04D61N06AW"
+    }, {
+      "name" : "#1",
+      "value" : "1",
+      "actionMode" : "Verify",
+      "toscaPath" : "#2.#1",
+      "toscaPathID" : "01KTPA0WT626X233ZFFVP1DBNM.01KTPA0WW75QSN0M37RY6MWDQQ.01KTPA4KE20FWZCRA81Z24SGPP"
+    } ]
+  } ]
+}

@@ -1,0 +1,337 @@
+
+    - id: "Vorgänger_Nachfolger_Ordinationen"
+      description: "Vorgänger Nachfolger Ordinationen"
+      stage: "*"
+      priority: HIGH
+    variables: 
+      {}
+  
+    steps: 
+        - type: BUFFER
+          op: EXEC
+          name: "URL"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{XL[Class F5 Urls CLV-PROVIDER]}"
+        - type: BUFFER
+          op: EXEC
+          name: "contractPartnerNumber"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{XL[Vorbereitung.contractPartnerNumber]}"
+        - type: BUFFER
+          op: EXEC
+          name: "ordinationNumber_Vorgänger"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{XL[Vorbereitung.ordinationNumber_Vorgänger]}"
+        - type: BUFFER
+          op: EXEC
+          name: "ordinationNumber_Nachfolger"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{XL[Vorbereitung.ordinationNumber_Nachfolger]}"
+        - type: BUFFER
+          op: EXEC
+          name: "clientIp"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{XL[Vorbereitung.clientIp]}"
+
+      - type: CALL
+        command: "reusable.tokenerstellung"
+        condition: "'Vorbereitung.script SVSC' != NULL"
+        parameters: 
+          tokenProvider: "{XL[Vorbereitung.script SVSC]}"
+        - type: BUFFER
+          op: EXEC
+          name: "token_SVC"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{B[token]}"
+
+      - type: CALL
+        command: "reusable.tokenerstellung"
+        condition: "'Vorbereitung.script A1' != NULL"
+        parameters: 
+          tokenProvider: "{XL[Vorbereitung.script A1]}"
+        - type: BUFFER
+          op: EXEC
+          name: "token_A1"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{B[token]}"
+
+      - type: CALL
+        command: "reusable.tokenerstellung"
+        condition: "'Vorbereitung.script Drei' != NULL"
+        parameters: 
+          tokenProvider: "{XL[Vorbereitung.script Drei]}"
+        - type: BUFFER
+          op: EXEC
+          name: "token_Drei"
+          condition: "Vorbereitung.AKTIV != NULL"
+          value: "{B[token]}"
+
+      # DELETE deleteProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Vorbereitung.Delete Request_Drei.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.clv-provider.v1.contract-partners.contractPartnerNumber.provisions.ordinationNumber.delete_deleteprovision_request
+        response: delete_deleteprovision_request_response
+        parameters: 
+          Authorization: "{XL[Vorbereitung.Delete Request_Drei.Provider_authorisiert]}"
+          contractPartnerNumber: "{XL[Vorbereitung.Delete Request_Drei.contractPartnerNumber]}"
+          ordinationNumber: "{XL[Vorbereitung.Delete Request_Drei.ordinationNumber]}"
+
+      # DELETE deleteProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "'Vorbereitung.Delete Request_Drei.AKTIV' != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Vorbereitung.Delete Response_Drei.StatusCode]}"
+        response: delete_deleteprovision_request_response
+
+      # DELETE deleteProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Vorbereitung.Delete Request_SVC.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.XLVorbereitung.Delete Request_SVC.Resource.delete_deleteprovision_request
+        response: delete_deleteprovision_request_response
+        parameters: 
+          Authorization: "{XL[Vorbereitung.Delete Request_SVC.Provider_authorisiert]}"
+          contractPartnerNumber: "{XL[Vorbereitung.Delete Request_SVC.contractPartnerNumber]}"
+          ordinationNumber: "{XL[Vorbereitung.Delete Request_SVC.ordinationNumber]}"
+
+      # DELETE deleteProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "'Vorbereitung.Delete Request_SVC.AKTIV' != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Vorbereitung.Delete Response_Drei.StatusCode]}"
+        response: delete_deleteprovision_request_response
+
+      # DELETE deleteProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Vorbereitung.Delete Request_A1.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.XLVorbereitung.Delete Request_A1.Resource.delete_deleteprovision_request
+        response: delete_deleteprovision_request_response
+        parameters: 
+          Authorization: "{XL[Vorbereitung.Delete Request_A1.Provider_authorisiert]}"
+          contractPartnerNumber: "{XL[Vorbereitung.Delete Request_A1.contractPartnerNumber]}"
+          ordinationNumber: "{XL[Vorbereitung.Delete Request_A1.ordinationNumber]}"
+
+      # DELETE deleteProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "'Vorbereitung.Delete Request_A1.AKTIV' != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Vorbereitung.Delete Response_A1.StatusCode]}"
+        response: delete_deleteprovision_request_response
+
+      # POST createProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Durchführung.POST createProvision_Request_1.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.clv-provider.v1.contract-partners.contractPartnerNumber.provisions.post_createprovision_request
+        response: post_createprovision_request_response
+        parameters: 
+          Authorization: "{XL[Durchführung.POST createProvision_Request_1.Provider_authorisiert]}"
+          ordinationNumber: "{XL[Durchführung.POST createProvision_Request_1.ordinationNumber]}"
+          redundancy: "{XL[Durchführung.POST createProvision_Request_1.redundancy]}"
+          connectionNumber: "{XL[Durchführung.POST createProvision_Request_1.connectionNumber]}"
+          clientIp: "{XL[Durchführung.POST createProvision_Request_1.clientIp]}"
+
+      # POST createProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "'Durchführung.POST createProvision_Request_1.AKTIV' != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Durchführung.POST createProvision_Response_1.StatusCode]}"
+        response: post_createprovision_request_response
+
+
+  
+      # Execute SQL Query
+        - type: SQL
+          op: EXEC
+          condition: "Vorbereitung.SQL_Statetment_Vorgänger != NULL"
+          command: "{XL[Vorbereitung.SQL_Statetment_Vorgänger]}"
+          response: tbox_db_expert_module__update_res
+
+
+
+  
+      # Execute SQL Query
+        - type: SQL
+          op: EXEC
+          condition: "Vorbereitung.SQL_Statetment_Nachfolger != NULL"
+          command: "{XL[Vorbereitung.SQL_Statetment_Nachfolger]}"
+          response: tbox_db_expert_module__update_res
+
+
+
+  
+      # Execute SQL Query
+        - type: SQL
+          op: EXEC
+          condition: "Vorbereitung.SQL_Statetment_Anschluss != NULL"
+          command: "{XL[Vorbereitung.SQL_Statetment_Anschluss]}"
+          response: tbox_db_expert_module__update_anschluss_res
+
+
+      # GET listOrdinations Request
+      - type: REST
+        op: EXEC
+        condition: "'Durchführung.GET listOrdinations.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.XLDurchführung.GET listOrdinations.Resource.get_listordinations_request
+        response: get_listordinations_request_response
+        parameters: 
+          contractPartnerNumber: "{XL[Durchführung.GET listOrdinations.contractPartnerNumber]}"
+          Authorization: "{XL[Durchführung.GET listOrdinations.Provider_authorisiert]}"
+
+      # GET getProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Durchführung.GET getProvision_Request.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.clv-provider.v1.contract-partners.contractPartnerNumber.provisions.ordinationNumber.get_getprovision_request
+        response: get_getprovision_request_response
+        parameters: 
+          contractPartnerNumber: "{XL[Durchführung.GET getProvision_Request.contractPartnerNumber]}"
+          ordinationNumber: "{XL[Durchführung.GET getProvision_Request.ordinationNumber]}"
+          Authorization: "{XL[Durchführung.GET getProvision_Request.Provider_authorisiert]}"
+
+      # GET getProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "'Durchführung.GET getProvision_Request.AKTIV' != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Durchführung.GET getProvision_Response.StatusCode]}"
+        response: get_getprovision_request_response
+
+      # POST createProvision Request
+      - type: REST
+        op: EXEC
+        condition: "'Durchführung.POST createProvision_Request.AKTIV' != NULL"
+        endpoint: "{B[URL]}"
+        command: rest.clv-provider.v1.contract-partners.contractPartnerNumber.provisions.post_createprovision_request
+        response: post_createprovision_request_response
+        parameters: 
+          Authorization: "{XL[Durchführung.POST createProvision_Request.Provider_authorisiert]}"
+          ordinationNumber: "{XL[Durchführung.POST createProvision_Request.ordinationNumber]}"
+          redundancy: "{XL[Durchführung.POST createProvision_Request.redundancy]}"
+          connectionNumber: "{XL[Durchführung.POST createProvision_Request.connectionNumber]}"
+          clientIp: "{XL[Durchführung.POST createProvision_Request.clientIp]}"
+
+      # POST createProvision Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' == "200 OK") AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Durchführung.POST createProvision_Response.StatusCode]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[Durchführung.POST createProvision_Response.StatusCode]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.type]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.href]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.title]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.status]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.detail]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.in]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.name]}"
+        response: post_createprovision_request_response
+
+      # POST createProvision Response ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "('Durchführung.POST createProvision_Response.StatusCode' != "200 OK" OR 'Durchführung.POST createProvision_Response.StatusCode' != NULL) AND ('Durchführung.POST createProvision_Request.AKTIV' != NULL)"
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{XL[Durchführung.POST createProvision_Response.ERROR_Response.issues.value]}"
+        response: post_createprovision_request_response
+
+
+  
+      # Execute SQL Query
+        - type: SQL
+          op: EXEC
+          condition: "Nachbereitung.SQL_Statetment_Anschluss != NULL"
+          command: "{XL[Nachbereitung.SQL_Statetment_Anschluss]}"
+          response: tbox_db_expert_module__update_anschluss_res
+

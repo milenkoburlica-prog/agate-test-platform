@@ -1,0 +1,774 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "01KNAFZ09DC8X0TFF09HCZZ82P",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "PST_XML_VUNEUTESTNR20260101_Create_2_OK_NOK_Bestande"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KNAF9FWYDT0Q8QPMCD4SKCPR" ],
+    "Library" : [ "01KNAFYJ56D0BDKZQQ64YKC17X" ],
+    "UsedBy" : [ "01KV5E9EZ34FY3C1VGEVSGTQZ3" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Clean output folder",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWYDT0Q8QPMCD4SKCPT",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C del /q {B[PST_BASE_PATH_TEMP_OUTPUT]}\\*",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Clean temp folder",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPBH2PKW3NAT59FC02FX45Z4",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C del /q {B[PST_BASE_PATH_TEMP_TEMP]}\\*",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Start encrypting",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWYDT0Q8QPMCD4SKCQ1",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} encrypt -k {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_01]} -K {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_02]} -s {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_03]} -i {B[XML_DATEI_INPUT_01]} -o {B[PST_BASE_PATH_TEMP_OUTPUT]}\\bestand1.xml",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Start encrypting",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWYDT0Q8QPMCD4SKCQQ",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} encrypt -k {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_01]} -K {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_02]} -s {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_03]} -i {B[XML_DATEI_INPUT_01]} -o {B[PST_BASE_PATH_TEMP_OUTPUT]}\\bestand2.xml",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Start pdg",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWZ1DGX4780WMYSRVRY",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\{B[LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} pdg -d {B[PST_BASE_PATH_TEMP_OUTPUT]}\\ -i \"\"\"\"text/xml\"\"\"\" -k 07 -p VU -u 34 -z NY",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Get DDAU Filename",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWZ1DGX4780WMYSRVSP",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --directory {B[PST_BASE_PATH_TEMP_OUTPUT]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove EOL",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWZ1DGX4780WMYSRVT2",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Read/Create File",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAF9FWZ1DGX4780WMYSRVTB",
+  "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+  "module" : "TBox Read/Create File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Get DDAU Filename",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAPG0B65Q7DX2AYWTJXE2J1",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --file {B[PST_BASE_PATH_TEMP_OUTPUT]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove EOL",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAPG0B65Q7DX2AYWTJXE2JD",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Read/Create File",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KNAPG0B65Q7DX2AYWTJXE2JP",
+  "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+  "module" : "TBox Read/Create File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - clean temp folder",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H6Z03DAV7BEHTBXSPTF",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C del /Q /S {B[PST_BASE_PATH_TEMP_TEMP]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - copy gz from output to temp",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H6Z03DAV7BEHTBXSPTT",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C copy {B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]} {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - unzip ddausNY frm output to temp",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H6Z03DAV7BEHTBXSPV4",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --unpack {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - copy prepared packageinfo",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0J1",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C copy /Y {B[PST_TEST_DATA_BASE_DIR]}\\{B[TSV_DATEI_INPUT_11]} {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[TSV_DATEI_INPUT_12]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0JC",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "referenze1",
+    "value" : "{RND[12]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "referenze1",
+    "toscaPathID" : "01KPDC7H701Y1Q1FVBR8DMR0JD"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Update ZusaetzlOrdnungsbegriff1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0JE",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --input {B[PST_BASE_PATH_TEMP_TEMP]}\\dd{B[PROJECT_KZ]}.paketinfo.xml --nodekey ZusaetzlOrdnungsbegriff --replaceplaceholder $ZusaetzlOrdnungsbegriff1 --replacewith {B[referenze2]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Update ReferenzNummer1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0K0",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --input {B[PST_BASE_PATH_TEMP_TEMP]}\\dd{B[PROJECT_KZ]}.paketinfo.xml --nodekey ReferenzNummer --replaceplaceholder $ReferenzNummer1 --replacewith {B[referenze1]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0KJ",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "referenze2",
+    "value" : "{RND[12]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "referenze2",
+    "toscaPathID" : "01KPDC7H701Y1Q1FVBR8DMR0KK"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Update ZusaetzlOrdnungsbegriff2",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0KM",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --input {B[PST_BASE_PATH_TEMP_TEMP]}\\dd{B[PROJECT_KZ]}.paketinfo.xml --nodekey ZusaetzlOrdnungsbegriff --replaceplaceholder $ZusaetzlOrdnungsbegriff2 --replacewith {B[referenze2]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Update ReferenzNummer2",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0M6",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --input {B[PST_BASE_PATH_TEMP_TEMP]}\\dd{B[PROJECT_KZ]}.paketinfo.xml --nodekey ReferenzNummer --replaceplaceholder $ReferenzNummer2 --replacewith {B[referenze2]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - zip ddausNY frm output to temp",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H701Y1Q1FVBR8DMR0MR",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --pack {B[PST_BASE_PATH_TEMP_TEMP]} --format NY",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Get DDAU EU Filename",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H734CT67QEN8QHNX5HV",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\ddaus_file_name_neu.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --file {B[PST_BASE_PATH_TEMP_TEMP]}\\",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Remove EOL",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H734CT67QEN8QHNX5J7",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name_neu.txt -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Read/Create File",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H734CT67QEN8QHNX5JG",
+  "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+  "module" : "TBox Read/Create File",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Copy file",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KPDC7H734CT67QEN8QHNX5JM",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C copy /Y {B[PST_BASE_PATH_TEMP_TEMP]}\\{B[DDAU_FILE_NAME_NEU]} {B[PST_BASE_PATH_TEMP_OUTPUT]}\\{B[DDAU_FILE_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+} ]

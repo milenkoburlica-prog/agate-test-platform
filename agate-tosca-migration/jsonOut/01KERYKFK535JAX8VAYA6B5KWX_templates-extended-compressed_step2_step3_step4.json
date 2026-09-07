@@ -1,0 +1,541 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KWX",
+  "Attributes" : {
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "DMP_V10",
+    "TestConfigurationParameters" : "H4sIAAAAAAAACoyPPQ7CMAyFrxJl529jaOlQAQtCVVvBnBZTRUrj4CSIno2BI3EFXATMjO+9z/bz8/5IsltvxBXIa7SpXEznUoBt8aRtl8oYzpOlzFZJDT7kaM+6i6QCo4Ui1UMAytEYaEeLqbwgdEBhEHtOU3mExgNddQtr22kLO+xKuEReVoJ3aD1IcVAmMlpTHIX2ujEsN8qMYRUdgfc5uuHnvQfqwTFVBeKeH6uCT5EtYXSplGJ9c0ihxipyjfC9MVsls7/+eQEAAP//AwAIjPE/HwEAAA==",
+    "TCProperties" : "H4sIAAAAAAAACsySsU4DMQyGXyXyDgUmhoaqnApiqVDvgDnXM1VQLo4cB/X6agw8Eq+AQeVggJmun/37/wa/vbxOZ9s+mGfk7ClaOD0+AYNxTZ2PGwtFHo/OYXYxbapbpoQsHnNFIeBadP8HH8zS9WjhErOXHTKYexeKgiVxq/MHF7ug0GffBsUNFwSzQtdRDIOFKxeygrokxqwV6Zt9HmqGpKlaWL32qMa9xjVTSRbALLaJWBqqS5tRvkomv2jqudFwXoR6J2qmC4ejeBOzuLgbNRfV/K45Oxy/FW4+ejQ8Kj65f9Ob/PGh7wAAAP//AwAcqYmk4wIAAA==",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "dmp_11_isDMPPatient",
+    "IncludeForSynchronization" : "1",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "134415",
+    "DerivedFromName" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TemplateDetail" : [ "01KERYKFK6C163BG3V8HT7F57T" ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "01KERYKFK535JAX8VAYA6B5KWY", "01KERYKFK535JAX8VAYA6B5KX4", "01KERYKFK535JAX8VAYA6B5KXR", "01KERYKFK6C163BG3V8HT7F57N" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "01KERYKFK468Y3V6W4B0F8JE7C" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KX4",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Vorbereitung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KERYKFK535JAX8VAYA6B5KWX" ],
+    "Items" : [ "01KERYKFK535JAX8VAYA6B5KX5", "01KERYKFK535JAX8VAYA6B5KX8", "01KERYKFK535JAX8VAYA6B5KXH", "01KERYKFK535JAX8VAYA6B5KXM" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KX5",
+  "Attributes" : {
+    "Condition" : "Einschreiben.SVT != NULL",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche DMP Patient aus DB_Reference - SVNummer.SVNR"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KERYKFK535JAX8VAYA6B5KX6" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a04cdb7-ddfe-a68e-aaf6-54978e354e05" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KX4" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{XL[SVPerson.SVNR]}",
+    "ExplicitName" : "VSNR"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KX8",
+  "Attributes" : {
+    "Condition" : "Einschreiben.SVT != NULL",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "schreibeDMPPatientEin_Reference - SVNummer.SVNR"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KERYKFK535JAX8VAYA6B5KX9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a04cdb7-db89-7158-f019-48bf7c2e917b" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KX4" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{XL[SVPerson.SVNR]}",
+    "ExplicitName" : "VSNR"
+  }, {
+    "Value" : "{XL[Vertragspartner.VPNR]}",
+    "ExplicitName" : "VPNR"
+  }, {
+    "Value" : "Einschreibung",
+    "ExplicitName" : "EingabeArtCode"
+  }, {
+    "Value" : "{XL[Einschreiben.SVT]}",
+    "ExplicitName" : "SVT"
+  }, {
+    "Value" : "{XL[Einschreiben.FG]}",
+    "ExplicitName" : "Fachgebiet"
+  }, {
+    "Value" : "01",
+    "ExplicitName" : "ProgrammCode"
+  }, {
+    "Value" : "{DATE[][][yyyy-MM-dd]}",
+    "ExplicitName" : "BEAntragsdatum"
+  }, {
+    "Value" : "{XL[EingabeArtUebersteuert_Bool]}",
+    "ExplicitName" : "EingabeArtUebersteuert_Bool"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KXH",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer_VPNR/Ord_id"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KERYKFK535JAX8VAYA6B5KXJ", "01KERYKFK535JAX8VAYA6B5KXK" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KX4" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KXJ",
+    "Value" : "{XL[Vertragspartner.VPNR]}",
+    "ExplicitName" : "B_Karte",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "B_Karte",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KXJ"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KXK",
+    "Value" : "{XL[Vertragspartner.Ord_id]}",
+    "ExplicitName" : "B_OrdinationsId",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "B_OrdinationsId",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KXK"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KXM",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KERYKFK535JAX8VAYA6B5KXN" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a038dd7-d4a3-b171-7df8-b09108480534" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KX4" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{B[B_Karte]}",
+    "ExplicitName" : "VpNummer"
+  }, {
+    "Value" : "{B[B_OrdinationsId]}",
+    "ExplicitName" : "ORD_ID"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KXR",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Durchführung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KERYKFK535JAX8VAYA6B5KWX" ],
+    "Items" : [ "01KERYPEFB875CW5XH1XAKEHQG", "01KERYPP1S4Z08V7W40FQTXHHW", "01KERYKFK535JAX8VAYA6B5KY0" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KERYPEFB875CW5XH1XAKEHQG",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "isDMPPatient Request V11"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KERYY4CM0TD17F9X901G5PV6", "01KERYYBA5E9NMY7TJ85W571MM", "01KERYYGW7CYJG21D21XBQTRM0" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "01KERVN1SDFMCE5KM3AB0CXKDR" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KXR" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYY4CM0TD17F9X901G5PV6",
+    "Value" : "{B[B_URL_HIGH]}",
+    "ExplicitName" : "Endpoint",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Endpoint",
+    "ToscaPathID" : "01KERYY4CM0TD17F9X901G5PV6"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='isDMPPatient']/*[local-name()='dialogId']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYYBA5E9NMY7TJ85W571MM",
+    "Value" : "{XL[dialogId]}",
+    "ExplicitName" : "dialogId",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "dialogId",
+    "ToscaPathID" : "01KERYYBA5E9NMY7TJ85W571MM"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='isDMPPatient']/*[local-name()='svNummer']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYYGW7CYJG21D21XBQTRM0",
+    "Value" : "{XL[SVPerson.SVNR]}",
+    "ExplicitName" : "svNummer",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "svNummer",
+    "ToscaPathID" : "01KERYYGW7CYJG21D21XBQTRM0"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KERYPP1S4Z08V7W40FQTXHHW",
+  "Attributes" : {
+    "Condition" : "DmpInvalidParameterException == NULL",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "isDMPPatient Response V11"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KERZ180FBVK9H7874Y6A8ETH", "01KERZ1HF9D1BTP21QYTMWVYWY" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "01KERVN1SDFMCE5KM3AB0CXKDW" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KXR" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERZ180FBVK9H7874Y6A8ETH",
+    "Value" : "200 OK",
+    "ExplicitName" : "StatusCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "StatusCode",
+    "ToscaPathID" : "01KERZ180FBVK9H7874Y6A8ETH"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='isDMPPatientResponse']/*[local-name()='return']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERZ1HF9D1BTP21QYTMWVYWY",
+    "Value" : "{XL[IstPatient]}",
+    "ExplicitName" : "return",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "return",
+    "ToscaPathID" : "01KERZ1HF9D1BTP21QYTMWVYWY"
+  }, {
+    "ModuleAttributeSurrogate" : "01KERVRZAH8K0SB2YQSRYD6JTV",
+    "Value" : "{NULL}",
+    "ExplicitName" : "ResponseTime",
+    "ActionMode" : "Verify"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KERYKFK535JAX8VAYA6B5KY0",
+  "Attributes" : {
+    "Condition" : "DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "DMP Exception Response V11"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KERYKFK535JAX8VAYA6B5KY1", "01KERYKFK535JAX8VAYA6B5KY2", "01KERYKFK6C163BG3V8HT7F579", "01KERYKFK6C163BG3V8HT7F57D", "01KERYKFK6C163BG3V8HT7F57H" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "01KERTP6EY5M8RFM773ERM4AVJ" ],
+    "ParentFolder" : [ "01KERYKFK535JAX8VAYA6B5KXR" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KY1",
+    "Value" : "500 Internal Server Error",
+    "ExplicitName" : "StatusCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "StatusCode",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KY1"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KY2",
+    "Value" : "{XL[DialogException]}",
+    "ExplicitName" : "DialogException",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "DialogException",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KY2"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KY3",
+    "Value" : "{XL[DialogException.InfoCode]}",
+    "ExplicitName" : "code",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DialogException.code",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KY2.01KERYKFK535JAX8VAYA6B5KY3"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KY4",
+    "Value" : "{XL[DialogException.ExceptionCode]}",
+    "ExplicitName" : "errorCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DialogException.errorCode",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KY2.01KERYKFK535JAX8VAYA6B5KY4"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK535JAX8VAYA6B5KY5",
+    "Value" : "*{XL[DialogException.InfoText]}*",
+    "ExplicitName" : "message",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DialogException.message",
+    "ToscaPathID" : "01KERYKFK535JAX8VAYA6B5KY2.01KERYKFK535JAX8VAYA6B5KY5"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F579",
+    "Value" : "{XL[DmpException]}",
+    "ExplicitName" : "DmpException",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpException",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F579"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='code']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57A",
+    "Value" : "{XL[DmpException.InfoCode]}",
+    "ExplicitName" : "code",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpException.code",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F579.01KERYKFK6C163BG3V8HT7F57A"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='errorCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57B",
+    "Value" : "{XL[DmpException.ExceptionCode]}",
+    "ExplicitName" : "errorCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpException.errorCode",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F579.01KERYKFK6C163BG3V8HT7F57B"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='message']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57C",
+    "Value" : "*{XL[DmpException.InfoText]}*",
+    "ExplicitName" : "message",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpException.message",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F579.01KERYKFK6C163BG3V8HT7F57C"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57D",
+    "Value" : "{XL[DmpInvalidParameterException]}",
+    "ExplicitName" : "DmpInvalidParameterException",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpInvalidParameterException",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57D"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57E",
+    "Value" : "{XL[DmpInvalidParameterException.InfoCode]}",
+    "ExplicitName" : "code",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpInvalidParameterException.code",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57D.01KERYKFK6C163BG3V8HT7F57E"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57F",
+    "Value" : "{XL[DmpInvalidParameterException.ExceptionCode]}",
+    "ExplicitName" : "errorCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpInvalidParameterException.errorCode",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57D.01KERYKFK6C163BG3V8HT7F57F"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57G",
+    "Value" : "*{XL[DmpInvalidParameterException.InfoText]}*",
+    "ExplicitName" : "message",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "DmpInvalidParameterException.message",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57D.01KERYKFK6C163BG3V8HT7F57G"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57H",
+    "Value" : "{XL[AccessException]}",
+    "ExplicitName" : "AccessException",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "AccessException",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57H"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57J",
+    "Value" : "{XL[AccessException.InfoCode]}",
+    "ExplicitName" : "code",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "AccessException.code",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57H.01KERYKFK6C163BG3V8HT7F57J"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57K",
+    "Value" : "{XL[AccessException.ExceptionCode]}",
+    "ExplicitName" : "errorCode",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "AccessException.errorCode",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57H.01KERYKFK6C163BG3V8HT7F57K"
+  }, {
+    "XmlPath" : "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KERYKFK6C163BG3V8HT7F57M",
+    "Value" : "*{XL[AccessException.InfoText]}*",
+    "ExplicitName" : "message",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "AccessException.message",
+    "ToscaPathID" : "01KERYKFK6C163BG3V8HT7F57H.01KERYKFK6C163BG3V8HT7F57M"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KERYKFK6C163BG3V8HT7F57N",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Nachbearbeitung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KERYKFK535JAX8VAYA6B5KWX" ],
+    "Items" : [ "01KERYKFK6C163BG3V8HT7F57P" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KERYKFK6C163BG3V8HT7F57P",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "dialogClose_auth1_Reference"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KERYKFK6C163BG3V8HT7F57Q" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a0ae521-a4bb-d67d-c70e-2d019bfb33f2" ],
+    "ParentFolder" : [ "01KERYKFK6C163BG3V8HT7F57N" ],
+    "DerivedFrom" : [ "3a0d4e18-e5c8-676e-9d75-c1750e4230e2" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{XL[Vertragspartner.VPNR]}",
+    "ExplicitName" : "VpNummer"
+  }, {
+    "Value" : "{XL[Vertragspartner.Ord_id]}",
+    "ExplicitName" : "OrdinationsId"
+  } ]
+} ]

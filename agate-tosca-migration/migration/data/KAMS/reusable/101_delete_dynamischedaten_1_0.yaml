@@ -1,0 +1,9 @@
+steps:
+========== REUSABLE CALL CREATE ==========
+[CALL-CREATE] step name        = execute-psql-script_1_0_Reference - DELETE dynamischedaten
+[CALL-CREATE] reusable rawName = 'execute-psql-script_atomic_1_0'
+[CALL-CREATE] generated command = 'reusable.execute_psql_script_atomic_1_0'
+==========================================
+
+      - type: CALL
+        command: 'reusable.execute_psql_script_atomic_1_0'

@@ -1,0 +1,209 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "01KRGT6HKP3CSWZXGTBN7Q1AZ5",
+  "Attributes" : {
+    "IncludeForSynchronization" : "1",
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "132717",
+    "DerivedFromName" : "",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "PST_REPORT_FF_002_fails_when_output_directory_does_not_exist_PST_F004"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "01KVDMHGDRBHSHS5HRN481FRTZ", "01KVDMHGDS70FJXSA7PMY6FCKP", "01KVDMHGDS70FJXSA7PMY6FCM9" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "01KR37D860F3RCGVXH1GSX7JA1" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMHGDRBHSHS5HRN481FRV0",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "TC_ID",
+    "value" : "PST_REPORT_GF_002",
+    "actionMode" : "Insert",
+    "toscaPath" : "TC_ID",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV1"
+  }, {
+    "name" : "tc_name",
+    "value" : "{B[TC_ID]}_{DATETIME}",
+    "actionMode" : "Insert",
+    "toscaPath" : "tc_name",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV2"
+  }, {
+    "name" : "TEST_DATA_PACKET_DIR",
+    "value" : "{B[TC_ID]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "TEST_DATA_PACKET_DIR",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV3"
+  }, {
+    "name" : "referenze2",
+    "value" : "XX",
+    "actionMode" : "Insert",
+    "toscaPath" : "referenze2",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV4"
+  }, {
+    "name" : "task",
+    "value" : "job",
+    "actionMode" : "Insert",
+    "toscaPath" : "task",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV5"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMHGDRBHSHS5HRN481FRV7",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "logging_path",
+    "value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "logging_path",
+    "toscaPathID" : "01KVDMHGDRBHSHS5HRN481FRV8"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - Create Logging DIR",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMHGDRBHSHS5HRN481FRV9",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "ExitCode" : {
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    },
+    "arguments" : {
+      "value" : "/C mkdir {B[logging_path]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "01_execute_ssh_Reference delete report file",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMHGDS70FJXSA7PMY6FCKQ",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "verify-no",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "rm {B[PST_OUTPUT_FOLDER]}/report1.txt",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "Verify" : {
+      "value" : "",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "02_execute_ssh_Reference pst report -dateFrom=20260601 -dateTo=20260630",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMHGDS70FJXSA7PMY6FCKX",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "verify-contains",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "pst report -dateFrom={DATE[][][yyyyMM]}01 -dateTo={DATE[][][yyyyMM]}30 -file={B[PST_OUTPUT_FOLDER]}/nonexis/report1.txt ;echo $?",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "Verify" : {
+      "value" : "0",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "04_execute_ssh_Reference check report file",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "01KVDMM3XC70HEDX482EGJAJZ6",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "reusableName" : "01_execute_ssh",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : {
+    "Option" : {
+      "value" : "verify-contains",
+      "actionMode" : "BusinessParameter"
+    },
+    "Command" : {
+      "value" : "ls -ltr {B[PST_OUTPUT_FOLDER]}/nonexis/report1.txt | wc -l",
+      "actionMode" : "BusinessParameter"
+    },
+    "Servicename" : {
+      "value" : "kvw-pst-{B[PST_ID]}",
+      "actionMode" : "BusinessParameter"
+    },
+    "Verify" : {
+      "value" : "No such file or directory",
+      "actionMode" : "BusinessParameter"
+    }
+  }
+} ]

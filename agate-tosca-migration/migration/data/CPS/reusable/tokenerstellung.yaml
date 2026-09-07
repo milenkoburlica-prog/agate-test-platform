@@ -1,0 +1,15 @@
+name: tokenerstellung
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: PW_Dir
+        value: "{S[SVC.Projekt root path]}\Tosca\Daten\Files\KVW\CLV_NEU"
+
+
+      # Execute PowerShell Command: TBox Start Program
+      - type: CMD
+        op: EXEC
+        command: "{b[pw_dir]}powershell -Command .\\{R[tokenProvider]} "
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File

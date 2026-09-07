@@ -1,0 +1,137 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "3a1a9ce5-92f0-ca06-db54-445081431b99",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "101_DELETE dynamischedaten_1_0"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a1a9ce4-fe98-de00-365d-f047f68f9e42"
+      ],
+      "Library": [
+        "3a1a0f6c-dce0-c65d-3aca-89d59f51c7ec"
+      ],
+      "UsedBy": [
+        "01KCP6VGJ3AXM27V8ZZ4HVX0KC",
+        "01M1BBZFRSE1R0KEDR5XTAEQZM"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a1a9ce4-fe98-de00-365d-f047f68f9e42",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "DELETE dynamischedaten Lib"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a1a9260-9cba-2670-1220-402c3d1c39a5"
+      ],
+      "ParentFolder": [
+        "3a1a9ce5-92f0-ca06-db54-445081431b99"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolderReference",
+    "Surrogate": "3a1a9260-9cba-2670-1220-402c3d1c39a5",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "execute-psql-script_1_0_Reference - DELETE dynamischedaten"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParameterLayerReference": [
+        "3a1a9260-bc6a-e765-30d6-61acd7c75724"
+      ],
+      "ExecutionContainerLogs": [],
+      "ReusedItem": [
+        "3a1a13da-ee7f-c123-3344-ef1ffbe91910"
+      ],
+      "ParentFolder": [
+        "3a1a9ce4-fe98-de00-365d-f047f68f9e42"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "ParameterLayerReference",
+    "Surrogate": "3a1a9260-bc6a-e765-30d6-61acd7c75724",
+    "Attributes": {
+      "Name": "Business Parameters"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepFolderReference": [
+        "3a1a9260-9cba-2670-1220-402c3d1c39a5"
+      ],
+      "AllParameterReferences": [
+        "3a1a9260-bc78-c3b2-1e2d-025cba1fd241"
+      ],
+      "ParameterLayer": [
+        "3a1a13da-ef3a-93f2-2098-f7a13339124f"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "ParameterReference",
+    "Surrogate": "3a1a9260-bc78-c3b2-1e2d-025cba1fd241",
+    "Attributes": {
+      "Value": "001_dynamsicheDatabasetable_delete.psql"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParameterLayerReference": [
+        "3a1a9260-bc6a-e765-30d6-61acd7c75724"
+      ],
+      "Parameter": [
+        "3a1a13da-ef9d-7257-b7da-e85397adc0ad"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "Parameter",
+    "Surrogate": "3a1a13da-ef9d-7257-b7da-e85397adc0ad",
+    "Attributes": {
+      "Name": "psqlFilename",
+      "ValueSelectionGroup": "",
+      "Description": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "Properties": [],
+      "ParameterLayer": [
+        "3a1a13da-ef3a-93f2-2098-f7a13339124f"
+      ],
+      "ParameterReferences": [
+        "3a1a9260-bc78-c3b2-1e2d-025cba1fd241",
+        "3a1a9cc6-47fb-5418-b46c-29f5d064af7d",
+        "3a1a9cc7-409f-ec06-cad5-bcfb6bea4e1b",
+        "3a1a9cc7-4cd0-ddd1-619b-a787378f6a60"
+      ],
+      "Parameters": []
+    }
+  }
+]

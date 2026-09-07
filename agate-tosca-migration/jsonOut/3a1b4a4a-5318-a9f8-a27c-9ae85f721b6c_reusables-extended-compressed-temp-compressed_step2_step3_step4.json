@@ -1,0 +1,75 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a4a-5318-a9f8-a27c-9ae85f721b6c",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Copy_TxFilesFromKams-SS40Simu"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1addb9-6c35-336b-2306-7005a26cf8ab" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P5W" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1addb9-6c35-336b-2306-7005a26cf8ab",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Copy Folder _TxFilesFromKams --> SS40Simu"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1addb9-6c35-69b4-f0da-5b6e07ff61bd", "3a1addb9-6c35-3508-1cfd-1eeb182483a3", "3a1addb9-6c35-ba68-d0d1-ae36e00c6d2b" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39f0c238-4cfc-28d8-37c6-5d57c6f694ec" ],
+    "ParentFolder" : [ "3a1b4a4a-5318-a9f8-a27c-9ae85f721b6c" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1addb9-6c35-69b4-f0da-5b6e07ff61bd",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Source Path",
+    "ToscaPathID" : "3a1addb9-6c35-69b4-f0da-5b6e07ff61bd"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1addb9-6c35-3508-1cfd-1eeb182483a3",
+    "Value" : "{S[SVC.Projekt root path]}\\Tosca\\Tools\\{B[Simulator]}\\files",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Target Path",
+    "ToscaPathID" : "3a1addb9-6c35-3508-1cfd-1eeb182483a3"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1addb9-6c35-ba68-d0d1-ae36e00c6d2b",
+    "Value" : "True",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Overwrite",
+    "ToscaPathID" : "3a1addb9-6c35-ba68-d0d1-ae36e00c6d2b"
+  } ]
+} ]

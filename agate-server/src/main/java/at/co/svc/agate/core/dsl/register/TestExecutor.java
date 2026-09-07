@@ -17,6 +17,7 @@ import at.co.svc.agate.core.interfaces.TestStepEngine;
 import at.co.svc.agate.engine.buffer.BufferEngine;
 import at.co.svc.agate.engine.call.CallEngine;
 import at.co.svc.agate.engine.cmd.CmdEngine;
+import at.co.svc.agate.engine.file.FileEngine;
 import at.co.svc.agate.engine.gui.GuiEngine;
 import at.co.svc.agate.engine.json.JsonEngine;
 import at.co.svc.agate.engine.oc.OcCmdEngine;
@@ -56,6 +57,7 @@ public class TestExecutor {
         engines.add(new JsonEngine());
         engines.add(new BufferEngine());
         engines.add(new PdfEngine());
+        engines.add(new FileEngine());
         engines.add(new CallEngine(this::executeSingleStep));
         
     }

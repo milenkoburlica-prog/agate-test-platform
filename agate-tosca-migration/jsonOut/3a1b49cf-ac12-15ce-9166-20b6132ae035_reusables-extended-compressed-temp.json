@@ -1,0 +1,358 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b49cf-ac12-15ce-9166-20b6132ae035",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Cleanup_TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c", "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "Library" : [ "3a1b49cb-54f2-9f66-25d6-3041daa326d8" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P5Q", "01M1BBZFRW7P6EHPXQPNECS7D4" ]
+  },
+  "BusinessParameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b49cf-ad34-5519-05fc-1862ab817f9c",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program  - Remove all Subfolders in TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b49cf-ad34-254f-cb37-d352ae8fe3ec", "3a1b49cf-ad34-e8f9-ad43-99d8caf66da0", "3a1b49cf-ad34-4ccd-70b5-12cd29b72a17", "3a1b49cf-ad34-f629-64cb-e184404612f0" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1b49cf-ac12-15ce-9166-20b6132ae035" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-254f-cb37-d352ae8fe3ec",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "cmd",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-1bc5-1af2-09cd056d5f96" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-e8f9-ad43-99d8caf66da0",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-c5a7-666c-0683771a33fc" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-4ccd-70b5-12cd29b72a17",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "{NULL}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c" ],
+    "SubValues" : [ "3a1b49cf-ad34-750b-a866-31a84a5993cd", "3a1b49cf-ad34-8308-47f3-3c30a8c16340", "3a1b49cf-ad34-b598-14de-cf02b5152506" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-be3c-2fff-7ad6b553cb24" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-750b-a866-31a84a5993cd",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "/C",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-4ccd-70b5-12cd29b72a17" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-b598-14de-cf02b5152506",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "for /D %i in ({B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\*) do rmdir /S /Q \"\"\"\"%i\\\"\"\"\"",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-4ccd-70b5-12cd29b72a17" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-f629-64cb-e184404612f0",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "True",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-5519-05fc-1862ab817f9c" ],
+    "SubValues" : [ "3a1b49cf-ad34-708e-639f-9749057d79e1" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-95dd-f5e7-223624b8941b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-708e-639f-9749057d79e1",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "69",
+    "Operator" : "1",
+    "Value" : "0",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-f629-64cb-e184404612f0" ],
+    "ModuleAttribute" : [ "39ef0b81-cb89-981e-88c4-38f385243957" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b49cf-ad34-6724-54ea-7f5561c9972e",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Remove all Files in TxFilesToKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b49cf-ad34-34f3-338d-a4111e7b12b7", "3a1b49cf-ad34-61f0-af72-b12752744785", "3a1b49cf-ad34-38fd-9b44-e1c1a27a4b8b", "3a1b49cf-ad34-a46f-2f87-947ab2ca7558" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "3a1b49cf-ac12-15ce-9166-20b6132ae035" ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-34f3-338d-a4111e7b12b7",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "cmd",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-1bc5-1af2-09cd056d5f96" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-61f0-af72-b12752744785",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "SubValues" : [ ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-c5a7-666c-0683771a33fc" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-38fd-9b44-e1c1a27a4b8b",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "{NULL}",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "SubValues" : [ "3a1b49cf-ad34-7623-afe4-fc593dd6fa85", "3a1b49cf-ad34-892b-6ac1-f0c2b8e13857", "3a1b49cf-ad34-ec03-8211-31bb98efabe3" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-be3c-2fff-7ad6b553cb24" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-7623-afe4-fc593dd6fa85",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "/C",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-38fd-9b44-e1c1a27a4b8b" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-ec03-8211-31bb98efabe3",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "37",
+    "Operator" : "0",
+    "Value" : "del /F /Q {B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\*",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-38fd-9b44-e1c1a27a4b8b" ],
+    "ModuleAttribute" : [ "39ef0b81-ca8f-027d-747e-9d787bd944f5" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-a46f-2f87-947ab2ca7558",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "517",
+    "Operator" : "1",
+    "Value" : "True",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStep" : [ "3a1b49cf-ad34-6724-54ea-7f5561c9972e" ],
+    "SubValues" : [ "3a1b49cf-ad34-7cea-7ac1-5a73cdd9541e" ],
+    "ModuleAttribute" : [ "39ef0b81-ca32-95dd-f5e7-223624b8941b" ],
+    "ExecutionLogs" : [ ]
+  }
+}, {
+  "ObjectClass" : "XTestStepValue",
+  "Surrogate" : "3a1b49cf-ad34-7cea-7ac1-5a73cdd9541e",
+  "Attributes" : {
+    "ExplicitName" : "",
+    "DataType" : "0",
+    "ActionMode" : "69",
+    "Operator" : "1",
+    "Value" : "0",
+    "ActionProperty" : "",
+    "DisabledDescription" : "",
+    "Condition" : "",
+    "Path" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "SubValues" : [ ],
+    "ParentValue" : [ "3a1b49cf-ad34-a46f-2f87-947ab2ca7558" ],
+    "ModuleAttribute" : [ "39ef0b81-cb89-981e-88c4-38f385243957" ],
+    "ExecutionLogs" : [ ]
+  }
+} ]

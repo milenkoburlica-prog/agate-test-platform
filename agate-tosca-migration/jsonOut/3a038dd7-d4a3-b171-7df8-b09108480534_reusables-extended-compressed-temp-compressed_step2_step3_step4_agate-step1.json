@@ -1,0 +1,81 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a038dd7-d4a3-b171-7df8-b09108480534",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "dialogaufbauByOrdid_buffered_auth_1"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a038dd8-ad78-1ee9-6602-c628553316b6" ],
+    "Items" : [ "3a038dd3-6e30-14c3-8020-ca0497f5ae47" ],
+    "Library" : [ "01KKK7EDHR4NG9ZED75Y3692B0" ],
+    "UsedBy" : [ "01KERZT0JX15X64528YG7SJ27A", "3a0d3be6-c415-ca7c-f29e-a7cab8c3ddfb" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VpNummer",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "ORD_ID",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "Setze Buffer dialogId auf gespeicherte dialogId",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a038dd3-6e61-7bb5-d4d0-8a482ac3ace0",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "('{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}'=='{REGEX[\"[A-Za-z0-9]{32}\"]}')",
+  "values" : [ {
+    "name" : "dialogId",
+    "value" : "{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "dialogId",
+    "toscaPathID" : "3a038dd3-6e6a-b7c5-2109-eaf099217b1a"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a1ae-dfe0-b15c-e713-9a37decacaea",
+  "condition" : null,
+  "reusableSurrogate" : "3a038df7-bfe5-d479-49c6-5a2b2e182918",
+  "reusableName" : "dialogaufbauByOrdid_auth_1",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "Speichere dialogId",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a038dd3-6fbf-85f6-1a8a-2ff328fdffed",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "(NOT (('{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}'=='{REGEX[\"[A-Za-z0-9]{32}\"]}')))",
+  "values" : [ {
+    "name" : "dialogId_{PL[VpNummer]}_{PL[ORD_ID]}",
+    "value" : "{B[dialogId]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "dialogId_{PL[VpNummer]}_{PL[ORD_ID]}",
+    "toscaPathID" : "3a038dd3-6fc3-03df-cdbe-8663d5eb56c2"
+  } ]
+} ]

@@ -1,0 +1,98 @@
+name: o_e_card_stecken
+steps:
+      - type: BUFFER
+        op: EXEC
+        name: cardSlot
+        value: "{R[cardSlot]}"
+
+      
+      - type: BUFFER
+        op: EXEC
+        name: GinoCardSlot
+        value: "{B[cardSlot]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesername
+        value: "{E[users.seriennummer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: KartenleserIP
+        value: "{E[users.ginoip]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesersimulator
+        value: "{E[users.serverip]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: cdfName
+        value: "{R[cdfName]}"
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "baseContact"
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "baseNfc"
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "satelliteNfc"
+
+
+      # insert_card Request
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='baseContact')"
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.insert_card.insert_card_request
+        response: rest.simulatord.insert_card.insert_card_request_response
+        parameters:
+          card_slot: "baseContact"
+          cdfName: "{B[cdfName]}"
+
+
+      # insert_card Request
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='baseNfc')"
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.insert_card.insert_card_request
+        response: rest.simulatord.insert_card.insert_card_request_response
+        parameters:
+          card_slot: "baseNfc"
+          cdfName: "{B[cdfName]}"
+
+      # insert_card RequestsatelliteNfc
+      - type: REST
+        op: EXEC
+        condition: "('{B[GinoCardSlot]}'=='satelliteNfc')"
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.insert_card.insert_card_request
+        response: rest.simulatord.insert_card.insert_card_request_response
+        parameters:
+          card_slot: "satelliteNfc"
+          cdfName: "{B[cdfName]}"

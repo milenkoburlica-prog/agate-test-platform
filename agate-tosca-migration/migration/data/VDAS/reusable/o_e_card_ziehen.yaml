@@ -1,0 +1,58 @@
+name: o_e_card_ziehen
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: GinoCardSlot
+        value: "{E[users.card.slot.default]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesername
+        value: "{E[users.seriennummer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: KartenleserIP
+        value: "{E[users.ginoip]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: Kartenlesersimulator
+        value: "{E[users.serverip]}"
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "baseContact"
+
+      # [Merged] remove_card Response is handled by the Request step
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "baseNfc"
+
+      # [Merged] remove_card Response is handled by the Request step
+
+      # remove_card Request
+      - type: REST
+        op: EXEC
+        endpoint: "http://{E[users.serverip]}"
+        command: rest.simulatord.remove_card.remove_card_request
+        response: rest.simulatord.remove_card.remove_card_request_response
+        parameters:
+          card_slot: "satelliteNfc"
+
+      # [Merged] remove_card Response is handled by the Request step

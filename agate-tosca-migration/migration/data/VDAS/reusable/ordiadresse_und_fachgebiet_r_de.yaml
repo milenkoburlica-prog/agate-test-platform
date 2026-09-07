@@ -1,0 +1,61 @@
+name: ordiadresse_und_fachgebiet_r_de
+steps:
+
+      - type: WAIT
+        value: "250"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "(((Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')) AND (Dialogdaten.Ordination.PLZ != NULL)) AND (Dialogdaten.Ordination.PLZ != NULL)"
+        name: Ordi_Add
+        value: "{XL[Dialogdaten.Ordination.PLZ]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "((Dialogdaten.Ordination.Ort_kurz==NULL) AND (((Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')) AND (Dialogdaten.Ordination.Ort != NULL))) AND (Dialogdaten.Ordination.Ort != NULL)"
+        name: Ordi_Add
+        value: "{B[Ordi_Add]} {XL[Dialogdaten.Ordination.Ort]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "((Dialogdaten.Ordination.Ort_kurz!=NULL) AND (((Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')) AND (Dialogdaten.Ordination.Ort != NULL))) AND (Dialogdaten.Ordination.Ort != NULL)"
+        name: Ordi_Add
+        value: "{B[Ordi_Add]} {XL[Dialogdaten.Ordination.Ort_kurz]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "((Dialogdaten.Ordination.Straße_kurz==NULL) AND (((Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')) AND (Dialogdaten.Ordination.Straße != NULL))) AND (Dialogdaten.Ordination.Straße != NULL)"
+        name: Ordi_Add
+        value: "{B[Ordi_Add]}, {XL[Dialogdaten.Ordination.Straße]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "((Dialogdaten.Ordination.Straße_kurz!=NULL) AND (((Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')) AND (Dialogdaten.Ordination.Straße != NULL))) AND (Dialogdaten.Ordination.Straße != NULL)"
+        name: Ordi_Add
+        value: "{B[Ordi_Add]}, {XL[Dialogdaten.Ordination.Straße_kurz]}"
+Unprocessed moduleName=Kopfdatenprüfung
+Unprocessed moduleName=Auswahl der Ordiadresse (004)
+
+
+      - type: WAIT
+        condition: "(Dialogdaten.Vertragspartner.Hat_mehrere_Ordinationen != '1')"
+        value: "500"
+Unprocessed moduleName=Auswahl der Ordiadresse (004)
+Unprocessed moduleName=Kopfdatenprüfung
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)
+Unprocessed moduleName=VP-Datenbestätigung (005)

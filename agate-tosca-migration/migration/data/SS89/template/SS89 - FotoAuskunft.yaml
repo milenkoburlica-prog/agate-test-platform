@@ -1,0 +1,86 @@
+
+    - id: "SS89_-_FotoAuskunft"
+      description: "SS89 - FotoAuskunft"
+      stage: "*"
+      priority: HIGH
+    variables: 
+      {}
+  
+    steps: 
+        - type: BUFFER
+          op: EXEC
+          name: "URL"
+          condition: "(true)"
+          value: "https://svcproxyt.ecard.sozialversicherung.at:9176"
+        - type: BUFFER
+          op: EXEC
+          name: "URL"
+          condition: "(NOT (true))"
+          value: "https://svcproxyt.ecard.sozialversicherung.at:9177"
+        - type: BUFFER
+          op: EXEC
+          name: "URL"
+          condition: "(NOT (true))"
+          value: "{E[env.instanzGr]} ist nicht für testing erlaubt Bitte nutze SYST oder WART."
+        - type: BUFFER
+          op: EXEC
+          name: "LogTimeStamp"
+          condition: ""
+          value: "{DATE[][][yyyy-MM-ddTHH:mm:ss,fff]}"
+
+      # FotoAuskunft Request
+      - type: REST
+        op: EXEC
+        endpoint: "{XL[Endpoint]}"
+        command: rest.ecsrvfotoauskunftservice.fotoauskunft.fotoauskunft_200_ok
+        response: fotoauskunft_200_ok_response
+        parameters: 
+          cin: "{XL[cin]}"
+          vsnr: "{XL[vsnr]}"
+
+      # FotoAuskunft - 200 OK Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "result != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[StatusCode]}"
+        response: fotoauskunft_200_ok_response
+
+      # FotoAuskunft - 200 OK Response - result (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "result != NULL"
+        source: BODY
+        path: "//result"
+        action: "EQUALS"
+        expected: "{XL[result]}"
+        response: fotoauskunft_200_ok_response
+
+      # FotoAuskunft - 500 Bad Request Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "errCode != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "{XL[StatusCode]}"
+        response: fotoauskunft_200_ok_response
+
+      # FotoAuskunft - 500 Bad Request Response - errCode (Verify)
+      - type: REST
+        op: ASSERT
+        condition: "errCode != NULL"
+        source: BODY
+        path: "//errCode"
+        action: "EQUALS"
+        expected: "{XL[errCode]}"
+        response: fotoauskunft_200_ok_response
+
+      - type: CALL
+        command: "reusable.03_openshift_logcheck"
+        parameters: 
+          ServiceCloudName: "ecsrvfotoauskunftservice"
+          MeldungCode: "{XL[errCode]}"
+          MeldungText: "{XL[errorText]}"
+          MeldungTyp: "{XL[errorTyp]}"
+          LogTyp: "EVENT"

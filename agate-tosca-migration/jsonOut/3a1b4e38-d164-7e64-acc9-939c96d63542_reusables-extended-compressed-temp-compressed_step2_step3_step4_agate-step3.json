@@ -1,0 +1,51 @@
+{
+  "name" : "SS2-Laufnummer-setzen_LfNr_PROD_EAA",
+  "surrogate" : "3a1b4e38-d164-7e64-acc9-939c96d63542",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4e38-f125-7448-ec04-a73a4256552f",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "SysVarName",
+      "value" : "LfNr_PROD_EAA",
+      "actionMode" : "Insert",
+      "toscaPath" : "SysVarName",
+      "toscaPathID" : "3a1b4e38-f125-8695-a165-27198b5f9b91"
+    }, {
+      "name" : "SysVarGruppe",
+      "value" : "ALL",
+      "actionMode" : "Insert",
+      "toscaPath" : "SysVarGruppe",
+      "toscaPathID" : "3a1b4e38-f125-1e90-69c1-031439213802"
+    }, {
+      "name" : "SysVarWert",
+      "value" : "{B[LfNr_PROD_EAA]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SysVarWert",
+      "toscaPathID" : "3a1b4e38-f125-78c2-ae20-8140213b9d18"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "ChVarSys_Reference _set LfNr_PROD_EAA",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4e38-f125-fb56-b7e9-6fdddc47a179",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "ChSysVar",
+    "reusableSurrogate" : "3a1aa111-dc62-d395-7ae7-776c2fbb397f",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

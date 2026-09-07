@@ -94,6 +94,7 @@ public class MainTestCaseExecute {
         // yamlFile = "data/demo/rest_engine_demo.yaml";
 
          yamlFile = "data/dmp11/Instance_dmp_11_getAdminPatientenInformationen.yaml";
+         yamlFile = "data/svc/003_oc_svc_basic_demo.yaml";
 
          String user = "Milenko";
          String instance ="KVW_ECS_SYST";

@@ -1,0 +1,120 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a038dd7-d4a3-b171-7df8-b09108480534",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "dialogaufbauByOrdid_buffered_auth_1"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a038dd8-ad78-1ee9-6602-c628553316b6" ],
+    "Items" : [ "3a038dd3-6e30-14c3-8020-ca0497f5ae47" ],
+    "Library" : [ "01KKK7EDHR4NG9ZED75Y3692B0" ],
+    "UsedBy" : [ "01KERZT0JX15X64528YG7SJ27A", "3a0d3be6-c415-ca7c-f29e-a7cab8c3ddfb" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VpNummer",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "ORD_ID",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038dd3-6e61-7bb5-d4d0-8a482ac3ace0",
+  "Attributes" : {
+    "Condition" : "('{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}'=='{REGEX[\"[A-Za-z0-9]{32}\"]}')",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Setze Buffer dialogId auf gespeicherte dialogId"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038dd3-6e6a-b7c5-2109-eaf099217b1a" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a038dd3-6e5d-b2ce-6c57-3aec7c7f75c0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a038dd3-6e6a-b7c5-2109-eaf099217b1a",
+    "Value" : "{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}",
+    "ExplicitName" : "dialogId",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "dialogId",
+    "ToscaPathID" : "3a038dd3-6e6a-b7c5-2109-eaf099217b1a"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a03a1ae-dfe0-b15c-e713-9a37decacaea",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a03a1b0-7c74-eae7-ac3f-fef8116b8d37" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a038df7-bfe5-d479-49c6-5a2b2e182918" ],
+    "ParentFolder" : [ "3a038dd3-6e85-d5a1-a188-954b0e918287" ]
+  },
+  "Parameters" : [ {
+    "Value" : "{PL[VpNummer]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{PL[ORD_ID]}",
+    "ExplicitName" : ""
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a038dd3-6fbf-85f6-1a8a-2ff328fdffed",
+  "Attributes" : {
+    "Condition" : "(NOT (('{B[dialogId_{PL[VpNummer]}_{PL[ORD_ID]}]}'=='{REGEX[\"[A-Za-z0-9]{32}\"]}')))",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Speichere dialogId"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a038dd3-6fc3-03df-cdbe-8663d5eb56c2" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a038dd3-6e85-d5a1-a188-954b0e918287" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a038dd3-6fc3-03df-cdbe-8663d5eb56c2",
+    "Value" : "{B[dialogId]}",
+    "ExplicitName" : "dialogId_{PL[VpNummer]}_{PL[ORD_ID]}",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "dialogId_{PL[VpNummer]}_{PL[ORD_ID]}",
+    "ToscaPathID" : "3a038dd3-6fc3-03df-cdbe-8663d5eb56c2"
+  } ]
+} ]

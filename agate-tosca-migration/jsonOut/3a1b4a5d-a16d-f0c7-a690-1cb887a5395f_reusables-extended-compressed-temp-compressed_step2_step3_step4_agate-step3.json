@@ -1,0 +1,39 @@
+{
+  "name" : "SS40-/SS43-Laufnummer-ermitteln",
+  "surrogate" : "3a1b4a5d-a16d-f0c7-a690-1cb887a5395f",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4a5e-2da2-2091-1679-48623ad2bf37",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "DIRPC",
+      "value" : "TxFilesToKams",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPC",
+      "toscaPathID" : "3a1b4a5e-2da2-9d6a-5388-11eda97a67c1"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4a5d-f3e9-2ced-4334-da970b3b1b32",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "LfNR_SS40_Calculator",
+    "reusableSurrogate" : "3a1adcf5-cdcd-facd-cb12-54d4b36227ce",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

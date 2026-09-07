@@ -1,0 +1,133 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "3a1aa193-38ad-74d8-eed1-7c52e31b7206",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "SS2AuftragAA"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a1aa1a9-8ad6-7941-3c6f-2ff480b2df4b"
+      ],
+      "Library": [
+        "3a1aa111-cec2-df26-4b80-a3604bc798c6"
+      ],
+      "UsedBy": [
+        "01M1BBZFRTD33Z21E6B9J304PT"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolder",
+    "Surrogate": "3a1aa1a9-8ad6-7941-3c6f-2ff480b2df4b",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "SS2AuftragAA Lib"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "Items": [
+        "3a1aa193-3b5b-ab05-550c-c371fa27f468",
+        "3a1aa193-3b5c-98a8-ceec-b1fceda5fbcf"
+      ],
+      "ParentFolder": [
+        "3a1aa193-38ad-74d8-eed1-7c52e31b7206"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a1aa193-3b5b-ab05-550c-c371fa27f468",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a1aa193-3b5c-3d74-41ca-e2d588133e72"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ],
+      "ParentFolder": [
+        "3a1aa1a9-8ad6-7941-3c6f-2ff480b2df4b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1aa193-3b5c-3d74-41ca-e2d588133e72",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "CMD",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "kams SS2AuftragAA",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "3a1aa193-3b5b-ab05-550c-c371fa27f468"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestStepFolderReference",
+    "Surrogate": "3a1aa193-3b5c-98a8-ceec-b1fceda5fbcf",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ParameterLayerReference": [
+        "3a1aa193-3b5c-7f7f-673b-0bc114bb5725"
+      ],
+      "ExecutionContainerLogs": [],
+      "ReusedItem": [
+        "3a13a095-fa28-5c89-614d-9cd7d1c20e17"
+      ],
+      "ParentFolder": [
+        "3a1aa1a9-8ad6-7941-3c6f-2ff480b2df4b"
+      ]
+    }
+  }
+]

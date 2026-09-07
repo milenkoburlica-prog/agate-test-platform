@@ -1,0 +1,19 @@
+name: fotoinfo_db_lösche_alle_zeilen_in_foto_info_über_svnr_de
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO_HM13 where FK_SV_NUMMER='{R[SVNR]}';"
+        response: lösche_alle_zeilen_in_foto_info_hm13_über_svnr_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM FOTO_INFO where FK_SV_NUMMER={R[SVNR]};"
+        response: lösche_alle_zeilen_in_foto_info_über_svnr_res
+

@@ -1,0 +1,67 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4a43-34f6-64a1-9a6b-94426fbc02ed",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Tx_CMStoKP-PC_TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b4a43-3604-f405-face-b58fcdadad54", "3a1b4a43-3604-76ad-f65b-6b04e3fd3c13" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P5R" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a43-3604-f405-face-b58fcdadad54",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "DIRPC",
+    "value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\.",
+    "actionMode" : "Insert",
+    "toscaPath" : "DIRPC",
+    "toscaPathID" : "3a1b4a43-3604-9d1c-819c-2f80b0ec5d38"
+  }, {
+    "name" : "DIRPOD",
+    "value" : "{B[KS_File-Gateway_Basedir]}{B[OMS.SS40_KP.TransferServerPath]}/.",
+    "actionMode" : "Insert",
+    "toscaPath" : "DIRPOD",
+    "toscaPathID" : "3a1b4a43-3604-08b9-4e7d-1e547a7df6ae"
+  }, {
+    "name" : "PODNAME",
+    "value" : "{B[KS_POD_Filegateway_Name]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "PODNAME",
+    "toscaPathID" : "3a1b4a43-3604-bef0-40be-cf567fec4658"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1b4a43-3604-76ad-f65b-6b04e3fd3c13",
+  "condition" : null,
+  "reusableSurrogate" : "3a13a6fe-2171-c8d2-da02-80b57899d454",
+  "reusableName" : "02_execute_file_transfer",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+} ]

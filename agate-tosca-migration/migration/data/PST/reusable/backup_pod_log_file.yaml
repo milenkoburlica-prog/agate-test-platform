@@ -1,0 +1,20 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: logging_path
+        value: "{B[G_LogDir]}\{B[PST_ID]}\{B[TEST_DATA_PACKET_DIR]}\{B[tc_name]}"
+
+
+      # Execute CMD Command: TBox Start Program - Create Logging DIR
+      - type: CMD
+        op: EXEC
+        command: "mkdir {B[logging_path]} 2>nul"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Copy to Logging Dir POD Log
+      - type: CMD
+        op: EXEC
+        command: "copy {B[L_LogDir]}\\{B[L_LogFile]} {B[logging_path]}\\{B[tc_name]}-pod-log-{R[operation]}.txt"
+        response: cmd_response

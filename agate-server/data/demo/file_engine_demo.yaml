@@ -1,0 +1,253 @@
+# ======================================================================
+# FILE Engine Demo
+# ======================================================================
+
+testCases:
+
+  - id: TC_FILE_FULL_DEMO
+    description: "FILE Engine - Full Happy Path"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      baseDir: "output/file-demo"
+      filename: "test.txt"
+      copyFilename: "test-copy.txt"
+      movedFilename: "test-moved.txt"
+
+    steps:
+
+      # ================================================================
+      # WRITE
+      # ================================================================
+
+      # 1. Create/write file
+      - type: FILE
+        op: EXEC
+        action: WRITE
+        path: "{B[baseDir]}/{B[filename]}"
+        text: |
+          AGATE FILE Engine
+          Line 2
+          CHANGED
+          Line 4
+          CHANGED
+        response: write_result
+
+      # ================================================================
+      # EXISTS
+      # ================================================================
+
+      # 2. Direct filesystem ASSERT
+      - type: FILE
+        op: ASSERT
+        action: EXISTS
+        path: "{B[baseDir]}/{B[filename]}"
+
+      # 3. EXEC EXISTS -> boolean response
+      - type: FILE
+        op: EXEC
+        action: EXISTS
+        path: "{B[baseDir]}/{B[filename]}"
+        response: file_exists
+
+      # ================================================================
+      # READ
+      # ================================================================
+
+      # 4. Read file
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "{B[baseDir]}/{B[filename]}"
+        response: file_content
+
+      # ================================================================
+      # CONTENT ASSERT
+      # ================================================================
+
+      # 5. CONTAINS
+      - type: FILE
+        op: ASSERT
+        response: file_content
+        action: CONTAINS
+        value: "AGATE FILE Engine"
+
+      # 6. NOT_CONTAINS
+      - type: FILE
+        op: ASSERT
+        response: file_content
+        action: NOT_CONTAINS
+        value: "THIS_TEXT_DOES_NOT_EXIST"
+
+      # 7. COUNT
+      - type: FILE
+        op: ASSERT
+        response: file_content
+        action: COUNT
+        value: "CHANGED"
+        expected: 2
+
+      # ================================================================
+      # BUFFER
+      # ================================================================
+
+      # 8. BUFFER TEXT
+      - type: FILE
+        op: BUFFER
+        response: file_content
+        action: TEXT
+        name: complete_file
+
+      # 9. BUFFER FILTER
+      - type: FILE
+        op: BUFFER
+        response: file_content
+        action: FILTER
+        value: "CHANGED"
+        name: changed_lines
+
+      # 10. BUFFER LINE
+      - type: FILE
+        op: BUFFER
+        response: file_content
+        action: LINE
+        value: "0"
+        name: first_line
+
+      # 11. BUFFER LAST_LINE
+      - type: FILE
+        op: BUFFER
+        response: file_content
+        action: LAST_LINE
+        value: "0"
+        name: last_line
+
+      # 12. BUFFER COUNT
+      - type: FILE
+        op: BUFFER
+        response: file_content
+        action: COUNT
+        value: "CHANGED"
+        name: changed_count
+
+      # ================================================================
+      # APPEND
+      # ================================================================
+
+      # 13. Append text
+      - type: FILE
+        op: EXEC
+        action: APPEND
+        path: "{B[baseDir]}/{B[filename]}"
+        text: "APPENDED"
+        newline: true
+
+      # 14. Read again
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "{B[baseDir]}/{B[filename]}"
+        response: file_after_append
+
+      # 15. Verify append
+      - type: FILE
+        op: ASSERT
+        response: file_after_append
+        action: CONTAINS
+        value: "APPENDED"
+
+      # ================================================================
+      # COPY
+      # ================================================================
+
+      # 16. Copy file
+      - type: FILE
+        op: EXEC
+        action: COPY
+        source: "{B[baseDir]}/{B[filename]}"
+        target: "{B[baseDir]}/{B[copyFilename]}"
+        overwrite: true
+
+      # 17. Verify copy exists
+      - type: FILE
+        op: ASSERT
+        action: EXISTS
+        path: "{B[baseDir]}/{B[copyFilename]}"
+
+      # 18. Read copied file
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "{B[baseDir]}/{B[copyFilename]}"
+        response: copied_content
+
+      # 19. Verify copied content
+      - type: FILE
+        op: ASSERT
+        response: copied_content
+        action: CONTAINS
+        value: "AGATE FILE Engine"
+
+      # ================================================================
+      # MOVE
+      # ================================================================
+
+      # 20. Move copied file
+      - type: FILE
+        op: EXEC
+        action: MOVE
+        source: "{B[baseDir]}/{B[copyFilename]}"
+        target: "{B[baseDir]}/{B[movedFilename]}"
+        overwrite: true
+
+      # 21. Old path must no longer exist
+      - type: FILE
+        op: ASSERT
+        action: NOT_EXISTS
+        path: "{B[baseDir]}/{B[copyFilename]}"
+
+      # 22. New path must exist
+      - type: FILE
+        op: ASSERT
+        action: EXISTS
+        path: "{B[baseDir]}/{B[movedFilename]}"
+
+      # ================================================================
+      # DELETE
+      # ================================================================
+
+      # 23. Delete moved file
+      - type: FILE
+        op: EXEC
+        action: DELETE
+        path: "{B[baseDir]}/{B[movedFilename]}"
+
+      # 24. Verify deleted
+      - type: FILE
+        op: ASSERT
+        action: NOT_EXISTS
+        path: "{B[baseDir]}/{B[movedFilename]}"
+
+      # 25. Delete original file
+      - type: FILE
+        op: EXEC
+        action: DELETE
+        path: "{B[baseDir]}/{B[filename]}"
+
+      # 26. Verify original deleted
+      - type: FILE
+        op: ASSERT
+        action: NOT_EXISTS
+        path: "{B[baseDir]}/{B[filename]}"
+
+      # ================================================================
+      # missingOk
+      # ================================================================
+
+      # 27. Delete already missing file without failure
+      - type: FILE
+        op: EXEC
+        action: DELETE
+        path: "{B[baseDir]}/{B[filename]}"
+        missingOk: true

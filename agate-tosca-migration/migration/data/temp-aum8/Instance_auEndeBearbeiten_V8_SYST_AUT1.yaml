@@ -1,0 +1,4335 @@
+testCases:
+
+- id: 'Fehlerfall: Länge (33)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not existing'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: DialogId NULL'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{NULL}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: DialogId leer'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: 'false'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: ArbeitsunfähigVon <300T + Force Execution false'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][-299d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][-299d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: ArbeitsunfähigBis >300T + Force Execution true'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][-301d][]}'
+      forceExecution: 'true'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][-301d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfähigBis >300T + Force Execution false)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+301d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03235
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '26'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in Letzter Tag der AU ist ungültig (mehr als 300 Tage Abweichung vom aktuellen Datum).
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: ArbeitsunfähigBis ok + Force Execution true'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'true'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: ArbeitsunfähigBis <300T (in Zukunft) + Force Execution false )'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not existing aufID (-1)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '{NULL}'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '-1'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03453
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '45'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von AUFM Id ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not existing aufID (47111)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '{NULL}'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '9999999'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03012
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '128'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die gesuchte Meldung existiert nicht (mehr) im e-card-System.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not existing version (-1)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '-1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03463
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '55'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Version ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not existing version (99)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '99'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03012
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '128'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die gesuchte Meldung existiert nicht (mehr) im e-card-System.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: Angabe AF-Meldung'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '8'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID8]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03061
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '3061'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Diese Meldung ist eine reine AF-Meldung. Die Funktion ""Arbeitsunfähigkeitsendedatum bearbeiten"" darf nicht auf sie angewendet werden.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfähigBis leer )'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '10'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID10]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{EMPTY}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03231
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '24'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Letzter Tag der AU ist ein Pflichtfeld.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: VSNR ohne Anspruch: Ticket??'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293383'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682576'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '11'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID11]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: Person ohne Anspruch'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293383'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682576'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '13'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293383'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID13]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: Länge (11)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: 10.10.20089
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03233
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '25'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Letzter Tag der AU ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: Sonderzeichen'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: §$.%&.()[]
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03233
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '25'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Letzter Tag der AU ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfaehigBis 50.50.2007'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: 50.50.2007
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03233
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '25'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Letzter Tag der AU ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfaehigBis  31.2.2007'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: 31.02.2007
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03233
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '25'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Letzter Tag der AU ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfaehigBis  Format 231.2.2007'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: 231.2.2007
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03233
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '25'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von Letzter Tag der AU ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: null'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{NULL}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03231
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '24'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Letzter Tag der AU ist ein Pflichtfeld.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: AUBis leer'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{EMPTY}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03231
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '24'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Letzter Tag der AU ist ein Pflichtfeld.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: not_set'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{NULL}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03231
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '24'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Letzter Tag der AU ist ein Pflichtfeld.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: Datum liegt in der Vergangenheit (<300Tage), ArbeitsunfaehigVon < ArbeitsunfaehigBis'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID3]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: ArbeitsunfaehigVon > ArbeitsunfaehigBis )'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID3]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][-10d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03037
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '120'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Datum für "Letzter Tag der AU" muss größer oder gleich dem Datum "Arbeitsunfähig von" sein.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: ArbeitsunfaehigBis + ArbeitsunfaehigVon identes Datum'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID3]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][-1d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][-1d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: Datum liegt in der Zukunft (<300Tage), ArbeitsunfaehigVon < ArbeitsunfaehigBis'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '3'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID3]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: kein AUM.CORE'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293522'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682579'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '{NULL}'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293522'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID3]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-A0005
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '12'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es existiert keine Berechtigung zum Aufruf dieser Funktion.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: auEndeBearbeiten, ohne Token'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: auEndeBearbeiten,SVSV-Token, SVNR ident'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: Kartenleser angegeben, ecard gesteckt'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Gutfall: Kartenleser angegeben, ocard gesteckt'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: Datum darf nicht gelöscht werden'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '17'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID17]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{EMPTY}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-03231
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '24'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Letzter Tag der AU ist ein Pflichtfeld.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'Fehlerfall: reine AF-Meldung (nicht erlaubt)'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '7'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID7]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03061
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '3061'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Diese Meldung ist eine reine AF-Meldung. Die Funktion ""Arbeitsunfähigkeitsendedatum bearbeiten"" darf nicht auf sie angewendet werden.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten,SVSV-Token, SVNR unterschiedlich_ZS-00167'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2933038819'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00167
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '65'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die SV-Nummer der verwendeten e-card stimmt nicht mit der angegebenen SV-Nummer überein.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, VPVP-Token, nicht erlaubt_ZS-00174'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, VPSV-Token, nicht erlaubt_ZS-00174'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, SVSV-Token abgelaufen_ZS00166'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: eyJhbGciOiJFUzM4NCJ9.eyJpYXQiOjE3MTY4MTI2NjQsInN2bnIiOiIyOTMwMDQ5MTA5IiwidnBuciI6IjI5MzE5NyIsInNpZyI6Ik1JSEtBZ0VCTVFrd0J3WUZLdzREQWhvd0N3WUpLb1pJaHZjTkFRY0JNWUdzTUlHcEFnRUJNRmd3VERFTE1Ba0dBMVVFQmhNQ1FWUXhHekFaQmdOVkJBb1RFbE52ZW1saGJIWmxjbk5wWTJobGNuVnVaekVPTUF3R0ExVUVDeE1GVTFaVGFXY3hFREFPQmdOVkJBTVRCMVJsYzNRdFEwRUNDSDQwNEZLa3dJWTFNQWNHQlNzT0F3SWFNQWtHQnlxR1NNNDlCQUVFTmpBMEFoaE8veTM4ZjkrSEZpRWFYU3VoYWk5cjdkK005NUpXRlhJQ0dIdjNKak1kV1psbGMrWE0zZ0ZVaDNxb3RTQmU5b2xUUWc9PSIsInNpZ1R5cGUiOiJzdiIsImNpbiI6IjgwMDQwMDAwMDYyMDAwMDAwMzA3IiwiY2FyZCI6ImUiLCJyZHJJZCI6IjY2NjY5MDExODAiLCJ2IjoxfQ.d5ASSJh44wVKyz8Wy-T79TFg5_kdI8BQJqn-oYX2bG95t9Ya7Yo7LQTFbYztiod0xX9_1mTxhCrvNNuzJgg1m2z2xgqjdUClS1hTjn3y6eFibmGdVHT6CYNhWqunAjhQ
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00166
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '64'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene e-card-Token ist für diese Anwendung nicht mehr gültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, VPSV-Token abgelaufen_ZS-00174'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: eyJhbGciOiJFUzI1NiJ9.eyJpYXQiOjE1ODE2MTY3MjYsInN2bnIiOiIzNjk4MTExMDU1IiwidnBuciI6IjEzNjA5OSIsInNpZyI6Ik1JSE9BZ0VCTVFzd0NRWUZLdzREQWhvRkFEQUxCZ2txaGtpRzl3MEJCd0V4Z2E0d2dhc0NBUUV3V0RCTU1Rc3dDUVlEVlFRR0V3SkJWREViTUJrR0ExVUVDaE1TVTI5NmFXRnNkbVZ5YzJsamFHVnlkVzVuTVE0d0RBWURWUVFMRXdWVFZsTnBaekVRTUE0R0ExVUVBeE1IVkdWemRDMURRUUlJQUk5VVpzN3Z2RDB3Q1FZRkt3NERBaG9GQURBSkJnY3Foa2pPUFFRQkJEWXdOQUlZZmUvUE9rYUc1YUNEeSttaFdFVkMrWVhoT1pRbUtwcDZBaGczN2RHckwvMndIR3dMUi9hcGZCYkZ6blF3TWh5dGFzRT0iLCJzaWdUeXBlIjoic3YiLCJjaW4iOiI4MDA0MDAwMDAxMTEwMDAwMDAzOSIsImNhcmQiOiJvIiwicmRySWQiOiIwMDowMDowYTo4NjpmMzphNSIsImdpbmFJZCI6IjAyZDE5N2ViLTIyZmQtNGJiNS1hYjE3LWVjNGZiNTg0YTM0NyIsInYiOjF9.5D0ZaZvt9WRLlhE2HU-RJ1nP4S1Y7GCeL4H6sAsfUiIX3iGsAiSo8_QcCvZcVTq7JG9x0A4oKk0DOwamln_7rw
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, Token ungültig_ZS-00165'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '293197'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00165
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '63'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene CardToken ist ungültig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, SVSV-Token, anderer VP_ZS-00168'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '2930049109'
+      VpNummer: '257201'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00168
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '66'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene e-card-Token ist einem anderen Vertragspartner zugeordnet.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'FF: auEndeBearbeiten, VPSV-Token, anderer VP_ZS-00174'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{B[token]}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: auEndeBearbeiten, Token Null'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: auEndeBearbeiten, Token Empty'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293197'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682599'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.erzeuge_basisdaten_ohne_create_close_dialog_aum8_auth1_bp
+    parameters:
+      Meldungsnummer: '6'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: '{EMPTY}'
+      aufId: '{B[MeldungsID6]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][+300d][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][+300d][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+- id: 'GF: auEndeBearbeiten, WKS Kontakt gültig'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.wks_erzeuge_wks_kontakt
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '05'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='auEndeBearbeitenResponse']/*[local-name()='return']/*[local-name()='arbeitsunfaehigBis']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.wks_db_lösche_alte_wks_kontakte_für_svnr
+    parameters:
+      SVNR: '2937049179'
+
+- id: 'FF: auEndeBearbeiten, WKS Kontakt mit e-Berechtigung'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.wks_erzeuge_wks_kontakt
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03013
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '106'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Auf diese Meldung kann nicht zugegriffen werden, weil sie von einem anderen VP angelegt wurde.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.wks_db_lösche_alte_wks_kontakte_für_svnr
+    parameters:
+      SVNR: '2937049179'
+
+- id: 'FF: auEndeBearbeiten, WKS Kontakt mit Typ = o/Adminkarte'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.wks_erzeuge_wks_kontakt
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03013
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '106'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Auf diese Meldung kann nicht zugegriffen werden, weil sie von einem anderen VP angelegt wurde.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.wks_db_lösche_alte_wks_kontakte_für_svnr
+    parameters:
+      SVNR: '2937049179'
+
+- id: 'FF: auEndeBearbeiten, WKS Kontakt abgelaufen'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.wks_erzeuge_wks_kontakt
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03013
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '106'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Auf diese Meldung kann nicht zugegriffen werden, weil sie von einem anderen VP angelegt wurde.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.wks_db_lösche_alte_wks_kontakte_für_svnr
+    parameters:
+      SVNR: '2937049179'
+
+- id: 'FF: auEndeBearbeiten, WKS Kontakt storniert'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.wks_erzeuge_wks_kontakt
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03013
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '106'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Auf diese Meldung kann nicht zugegriffen werden, weil sie von einem anderen VP angelegt wurde.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de
+
+  - type: CALL
+    command: reusable.wks_db_lösche_alte_wks_kontakte_für_svnr
+    parameters:
+      SVNR: '2937049179'
+
+- id: 'FF: auEndeBearbeiten, kein WKS Kontakt vorhanden'
+  description: auEndeBearbeiten_V8_SYST_AUT1
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.erzeuge_fremdmeldung
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '293015'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15694591'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.aum.8.auendebearbeiten_request
+    response: auendebearbeiten_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      cardToken: ''
+      aufId: '{B[FremdMeldungsId]}'
+      aufIdVersion: '1'
+      arbeitsunfaehigBis: '{DATE[][][]}'
+      forceExecution: 'false'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-03013
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '106'
+    response: auendebearbeiten_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AumException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Auf diese Meldung kann nicht zugegriffen werden, weil sie von einem anderen VP angelegt wurde.
+    response: auendebearbeiten_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+  - type: CALL
+    command: reusable.db_lösche_alle_meldungen_von_heute_de

@@ -1,0 +1,1012 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Option
+        value: "{R[Option]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_WindowsFilePath
+        value: "{R[WindowsFilePath]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_UnixFilePath
+        value: "{R[UnixFilePath]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Servicename
+        value: "{R[Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_System
+        value: "ecard"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Target
+        value: "openshift"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_PATH
+        value: "{S[SVC.Projekt root path]}\Tosca\Daten\Excel\Umgebungsdaten_KVW1\bin"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_DATA
+        value: "{S[SVC.Projekt root path]}\Tosca\Daten\Excel\Umgebungsdaten_KVW1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_07
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\plink_utf8.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_06
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\prepare_dest_path.ps1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_04
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\checkOcccurance.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_03
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\csv_reader.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_02
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\removeLF3forSingleSpecLines.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_01
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\removeLF3forSingleSpecLines.bat"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: G_UMGEBUNGSSCRIPT_SCRIPT_05
+        value: "{B[G_UMGEBUNGSSCRIPT_PATH]}\remove_disk_id.ps1"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-ftp')"
+        name: L_Target
+        value: "ftp"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-nfs')"
+        name: L_Target
+        value: "nfs"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-simu')"
+        name: L_Target
+        value: "simu"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_System
+        value: "ecard"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: L_Namespace
+        value: "{E[env.openShift.namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-man')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-man')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-aut')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-aut')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-file-gateway')"
+        name: L_System
+        value: "ks"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-file-gateway')"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')"
+        name: L_UmgebungsTyp
+        value: "cloud"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift')))"
+        name: L_UmgebungsTyp
+        value: "legacy"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostName
+        value: "{B[KS_APP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostUser
+        value: "{B[KS_APP_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostPassword
+        value: "{B[KS_APP_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostName
+        value: "{B[EC_BAT_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostUser
+        value: "{B[EC_BAT_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostPassword
+        value: "{B[EC_BAT_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostName
+        value: "{B[KS_FTP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostUser
+        value: "{B[KS_FTP_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostPassword
+        value: "{B[KS_FTP_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostName
+        value: "{B[EC_FTP_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostUser
+        value: "{B[EC_FTP_SERVER_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostPassword
+        value: "{B[EC_FTP_SERVER_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostName
+        value: "{B[KS_SIMU_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostUser
+        value: "{B[KS_SIMU_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: L_HostPassword
+        value: "{B[KS_SIMU_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostName
+        value: "{B[EC_SIMU_BAT_SERVER_NAME]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostUser
+        value: "{B[EC_SIMU_BAT_USER]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostPassword
+        value: "{B[EC_SIMU_BAT_PASSWORD]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogDir
+        value: "{B[LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogFile
+        value: "{B[LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')"
+        name: L_UmgebungsTyp
+        value: "cloud"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_Namespace
+        value: "{E[env.openShift.namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostUser
+        value: "{E[env.openShift.username]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_HostPassword
+        value: "{E[env.openShift.password]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: L_LoginServer
+        value: "{E[env.openShift.loginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Namespace
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Username
+        value: "{B[L_HostUser]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Password
+        value: "{B[L_HostPassword]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Loginserver
+        value: "{B[L_LoginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogDir
+        value: "{B[G_EC_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BLogFile
+        value: "{B[G_EC_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BUserName
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BUserPassword
+        value: "{B[L_HostPassword]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BLoginServer
+        value: "{B[L_LoginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: BNamespace
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Lokal_POD_Name
+        value: "--set_dynamisch_pro_testcase--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')"
+        name: B_OpenShift_Lokal_Servicename
+        value: "{R[L_Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_Namespace
+        value: "{B[G_KS_OpenShift_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_HostUser
+        value: "{B[G_KS_OpenShift_Username]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_HostPassword
+        value: "{B[G_KS_OpenShift_Password]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: L_LoginServer
+        value: "{B[G_KS_OpenShift_Loginserver]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Namespace
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Username
+        value: "{B[L_HostUser]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Password
+        value: "{B[L_HostPassword]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Loginserver
+        value: "{B[L_LoginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BLogDir
+        value: "{B[G_KS_OpenShift_LogDir]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BLogFile
+        value: "{B[G_KS_OpenShift_LogFile]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BUserName
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BUserPassword
+        value: "{B[L_HostPassword]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BLoginServer
+        value: "{B[L_LoginServer]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: BNamespace
+        value: "{B[L_Namespace]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Lokal_POD_Name
+        value: "--set_dynamisch_pro_testcase--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))"
+        name: B_OpenShift_Lokal_Servicename
+        value: "{R[L_Servicename]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy')"
+        name: ProcessingFlag
+        value: "0"
+
+
+      # Execute Command: TBox Start Program - execute WinSCP.com
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'put'))"
+        command: |
+            ommand "option batch on" "open {B[L_HostUser]}:{B[L_HostPassword]}@{B[L_HostName]}" "put "{B[L_WindowsFilePath]}" "{B[L_UnixFilePath]}" ""exit""
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'put'))"
+        name: ProcessingFlag
+        value: "1"
+
+
+      # Execute Command: TBox Start Program - execute WinSCP.com
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'get'))"
+        command: |
+            ommand "option batch on" "open {B[L_HostUser]}:{B[L_HostPassword]}@{B[L_HostName]}" "get "{B[L_UnixFilePath]}" "{B[L_WindowsFilePath]}" ""exit""
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'get'))"
+        name: ProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: ASSERT
+        condition: "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND ('{B[ProcessingFlag]}'=='0')"
+        name: ExceptionInfoText
+        action: EQUALS
+        expected: "User-Error. Please check how sind Parameters for ResusableStepModule set!! Important: For WindowsFilePath is only \ allowed and for UnixFilePath is / is only allowed!!!"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: L_WindowsFilePathLoc
+        value: "{B[L_WindowsFilePath]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: L_UnixFilePathLoc
+        value: "{B[L_UnixFilePath]}"
+
+
+      # Execute PowerShell Command: TBox Start Program - dest_file correction_put_variant
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "powershell -Command -command {B[G_UMGEBUNGSSCRIPT_SCRIPT_06]} {B[L_WindowsFilePath]} {B[L_UnixFilePath]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove CR LF Step 1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "{b[g_umgebungsscript_path]}{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_dest {B[BLogDir]}\\{B[BLogFile]}_dest_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove CR LF Step 2
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "{b[g_umgebungsscript_path]}{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_dest_ohne_CRLF {B[BLogDir]}\\{B[BLogFile]}_dest"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_dest"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_dest_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - windows_file_name_correction_put_variante
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "powershell -Command -command {B[G_UMGEBUNGSSCRIPT_SCRIPT_05]} {B[L_WindowsFilePath]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove CR LF Step 1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "{b[g_umgebungsscript_path]}{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_ohne_disk {B[BLogDir]}\\{B[BLogFile]}_ohne_disk_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove CR LF Step 2
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "{b[g_umgebungsscript_path]}{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_ohne_disk_ohne_CRLF {B[BLogDir]}\\{B[BLogFile]}_ohne_disk"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_ohne_disk"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_ohne_disk_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute CMD Command: OpenShift Start File Transfer - put
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put')) AND ('{B[L_Servicename]}'=='kvw-pst-zpv')"
+        command: |
+            powershell -Command $pod = $(oc get pods -n {B[L_Namespace]} -l app.kubernetes.io/name={B[L_Servicename]} -o jsonpath='"{.items[0].metadata.name}"'); oc cp '{B[L_WindowsFilePath_Loc]}' {B[L_Namespace]}/$"{pod}":{B[L_UnixFilePath_Loc]}
+        response: cmd_response
+
+
+      # Execute CMD Command: OpenShift Start File Transfer - put
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put')) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-zpv'))) AND ('{B[L_Servicename]}'=='kvw-pst-bpksmig-zpv')"
+        command: |
+            powershell -Command $pod = $(oc get pods -n {B[L_Namespace]} --no-headers | Select-String '{B[L_Servicename]}').Line.Split()[0]; oc cp '{B[L_WindowsFilePath_Loc]}' {B[L_Namespace]}/$"{pod}":{B[L_UnixFilePath_Loc]}
+        response: cmd_response
+
+
+      # Execute CMD Command: OpenShift Start File Transfer - put
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put')) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-zpv'))) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-bpksmig-zpv'))) AND ('{B[L_Servicename]}'=='kvw-pst-bpks-zpv')"
+        command: |
+            powershell -Command $pod = $(oc get pods -n {B[L_Namespace]} --no-headers | Select-String '{B[L_Servicename]}').Line.Split()[0]; oc cp '{B[L_WindowsFilePath_Loc]}' {B[L_Namespace]}/$"{pod}":{B[L_UnixFilePath_Loc]}
+        response: cmd_response
+
+
+      # Execute CMD Command: OpenShift Start File Transfer - put
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put')) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-zpv'))) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-bpksmig-zpv'))) AND (NOT (('{B[L_Servicename]}'=='kvw-pst-bpks-zpv')))"
+        command: |
+            powershell -Command $pod = $(oc get pods -n {B[L_Namespace]} -l app.kubernetes.io/instance={B[L_Servicename]} -o jsonpath='"{.items[0].metadata.name}"'); oc cp '{B[L_WindowsFilePath_Loc]}' {B[L_Namespace]}/$"{pod}":{B[L_UnixFilePath_Loc]}
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - execute CheckNuberOfOCccurance.ps1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: |
+            {B[G_UMGEBUNGSSCRIPT_SCRIPT_04]} "{B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txt" "failure" 0 > {B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txtK
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - check Response is handled by the Request step
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txtK"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}Z"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - execute CheckNuberOfOCccurance.ps1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: |
+            {B[G_UMGEBUNGSSCRIPT_SCRIPT_04]} "{B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txt" "error" 0 > {B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txtK
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - check Response is handled by the Request step
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_filetransfer_put_result.txtK"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}Z"
+        response: cmd_response
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'put'))"
+        name: ProcessingFlag
+        value: "1"
+
+
+      # Execute PowerShell Command: TBox Start Program - dest_file correction_get_variant
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "powershell -Command -command {B[G_UMGEBUNGSSCRIPT_SCRIPT_06]} '{B[L_UnixFilePath]}' '{B[L_WindowsFilePath]}'"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - dest_file correction_get_variant - remove CR LF
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_dest {B[BLogDir]}\\{B[BLogFile]}_dest_ohne_CRLF"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_dest"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_dest_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute PowerShell Command: TBox Start Program - windows_file_name_correction_get_variante
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "powershell -Command -command {B[G_UMGEBUNGSSCRIPT_SCRIPT_05]} {B[L_WindowsFilePath_Loc]}"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - windows_file_name_correction_get_variante - remove CR LF
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "{B[G_UMGEBUNGSSCRIPT_SCRIPT_02]} {B[BLogDir]}\\{B[BLogFile]}_ohne_disk {B[BLogDir]}\\{B[BLogFile]}_ohne_disk_ohne_CRLF"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_ohne_disk"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - remove temp file
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: "del {B[BLogDir]}\\{B[BLogFile]}_ohne_disk_ohne_CRLF"
+        response: cmd_response
+
+
+      # Execute CMD Command: OpenShift Start File Transfer - get
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: |
+            powershell -Command $pod = $(oc get pods -n {B[L_Namespace]} -l app.kubernetes.io/instance={B[L_Servicename]} -o jsonpath='"{.items[0].metadata.name}"'); oc cp {B[L_Namespace]}/$"{pod}":{B[L_UnixFilePath]} '{B[L_WindowsFilePath_Loc]}'
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - execute CheckNuberOfOCccurance.ps1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: |
+            {B[G_UMGEBUNGSSCRIPT_SCRIPT_04]} "{B[BLogDir]}\\{B[BLogFile]}_filetransfer_get_result.txt" "failure" 0 > {B[BLogDir]}\\{B[BLogFile]}_filetransfer_get_result.txtK
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - check Response is handled by the Request step
+
+
+      # Execute CMD Command: TBox Start Program - execute CheckNuberOfOCccurance.ps1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        command: |
+            {B[G_UMGEBUNGSSCRIPT_SCRIPT_04]} "{B[BLogDir]}\\{B[BLogFile]}_filetransfer_get_result.txt" "error" 0 > {B[BLogDir]}\\{B[BLogFile]}_filetransfer_get_result.txtK
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - check Response is handled by the Request step
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'get'))"
+        name: ProcessingFlag
+        value: "1"
+
+
+      - type: BUFFER
+        op: ASSERT
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND ('{B[ProcessingFlag]}'=='0')"
+        name: ExceptionInfoText
+        action: EQUALS
+        expected: "User-Error. Please check how sind Parameters for ResusableStepModule set!! Important: For WindowsFilePath is only \ allowed and for UnixFilePath is / is only allowed!!!"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: G_OpenShift_Lokal_CMD
+        value: "--set_dynamisch_pro_testcase--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: G_OpenShift_Lokal_Servicename
+        value: "--set_dynamisch_pro_testcase--"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))"
+        name: G_OpenShift_Lokal_POD_Name
+        value: "--set_dynamisch_pro_testcase--"

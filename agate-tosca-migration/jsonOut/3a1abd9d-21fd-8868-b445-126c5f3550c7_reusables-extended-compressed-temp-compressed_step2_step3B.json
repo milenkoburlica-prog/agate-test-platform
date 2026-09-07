@@ -1,0 +1,103 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1abd9d-21fd-8868-b445-126c5f3550c7",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40QuittungVerarbeiten"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1abd9d-40a4-690e-0de2-c9735df6b969" ],
+    "Library" : [ "3a1aa111-cec2-df26-4b80-a3604bc798c6" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P64" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "3a1abd9d-40a4-690e-0de2-c9735df6b969",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40QuittungVerarbeiten Lib"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1abd9d-40a4-6941-9a9d-8c2689603c5d", "3a1abd9d-40a4-b536-a3c1-ae4ced756870" ],
+    "ParentFolder" : [ "3a1abd9d-21fd-8868-b445-126c5f3550c7" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1abd9d-40a4-6941-9a9d-8c2689603c5d",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1abd9d-40a4-bc73-220a-980fd18a1469" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1abd9d-40a4-690e-0de2-c9735df6b969" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1abd9d-40a4-bc73-220a-980fd18a1469",
+    "Value" : "kams SS40QuittungVerarbeiten",
+    "ExplicitName" : "CMD",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "CMD",
+    "ToscaPathID" : "3a1abd9d-40a4-bc73-220a-980fd18a1469"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1abd9d-40a4-b536-a3c1-ae4ced756870",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1abd9d-40a4-e0a3-d555-86ffed17b8eb" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "3a1abd9d-40a4-690e-0de2-c9735df6b969" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-no",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[CMD]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[KS_POD_Name]}",
+    "ExplicitName" : ""
+  } ]
+} ]

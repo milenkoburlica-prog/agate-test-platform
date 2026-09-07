@@ -1,0 +1,1996 @@
+{
+  "name" : "01_execute_ssh",
+  "surrogate" : "3a13a095-fa28-5c89-614d-9cd7d1c20e17",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Optional PL-",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3492-7497-0a2c-963fbeed81c4",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_Option",
+      "value" : "{PL[Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Option",
+      "toscaPathID" : "3a1b22ab-3492-e100-6eaa-a5e56ae4bbbe"
+    }, {
+      "name" : "L_Command",
+      "value" : "{PL[Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Command",
+      "toscaPathID" : "3a1b22ab-3492-14cd-23a7-73a2167c54e3"
+    }, {
+      "name" : "L_Verify",
+      "value" : "not-set",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Verify",
+      "toscaPathID" : "3a1b22ab-3492-98a8-20fd-d2b0fca1f074"
+    }, {
+      "name" : "L_Verify",
+      "value" : "{PL[Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Verify",
+      "toscaPathID" : "3a1b22ab-3492-7f76-988d-5451a0949777"
+    }, {
+      "name" : "L_Servicename",
+      "value" : "{PL[Servicename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Servicename",
+      "toscaPathID" : "3a1b22ab-3492-8315-b191-6c835063b9f4"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "TBox Set Mandaroy PL-Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3492-c9e8-f347-474d7c965221",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_System",
+      "value" : "ecard",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_System",
+      "toscaPathID" : "3a1b22ab-3492-8201-e5dc-ce24e78e914f"
+    }, {
+      "name" : "L_Target",
+      "value" : "openshift",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Target",
+      "toscaPathID" : "3a1b22ab-3492-2f90-bda2-8e4c8f6a491e"
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "TBox Set Mandatory Batches",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3492-3281-df87-934fe1f7fc13",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "G_UMGEBUNGSSCRIPT_PATH",
+      "value" : "{S[SVC.Projekt root path]}\\Tosca\\Daten\\Excel\\Umgebungsdaten_KVW1\\bin",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_PATH",
+      "toscaPathID" : "3a1b22ab-3492-8167-2565-90d2c4424e82"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_DATA",
+      "value" : "{S[SVC.Projekt root path]}\\Tosca\\Daten\\Excel\\Umgebungsdaten_KVW1",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_DATA",
+      "toscaPathID" : "3a1b22ab-3492-7c94-4472-48a7884f09a4"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_08",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\removeLSSHResponseLF.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_08",
+      "toscaPathID" : "3a1b22ab-3492-28d7-2a79-6b5d50350e3f"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_07",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\plink_utf8.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_07",
+      "toscaPathID" : "3a1b22ab-3492-986a-6e36-b68493ab0720"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_06",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\prepare_dest_path.ps1",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_06",
+      "toscaPathID" : "3a1b22ab-3492-1ae2-6e4d-6204ee6d3eec"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_04",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\checkOcccurance.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_04",
+      "toscaPathID" : "3a1b22ab-3492-91c6-ee57-3c3f57acf932"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_03",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\csv_reader.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_03",
+      "toscaPathID" : "3a1b22ab-3492-8f81-330e-17fc0e0ebbc3"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_02",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\removeLF3forSingleSpecLines.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_02",
+      "toscaPathID" : "3a1b22ab-3492-dd13-47e8-c2bcb9dd1767"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_01",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\removeLF3forSingleSpecLines.bat",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_01",
+      "toscaPathID" : "3a1b22ab-3492-e26f-f621-78d8aa16f977"
+    }, {
+      "name" : "G_UMGEBUNGSSCRIPT_SCRIPT_05",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_PATH]}\\remove_disk_id.ps1",
+      "actionMode" : "Insert",
+      "toscaPath" : "G_UMGEBUNGSSCRIPT_SCRIPT_05",
+      "toscaPathID" : "3a1b22ab-3492-e72d-b1d4-9f52e6603565"
+    } ]
+  }, {
+    "index" : 4,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3492-d7bd-bc25-ab2bd2e32234",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-ftp')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_Target",
+      "value" : "ftp",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Target",
+      "toscaPathID" : "3a1b22ab-3492-1c6e-c807-b0ae769c50e2"
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3492-1bc6-ce88-006b1084b716",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-nfs')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_Target",
+      "value" : "nfs",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Target",
+      "toscaPathID" : "3a1b22ab-3492-cdf3-6938-ea96a394c820"
+    } ]
+  }, {
+    "index" : 6,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-0d36-9260-8051b88f6b5d",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'systpst-simu')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_Target",
+      "value" : "simu",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Target",
+      "toscaPathID" : "3a1b22ab-3493-1b07-8693-db297a75984c"
+    } ]
+  }, {
+    "index" : 7,
+    "name" : "TBox Set Mandatory L_Namespace",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b2d2c-190f-84dc-8935-8a2043940360",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_Namespace",
+      "value" : "{B[G_EC_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b2d2c-190f-a812-17da-cf183b578cad"
+    } ]
+  }, {
+    "index" : 8,
+    "name" : "TBox Set Mandatory PL-Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b2cd2-1d2c-d436-c2bb-00de0e66f588",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-aut')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_System",
+      "value" : "ks",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_System",
+      "toscaPathID" : "3a1b2cd5-d9f3-df50-44df-336d2f63dd8b"
+    }, {
+      "name" : "L_Namespace",
+      "value" : "{B[G_KS_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b2d2a-b46c-b311-f2cf-9ef75c1a6221"
+    } ]
+  }, {
+    "index" : 9,
+    "name" : "TBox Set Mandatory PL-Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b43dd-75dd-d634-4a99-eaa55f182433",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-kams-man')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_System",
+      "value" : "ks",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_System",
+      "toscaPathID" : "3a1b43dd-75dd-f4e5-415c-ad71af945bfa"
+    }, {
+      "name" : "L_Namespace",
+      "value" : "{B[G_KS_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b43dd-75dd-b315-70d8-df0ea6bd560d"
+    } ]
+  }, {
+    "index" : 10,
+    "name" : "TBox Set Mandaroy KS Instance",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b3098-61dd-ab1b-1aa3-3c6dfcabfd23",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Servicename]}' == 'kvw-file-gateway')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_System",
+      "value" : "ks",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_System",
+      "toscaPathID" : "3a1b3098-61dd-c66c-c895-767f44802ba3"
+    }, {
+      "name" : "L_Namespace",
+      "value" : "{B[G_KS_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b3098-61dd-8f06-d8a6-8434d59323be"
+    } ]
+  }, {
+    "index" : 11,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-cad5-8c5d-128f428be8cc",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_UmgebungsTyp",
+      "value" : "cloud",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_UmgebungsTyp",
+      "toscaPathID" : "3a1b22ab-3493-c7e9-b720-7efbc6c363c7"
+    } ]
+  }, {
+    "index" : 12,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-075e-25d8-3886f6dbbc26",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_UmgebungsTyp",
+      "value" : "legacy",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_UmgebungsTyp",
+      "toscaPathID" : "3a1b22ab-3493-23fe-0678-016343ea3b84"
+    } ]
+  }, {
+    "index" : 13,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-4ab8-df48-a8f3be360d96",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3493-bb02-bc4b-8c3fd28ebfce"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3493-2a7e-ff22-a7b83b031c05"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3493-45f7-c6c6-13a5dd5251db"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[KS_APP_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3493-b4cb-6b7c-9241f1d4e8e6"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[KS_APP_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3493-15a3-e39f-478d4abca1f0"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[KS_APP_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3493-bbb7-1a07-9ebcf4f638e7"
+    } ]
+  }, {
+    "index" : 14,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-7f61-3ce3-03cabe838f66",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3493-67c7-1b35-62e162277e85"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3493-205a-b161-23109963ddd5"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3493-fb4c-9c01-8523d8ff9c7d"
+    } ]
+  }, {
+    "index" : 15,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3493-574d-a3ed-837c9c853f9a",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3493-e148-a56c-ea0d23e2b542"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3493-8171-55da-4ce97e596c83"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3493-0e3d-eb7a-f6fd585126d0"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[EC_BAT_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3493-9bd7-3386-15a3e0c97ba6"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[EC_BAT_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3494-5ed3-c0bb-88cc01c9a099"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[EC_BAT_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3494-42fe-18bb-5c3af62b75ec"
+    } ]
+  }, {
+    "index" : 16,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3494-d2b4-bce5-6ad54dcfc5a8",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'nfs') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3494-b509-dec6-afde4d30f12a"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3494-8ffb-b08c-d195827829db"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3494-b4ad-538e-f201a2db50b2"
+    } ]
+  }, {
+    "index" : 17,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3494-82d0-1b9d-ec24ac73e786",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3494-5a70-8e87-1158ef3ed057"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3494-6a8a-8ca1-c1a756d25d14"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3494-3abd-7ef2-a37f64cb8810"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[KS_FTP_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3494-cbc9-5750-cde60595d809"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[KS_FTP_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3494-219e-a638-ed65f579dc44"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[KS_FTP_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3494-dace-15d3-c935dc9be391"
+    } ]
+  }, {
+    "index" : 18,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3494-24f4-b6c0-8dbf133cd4da",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3494-c0a1-f953-759c9445053d"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3494-ea89-ee43-42efb5838698"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3494-6a0a-b146-15796ae6ab2d"
+    } ]
+  }, {
+    "index" : 19,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3494-49c4-d349-8f166a5b455d",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3494-0262-7431-b83a458bb32a"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3494-dccb-bb34-33e16fc45d04"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3494-1676-5107-48fa231e7f0e"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[EC_FTP_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3494-a856-23d4-08fdb952a8c1"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[EC_FTP_SERVER_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3494-71ad-098f-6be78d9f15ae"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[EC_FTP_SERVER_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3495-a5a7-fe41-e64cb16ce9be"
+    } ]
+  }, {
+    "index" : 20,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-2616-0ca5-d323b8e72b36",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'ftp') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3495-1d27-1c9b-56040dc19c60"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3495-846c-09d1-66b0aae2edbc"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3495-4d4c-68e9-ab876564bb48"
+    } ]
+  }, {
+    "index" : 21,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-7c12-f880-7273c052592b",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3495-035e-2309-185c4e8d3aed"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3495-c03b-cfe5-5c58f8c94e08"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3495-3413-23fc-d5f708069a26"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[KS_SIMU_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3495-e6b6-6971-3f779c0b51f2"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[KS_SIMU_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3495-2fb0-63ca-9152ac122319"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[KS_SIMU_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3495-f67b-0351-1829df273321"
+    } ]
+  }, {
+    "index" : 22,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-4854-f314-3655565ea5e4",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ks')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3495-ecbc-785c-57e3d1586b83"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3495-f54a-e280-aac0e2185916"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3495-7598-d72f-9e673c4f933b"
+    } ]
+  }, {
+    "index" : 23,
+    "name" : "TBox Set Buffer - Input Parameters",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-c2d6-504d-333620e0d03b",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHCommand",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHCommand",
+      "toscaPathID" : "3a1b22ab-3495-ed8d-f17f-edde9ba766cb"
+    }, {
+      "name" : "SSHOption",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHOption",
+      "toscaPathID" : "3a1b22ab-3495-aab1-b10d-a20f521497e8"
+    }, {
+      "name" : "SSHVerify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHVerify",
+      "toscaPathID" : "3a1b22ab-3495-2d4f-007b-683f7998e993"
+    }, {
+      "name" : "SSHHostName",
+      "value" : "{B[EC_SIMU_BAT_SERVER_NAME]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostName",
+      "toscaPathID" : "3a1b22ab-3495-699c-0db6-878c42691cae"
+    }, {
+      "name" : "SSHHostUser",
+      "value" : "{B[EC_SIMU_BAT_USER]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostUser",
+      "toscaPathID" : "3a1b22ab-3495-1a3a-265c-2a2b1043ab24"
+    }, {
+      "name" : "SSHHostPassword",
+      "value" : "{B[EC_SIMU_BAT_PASSWORD]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHHostPassword",
+      "toscaPathID" : "3a1b22ab-3495-0ce3-48e7-ec60ec7517ae"
+    } ]
+  }, {
+    "index" : 24,
+    "name" : "TBox Set Buffer - Helper",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-0365-bdd2-2f489dfa8515",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_Target]}' == 'openshift'))) AND ('{B[L_Target]}' == 'simu') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "0",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-3495-e9cc-f7e9-ad3407a4513c"
+    }, {
+      "name" : "SSHLogDir",
+      "value" : "{B[B_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogDir",
+      "toscaPathID" : "3a1b22ab-3495-362e-ecc5-af8f2125ca27"
+    }, {
+      "name" : "SSHLogFile",
+      "value" : "{B[B_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHLogFile",
+      "toscaPathID" : "3a1b22ab-3495-cc9f-516e-49375c532ce1"
+    } ]
+  }, {
+    "index" : 25,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3495-6421-2f8d-ba16e5601f58",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_UmgebungsTyp",
+      "value" : "cloud",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_UmgebungsTyp",
+      "toscaPathID" : "3a1b22ab-3495-8b61-bfc4-dfa5d0b32d66"
+    } ]
+  }, {
+    "index" : 26,
+    "name" : "TBox Set Buffer_Inputs",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3496-c29a-8060-0c6d46351313",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_HostName",
+      "value" : "{B[G_EC_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_HostName",
+      "toscaPathID" : "3a1b22ab-3496-c7ff-b7c6-08a0f7b257c4"
+    }, {
+      "name" : "L_HostUser",
+      "value" : "{B[G_EC_OpenShift_Username]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_HostUser",
+      "toscaPathID" : "3a1b22ab-3496-64da-a836-f224da696aa1"
+    }, {
+      "name" : "L_HostPassword",
+      "value" : "{B[G_EC_OpenShift_Password]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_HostPassword",
+      "toscaPathID" : "3a1b22ab-3496-df68-1a7d-d15e669d89c4"
+    }, {
+      "name" : "L_LoginServer",
+      "value" : "{B[G_EC_OpenShift_Loginserver]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LoginServer",
+      "toscaPathID" : "3a1b22ab-3496-5158-6106-349bae245ef6"
+    }, {
+      "name" : "L_Namespace",
+      "value" : "{B[G_EC_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b22ab-3496-2468-ba5c-173519496de8"
+    }, {
+      "name" : "L_LogDir",
+      "value" : "{B[G_EC_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LogDir",
+      "toscaPathID" : "3a1b22ab-3496-dd92-cb72-aa1fad39f5a9"
+    }, {
+      "name" : "L_LogFile",
+      "value" : "{B[G_EC_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LogFile",
+      "toscaPathID" : "3a1b22ab-3496-5a3a-2992-6c8903a20257"
+    } ]
+  }, {
+    "index" : 27,
+    "name" : "TBox Set Lokal Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3496-b575-0b74-384325bd669c",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND ('{B[L_System]}' == 'ecard')",
+    "action" : null,
+    "values" : [ {
+      "name" : "B_OpenShift_Lokal_POD_Name",
+      "value" : "--init-value--",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_POD_Name",
+      "toscaPathID" : "3a1b22ab-3496-1c44-30a0-327b86ef5b14"
+    }, {
+      "name" : "B_OpenShift_Lokal_Servicename",
+      "value" : "{B[L_Servicename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_Servicename",
+      "toscaPathID" : "3a1b22ab-3496-75ee-2fb5-bb0efb28ef8d"
+    }, {
+      "name" : "B_OpenShift_Lokal_CMD",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_CMD",
+      "toscaPathID" : "3a1b22ab-3496-7732-4716-73dcd1563967"
+    }, {
+      "name" : "L_Option",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Option",
+      "toscaPathID" : "3a1b22ab-3496-effa-d359-641d29885ff1"
+    }, {
+      "name" : "L_Verify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Verify",
+      "toscaPathID" : "3a1b22ab-3496-1403-47ee-68008655b82a"
+    } ]
+  }, {
+    "index" : 28,
+    "name" : "TBox Set Buffer_Inputs",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3496-7b56-9e0f-1ffc21fbee96",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "L_HostUser",
+      "value" : "{B[G_KS_OpenShift_Username]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_HostUser",
+      "toscaPathID" : "3a1b22ab-3496-0f49-5b09-47d45e53d469"
+    }, {
+      "name" : "L_HostPassword",
+      "value" : "{B[G_KS_OpenShift_Password]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_HostPassword",
+      "toscaPathID" : "3a1b22ab-3496-af5e-051a-45d535ce4e4b"
+    }, {
+      "name" : "L_LoginServer",
+      "value" : "{B[G_KS_OpenShift_Loginserver]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LoginServer",
+      "toscaPathID" : "3a1b22ab-3496-7b9d-6cba-ff2d91a6d41d"
+    }, {
+      "name" : "L_Namespace",
+      "value" : "{B[G_KS_OpenShift_Namespace]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Namespace",
+      "toscaPathID" : "3a1b22ab-3496-a6dd-e7b9-54d417beb7b5"
+    }, {
+      "name" : "L_LogDir",
+      "value" : "{B[G_KS_OpenShift_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LogDir",
+      "toscaPathID" : "3a1b22ab-3496-dcbf-8544-13a67683c949"
+    }, {
+      "name" : "L_LogFile",
+      "value" : "{B[G_KS_OpenShift_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_LogFile",
+      "toscaPathID" : "3a1b22ab-3496-52c7-ada2-f8cda3a0091a"
+    } ]
+  }, {
+    "index" : 29,
+    "name" : "TBox Set Lokal Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3496-b743-7fb7-8cb8c84bc670",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_Target]}' == 'openshift') AND (NOT (('{B[L_System]}' == 'ecard')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "B_OpenShift_Lokal_CMD",
+      "value" : "--init-value--",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_CMD",
+      "toscaPathID" : "3a1b22ab-3496-76bd-1798-8cc1f528a659"
+    }, {
+      "name" : "B_OpenShift_Lokal_Servicename",
+      "value" : "{B[L_Servicename]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_Servicename",
+      "toscaPathID" : "3a1b22ab-3496-0db6-dd8b-558af944c186"
+    }, {
+      "name" : "B_OpenShift_Lokal_CMD",
+      "value" : "{B[L_Command]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "B_OpenShift_Lokal_CMD",
+      "toscaPathID" : "3a1b22ab-3496-7730-b49d-72085cceb75b"
+    }, {
+      "name" : "L_Option",
+      "value" : "{B[L_Option]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Option",
+      "toscaPathID" : "3a1b22ab-3496-2bde-bd58-8b513b141637"
+    }, {
+      "name" : "L_Verify",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "L_Verify",
+      "toscaPathID" : "3a1b22ab-3496-7bd8-f9b0-6335daf36101"
+    } ]
+  }, {
+    "index" : 30,
+    "name" : "TBox Start Program - execute plink",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3496-0a2e-fc48-14f95d668a86",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy')",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "{B[G_UMGEBUNGSSCRIPT_SCRIPT_07]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "Directory",
+      "value" : "{B[SSHLogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Directory"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "{B[TOOL_PATH_PLINK]} {B[SSHHostUser]} \"\"\"\"{B[SSHHostPassword]}\"\"\"\" {B[SSHHostName]} {B[L_Command]} {B[SSHLogDir]}\\{B[SSHLogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 31,
+    "name" : "TBox Start Program - powershell - count lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-3497-9106-34b9-cefe840df46c",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "StandardOutputFile",
+      "value" : "{B[SSHLogDir]}\\{B[SSHLogFile]}_Count",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command (Get-Content -Path {B[SSHLogDir]}\\{B[SSHLogFile]} -Raw | Measure-Object -Line).Lines",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 32,
+    "name" : "TBox Start Program - powershell - remove EndOfLine - utf-8 default - CHANGED",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349b-6a3b-4e3b-89ee5de62d52",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command (Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]}_Count) | Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_Count -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 33,
+    "name" : "TBox Read/Create File - buffer count lines CHANGED",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349b-8763-02fa-8b4f4a3ebf47",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 34,
+    "name" : "TBox Start Program - powershell - get Count-1 lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-dbc3-ee2e-e38f7abf50c9",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -First ([Math]::Max(0, (Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]}).Length - 1)) | Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 35,
+    "name" : "TBox Start Program - powershell - get Last lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-c99e-895b-e14775eba526",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -Last 1 | Out-File -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_2 -Encoding UTF8 -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 36,
+    "name" : "TBox Start Program - powershell - merge files",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-0fc8-f659-d21cfddb6d37",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command Out-File -Encoding UTF8 -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1 -InputObject $(type {B[SSHLogDir]}\\{B[SSHLogFile]}_2) -NoNewline -Append",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 37,
+    "name" : "TBox Start Program - powershell - get Last lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-e21c-bc91-a96cb2cdd5e5",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "arguments",
+      "value" : "-command Get-Content -Encoding UTF8 -Path {B[SSHLogDir]}\\{B[SSHLogFile]} | Select-Object -Last 1 | Out-File -FilePath {B[SSHLogDir]}\\{B[SSHLogFile]}_1 -Encoding UTF8 -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 38,
+    "name" : "TBox Read/Create File - get response from log file",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-be40-53b1-776087a7859d",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 39,
+    "name" : "TBox Set Buffer - verify response (exact)",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-cc14-d7a5-e255cf927072",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b22ab-349c-9363-0061-8d2f8c08c7d0"
+    } ]
+  }, {
+    "index" : 40,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-6a20-1b1e-64c98bbed07e",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-349c-daec-4b94-d27bddf6a848"
+    } ]
+  }, {
+    "index" : 41,
+    "name" : "TBox Set Buffer - buffer response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349c-cb10-cea0-57a9b1b84118",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "{B[SSHVerify]}",
+      "value" : "{B[SSHResponse]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "{B[SSHVerify]}",
+      "toscaPathID" : "3a1b22ab-349d-10ca-c1f2-8688476b8f11"
+    } ]
+  }, {
+    "index" : 42,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-9552-5f7e-3113da1cb23f",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-349d-4ced-ea89-6d210caa3d28"
+    } ]
+  }, {
+    "index" : 43,
+    "name" : "NEW TBox Set Buffer - setResponse",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-70dd-afc2-f57a6b506e43",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "<leer>",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b22ab-349d-94cf-0502-2b7d26388465"
+    } ]
+  }, {
+    "index" : 44,
+    "name" : "NEW TBox Evaluation Tool",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-1367-1a13-684141487bc8",
+    "module" : "TBox Evaluation Tool",
+    "moduleSurrogate" : "39ef0b81-ca03-ccd3-075c-e79f690877c0",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 45,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-ffdf-a491-afbf60350e12",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-349d-2d0d-6bfe-3bb421916520"
+    } ]
+  }, {
+    "index" : 46,
+    "name" : "TBox Read/Create File - get response from log file",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-9945-2ebd-3f301a430feb",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[SSHOption]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 47,
+    "name" : "TBox Set Buffer - buffer response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-8b10-6d45-beaf4961684e",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[SSHOption]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "*{B[L_Verify]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b22ab-349d-29de-a779-9b6ba2243278"
+    } ]
+  }, {
+    "index" : 48,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-00b7-4f06-2605cb011f18",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[SSHOption]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-349d-4fe2-f9b6-85c50f30fed2"
+    } ]
+  }, {
+    "index" : 49,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-a888-1045-ee478d5c86d2",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND (('{B[L_Option]}' == 'verify-no'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-349d-7616-5cdc-e726c3709546"
+    } ]
+  }, {
+    "index" : 50,
+    "name" : "TBox Set Buffer - Error",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-e1c5-fef3-ecc40af176f5",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy') AND ('{B[SSHProcessingFlag]}'=='0')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHExceptionInfoText",
+      "value" : "User-Error. Please check how sind Parameters for ResusableStepModule set!!",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHExceptionInfoText",
+      "toscaPathID" : "3a1b22ab-349d-864a-7177-3f03d128c4a5"
+    } ]
+  }, {
+    "index" : 51,
+    "name" : "TBox Delete Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349d-4119-e3bf-93520ef054f5",
+    "module" : "TBox Delete Buffer",
+    "moduleSurrogate" : "39e342b2-6ec7-0f30-678c-aec82a472007",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND ('{B[L_UmgebungsTyp]}'=='legacy')",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 52,
+    "name" : "TBox Set Buffer _LogTimeStamp",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349f-9f79-eaf9-d075dab11217",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "LogTimeStamp",
+      "value" : "{DATE[][][yyyy-MM-ddTHH:mm:ss]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "LogTimeStamp",
+      "toscaPathID" : "3a1b22ab-349f-3bc0-59cb-ec9a277eb1f3"
+    } ]
+  }, {
+    "index" : 53,
+    "name" : "OpenShift Start Batch",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-349f-5635-6b93-5d5cc5fb8d2d",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "C:\\Windows\\system32\\cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "StandardOutputFile",
+      "value" : "{B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    }, {
+      "name" : "arguments",
+      "value" : "/C oc exec deployment/{B[L_Servicename]} --namespace {B[L_Namespace]} -- bash -c \"\"\"\"{B[B_OpenShift_Lokal_CMD]}\"\"\"\"",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 54,
+    "name" : "neu TBox Start Program - remove CR LF",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b3662-450d-08f8-2415-8dd059ff0060",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "/C {B[G_UMGEBUNGSSCRIPT_SCRIPT_08]} {B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 55,
+    "name" : "neu TBox Start Program - ren Openshift_Log_ohne_CRLF",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b3662-450d-81e4-217f-6c35d161745c",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "Directory",
+      "value" : "{B[L_LogDir]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Directory"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "/C del {B[L_LogDir]}\\{B[L_LogFile]} & ren {B[L_LogFile]}_ohne_CRLF {B[L_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 56,
+    "name" : "TBox Start Program - powershell - count lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-6547-3413-c5049bae293e",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "StandardOutputFile",
+      "value" : "{B[L_LogDir]}\\{B[L_LogFile]}_Count",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "-command (Get-Content -Path {B[L_LogDir]}\\{B[L_LogFile]} -Raw | Measure-Object -Line).Lines",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 57,
+    "name" : "TBox Start Program - powershell - remove EndOfLine - utf-8 default",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-2277-4891-8f81d78e4f29",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "-command (Get-Content -Encoding UTF8 -Path {B[L_LogDir]}\\{B[L_LogFile]}_Count) | Out-File -Encoding UTF8 -FilePath {B[L_LogDir]}\\{B[L_LogFile]}_Count -NoNewline",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 58,
+    "name" : "TBox Read/Create File - buffer count lines",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-90cc-b8fd-a57ec4b8da8f",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer'))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 59,
+    "name" : "TBox Start Program - powershell - response is multiline",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c8-c351-63e1-fb13-c6438863cb2b",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (true)",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "powershell.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "-ExecutionPolicy Bypass -File {B[G_UMGEBUNGSSCRIPT_PATH]}\\RemoveTrailingCRLF.ps1 {B[L_LogDir]}\\{B[L_LogFile]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 60,
+    "name" : "TBox Read/Create File - get response from log file",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-8b9b-ac45-413d19ce2495",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (true)",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 61,
+    "name" : "TBox Set Buffer - verify response (exact)",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-7dfe-6b97-0d0cc41ff4df",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (true) AND ('{B[L_Option]}' == 'verify-exact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "{B[L_Verify]}",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b39c5-f836-ec86-3026-4111fe742fd0"
+    } ]
+  }, {
+    "index" : 62,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-b808-7c09-727fb8ea2759",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (true) AND ('{B[L_Option]}' == 'verify-exact')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b39c5-f836-45db-d566-61c15c45e902"
+    } ]
+  }, {
+    "index" : 63,
+    "name" : "TBox Set Buffer - buffer response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-574c-9324-fa460061248e",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact'))) AND (true) AND (NOT (('{B[L_Option]}' == 'verify-exact')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "{B[L_Verify]}",
+      "value" : "{B[SSHResponse]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "{B[L_Verify]}",
+      "toscaPathID" : "3a1b39c5-f836-d953-f89a-034116cac47f"
+    } ]
+  }, {
+    "index" : 64,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-b8b4-8b2d-4f8a07d26808",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (('{B[L_Option]}' == 'verify-exact'))) AND (true) AND (NOT (('{B[L_Option]}' == 'verify-exact')))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b39c5-f836-ccd1-a07a-0d84b1b16b1b"
+    } ]
+  }, {
+    "index" : 65,
+    "name" : "TBox Set Buffer - setResponse",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-e353-27ca-f893cb66d46f",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "<leer>",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b39c5-f836-2d3e-f91b-bd86397d8d7f"
+    } ]
+  }, {
+    "index" : 66,
+    "name" : "TBox Evaluation Tool",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-658f-5ea8-bfb997317fa8",
+    "module" : "TBox Evaluation Tool",
+    "moduleSurrogate" : "39ef0b81-ca03-ccd3-075c-e79f690877c0",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 67,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b39c5-f836-4bb8-dcfb-dd9301059d27",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-exact') || ('{B[L_Option]}' == 'buffer')) AND (NOT (true))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b39c5-f836-076d-8827-d0ed847e0b3e"
+    } ]
+  }, {
+    "index" : 68,
+    "name" : "TBox Read/Create File - get response from log file",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-34a8-11e8-0455-e332bd5c07cd",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ ]
+  }, {
+    "index" : 69,
+    "name" : "TBox Set Buffer - buffer response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-34a8-6286-2ad9-8609f0a2a9b6",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHResponse",
+      "value" : "*{B[L_Verify]}*",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHResponse",
+      "toscaPathID" : "3a1b22ab-34a8-b753-2c84-4a85ece7fd5a"
+    } ]
+  }, {
+    "index" : 70,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-34a8-4c2f-6c19-15e126ff2381",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-contains'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-34a8-3d1f-464e-fc20e01df745"
+    } ]
+  }, {
+    "index" : 71,
+    "name" : "TBox Set Buffer - setProcessingFlag",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-34a8-cf2b-5952-62fcb48b4263",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND (('{B[L_Option]}' == 'verify-no'))",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHProcessingFlag",
+      "value" : "1",
+      "actionMode" : "Insert",
+      "toscaPath" : "SSHProcessingFlag",
+      "toscaPathID" : "3a1b22ab-34a8-3b0b-abac-136e35eaf8b6"
+    } ]
+  }, {
+    "index" : 72,
+    "name" : "TBox Set Buffer - Error",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b22ab-34a8-97f8-9488-6f931234994d",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true') AND (NOT (('{B[L_UmgebungsTyp]}'=='legacy'))) AND ('{B[SSHProcessingFlag]}'=='0')",
+    "action" : null,
+    "values" : [ {
+      "name" : "SSHExceptionInfoText",
+      "value" : "User-Error. Please check how sind Parameters for ResusableStepModule set!!",
+      "actionMode" : "Verify",
+      "toscaPath" : "SSHExceptionInfoText",
+      "toscaPathID" : "3a1b22ab-34a8-4ba9-bd0e-dac9a359a334"
+    } ]
+  } ]
+}

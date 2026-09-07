@@ -1,0 +1,57 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1c1836-b801-590e-017b-4dda5d45e6fc",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Certs-austauschen_in-TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1c17c0-eb3b-b176-febb-4fa226cef27f" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRW7P6EHPXQPNECS7D8" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Start Program - powershell - ersetze-zertifikat-ALL.ps1",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a1c17c0-eb3b-d5dd-52f7-ef9b39a4d7c1",
+  "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+  "module" : "TBox Start Program",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : {
+    "Path" : {
+      "value" : "cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    },
+    "StandardOutputFile" : {
+      "value" : "{B[G_LogDir]}\\LfNr_PROD.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    },
+    "TimeoutForExit" : {
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    },
+    "arguments" : {
+      "value" : "/C powershell -ExecutionPolicy Bypass -File {B[KS_Bin_Folder]}\\ersetze-zertifikat-ALL.ps1 {B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\{B[FILENAME]} {B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\{B[FILENAME]}_output",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    }
+  }
+} ]

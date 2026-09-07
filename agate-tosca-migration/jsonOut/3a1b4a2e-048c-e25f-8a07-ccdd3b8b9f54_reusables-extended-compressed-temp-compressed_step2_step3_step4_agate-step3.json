@@ -1,0 +1,39 @@
+{
+  "name" : "SS2-Laufnummer-ermitteln",
+  "surrogate" : "3a1b4a2e-048c-e25f-8a07-ccdd3b8b9f54",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a1b4a2e-8e86-678b-0a63-81eac922f29f",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "",
+    "action" : null,
+    "values" : [ {
+      "name" : "DIRPC",
+      "value" : "TxFilesToKams",
+      "actionMode" : "Insert",
+      "toscaPath" : "DIRPC",
+      "toscaPathID" : "3a1b4a2f-5074-4be2-b797-69d1bbf4f521"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "LfNR_SS2_Calculator_Test_Reference_SS2-Laufnummer-ermitteln",
+    "type" : "Reusable",
+    "op" : null,
+    "surrogate" : "3a1b4a2e-6548-8d30-6d37-85c2398586df",
+    "module" : null,
+    "moduleSurrogate" : null,
+    "moduleClass" : null,
+    "reusableName" : "LfNR_SS2_Order_Calculator",
+    "reusableSurrogate" : "3a1ab3fb-7988-36ec-b07f-07051d8182ce",
+    "condition" : null,
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

@@ -1,0 +1,46 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: oc_log_file
+        value: "{R[log-file]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: searchString
+        value: "{R[search-string]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: noOccurance
+        value: "{R[no-occurance]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: logFile
+        value: "oc-log.txt"
+
+
+      - type: BUFFER
+        op: EXEC
+        condition: "('true' == 'true')"
+        name: logFolder
+        value: "C:\TCLogs"
+
+
+      # Execute CMD Command: TBox Start Program - execute CheckNuberOfOCccurance.ps1
+      - type: CMD
+        op: EXEC
+        condition: "('true' == 'true')"
+        command: |
+            {s[svc.projekt root path]}\tosca\scripts\kvw_scripts{S[SVC.Projekt root path]}\\Tosca\\Scripts\\KVW_Scripts\\CheckOcccurance.bat "{B[oc_log_file]}" "{B[searchString]}" {B[NoOccurance]} > {B[logFolder]}\\{B[logFile]}K
+        response: cmd_response
+
+      # [Merged] TBox Read/Create File - check Response is handled by the Request step

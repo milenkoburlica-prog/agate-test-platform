@@ -1,0 +1,1093 @@
+testCases:
+
+- id: OclMuhi_SS12_SVNR gesetzt_Eigenanspruch_ÖGK_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_vorauss. Geburtsdatum 11 W u1 Tag_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_vorauss. Geburtsdatum morgen_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_CardToken gesetzt_mit_SVNR_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_mehrfach_versichert_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_kein Druckname_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR gesetzt_APO-Vertrag_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682602'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_VP_kein_Recht_MUHI.CORE_BVA_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336026'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682601'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_nicht-in-DB_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_ungültig_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_Anspruch_nicht_ÖGK_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_abgeleiteter_Anspruch_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId Länge (33)_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId not existing_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId NULL_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId leer_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVSV-Token, SVNR-Eingabe unterschiedlich_ZS00167_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_e-Card-Token ungültig_ZS-00165_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVSV-Token, anderer VP_ZS-00168_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Token Null, SVN-Eingabe_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Token , Token Empty, SVN-Eingabe_GF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Keine e-card gesteckt, keine SV-Numer angegeben_ ZS-3300001_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_voraussichtlicher Geburtstermin fehlt_ZS-3300011_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtstermin -Datum falsches Format_ ZS-3300013_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtstermin -Datum liegt in der Vergangenheit_ ZS-3300014_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtsdatum liegt mehr als 40 Wochen in der Zukunft_ZS-3300015_FF
+  description: dmp_11_searchAnfragen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchanfragen_request_v11_dl
+    response: searchanfragen_request_v11_dl_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      anfrageArt: '{NULL}'
+      anfrageStatus: '{NULL}'
+      datumBeginn: '{NULL}'
+      datumEnde: '{NULL}'
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

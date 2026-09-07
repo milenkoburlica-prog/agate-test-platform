@@ -1,0 +1,9 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "Update WKS_Kontakt Set kontaktzeitpunkt = (TRUNC(ADD_MONTHS(SYSDATE, -3), 'Q') - 1) where SV_NUMMER = '{R[SVNR]}'"
+        response: setze_wks_kontakt_als_abgelaufen_(vorvorletztes_quartal)_für_svnr_res
+

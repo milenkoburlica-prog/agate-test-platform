@@ -1,9 +1,9 @@
 package at.co.svc.agate.engine.cmd;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 
+import at.co.svc.agate.core.command.CommandExecutionSupport;
+import at.co.svc.agate.core.command.CommandResult;
 import at.co.svc.agate.core.dsl.model.StepType;
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.model.TestStep;
@@ -13,13 +13,10 @@ import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.engine.AbstractStepEngine;
 import at.co.svc.agate.core.interfaces.TestLogger;
-import at.co.svc.agate.engine.oc.OcCmdResponse;
 
-/**
- * Universal Command Engine for local OS commands. Supports EXEC (execution),
- * ASSERT (validation), and BUFFER (data extraction).
- */
 public class CmdEngine extends AbstractStepEngine {
+
+    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
 
     @Override
     public boolean canExecute(StepType stepType) {
@@ -27,340 +24,676 @@ public class CmdEngine extends AbstractStepEngine {
     }
 
     @Override
-    public void doExecute(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
+    public void doExecute(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
 
         if (isVerbose) {
-            PrintDslStepContext.logDslStepContext(logger, step);
+            PrintDslStepContext.logDslStepContext(
+                    logger,
+                    step);
         }
 
-        String op = (step.getOp() != null) ? step.getOp().toUpperCase() : "EXEC";
+        String op =
+                step.getOp() != null
+                        ? step.getOp().toUpperCase()
+                        : "EXEC";
 
         switch (op) {
+
         case "ASSERT":
-            handleAssertion(tc, step, context, stepIndex, printExecution, yamlFile, logger, isVerbose);
+            handleAssertion(
+                    tc,
+                    step,
+                    context,
+                    stepIndex,
+                    printExecution,
+                    yamlFile,
+                    logger,
+                    isVerbose);
             break;
+
         case "BUFFER":
-            handleBuffer(tc, step, context, stepIndex, printExecution, yamlFile, logger, isVerbose);
+            handleBuffer(
+                    tc,
+                    step,
+                    context,
+                    stepIndex,
+                    printExecution,
+                    yamlFile,
+                    logger,
+                    isVerbose);
             break;
+
         case "EXEC":
-            handleExecution(tc, step, context, yamlFile, stepIndex, printExecution, logger, isVerbose);
+            handleExecution(
+                    tc,
+                    step,
+                    context,
+                    yamlFile,
+                    stepIndex,
+                    printExecution,
+                    logger,
+                    isVerbose);
             break;
+
         default:
-            throw new RuntimeException("Unsupported CMD operation: " + op);
+            throw new RuntimeException(
+                    "Unsupported CMD operation: " + op);
         }
     }
 
-    private void handleExecution(TestCase tc, TestStep step, ExecutionContext context, String yamlFile, int stepIndex,
-            Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
+    private void handleExecution(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            String yamlFile,
+            int stepIndex,
+            Boolean printExecution,
+            TestLogger logger,
+            boolean isVerbose) throws Exception {
 
         String rawCommand = step.getCommand();
-        if (rawCommand == null)
-            return;
 
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-        String resolvedCommand = resolver.resolve(tc, rawCommand, tc.getVariables(), yamlFile, stepIndex, "command");
+        if (rawCommand == null
+                || rawCommand.isBlank()) {
 
-        if (resolvedCommand != null && step.getParameters() != null) {
-            resolvedCommand = resolver.resolve(tc, resolvedCommand, step.getParameters(), yamlFile, stepIndex,
-                    "command", step);
+            throw new RuntimeException(
+                    "CMD EXEC requires 'command'.");
         }
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            logger.info(String.format("    %s>>> CMD       %s: %s", ConsoleColors.GREEN, ConsoleColors.RESET,
-                    resolvedCommand));
+        YamlPlaceholderResolver resolver =
+                new YamlPlaceholderResolver();
+
+        String resolvedCommand =
+                resolver.resolve(
+                        tc,
+                        rawCommand,
+                        tc.getVariables(),
+                        yamlFile,
+                        stepIndex,
+                        "command");
+
+        if (resolvedCommand != null
+                && step.getParameters() != null) {
+
+            resolvedCommand =
+                    resolver.resolve(
+                            tc,
+                            resolvedCommand,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "command",
+                            step);
         }
 
-        StringBuilder output = new StringBuilder();
-        int exitCode = -1;
+        String outputFile =
+                step.getOutputFile();
 
-        try {
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", resolvedCommand);
-            pb.redirectErrorStream(true);
+        if (outputFile != null) {
 
-            String trimmedCmd = resolvedCommand.trim();
+            outputFile =
+                    resolver.resolve(
+                            tc,
+                            outputFile,
+                            tc.getVariables(),
+                            yamlFile,
+                            stepIndex,
+                            "outputFile");
 
-            if (trimmedCmd.length() > 2 && Character.isLetter(trimmedCmd.charAt(0)) && trimmedCmd.charAt(1) == ':') {
-
-                String executablePath = trimmedCmd;
-                if (trimmedCmd.startsWith("\"")) {
-                    int nextQuote = trimmedCmd.indexOf("\"", 1);
-                    if (nextQuote != -1) {
-                        executablePath = trimmedCmd.substring(1, nextQuote);
-                    }
-                } else {
-                    int firstSpace = trimmedCmd.indexOf(" ");
-                    if (firstSpace != -1) {
-                        executablePath = trimmedCmd.substring(0, firstSpace);
-                    }
-                }
-
-                File executableFile = new File(executablePath);
-                File workingDir = executableFile.getParentFile();
-
-                if (workingDir != null && workingDir.exists() && workingDir.isDirectory()) {
-                    pb.directory(workingDir);
-
-                    if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                        logger.info(String.format("    %s>>> WORKDIR   %s: %s", ConsoleColors.BLUE, ConsoleColors.RESET,
-                                workingDir.getAbsolutePath()));
-                    }
-                }
+            if (step.getParameters() != null) {
+                outputFile =
+                        resolver.resolve(
+                                tc,
+                                outputFile,
+                                step.getParameters(),
+                                yamlFile,
+                                stepIndex,
+                                "outputFile",
+                                step);
             }
+        }
 
-            Process process = pb.start();
+        File workingDirectory =
+                determineWorkingDirectory(
+                        resolvedCommand);
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    output.append(line).append("\n");
-                    if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-                        logger.info(String.format("    %s<<< OUT       %s: %s", ConsoleColors.GREEN,
-                                ConsoleColors.RESET, line));
-                    }
-                }
+        int timeout =
+                step.getTimeout() != null
+                        ? step.getTimeout()
+                        : DEFAULT_TIMEOUT_SECONDS;
+
+        int expectedExitCode =
+                step.getExpectedExitCode() != null
+                        ? step.getExpectedExitCode()
+                        : 0;
+
+        boolean checkExitCode =
+                step.getCheckExitCode() == null
+                        || step.getCheckExitCode();
+
+        if (timeout <= 0) {
+            throw new RuntimeException(
+                    "CMD timeout must be greater than 0.");
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> CMD       %s: %s",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET,
+                            resolvedCommand));
+
+            if (workingDirectory != null) {
+
+                logger.info(
+                        String.format(
+                                "    %s>>> WORKDIR   %s: %s",
+                                ConsoleColors.BLUE,
+                                ConsoleColors.RESET,
+                                workingDirectory.getAbsolutePath()));
             }
-            exitCode = process.waitFor();
-            OcCmdResponse responseObj = new OcCmdResponse(exitCode, output.toString());
+        }
 
-            if (step.getResponse() != null) {
-                context.storeBuffer(step.getResponse(), responseObj);
-            }
+        CommandResult result =
+                CommandExecutionSupport.executeWindowsShell(
+                        resolvedCommand,
+                        workingDirectory,
+                        timeout);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Command execution failed: " + e.getMessage());
+        if (step.getResponse() != null) {
+            context.storeBuffer(
+                    step.getResponse(),
+                    result);
+        }
+
+        if (outputFile != null
+                && !outputFile.isBlank()) {
+
+            CommandExecutionSupport.writeOutputFile(
+                    outputFile,
+                    result.getOutput(),
+                    workingDirectory);
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logOutput(
+                    result.getOutput(),
+                    logger);
+
+            String statusColor =
+                    result.getExitCode() == expectedExitCode
+                            && !result.isTimedOut()
+                                    ? ConsoleColors.GREEN
+                                    : ConsoleColors.RED;
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: Exit=%d, Timeout=%s, Duration=%d ms",
+                            statusColor,
+                            ConsoleColors.RESET,
+                            result.getExitCode(),
+                            result.isTimedOut(),
+                            result.getDurationMs()));
+        }
+
+        if (result.isTimedOut()) {
+            throw new RuntimeException(
+                    "Command timed out after "
+                            + timeout
+                            + " seconds.");
+        }
+
+        if (checkExitCode
+                && result.getExitCode()
+                        != expectedExitCode) {
+
+            throw new RuntimeException(
+                    "Command execution failed. Expected exit code "
+                            + expectedExitCode
+                            + " but got "
+                            + result.getExitCode());
         }
     }
 
-    private void handleAssertion(TestCase tc, TestStep step, ExecutionContext context, int stepIndex,
-            Boolean printExecution, String yamlFile, TestLogger logger, boolean isVerbose) {
+    private void handleAssertion(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            int stepIndex,
+            Boolean printExecution,
+            String yamlFile,
+            TestLogger logger,
+            boolean isVerbose) {
 
-        String responseKey = step.getResponse();
-        String action = (step.getAction() != null) ? step.getAction().toUpperCase() : "";
-        String expected = (step.getExpected() != null) ? step.getExpected() : "0";
-        String value = (step.getValue() != null) ? step.getValue() : "";
+        String responseKey =
+                step.getResponse();
 
-        Object rawVal = context.getBuffer(responseKey);
+        String action =
+                step.getAction() != null
+                        ? step.getAction().toUpperCase()
+                        : "";
+
+        String expected =
+                step.getExpected() != null
+                        ? step.getExpected()
+                        : "0";
+
+        String value =
+                step.getValue() != null
+                        ? step.getValue()
+                        : "";
+
+        Object rawVal =
+                context.getBuffer(
+                        responseKey);
+
         if (rawVal == null) {
-            throw new RuntimeException("No response or buffer found for key: " + responseKey);
+            throw new RuntimeException(
+                    "No response or buffer found for key: "
+                            + responseKey);
         }
 
-        OcCmdResponse cachedResponse = (rawVal instanceof OcCmdResponse) ? (OcCmdResponse) rawVal : null;
-        String outputToCheck = (rawVal instanceof OcCmdResponse) ? ((OcCmdResponse) rawVal).getOutput()
-                : rawVal.toString();
+        CommandResult commandResult =
+                rawVal instanceof CommandResult
+                        ? (CommandResult) rawVal
+                        : null;
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            if (action.equals("COUNT") || action.equals("EXITCODE")) {
-                logger.info(String.format("    %s>>> ASSERT    %s: %s | Expected: [%s]", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, action, expected));
-            }
-        }
+        String outputToCheck =
+                commandResult != null
+                        ? commandResult.getOutput()
+                        : rawVal.toString();
 
         switch (action) {
+
         case "EXITCODE":
-        case "COUNT":
-            if (expected == null) {
-                throw new RuntimeException("Assertion [" + action + "] requires an 'expected' field.");
-            }
-            break;
-        case "CONTAINS":
-        case "NOT_CONTAINS":
-        case "EQUALS":
-        case "NOT_EQUALS":
-            if (value == null || value.isEmpty()) {
-                throw new RuntimeException("Assertion [" + action + "] requires a 'value' field.");
-            }
-            break;
-        default:
-            throw new RuntimeException("Unknown assertion type: \"" + action + "\"");
-        }
-
-        boolean passed = false;
-        String actualValue = "";
-        switch (action) {
-        case "EXITCODE":
-            if (cachedResponse == null) {
-                throw new RuntimeException("Assertion [EXITCODE] requires a full CMD response, not a buffer string.");
-            }
-            String actualExit = String.valueOf(cachedResponse.getExitCode());
-            passed = actualExit.equals(expected);
-            actualValue = "Exit: " + actualExit;
-            break;
-
-        case "CONTAINS":
-            passed = outputToCheck.contains(value);
-            actualValue = passed ? "String \"" + value + "\" found" : "String \"" + value + "\" NOT found";
-            break;
-
-        case "NOT_CONTAINS":
-            passed = !outputToCheck.contains(value);
-            actualValue = passed ? "String \"" + value + "\" absent" : "String \"" + value + "\" present (Error)";
-            break;
-
-        case "EQUALS":
-            passed = outputToCheck.trim().equals(value.trim());
-            actualValue = passed ? "String equals expected"
-                    : "String '" + outputToCheck.trim() + "' does NOT equal '" + value + "'";
-            break;
-
-        case "NOT_EQUALS":
-            passed = !outputToCheck.trim().equals(value.trim());
-            actualValue = passed ? "String does not equal expected" : "String matches unexpected value";
-            break;
-
-        case "COUNT":
-            int actualCount = countOccurrences(outputToCheck, value);
-            passed = (actualCount == Integer.parseInt(expected));
-            actualValue = "Count = " + actualCount;
-            break;
-
-        default:
-            throw new RuntimeException("Unknown assertion type: \"" + action + "\"");
-        }
-
-        if (!passed) {
-            if (action.equals("COUNT") || action.equals("EXITCODE")) {
+            if (commandResult == null) {
                 throw new RuntimeException(
-                        "Assertion " + action + " failed! Expected: " + expected + ", Actual: " + actualValue);
-            } else {
-                throw new RuntimeException("Assertion " + action + " failed! " + actualValue);
+                        "Assertion [EXITCODE] requires a CMD command response.");
             }
+
+            if (commandResult.getExitCode()
+                    != Integer.parseInt(expected)) {
+
+                throw new RuntimeException(
+                        "Assertion EXITCODE failed! Expected: "
+                                + expected
+                                + ", Actual: "
+                                + commandResult.getExitCode());
+            }
+            break;
+
+        case "CONTAINS":
+            if (!outputToCheck.contains(value)) {
+                throw new RuntimeException(
+                        "Assertion CONTAINS failed! String \""
+                                + value
+                                + "\" not found.");
+            }
+            break;
+
+        case "NOT_CONTAINS":
+            if (outputToCheck.contains(value)) {
+                throw new RuntimeException(
+                        "Assertion NOT_CONTAINS failed! String \""
+                                + value
+                                + "\" found.");
+            }
+            break;
+
+        case "EQUALS":
+            if (!outputToCheck.trim()
+                    .equals(value.trim())) {
+
+                throw new RuntimeException(
+                        "Assertion EQUALS failed! Expected: \""
+                                + value
+                                + "\", Actual: \""
+                                + outputToCheck.trim()
+                                + "\"");
+            }
+            break;
+
+        case "NOT_EQUALS":
+            if (outputToCheck.trim()
+                    .equals(value.trim())) {
+
+                throw new RuntimeException(
+                        "Assertion NOT_EQUALS failed.");
+            }
+            break;
+
+        case "COUNT":
+            int actualCount =
+                    countOccurrences(
+                            outputToCheck,
+                            value);
+
+            if (actualCount
+                    != Integer.parseInt(expected)) {
+
+                throw new RuntimeException(
+                        "Assertion COUNT failed! Expected: "
+                                + expected
+                                + ", Actual: "
+                                + actualCount);
+            }
+            break;
+
+        default:
+            throw new RuntimeException(
+                    "Unknown assertion type: \""
+                            + action
+                            + "\"");
+        }
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: SUCCESS",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET));
         }
     }
 
-    private void handleBuffer(TestCase tc, TestStep step, ExecutionContext context, int stepIndex,
-            Boolean printExecution, String yamlFile, TestLogger logger, boolean isVerbose) {
+    private void handleBuffer(
+            TestCase tc,
+            TestStep step,
+            ExecutionContext context,
+            int stepIndex,
+            Boolean printExecution,
+            String yamlFile,
+            TestLogger logger,
+            boolean isVerbose) {
 
-        String responseKey = step.getResponse();
-        String action = (step.getAction() != null) ? step.getAction().toUpperCase() : "TEXT";
-        String name = step.getName();
+        String responseKey =
+                step.getResponse();
 
-        String rawValue = step.getValue();
+        String action =
+                step.getAction() != null
+                        ? step.getAction().toUpperCase()
+                        : "TEXT";
 
-        if ((rawValue == null || rawValue.trim().isEmpty()) && (action.equals("LINE") || action.equals("LAST_LINE"))) {
+        String name =
+                step.getName();
+
+        String rawValue =
+                step.getValue();
+
+        if ((rawValue == null
+                || rawValue.trim().isEmpty())
+                && (action.equals("LINE")
+                        || action.equals("LAST_LINE"))) {
+
             rawValue = "0";
         }
 
-        int parsedValue = 0;
-        if (action.equals("LINE") || action.equals("LAST_LINE")) {
-            try {
-                parsedValue = Integer.parseInt(rawValue);
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(
-                        "Action [" + action + "] requires a valid numeric value, but got: \"" + rawValue + "\"");
-            }
+        Object raw =
+                context.getBuffer(
+                        responseKey);
+
+        if (!(raw instanceof CommandResult)) {
+            throw new RuntimeException(
+                    "No CMD response found for key: "
+                            + responseKey);
         }
 
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-        String resolvedResponseKey = resolver.resolve(tc, responseKey, tc.getVariables(), yamlFile, stepIndex,
-                "response");
+        CommandResult commandResult =
+                (CommandResult) raw;
 
-        OcCmdResponse cachedResponse = context.getResponse(resolvedResponseKey, OcCmdResponse.class);
-        if (cachedResponse == null) {
-            logger.error(String.format("    %s>>> ERROR     %s: Response [%s] not found!", ConsoleColors.RED,
-                    ConsoleColors.RESET, responseKey));
-            throw new RuntimeException("No response found for key: " + responseKey);
-        }
+        String fullOutput =
+                commandResult.getOutput() == null
+                        ? ""
+                        : commandResult.getOutput().trim();
 
-        String fullOutput = cachedResponse.getOutput().trim();
-        String[] lines = fullOutput.split("\\R");
-
-        validateBufferParameters(action, rawValue, lines.length);
-
-        String result = "";
+        String result;
 
         switch (action) {
+
         case "COUNT":
-            result = String.valueOf(countOccurrences(fullOutput, (rawValue != null ? rawValue : "")));
+            result =
+                    String.valueOf(
+                            countOccurrences(
+                                    fullOutput,
+                                    rawValue != null
+                                            ? rawValue
+                                            : ""));
             break;
 
         case "FILTER":
-            StringBuilder filtered = new StringBuilder();
-            String[] filterLines = fullOutput.split("\\R");
-            String searchStr = (rawValue != null ? rawValue : "");
-            for (String line : filterLines) {
-                if (line.contains(searchStr)) {
-                    filtered.append(line).append("\n");
-                }
-            }
-            result = filtered.toString().trim();
+            result =
+                    filterLines(
+                            fullOutput,
+                            rawValue != null
+                                    ? rawValue
+                                    : "");
             break;
 
         case "LAST_LINE":
-            String[] lastLines = fullOutput.split("\\R");
-            result = lastLines[lastLines.length - 1 - parsedValue].trim();
+            result =
+                    getLastLine(
+                            fullOutput,
+                            Integer.parseInt(rawValue));
             break;
 
         case "LINE":
-            String[] normalLines = fullOutput.split("\\R");
-            result = normalLines[parsedValue].trim();
+            result =
+                    getLine(
+                            fullOutput,
+                            Integer.parseInt(rawValue));
             break;
 
         case "TEXT":
-        default:
             result = fullOutput;
             break;
+
+        default:
+            throw new RuntimeException(
+                    "Unsupported CMD BUFFER action: "
+                            + action);
         }
 
-        context.storeBuffer(name, result);
+        if (name == null
+                || name.isBlank()) {
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-            if (action.equals("TEXT")) {
-                logger.info(String.format("    %s>>> BUFFER    %s: [%s] | Save Full Output to [%s]",
-                        ConsoleColors.GREEN, ConsoleColors.RESET, responseKey, name));
-            } else {
-                logger.info(String.format("    %s>>> BUFFER    %s: [%s] | %s [%s] to [%s]", ConsoleColors.GREEN,
-                        ConsoleColors.RESET, responseKey, action, rawValue, name));
-            }
+            throw new RuntimeException(
+                    "CMD BUFFER requires 'name'.");
+        }
 
-            if (result != null && !result.isEmpty()) {
-                String[] resultLines = result.split("\\R");
-                for (String line : resultLines) {
-                    logger.info(String.format("    %s<<< OUT       %s: %s", ConsoleColors.GREEN, ConsoleColors.RESET,
-                            line));
-                }
-            }
+        context.storeBuffer(
+                name,
+                result);
+
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose) {
+
+            logger.info(
+                    String.format(
+                            "    %s>>> RESULT    %s: SUCCESS (Buffered)",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET));
         }
     }
 
-    private void validateBufferParameters(String action, String rawValue, int maxLines) {
-        if (!action.equals("LINE") && !action.equals("LAST_LINE")) {
+    private File determineWorkingDirectory(
+            String command) {
+
+        if (command == null) {
+            return null;
+        }
+
+        String trimmed =
+                command.trim();
+
+        String executablePath = null;
+
+        if (trimmed.startsWith("\"")) {
+
+            int nextQuote =
+                    trimmed.indexOf(
+                            "\"",
+                            1);
+
+            if (nextQuote > 1) {
+                executablePath =
+                        trimmed.substring(
+                                1,
+                                nextQuote);
+            }
+
+        } else if (trimmed.length() > 2
+                && Character.isLetter(
+                        trimmed.charAt(0))
+                && trimmed.charAt(1) == ':') {
+
+            int firstSpace =
+                    trimmed.indexOf(' ');
+
+            executablePath =
+                    firstSpace > 0
+                            ? trimmed.substring(
+                                    0,
+                                    firstSpace)
+                            : trimmed;
+        }
+
+        if (executablePath == null) {
+            return null;
+        }
+
+        File executableFile =
+                new File(
+                        executablePath);
+
+        File parent =
+                executableFile.getParentFile();
+
+        if (parent != null
+                && parent.exists()
+                && parent.isDirectory()) {
+
+            return parent;
+        }
+
+        return null;
+    }
+
+    private void logOutput(
+            String output,
+            TestLogger logger) {
+
+        if (output == null
+                || output.isBlank()) {
             return;
         }
 
-        if (rawValue == null || rawValue.isEmpty()) {
-            throw new RuntimeException(
-                    "BUFFER error: Action '" + action + "' requires a numeric 'value', but none was provided.");
-        }
+        for (String line :
+                output.trim().split("\\R")) {
 
-        try {
-            int parsedValue = Integer.parseInt(rawValue);
-
-            if (parsedValue < 0) {
-                throw new RuntimeException(
-                        "BUFFER error: Value '" + rawValue + "' for action '" + action + "' must be >= 0.");
-            }
-
-            if (parsedValue >= maxLines) {
-                throw new RuntimeException("BUFFER error: Value '" + rawValue + "' for action '" + action
-                        + "' is out of bounds. Output contains only " + maxLines + " lines.");
-            }
-        } catch (NumberFormatException e) {
-            throw new RuntimeException(
-                    "BUFFER error: Value '" + rawValue + "' for action '" + action + "' is not a valid integer.");
+            logger.info(
+                    String.format(
+                            "    %s<<< OUT       %s: %s",
+                            ConsoleColors.GREEN,
+                            ConsoleColors.RESET,
+                            line));
         }
     }
 
-    private int countOccurrences(String text, String search) {
-        if (text == null || search == null || search.isEmpty())
+    private String filterLines(
+            String text,
+            String search) {
+
+        StringBuilder result =
+                new StringBuilder();
+
+        for (String line :
+                text.split("\\R")) {
+
+            if (line.contains(search)) {
+                result.append(line)
+                        .append(System.lineSeparator());
+            }
+        }
+
+        return result.toString().trim();
+    }
+
+    private String getLine(
+            String text,
+            int index) {
+
+        String[] lines =
+                text.split("\\R");
+
+        if (index < 0
+                || index >= lines.length) {
+
+            throw new RuntimeException(
+                    "LINE index out of bounds: "
+                            + index);
+        }
+
+        return lines[index].trim();
+    }
+
+    private String getLastLine(
+            String text,
+            int offset) {
+
+        String[] lines =
+                text.split("\\R");
+
+        int index =
+                lines.length - 1 - offset;
+
+        if (index < 0
+                || index >= lines.length) {
+
+            throw new RuntimeException(
+                    "LAST_LINE index out of bounds: "
+                            + offset);
+        }
+
+        return lines[index].trim();
+    }
+
+    private int countOccurrences(
+            String text,
+            String search) {
+
+        if (text == null
+                || search == null
+                || search.isEmpty()) {
+
             return 0;
+        }
 
         int count = 0;
-        int idx = 0;
-        while ((idx = text.indexOf(search, idx)) != -1) {
+        int index = 0;
+
+        while ((index =
+                text.indexOf(
+                        search,
+                        index)) != -1) {
+
             count++;
-            idx += search.length();
+            index += search.length();
         }
+
         return count;
     }
 }

@@ -1,0 +1,103 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1aa6e8-b86f-db37-c2f0-354a87cf00e1",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40DateiBereitstellen"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1aa6e8-b91d-2e0d-a10e-c394f7a506bc" ],
+    "Library" : [ "3a1aa111-cec2-df26-4b80-a3604bc798c6" ],
+    "UsedBy" : [ "01M1BBZFRV69E4J1S86EB70P58" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "3a1aa6e8-b91d-2e0d-a10e-c394f7a506bc",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "SS40DateiBereitstellen Lib"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1aa6e8-b91d-6a99-3494-af7cbd9871f0", "3a1aa6e8-b91d-327d-9452-cab45541826d" ],
+    "ParentFolder" : [ "3a1aa6e8-b86f-db37-c2f0-354a87cf00e1" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1aa6e8-b91d-6a99-3494-af7cbd9871f0",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1aa6e8-b91d-bfd1-4e83-e0804a0e6645" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1aa6e8-b91d-2e0d-a10e-c394f7a506bc" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1aa6e8-b91d-bfd1-4e83-e0804a0e6645",
+    "Value" : "kams SS40DateiBereitstellen",
+    "ExplicitName" : "CMD",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "CMD",
+    "ToscaPathID" : "3a1aa6e8-b91d-bfd1-4e83-e0804a0e6645"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1aa6e8-b91d-327d-9452-cab45541826d",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1aa6e8-b91d-46ba-c45e-3ccda72e40b8" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "3a1aa6e8-b91d-2e0d-a10e-c394f7a506bc" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-no",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[CMD]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[KS_POD_Name]}",
+    "ExplicitName" : ""
+  } ]
+} ]

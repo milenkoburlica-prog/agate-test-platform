@@ -1,0 +1,6 @@
+{
+  "ordinationNumber" : "{B[ordinationNumber]}",
+  "redundancy" : "{B[redundancy]}",
+  "connectionNumber" : "{B[connectionNumber]}",
+  "clientIp" : "{B[clientIp]}"
+}

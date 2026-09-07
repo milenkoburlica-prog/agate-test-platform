@@ -1,0 +1,27 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarName
+        value: "LfNr_SS40_QK"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarGruppe
+        value: "{B[KS_KARTENGENERATION]}"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: SysVarWert
+        value: "{B[LfNr_SS40_QK]}"
+
+========== REUSABLE CALL CREATE ==========
+[CALL-CREATE] step name        = 
+[CALL-CREATE] reusable rawName = 'ChSysVar'
+[CALL-CREATE] generated command = 'reusable.chsysvar'
+==========================================
+
+      - type: CALL
+        command: 'reusable.chsysvar'

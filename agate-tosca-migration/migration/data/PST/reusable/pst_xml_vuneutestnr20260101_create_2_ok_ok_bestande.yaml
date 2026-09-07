@@ -1,0 +1,59 @@
+steps:
+
+      # Execute CMD Command: TBox Start Program - Clean output folder
+      - type: CMD
+        op: EXEC
+        command: "del /q {B[PST_BASE_PATH_TEMP_OUTPUT]}\\*"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Start encrypting
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} encrypt -k {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_01]} -K {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_02]} -s {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_03]} -i {B[XML_DATEI_INPUT_01]} -o {B[PST_BASE_PATH_TEMP_OUTPUT]}\\bestand1.xml"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Start encrypting
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} encrypt -k {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_01]} -K {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_02]} -s {B[PST_BASE_PATH_PEM]}\\{B[PEM_DATEI_03]} -i {B[XML_DATEI_INPUT_01]} -o {B[PST_BASE_PATH_TEMP_OUTPUT]}\\bestand2.xml"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Start pdg
+      - type: CMD
+        op: EXEC
+        command: |
+            java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_JAR_NAME]} pdg -d {B[PST_BASE_PATH_TEMP_OUTPUT]}\\ -i "text/xml" -k 07 -p VU -u 34 -z NY
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Get DDAU Filename
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --directory {B[PST_BASE_PATH_TEMP_OUTPUT]}\\"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Remove EOL
+      - type: CMD
+        op: EXEC
+        command: "powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File
+
+
+      # Execute CMD Command: TBox Start Program - Get DDAU Filename
+      - type: CMD
+        op: EXEC
+        command: "java -jar {B[PST_BASE_PATH_BIN]}\\{B[PST_SIMU_HELPER_JAR_NAME]} --file {B[PST_BASE_PATH_TEMP_OUTPUT]}\\"
+        response: cmd_response
+
+
+      # Execute CMD Command: TBox Start Program - Remove EOL
+      - type: CMD
+        op: EXEC
+        command: "powershell -Command (Get-Content {B[G_LogDir]}\\ddaus_file_name.txt -Raw).TrimEnd([char]13,[char]10) | Set-Content {B[G_LogDir]}\\ddaus_file_name.txt -NoNewline"
+        response: cmd_response
+Unprocessed moduleName=TBox Read/Create File

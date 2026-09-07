@@ -1,0 +1,14 @@
+steps:
+      # schreibeDMPPatientEin Request
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{B[WS_Server]}:{B[WS_Port]}"
+        command: soap.ecsrvbe2dmp.services.dmp_ss30_frontendservicesoap.schreibedmppatientein_request
+        response: soap.ecsrvbe2dmp.services.dmp_ss30_frontendservicesoap.schreibedmppatientein_request_response
+        parameters:
+          BezirkskennzeichenDmpArzt: "DM2"
+          PlzDmpArzt: "1010"
+          BezirkskennzeichenPatient: "dm2"
+          PlzPatient: "1011"
+
+      # [Merged] schreibeDMPPatientEin Response is handled by the Request step

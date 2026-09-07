@@ -1,0 +1,107 @@
+{
+  "name" : "03-openShift_consolecheck",
+  "surrogate" : "3a13521a-9681-a230-b9c4-e3aa84ce5d59",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer - Set Buffers",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a13521a-9782-61b3-e746-ef83746eb73d",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "oc_log_file",
+      "value" : "{PL[log-file]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "oc_log_file",
+      "toscaPathID" : "3a13521a-9782-1422-44af-5c3df996ce68"
+    }, {
+      "name" : "searchString",
+      "value" : "{PL[search-string]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "searchString",
+      "toscaPathID" : "3a13521a-9782-4b2e-d31d-b8565ac97add"
+    }, {
+      "name" : "noOccurance",
+      "value" : "{PL[no-occurance]}",
+      "actionMode" : "Insert",
+      "toscaPath" : "noOccurance",
+      "toscaPathID" : "3a13521a-9782-c52f-cd19-35b0e30cdee7"
+    }, {
+      "name" : "logFile",
+      "value" : "oc-log.txt",
+      "actionMode" : "Insert",
+      "toscaPath" : "logFile",
+      "toscaPathID" : "3a13521a-9782-f98f-9bbd-640cd8879213"
+    }, {
+      "name" : "logFolder",
+      "value" : "C:\\TCLogs",
+      "actionMode" : "Insert",
+      "toscaPath" : "logFolder",
+      "toscaPathID" : "3a13521a-9782-c5d9-a63f-dc678ec98d99"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "TBox Start Program - execute CheckNuberOfOCccurance.ps1",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a13521a-9782-ec59-b8e6-d834b015b9ab",
+    "module" : "TBox Start Program",
+    "moduleSurrogate" : "39ef0b81-ca32-4c01-9327-9a9501ec8de7",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ {
+      "name" : "Path",
+      "value" : "cmd.exe",
+      "actionMode" : "Insert",
+      "toscaPath" : "Path"
+    }, {
+      "name" : "Directory",
+      "value" : "{S[SVC.Projekt root path]}\\Tosca\\Scripts\\KVW_Scripts",
+      "actionMode" : "Insert",
+      "toscaPath" : "Directory"
+    }, {
+      "name" : "StandardOutputFile",
+      "value" : "{B[logFolder]}\\{B[logFile]}Z",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.StandardOutputFile"
+    }, {
+      "name" : "TimeoutForExit",
+      "value" : "3000",
+      "actionMode" : "Insert",
+      "toscaPath" : "WaitForExit.TimeoutForExit"
+    }, {
+      "name" : "ExitCode",
+      "value" : "0",
+      "actionMode" : "Verify",
+      "toscaPath" : "WaitForExit.ExitCode"
+    }, {
+      "name" : "arguments",
+      "value" : "/C {S[SVC.Projekt root path]}\\Tosca\\Scripts\\KVW_Scripts\\CheckOcccurance.bat \"\"\"\"{B[oc_log_file]}\"\"\"\" \"\"\"\"{B[searchString]}\"\"\"\" {B[NoOccurance]} > {B[logFolder]}\\{B[logFile]}K",
+      "actionMode" : "Insert",
+      "toscaPath" : "Arguments"
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "TBox Read/Create File - check Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "3a13521a-9782-b9c2-7722-392e2aad2b84",
+    "module" : "TBox Read/Create File",
+    "moduleSurrogate" : "39ef0b81-ca12-20fa-841b-58d4b8e3af98",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : "('true' == 'true')",
+    "action" : null,
+    "values" : [ ]
+  } ]
+}

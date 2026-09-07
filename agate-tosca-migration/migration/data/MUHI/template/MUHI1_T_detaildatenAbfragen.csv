@@ -1,0 +1,28 @@
+ParameterName;Fehlerfall: DialogId Länge (33);Fehlerfall: DialogId not existing;Fehlerfall: DialogId NULL;Fehlerfall: DialogId leer;Gutfall: Absolute Meldung;Gutfall: Individuelle Meldung;Fehlerfall: Absolute Meldung von anderem VP;Fehlerfall: Individuelle Meldung von anderem VP;Fehlerfall: MeldungsId nicht vorhanden;Fehlerfall: Kein Recht MUHI.Core
+Instanz;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL;ALL
+Replayable;;;;;;;;;;
+Vertragspartner.VPNR;336010;336010;336010;336010;336047;336047;336047;336047;336047;336026
+Vertragspartner.Ord_id;15682607;15682607;15682607;15682607;15682603;15682603;15682603;15682603;15682603;15682601
+Vertragspartner.OrdinationsId;99;99;99;99;99;99;99;99;99;98
+DialogID;Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU;Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA;{NULL};{EMPTY};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]};{B[dialogId]}
+meldungsTyp;;;;;A;I;A;I;;
+MuhiException;;;;;;;ZS-3390028;ZS-3390028;ZS-3390027;
+DialogException;CL-01085;CL-01085;CL-01085;CL-01085;;;;;;
+AccessException;;;;;;;;;;CL-A0005_MUHI_ExceptionCode_62
+CardException;;;;;;;;;;
+DialogException.Information;Die angegebene Dialog Id ist ungültig. Hinweis: Diese Exception tritt in folgenden Fällen auf: Eine Zeitüberschreitung wurde am Client erkannt und das Erkennen liegt schon zu lange zurück. Ein unerwarteter Fehler beim Zugiff auf den Dialog (auch falsche DialogId). Der Dialog wurde ohne Failover-Kennzeichen aufgebaut, aber im möglichen Failover-Fall wird erkannt, dass die Funktion mit Failover-Information (TransaktionsId im Header) aufgerufen wurde.;Die angegebene Dialog Id ist ungültig. Hinweis: Diese Exception tritt in folgenden Fällen auf: Eine Zeitüberschreitung wurde am Client erkannt und das Erkennen liegt schon zu lange zurück. Ein unerwarteter Fehler beim Zugiff auf den Dialog (auch falsche DialogId). Der Dialog wurde ohne Failover-Kennzeichen aufgebaut, aber im möglichen Failover-Fall wird erkannt, dass die Funktion mit Failover-Information (TransaktionsId im Header) aufgerufen wurde.;Die angegebene Dialog Id ist ungültig. Hinweis: Diese Exception tritt in folgenden Fällen auf: Eine Zeitüberschreitung wurde am Client erkannt und das Erkennen liegt schon zu lange zurück. Ein unerwarteter Fehler beim Zugiff auf den Dialog (auch falsche DialogId). Der Dialog wurde ohne Failover-Kennzeichen aufgebaut, aber im möglichen Failover-Fall wird erkannt, dass die Funktion mit Failover-Information (TransaktionsId im Header) aufgerufen wurde.;Die angegebene Dialog Id ist ungültig. Hinweis: Diese Exception tritt in folgenden Fällen auf: Eine Zeitüberschreitung wurde am Client erkannt und das Erkennen liegt schon zu lange zurück. Ein unerwarteter Fehler beim Zugiff auf den Dialog (auch falsche DialogId). Der Dialog wurde ohne Failover-Kennzeichen aufgebaut, aber im möglichen Failover-Fall wird erkannt, dass die Funktion mit Failover-Information (TransaktionsId im Header) aufgerufen wurde.;;;;;;
+DialogException.InfoText;Der Dialog ist ungültig. Bitte melden Sie sich erneut an.;Der Dialog ist ungültig. Bitte melden Sie sich erneut an.;Der Dialog ist ungültig. Bitte melden Sie sich erneut an.;Der Dialog ist ungültig. Bitte melden Sie sich erneut an.;;;;;;
+DialogException.InfoCode;CL-01085;CL-01085;CL-01085;CL-01085;;;;;;
+DialogException.ExceptionCode;1;1;1;1;;;;;;
+DialogException.ExceptionTyp;DIALOG_INVALID;DIALOG_INVALID;DIALOG_INVALID;DIALOG_INVALID;;;;;;
+DialogException.ExceptionName;DialogException;DialogException;DialogException;DialogException;;;;;;
+MuhiException.ExceptionName;;;;;;;MuhiException;MuhiException;MuhiException;
+MuhiException.InfoCode;;;;;;;ZS-3390028;ZS-3390028;ZS-3390027;
+MuhiException.InfoText;;;;;;;Sie dürfen die angegebene Meldung nicht lesen oder verändern, da sie nicht von Ihnen erstellt wurde.;Sie dürfen die angegebene Meldung nicht lesen oder verändern, da sie nicht von Ihnen erstellt wurde.;Es existiert keine Meldung mit der angegebenen Nummer.;
+MuhiException.ExceptionTyp;;;;;;;ACCESS_FORBIDDEN;ACCESS_FORBIDDEN;NO_ENTRY_FOR_ID;
+MuhiException.ExceptionCode;;;;;;;54;54;53;
+AccessException.ExceptionName;;;;;;;;;;AccessException
+AccessException.ExceptionCode;;;;;;;;;;62
+AccessException.InfoCode;;;;;;;;;;CL-A0005
+AccessException.InfoText;;;;;;;;;;Es existiert keine Berechtigung zum Aufruf dieser Funktion.
+AccessException.Information;;;;;;;;;;Es existiert keine Berechtigung zum Aufruf dieser Funktion.

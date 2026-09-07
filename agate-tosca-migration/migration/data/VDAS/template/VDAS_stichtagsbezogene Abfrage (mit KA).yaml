@@ -1,0 +1,395 @@
+
+  - id: "VDAS_stichtagsbezogene_Abfrage_(mit_KA)"
+    description: "VDAS_stichtagsbezogene Abfrage (mit KA)"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "Funktion == 'ZPV'"
+        command: "select * from HVB_SVPERSON where SV_NUMMER = '{XL[SVPerson]}'"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 1
+      - type: SQL
+        op: BUFFER
+        name: VORNAME
+        row: "0"
+        column: "1"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 2
+      - type: SQL
+        op: BUFFER
+        name: ZUNAME
+        row: "0"
+        column: "2"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 3
+      - type: SQL
+        op: BUFFER
+        name: TITEL_VORNE
+        row: "0"
+        column: "3"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 4
+      - type: SQL
+        op: BUFFER
+        name: TITEL_HINTEN
+        row: "0"
+        column: "4"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 5
+      - type: SQL
+        op: BUFFER
+        name: DRUCKVORNAME
+        row: "0"
+        column: "5"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 6
+      - type: SQL
+        op: BUFFER
+        name: DRUCKZUNAME
+        row: "0"
+        column: "6"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 7
+      - type: SQL
+        op: BUFFER
+        name: DRUCKTITEL_VORNE
+        row: "0"
+        column: "7"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 8
+      - type: SQL
+        op: BUFFER
+        name: DRUCKTITEL_HINTEN
+        row: "0"
+        column: "8"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 9
+      - type: SQL
+        op: BUFFER
+        name: GEBURTSDATUM
+        row: "0"
+        column: "9"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 10
+      - type: SQL
+        op: BUFFER
+        name: GESCHLECHT_CODE
+        row: "0"
+        column: "10"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 12
+      - type: SQL
+        op: BUFFER
+        name: LASTCHANGE
+        row: "0"
+        column: "12"
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 13
+      - type: SQL
+        op: BUFFER
+        name: USERID
+        row: "0"
+        column: "13"
+        response: tbox_db_expert_module_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "Funktion='ZPV'"
+        command: "update HVB_SVPERSON set zuname='', vorname='', geburtsdatum='', LASTCHANGE=LASTCHANGE-2 where SV_NUMMER = '{XL[SVPerson]}'"
+        response: tbox_db_expert_module_update_{xl[svperson]}_res
+
+
+      - type: CALL
+        command: "reusable.dialogaufbau_std_rcv_de"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.ordiadresse_und_fachgebiet_r_de"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_lösche_foto_info_auskunft_zu_übergebener_svnr_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_lösche_alle_zeilen_in_foto_info_über_svnr_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_insert_fa_zu_svnr_in_foto_info_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+
+      - type: CALL
+        command: "reusable.prüfung_versionsnummer_vdas"
+        condition: "KopfdatenCheck=='ja'"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Anwendungsmenü (008)
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Versichertendatenabfragemenü
+      #[Pending] No mapping for: Versichertendatenabfragemenü
+
+      - type: CALL
+        command: "reusable.onlinehilfe_vdas"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_kopfzeile_mit_auspraegung_de"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.versichertendatenvorgabe"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.onlinehilfe_vdas"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_kopfzeile_mit_auspraegung_de"
+        condition: "(KopfdatenCheck=='ja')"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Versichertendateneingabe
+      #[Pending] No mapping for: Versichertendateneingabe
+      #[Pending] No mapping for: Versichertendateneingabe
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.onlinehilfe_vdas"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_kopfzeile_mit_auspraegung_de"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.fotoinfo_gui_existenz_prüfung_foto_info_meldung_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          Existiert: "True"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_prüfe,_ob_übergebene_anzahl_foto_info_auskunft_zeilen_zu_svnr_existieren_de"
+        condition: "Foto_Info =='Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+          Anzahl: "1"
+
+      - type: CALL
+        command: "reusable.prüfung_patientendaten_mit_stichtag"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_abgeleitete_patientendaten_anspruch_1"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_versichertendaten"
+        parameters: {}
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.onlinehilfe_vdas"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.kopfdatencheck_mit_auspraegung_de"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.fotoinfo_gui_existenz_prüfung_foto_info_meldung_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          Existiert: "True"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_prüfe,_ob_übergebene_anzahl_foto_info_auskunft_zeilen_zu_svnr_existieren_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+          Anzahl: "1"
+      #[Pending] No mapping for: Anspruchsliste
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.onlinehilfe_vdas"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.kopfdatencheck_mit_auspraegung_de"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_abgeleitete_patientendaten_anspruch_1"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_patientendaten_mit_stichtag"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_feld_todesdatum"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_versichertendaten"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.fotoinfo_gui_existenz_prüfung_foto_info_meldung_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          Existiert: "False"
+      #[Pending] No mapping for: Abfrageergebnis
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.fotoinfo_gui_existenz_prüfung_foto_info_meldung_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          Existiert: "True"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_prüfe,_ob_übergebene_anzahl_foto_info_auskunft_zeilen_zu_svnr_existieren_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+          Anzahl: "1"
+      #[Pending] No mapping for: Anspruchsliste
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.prüfung_patientendaten_mit_stichtag"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_abgeleitete_patientendaten_anspruch_2"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_versichertendaten_anspruch2"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.fotoinfo_gui_existenz_prüfung_foto_info_meldung_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          Existiert: "False"
+      #[Pending] No mapping for: Abfrageergebnis
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Anspruchsliste
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+
+      - type: CALL
+        command: "reusable.prüfung_patientendaten_mit_stichtag"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_abgeleitete_patientendaten_anspruch_3"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.prüfung_versichertendaten_anspruch3"
+        parameters: {}
+      #[Pending] No mapping for: Abfrageergebnis
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: TBox Wait
+      #[Pending] No mapping for: Versichertendateneingabe
+      #[Pending] No mapping for: Versichertendatenabfragemenü_Stichtag
+      #[Pending] No mapping for: Ergebnisübersicht_Buttons
+      #[Pending] No mapping for: Kopfdatenprüfung
+      #[Pending] No mapping for: Versichertendatenabfragemenü
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        condition: "Funktion == 'ZPV'"
+        command: "update HVB_SVPERSON set vorname='{B[VORNAME]}', zuname='{B[ZUNAME]}', titel_vorne='{B[TITEL_VORNE]}', drucktitel_hinten='{B[DRUCKTITEL_HINTEN]}', drucktitel_vorne='{B[DRUCKTITEL_VORNE]}', titel_hinten='{B[TITEL_HINTEN]}', geschlecht_code='{B[GESCHLECHT_CODE]}', geburtsdatum='{B[GEBURTSDATUM]}', druckvorname='{B[DRUCKVORNAME]}', druckzuname='{B[DRUCKZUNAME]}', lastchange = to_timestamp('{B[LASTCHANGE]}.0','DD.MM.YYYY HH24:MI:SS:FF'), userid='{B[USERID]}' where SV_NUMMER = '{XL[SVPerson]}'"
+        response: dbexpertmodule_update_svnr_res
+
+
+      - type: CALL
+        command: "reusable.dialog_beenden_r_de"
+        parameters: {}
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_lösche_foto_info_auskunft_zu_übergebener_svnr_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"
+
+      - type: CALL
+        command: "reusable.fotoinfo_db_lösche_alle_zeilen_in_foto_info_über_svnr_de"
+        condition: "Foto_Info == 'Ja'"
+        parameters: 
+          SVNR: "{XL[SVPerson.SVNR]}"

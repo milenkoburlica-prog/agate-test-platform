@@ -1,0 +1,9 @@
+steps:
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "update PST_DATEN_BESTAND set status = 'FE'where STATUS not in ('FE','EX')"
+        response: tbox_db_expert_module__unverarbeitete_bestände_löschen_-_bereingung_vor_beginn_res
+

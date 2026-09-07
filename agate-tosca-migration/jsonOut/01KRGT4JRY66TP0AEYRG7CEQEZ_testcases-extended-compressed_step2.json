@@ -1,0 +1,419 @@
+[ {
+  "ObjectClass" : "TestCase",
+  "Surrogate" : "01KRGT4JRY66TP0AEYRG7CEQEZ",
+  "Attributes" : {
+    "IncludeForSynchronization" : "1",
+    "CheckoutWorkspace" : "",
+    "IsBusinessTestCase" : "0",
+    "Description" : "",
+    "SynchronizationPolicy" : "2",
+    "Revision" : "132717",
+    "DerivedFromName" : "",
+    "CheckOutState" : "1",
+    "Pausable" : "1",
+    "TestCaseWorkState" : "2",
+    "Name" : "PST_REPORT_GF_002_report_with_absolute_output_file_path"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionLogs" : [ ],
+    "ReferencedBy" : [ ],
+    "ExecutionEntries" : [ ],
+    "Items" : [ "01KVDGRF595876J5WPWTN85A49", "01KVDGRF595876J5WPWTN85A4V", "01KVDGRF595876J5WPWTN85A58" ],
+    "Properties" : [ ],
+    "AttachedFiles" : [ ],
+    "ParentFolder" : [ "01KR37D860F3RCGVXH1GSX7JA1" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A49",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Vorbereitung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KRGT4JRY66TP0AEYRG7CEQEZ" ],
+    "Items" : [ "01KVDGRF595876J5WPWTN85A4A", "01KVDGRF595876J5WPWTN85A4G" ],
+    "DerivedFrom" : [ "01KV5E9EZ26XZ654JZP1229YAQ" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4A",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KVDGRF595876J5WPWTN85A4B", "01KVDGRF595876J5WPWTN85A4C", "01KVDGRF595876J5WPWTN85A4D", "01KVDGRF595876J5WPWTN85A4E", "01KVDGRF595876J5WPWTN85A4F" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A49" ],
+    "DerivedFrom" : [ "01KV5E9EZ26XZ654JZP1229YAR" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4B",
+    "Value" : "PST_REPORT_GF_002",
+    "ExplicitName" : "TC_ID",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "TC_ID",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4B"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4C",
+    "Value" : "{B[TC_ID]}_{DATETIME}",
+    "ExplicitName" : "tc_name",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "tc_name",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4C"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4D",
+    "Value" : "{B[TC_ID]}",
+    "ExplicitName" : "TEST_DATA_PACKET_DIR",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "TEST_DATA_PACKET_DIR",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4D"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4E",
+    "Value" : "XX",
+    "ExplicitName" : "referenze2",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "referenze2",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4E"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4F",
+    "Value" : "job",
+    "ExplicitName" : "task",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "task",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4F"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4G",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Backup-pst-input-data"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "01KVDGRF595876J5WPWTN85A4H", "01KVDGRF595876J5WPWTN85A4K" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A49" ],
+    "DerivedFrom" : [ "01KV5E9EZ87KV1RY013DJEBYE1" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4H",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KVDGRF595876J5WPWTN85A4J" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4G" ],
+    "DerivedFrom" : [ "01KV5E9EZ87KV1RY013DJEBYE2" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4J",
+    "Value" : "{B[G_LogDir]}\\{B[PST_ID]}\\{B[TEST_DATA_PACKET_DIR]}\\{B[tc_name]}",
+    "ExplicitName" : "logging_path",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "logging_path",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4J"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4K",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Start Program - Create Logging DIR"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "01KVDGRF595876J5WPWTN85A4M", "01KVDGRF595876J5WPWTN85A4N", "01KVDGRF595876J5WPWTN85A4S" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-ca32-4c01-9327-9a9501ec8de7" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4G" ],
+    "DerivedFrom" : [ "01KV5E9EZ87KV1RY013DJEBYE4" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4M",
+    "Value" : "C:\\Windows\\system32\\cmd.exe",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Path",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4M"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4P",
+    "Value" : "/C",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4N.01KVDGRF595876J5WPWTN85A4P"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4Q",
+    "Value" : "mkdir",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4N.01KVDGRF595876J5WPWTN85A4Q"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4R",
+    "Value" : "{B[logging_path]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "Arguments.Argument",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4N.01KVDGRF595876J5WPWTN85A4R"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "01KVDGRF595876J5WPWTN85A4T",
+    "Value" : "0",
+    "ExplicitName" : "",
+    "ActionMode" : "Verify",
+    "ActionProperty" : "",
+    "ToscaPath" : "WaitForExit.ExitCode",
+    "ToscaPathID" : "01KVDGRF595876J5WPWTN85A4S.01KVDGRF595876J5WPWTN85A4T"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4V",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Durchführung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KRGT4JRY66TP0AEYRG7CEQEZ" ],
+    "Items" : [ "01KVDGRF595876J5WPWTN85A4W", "01KVDH22VBDMA6VZWEQNN81FCX", "01KVDGRF595876J5WPWTN85A52", "01KVDN0PFX8ZSR7GKFTH2WTMVH" ],
+    "DerivedFrom" : [ "01KV5E9EZ87KV1RY013DJEBYEN" ]
+  },
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A4W",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "01_execute_ssh_Reference delete report file"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KVDGRF595876J5WPWTN85A4X" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4V" ],
+    "DerivedFrom" : [ "01KV5EZX0148A22JWZCT42M70B" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-no",
+    "ExplicitName" : "Option"
+  }, {
+    "Value" : "rm {B[PST_OUTPUT_FOLDER]}/report1.txt",
+    "ExplicitName" : "Command"
+  }, {
+    "Value" : "kvw-pst-{B[PST_ID]}",
+    "ExplicitName" : "Servicename"
+  }, {
+    "Value" : "",
+    "ExplicitName" : "Verify"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KVDH22VBDMA6VZWEQNN81FCX",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "02_execute_ssh_Reference pst report -dateFrom=20260601 -dateTo=20260630"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KVDH22VBDMA6VZWEQNN81FCY" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4V" ],
+    "DerivedFrom" : [ "01KV5EZX0148A22JWZCT42M70B" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-contains",
+    "ExplicitName" : "Option"
+  }, {
+    "Value" : "pst report -dateFrom={DATE[][][yyyyMM]}01 -dateTo={DATE[][][yyyyMM]}30 -file={B[PST_OUTPUT_FOLDER]}/report1.txt ;echo $?",
+    "ExplicitName" : "Command"
+  }, {
+    "Value" : "kvw-pst-{B[PST_ID]}",
+    "ExplicitName" : "Servicename"
+  }, {
+    "Value" : "0",
+    "ExplicitName" : "Verify"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A52",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "03_execute_file_transfer_Reference"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KVDGRF595876J5WPWTN85A53" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a6fe-2171-c8d2-da02-80b57899d454" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4V" ],
+    "DerivedFrom" : [ "01KV5E9EZ87KV1RY013DJEBYEP" ]
+  },
+  "Parameters" : [ {
+    "Value" : "get",
+    "ExplicitName" : "Option"
+  }, {
+    "Value" : "kvw-pst-{B[PST_ID]}",
+    "ExplicitName" : "Servicename"
+  }, {
+    "Value" : "{B[logging_path]}",
+    "ExplicitName" : "WindowsFilePath"
+  }, {
+    "Value" : "{B[PST_OUTPUT_FOLDER]}\\report1.txt",
+    "ExplicitName" : "UnixFilePath"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "01KVDN0PFX8ZSR7GKFTH2WTMVH",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "04_execute_ssh_Reference check report file"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "01KVDN0PFX8ZSR7GKFTH2WTMVJ" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a095-fa28-5c89-614d-9cd7d1c20e17" ],
+    "ParentFolder" : [ "01KVDGRF595876J5WPWTN85A4V" ],
+    "DerivedFrom" : [ "01KV5EZX0148A22JWZCT42M70B" ]
+  },
+  "Parameters" : [ {
+    "Value" : "verify-exact",
+    "ExplicitName" : "Option"
+  }, {
+    "Value" : "ls -ltr {B[PST_OUTPUT_FOLDER]}/report1.txt | wc -l",
+    "ExplicitName" : "Command"
+  }, {
+    "Value" : "kvw-pst-{B[PST_ID]}",
+    "ExplicitName" : "Servicename"
+  }, {
+    "Value" : "1",
+    "ExplicitName" : "Verify"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolder",
+  "Surrogate" : "01KVDGRF595876J5WPWTN85A58",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "2",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Nacharbeitung"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "TestCase" : [ "01KRGT4JRY66TP0AEYRG7CEQEZ" ],
+    "Items" : [ ],
+    "DerivedFrom" : [ "01KV5E9EZB1X33T5MT71QBGDGS" ]
+  },
+  "Parameters" : [ ]
+} ]

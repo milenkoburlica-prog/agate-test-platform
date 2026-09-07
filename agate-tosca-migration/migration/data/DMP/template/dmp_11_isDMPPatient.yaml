@@ -1,0 +1,203 @@
+
+  - id: "dmp_11_isDMPPatient"
+    description: "dmp_11_isDMPPatient"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+      - type: CALL
+        command: "reusable.db_dmp_delete_dmp_patient"
+        condition: "Einschreiben.SVT != NULL"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+
+      - type: CALL
+        command: "reusable.soap_ss30_schreibedmppatientein"
+        condition: "Einschreiben.SVT != NULL"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+      - type: BUFFER
+        op: EXEC
+        name: "B_Karte"
+        condition: ""
+        value: "{XL[Vertragspartner.VPNR]}"
+      - type: BUFFER
+        op: EXEC
+        name: "B_OrdinationsId"
+        condition: ""
+        value: "{XL[Vertragspartner.Ord_id]}"
+
+      - type: CALL
+        command: "reusable.ru_dialog_aufbau_mit_ordid"
+        parameters: 
+          ORD_ID: '{B[B_OrdinationsId]}'
+          vpNummer: '{B[B_Karte]}'
+          cardSlot: "baseContact"
+
+      # isDMPPatient Request V11
+      - type: SOAP
+        op: EXEC
+        endpoint: "https://{E[env.ecard.service]}"
+        command: soap.dmp.11.isdmppatient_request_v11
+        response: isdmppatient_request_v11_response
+        parameters: 
+          dialogId: "{XL[dialogId]}"
+          svNummer: "{XL[SVPerson.SVNR]}"
+
+      # isDMPPatient Response V11 - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DmpInvalidParameterException == NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: isdmppatient_request_v11_response
+
+      # isDMPPatient Response V11 - return (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DmpInvalidParameterException == NULL"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='isDMPPatientResponse']/*[local-name()='return']"
+        action: "EQUALS"
+        expected: "{XL[IstPatient]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - StatusCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL"
+        source: STATUS
+        action: EQUALS
+        expected: "500"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.InfoCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DialogException.ExceptionCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DialogException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DialogException.InfoText]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DmpException.InfoCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DmpException.ExceptionCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DmpException.InfoText]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[DmpInvalidParameterException.InfoCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[DmpInvalidParameterException.ExceptionCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[DmpInvalidParameterException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[DmpInvalidParameterException.InfoText]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - code (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.InfoCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - errorCode (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']"
+        action: "EQUALS"
+        expected: "{XL[AccessException.ExceptionCode]}"
+        response: isdmppatient_request_v11_response
+
+      # DMP Exception Response V11 - message (Verify)
+      - type: SOAP
+        op: ASSERT
+        condition: "((DialogException != NULL OR DmpException != NULL OR DmpInvalidParameterException != NULL OR AccessException != NULL) AND (({XL[AccessException]} != NULL)))"
+        source: BODY
+        path: "/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']"
+        action: "CONTAINS"
+        expected: "{XL[AccessException.InfoText]}"
+        response: isdmppatient_request_v11_response
+
+      - type: CALL
+        command: "reusable.dialogclose_auth1"
+        parameters:
+          dialogId: "{B[dialogId]}"

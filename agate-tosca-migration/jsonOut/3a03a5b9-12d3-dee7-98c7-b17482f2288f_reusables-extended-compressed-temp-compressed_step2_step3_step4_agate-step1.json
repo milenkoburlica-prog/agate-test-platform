@@ -1,0 +1,304 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a03a5b9-12d3-dee7-98c7-b17482f2288f",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "Nutzung für Applikation mit gesteckte o-Card (VPSV)",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "create_cardToken_svSig_o_card"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a03a5b9-12d6-b439-d491-8dbcef520457" ],
+    "Items" : [ "3a03a5b9-12d7-1dda-2fdf-5c8e27fb03af", "3a03a5b9-12d7-cd14-c304-78695901dcbb", "3a03a5b9-12d7-e410-784a-6e5221792b22", "3a03a5b9-12d8-6f53-0c38-34935045bddd", "3a03a5b9-12d9-5db9-d536-065a1af9a6b5" ],
+    "Library" : [ "3a0388cf-a31e-a30f-36d2-54a18b123a9d" ],
+    "UsedBy" : [ "3a0d3be6-c415-e6c7-f41f-6b2d2a6ed87a" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VpNummer",
+    "ValueSelectionGroup" : ""
+  }, {
+    "Name" : "SvNummer",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d7-1dda-2fdf-5c8e27fb03af",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "GinoCardSlot",
+    "value" : "{B[B_CardReaderSimulatorSlot]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "GinoCardSlot",
+    "toscaPathID" : "3a03a5b9-12d7-1803-7ed5-e4d96f417d5f"
+  }, {
+    "name" : "Kartenlesername",
+    "value" : "{B[B_Kartenlesername]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Kartenlesername",
+    "toscaPathID" : "3a03a5b9-12d7-4823-0fee-7d3a1eb85c7f"
+  }, {
+    "name" : "KartenleserIP",
+    "value" : "{B[B_KartenleserIP]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "KartenleserIP",
+    "toscaPathID" : "3a03a5b9-12d7-7553-66c4-f432c5a17e79"
+  }, {
+    "name" : "Kartenlesersimulator",
+    "value" : "{B[B_Kartenlesersimulator]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Kartenlesersimulator",
+    "toscaPathID" : "3a03a5b9-12d7-b9e7-ee0d-11c29e59fb82"
+  }, {
+    "name" : "VpNummer",
+    "value" : "{PL[VpNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "VpNummer",
+    "toscaPathID" : "3a03a5b9-12d7-e51f-7da3-8b1669ab26da"
+  }, {
+    "name" : "SvNummer",
+    "value" : "{PL[SvNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "SvNummer",
+    "toscaPathID" : "3a03a5b9-12d7-8e7b-8239-e28eb1b9e0b1"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Name" : "",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d7-cd14-c304-78695901dcbb",
+  "condition" : null,
+  "reusableSurrogate" : "3a0388d0-14a6-c8be-0ce8-45b5cb29e547",
+  "reusableName" : "o-/e-Card stecken",
+  "moduleSurrogate" : null,
+  "module" : null,
+  "moduleClass" : null,
+  "values" : { }
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Set Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d7-e410-784a-6e5221792b22",
+  "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+  "module" : "TBox Set Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ {
+    "name" : "GinoCardSlot",
+    "value" : "{B[B_CardReaderSimulatorSlot]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "GinoCardSlot",
+    "toscaPathID" : "3a03a5b9-12d8-ee95-8003-e8fa521f051f"
+  }, {
+    "name" : "Kartenlesername",
+    "value" : "{B[B_Kartenlesername]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Kartenlesername",
+    "toscaPathID" : "3a03a5b9-12d8-a332-d758-aab64c716b0d"
+  }, {
+    "name" : "KartenleserIP",
+    "value" : "{B[B_KartenleserIP]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "KartenleserIP",
+    "toscaPathID" : "3a03a5b9-12d8-7e4c-9717-20614a106547"
+  }, {
+    "name" : "Kartenlesersimulator",
+    "value" : "{B[B_Kartenlesersimulator]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Kartenlesersimulator",
+    "toscaPathID" : "3a03a5b9-12d8-8d86-dcb6-ed2264756173"
+  }, {
+    "name" : "VpNummer",
+    "value" : "{PL[VpNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "VpNummer",
+    "toscaPathID" : "3a03a5b9-12d8-0100-730c-ef199076c087"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_baseContact Request",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d8-dc16-3195-9b4960e2c8ba",
+  "moduleSurrogate" : "3a03a5b1-5dc5-e55a-021c-1095aeebeab4",
+  "module" : "cardToken_svSig_o_card_baseContact Request",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "('{B[B_CardReaderSimulatorSlot]}'=='baseContact')",
+  "values" : [ {
+    "name" : "Endpoint",
+    "value" : "https://{B[B_KartenleserIP]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Endpoint",
+    "toscaPathID" : "3a03a5b9-12d8-8f9f-124f-84957f16e713"
+  }, {
+    "name" : "svnr",
+    "value" : "{B[SvNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "svnr",
+    "toscaPathID" : "3a03a5b9-12d8-4d84-99cd-fbbcfbe6d514",
+    "jsonPath" : "svnr"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_baseContact Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d8-544e-8acf-cfee3b4066ad",
+  "moduleSurrogate" : "3a03a5b1-5de7-2294-e211-650233aa2722",
+  "module" : "cardToken_svSig_o_card_baseContact Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "('{B[B_CardReaderSimulatorSlot]}'=='baseContact')",
+  "values" : [ {
+    "name" : "StatusCode",
+    "value" : "200 OK",
+    "actionMode" : "Verify",
+    "toscaPath" : "StatusCode",
+    "toscaPathID" : "3a03a5b9-12d8-fa3e-b0c1-3dbf07c0e845"
+  }, {
+    "name" : "value",
+    "value" : "token",
+    "actionMode" : "Buffer",
+    "toscaPath" : "value",
+    "toscaPathID" : "3a03a5b9-12d8-9c37-7d16-cfc8436499df",
+    "jsonPath" : "status.baseContact.token.value"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_baseNfc Request",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d9-9f9c-829c-81effaaba6e5",
+  "moduleSurrogate" : "3a03a5b1-5df0-d53d-266a-7b72ab36c782",
+  "module" : "cardToken_svSig_o_card_baseNfc Request",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND ('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')",
+  "values" : [ {
+    "name" : "Endpoint",
+    "value" : "https://{B[B_KartenleserIP]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Endpoint",
+    "toscaPathID" : "3a03a5b9-12d9-93c5-33b9-dc3f01495d4c"
+  }, {
+    "name" : "svnr",
+    "value" : "{B[SvNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "svnr",
+    "toscaPathID" : "3a03a5b9-12d9-7148-289b-7e2a81c76665",
+    "jsonPath" : "svnr"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_baseNfc Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d9-c460-682f-a98be938dc3a",
+  "moduleSurrogate" : "3a03a5b1-5df0-48d1-8b8d-9a1f082b2a7f",
+  "module" : "cardToken_svSig_o_card_baseNfc Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND ('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')",
+  "values" : [ {
+    "name" : "StatusCode",
+    "value" : "200 OK",
+    "actionMode" : "Verify",
+    "toscaPath" : "StatusCode",
+    "toscaPathID" : "3a03a5b9-12d9-d018-d5ef-f4e15c899cac"
+  }, {
+    "name" : "value",
+    "value" : "token",
+    "actionMode" : "Buffer",
+    "toscaPath" : "value",
+    "toscaPathID" : "3a03a5b9-12d9-4e82-cb8e-c82a77e61e56",
+    "jsonPath" : "status.baseNfc.token.value"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_satelliteNfc Request",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d9-f7ce-2bb9-e311f8da667f",
+  "moduleSurrogate" : "3a03a5b1-5df1-d90c-7cf3-60de26ff9a1e",
+  "module" : "cardToken_svSig_o_card_satelliteNfc Request",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND (NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')))",
+  "values" : [ {
+    "name" : "Endpoint",
+    "value" : "https://{B[B_KartenleserIP]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "Endpoint",
+    "toscaPathID" : "3a03a5b9-12d9-0313-1986-cbe68b956af3"
+  }, {
+    "name" : "svnr",
+    "value" : "{B[SvNummer]}",
+    "actionMode" : "Insert",
+    "toscaPath" : "svnr",
+    "toscaPathID" : "3a03a5b9-12d9-57b6-794b-57b9e2a85a50",
+    "jsonPath" : "svnr"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "cardToken_svSig_o_card_satelliteNfc Response",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d9-3f8e-4081-8777068b5d73",
+  "moduleSurrogate" : "3a03a5b1-5df1-0c74-4680-7da5b0a23578",
+  "module" : "cardToken_svSig_o_card_satelliteNfc Response",
+  "moduleClass" : "ApiModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "(NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseContact'))) AND (NOT (('{B[B_CardReaderSimulatorSlot]}'=='baseNfc')))",
+  "values" : [ {
+    "name" : "StatusCode",
+    "value" : "200 OK",
+    "actionMode" : "Verify",
+    "toscaPath" : "StatusCode",
+    "toscaPathID" : "3a03a5b9-12d9-4f08-9e91-3c52afe5564d"
+  }, {
+    "name" : "value",
+    "value" : "token",
+    "actionMode" : "Buffer",
+    "toscaPath" : "value",
+    "toscaPathID" : "3a03a5b9-12d9-06ed-cdb2-e6767ddf6229",
+    "jsonPath" : "status.satellite.token.value"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Name" : "TBox Delete Buffer",
+  "type" : null,
+  "op" : null,
+  "surrogate" : "3a03a5b9-12d9-5db9-d536-065a1af9a6b5",
+  "moduleSurrogate" : "39e342b2-6ec7-0f30-678c-aec82a472007",
+  "module" : "TBox Delete Buffer",
+  "moduleClass" : "XModule",
+  "reusableName" : null,
+  "reusableSurrogate" : null,
+  "condition" : "",
+  "values" : [ ]
+} ]

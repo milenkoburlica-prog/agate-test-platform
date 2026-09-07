@@ -1,0 +1,27 @@
+steps:
+
+      - type: BUFFER
+        op: EXEC
+        name: DIRPC
+        value: "{B[KS_Testdaten_BaseDir]}\TxFilesToKams\."
+
+
+      - type: BUFFER
+        op: EXEC
+        name: DIRPOD
+        value: "{B[OMS.SS2_CKVtoCMS.TransferVerzeichnis]}/"
+
+
+      - type: BUFFER
+        op: EXEC
+        name: PODNAME
+        value: "{B[KS_POD_Name]}"
+
+========== REUSABLE CALL CREATE ==========
+[CALL-CREATE] step name        = 
+[CALL-CREATE] reusable rawName = '02_execute_file_transfer'
+[CALL-CREATE] generated command = 'reusable.02_execute_file_transfer'
+==========================================
+
+      - type: CALL
+        command: 'reusable.02_execute_file_transfer'

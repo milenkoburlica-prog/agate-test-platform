@@ -40,8 +40,14 @@ public class YamlTestCaseLoader {
             
             return TestCaseFilter.filter(rawList);
         } catch (Exception e) {
-            System.err.println("File " + yamlPath + " cannot be loaded!");
-            e.printStackTrace();
+            System.err.println();
+            System.err.println("============================================================");
+            System.err.println("[YAML][ERROR] Test suite cannot be loaded");
+            System.err.println("============================================================");
+            System.err.println("File   : " + new File(yamlPath).getAbsolutePath());
+            System.err.println("Reason : " + e.getMessage());
+            System.err.println("============================================================");
+            System.err.println();
             throw e;
         }
     }
@@ -74,7 +80,7 @@ public class YamlTestCaseLoader {
         for (Map<String, String> row : dataRows) {
             TestCase tc = createTestCaseFromMap(tcMap, yamlPath, row);
             String rawName = tc.getName();
-            // Ovde nemamo TestStep jer je u pitanju ime TC-a
+            // There is no TestStep here because this is the test-case name.
             String resolvedName = resolver.resolve(tc, rawName, tc.getVariables(), yamlPath, 0, rawName, null);
             tc.setName(resolvedName); 
             iterations.add(tc);
@@ -109,7 +115,7 @@ public class YamlTestCaseLoader {
         Object stepsObj = tcMap.get("steps");
         if (stepsObj instanceof List) {
             List<Map<String, Object>> stepList = (List<Map<String, Object>>) stepsObj;
-         // Dodajemo 'null' kao šesti parametar jer na nivou TestCase-a nema nasleđenih R-varijabli
+         // Pass null for inherited parameters because the test-case level has no inherited R variables.
 //            List<TestStep> tree = processSteps(tc, stepList, yamlPath, resolver, "", null);  
             List<TestStep> tree = processSteps(tc, stepList, yamlPath, resolver, "", null, false);
             for (TestStep s : tree) {
@@ -137,14 +143,14 @@ public class YamlTestCaseLoader {
                 step.setId("step_" + currentIdNum.replace(".", "_"));
             }
 
-            // >>> POPRAVLJENI DEO: Koristimo prosleđeni boolean umesto provere "modules" <<<
+            // Use the explicit fragment flag instead of inferring fragment context from the path.
             String identifier = isFragment ? yamlPath : tc.getName();
 
             String originalYamlText = extractOriginalStepYaml(yamlPath, identifier, localIndex, isFragment);
             step.setTextYaml(originalYamlText);
-            // >>> ------------------------------------------------------------------ <<<
+            // ------------------------------------------------------------------
             
-            // KONTEKST R-VARIJABLI:
+            // R-variable context:
             Map<String, Object> effectiveParams = new HashMap<>();
             if (inheritedParams != null) {
                 effectiveParams.putAll(inheritedParams);
@@ -158,7 +164,7 @@ public class YamlTestCaseLoader {
                 String action = asString(stepMap.get("command"));
                 String fragmentPath = "data" + File.separator + System.getProperty("APPLICATION") + File.separator + action.replace(".", File.separator) + ".yaml";
                 
-                // PROSLEĐIVANJE KONTEKSTA: Šaljemo parametre u fragment
+                // Pass the effective parameter context into the reusable fragment.
                 List<TestStep> subTree = loadFragmentStepsHierarchical(tc, fragmentPath, resolver, currentIdNum, effectiveParams);
                 step.setSubSteps(subTree);
             }
@@ -173,30 +179,73 @@ public class YamlTestCaseLoader {
     
     
     @SuppressWarnings("unchecked")
-    private static List<TestStep> loadFragmentStepsHierarchical(TestCase tc, String fragmentPath, YamlPlaceholderResolver resolver, String parentId, Map<String, Object> paramsToPass) throws Exception {
+    private static List<TestStep> loadFragmentStepsHierarchical(
+            TestCase tc,
+            String fragmentPath,
+            YamlPlaceholderResolver resolver,
+            String parentId,
+            Map<String, Object> paramsToPass) throws Exception {
+
         File file = new File(fragmentPath);
+
         if (!file.exists()) {
-            throw new java.io.FileNotFoundException("Reusable fragment not found: " + file.getAbsolutePath());
+            throw new java.io.FileNotFoundException(
+                    "Reusable fragment not found: " + file.getAbsolutePath()
+            );
         }
+
+        System.out.println("[YAML] Loading reusable fragment: " + file.getPath());
 
         try (FileInputStream fis = new FileInputStream(file);
              InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-            
+
             Yaml yaml = new Yaml();
-            Map<String, Object> fragmentRoot = yaml.load(reader);
-            if (fragmentRoot != null && fragmentRoot.containsKey("steps")) {
-                List<Map<String, Object>> fragmentSteps = (List<Map<String, Object>>) fragmentRoot.get("steps");
-                
-                // KLJUČNA PROMENA: Prosleđujemo 'true' na kraju jer pouzdano znamo da je ovo fragment
-                return processSteps(tc, fragmentSteps, fragmentPath, resolver, parentId, paramsToPass, true);
+
+            final Map<String, Object> fragmentRoot;
+            try {
+                fragmentRoot = yaml.load(reader);
+            } catch (Exception e) {
+                System.err.println();
+                System.err.println("============================================================");
+                System.err.println("[YAML][ERROR] Reusable fragment cannot be loaded");
+                System.err.println("============================================================");
+                System.err.println("File       : " + file.getAbsolutePath());
+                System.err.println("Test Case  : " + tc.getName());
+                System.err.println("Parent Step: " + parentId);
+                System.err.println("Reason     : " + e.getMessage());
+                System.err.println("============================================================");
+                System.err.println();
+                throw e;
             }
+
+            if (fragmentRoot != null && fragmentRoot.containsKey("steps")) {
+                List<Map<String, Object>> fragmentSteps =
+                        (List<Map<String, Object>>) fragmentRoot.get("steps");
+
+                // Pass true because this method is loading a reusable fragment.
+                return processSteps(
+                        tc,
+                        fragmentSteps,
+                        fragmentPath,
+                        resolver,
+                        parentId,
+                        paramsToPass,
+                        true
+                );
+            }
+
+            System.out.println(
+                    "[YAML][WARNING] Reusable fragment contains no 'steps' section: "
+                            + file.getPath()
+            );
         }
+
         return new ArrayList<>();
     }
     
     
     private static void resolveStepDetails(TestCase tc, TestStep step, YamlPlaceholderResolver resolver, String path, int idx) {
-        // Svaki resolve poziv sada dobija 'step' kao poslednji argument za R[...] podršku
+        // Pass the current step to every resolver call so R[...] variables can be resolved.
         if (step.getRow() != null) step.setRow(resolver.resolve(tc, step.getRow(), tc.getVariables(), path, idx, "row", step));
         if (step.getColumn() != null) step.setColumn(resolver.resolve(tc, step.getColumn(), tc.getVariables(), path, idx, "column", step));
         if (step.getUrl() != null) step.setUrl(resolver.resolve(tc, step.getUrl(), tc.getVariables(), path, idx, "url", step));
@@ -207,13 +256,13 @@ public class YamlTestCaseLoader {
         if (step.getEndpoint() != null) step.setEndpoint(resolver.resolve(tc, step.getEndpoint(), tc.getVariables(), path, idx, "endpoint", step));
         if (step.getCondition() != null) step.setCondition(resolver.resolve(tc, step.getCondition(), tc.getVariables(), path, idx, "condition", step));
         
-     // 2. NOVO: Resolve za PARAMETERS (R-varijable)
+     // Resolve step parameters used as R variables.
         if (step.getParameters() != null && !step.getParameters().isEmpty()) {
             Map<String, Object> resolvedParams = new HashMap<>();
             for (Map.Entry<String, Object> entry : step.getParameters().entrySet()) {
                 Object rawValue = entry.getValue();
                 if (rawValue instanceof String) {
-                    // Ključni momenat: Ovde "{B[vpNummer]}" postaje "136099"
+                    // Example: "{B[vpNummer]}" becomes "136099".
                     String resolvedValue = resolver.resolve(tc, (String) rawValue, tc.getVariables(), path, idx, "param-" + entry.getKey(), step);
                     String escapedValue = resolvedValue;
                     if (step.getType().equals(StepType.SOAP) && step.getOp().equals("EXEC")) {
@@ -224,7 +273,7 @@ public class YamlTestCaseLoader {
                     resolvedParams.put(entry.getKey(), rawValue);
                 }
             }
-            // Vraćamo nazad očišćene parametre u step
+            // Store the resolved parameters back on the step.
             step.setParameters(resolvedParams);
         }
         
@@ -251,7 +300,7 @@ public class YamlTestCaseLoader {
         return obj == null ? null : obj.toString();
     }
     
- // Izmeni potpis da prima i TestStep (ili izvuci parametre pre poziva)
+ // The method receives TestStep so inherited parameters are available.
     @SuppressWarnings("unchecked")
     private void enrichStepDataIfNeeded(TestCase tc, TestStep step) throws Exception {
         if ((step.getType() == StepType.REST || step.getType() == StepType.SOAP) 
@@ -262,8 +311,8 @@ public class YamlTestCaseLoader {
             tempMap.put("op", step.getOp());
             tempMap.put("action", step.getAction());
             
-            // KLJUČNO: Prosleđujemo 'step' koji u sebi već ima parameters (R varijable)
-            // koje je nasledio tokom YamlTestCaseLoader.processSteps rekurzije
+            // Pass the step because it already contains inherited parameters (R variables).
+            // These parameters were inherited during processSteps recursion.
             YamlTestCaseLoader.handleFileBasedRestCall(tc, tempMap, step);
             
             if (tempMap.containsKey("url")) step.setUrl(tempMap.get("url").toString());
@@ -280,21 +329,21 @@ public class YamlTestCaseLoader {
         YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
 
         
-        // --- NOVO: PRE-RESOLVE PARAMETARA ---
-        // Moramo očistiti parametre samog stepa pre nego što ih upotrebimo za body
+        // Pre-resolve step parameters.
+        // Resolve the step parameters before they are used in the request body.
         if (step.getParameters() != null && !step.getParameters().isEmpty()) {
             Map<String, Object> preResolvedParams = new HashMap<>();
             for (Map.Entry<String, Object> entry : step.getParameters().entrySet()) {
                 if (entry.getValue() instanceof String) {
                     String rawVal = (String) entry.getValue();
-                    // Resolve-ujemo vrednost parametra (npr. {B[vpNummer]} -> 136099)
+                    // Resolve the parameter value, for example {B[vpNummer]} -> 136099.
                     String resolvedVal = resolver.resolve(tc, rawVal, tc.getVariables(), "internal", 0, "param-fix", step);
                     preResolvedParams.put(entry.getKey(), resolvedVal);
                 } else {
                     preResolvedParams.put(entry.getKey(), entry.getValue());
                 }
             }
-            // Ažuriramo step parametre sa pravim vrednostima
+            // Update the step with the resolved parameter values.
             step.setParameters(preResolvedParams);
         }
         // ------------------------------------
@@ -311,17 +360,17 @@ public class YamlTestCaseLoader {
 
         String basePath = "data/" + System.getProperty("APPLICATION") + "/modules/" + modulePath + "/";
 
-        // 1. ČITANJE METADATA.JSON
+        // 1. Read metadata.json.
         File metaFile = new File(basePath + "metadata.json");
         if (metaFile.exists()) {
             Map<String, Object> meta = JSON_MAPPER.readValue(metaFile, Map.class);
 
             if (meta.get("url") != null) {
                 if (meta.get("method") != null) {
-                    // Ne diramo "op", punimo "method"
+                    // Keep "op" unchanged and populate "method".
                     stepMap.put("method", meta.get("method").toString()); 
                 }
-                // KLJUČNO: Prosleđujemo 'step' da bi resolver video R-varijable
+                // Pass the step so the resolver can access R variables.
                 if (step.getEndpoint() == null) {
                     throw new RuntimeException("Endpoint null");
                 }
@@ -334,20 +383,20 @@ public class YamlTestCaseLoader {
                 Map<String, Object> headers = (Map<String, Object>) meta.get("headers");
                 Map<String, String> resolvedHeaders = new HashMap<>();
                 for (Map.Entry<String, Object> h : headers.entrySet()) {
-                    // KLJUČNO: Prosleđujemo 'step'
+                    // Pass the current step to the resolver.
                     String resolvedValue = resolver.resolve(tc, h.getValue().toString(), tc.getVariables(), metaFile.getPath(), 0, "header", step);
                     resolvedHeaders.put(h.getKey(), resolvedValue);
                 }
                 stepMap.put("headers", resolvedHeaders);
             }
             
-         // >>> NOVO MESTO: Parsiranje 'auth' bloka iz metadata.json <<<
+         // Parse the optional auth block from metadata.json.
             Object authObj = meta.get("auth");
             if (authObj instanceof Map) {
                 Map<String, Object> authMap = (Map<String, Object>) authObj;
                 at.co.svc.agate.core.dsl.model.SoapAuth soapAuth = new at.co.svc.agate.core.dsl.model.SoapAuth();
                 
-                // Ovde opciono možeš propustiti vrednosti kroz resolver ako podržavaju varijable (npr. {B[username]})
+                // Resolve auth values as well so placeholders such as {B[username]} are supported.
                 String resolvedType = resolver.resolve(tc, asString(authMap.get("type")), tc.getVariables(), metaFile.getPath(), 0, "auth-type", step);
                 String resolvedUser = resolver.resolve(tc, asString(authMap.get("username")), tc.getVariables(), metaFile.getPath(), 0, "auth-username", step);
                 String resolvedPass = resolver.resolve(tc, asString(authMap.get("password")), tc.getVariables(), metaFile.getPath(), 0, "auth-password", step);
@@ -361,34 +410,34 @@ public class YamlTestCaseLoader {
         } else {
             File file = new File(basePath + "metadata.json");
             if (!file.exists()) {
-                // Umesto samo bacanja izuzetka, baci ga sa porukom koju tvoj logger prepoznaje
+                // Throw a descriptive error so the caller can report the missing configuration file.
                 //PrintDslStepContext.logDslStepContext(logger, step);
                 throw new RuntimeException("Missing configuration file: " + basePath + "metadata.json");
             }
             throw new RuntimeException("Unknown");
         }
 
-     // 2. ČITANJE REQUEST FAJLA (JSON ILI XML)
+     // 2. Read the request file (JSON or XML).
         File reqFile = new File(basePath + "request.json");
         
-        // Ako ne postoji request.json, prebacujemo se na request.xml (SOAP)
+        // Fall back to request.xml when request.json does not exist.
         if (!reqFile.exists()) {
             reqFile = new File(basePath + "request.xml");
         }
 
-        // Ako bilo koji od ova dva fajla postoji, procesiramo ga
+        // Process the request when either JSON or XML exists.
         if (reqFile.exists()) {
             String bodyContent = Files.readString(reqFile.toPath(), StandardCharsets.UTF_8);
             
-            // KLJUČNO: Prosleđujemo 'step' kako bi {R[vpNummer]} bio zamenjen vrednošću iz parametara
-            // Primena tvoje nove metode: Brisanje NULL elemenata i priprema EMPTY
+            // Pass the current step to the resolver. kako bi {R[vpNummer]} bio zamenjen vrednošću iz parametara
+            // Apply NULL-removal and EMPTY-value handling before placeholder resolution.
             bodyContent = resolveNullableRule(bodyContent, step.getParameters());
             
-            // Rezolucija varijabli i parametara unutar tela (isto važi i za JSON i za XML tagove)
-            // VAZNO: parametara imaju prioritet nad varijabli
+            // Resolve parameters and variables inside the request body for both JSON and XML.
+            // Parameters take precedence over test-case variables.
             String resolvedBody = resolver.resolve(tc, bodyContent, step.getParameters(), reqFile.getPath(), 0, "body", step);
             resolvedBody = resolver.resolve(tc, resolvedBody, tc.getVariables(), reqFile.getPath(), 0, "body", step);            
-            // Smještamo finalni tekst (bilo JSON ili XML) pod "body" ključ u mapi koraka
+            // Store the final JSON or XML text under the "body" key.
             stepMap.put("body", resolvedBody);
         }
         
@@ -402,22 +451,22 @@ public class YamlTestCaseLoader {
             String value = String.valueOf(entry.getValue());
 
             if ("{NULL}".equalsIgnoreCase(value)) {
-                // REGEX ZA JSON: Uklanja "ključ": "{R[ključ]}" i zarez ako postoji
-                // Pokriva varijante: "ključ":"{R[ključ]}", ili "ključ" : "{R[ključ]}"
+                // JSON regex: remove "key": "{R[key]}" and an optional trailing comma.
+                // Supports spacing variants around the key, colon, and placeholder.
                 String jsonRegex = "(?i)\"\\s*" + key + "\\s*\"\\s*:\\s*\"\\s*\\{R\\[" + key + "\\]\\}\\s*\"\\s*,?";
                 body = body.replaceAll(jsonRegex, "");
                 
-                // REGEX ZA XML: Uklanja <ključ>{R[ključ]}</ključ>
+                // XML regex: remove <key>{R[key]}</key>.
                 String xmlRegex = "(?i)<\\s*" + key + "\\s*>\\s*\\{R\\[" + key + "\\]\\}\\s*<\\s*/\\s*" + key + "\\s*>";
                 body = body.replaceAll(xmlRegex, "");
             } 
             else if ("{EMPTY}".equalsIgnoreCase(value)) {
-                // Za EMPTY samo menjamo placeholder u prazno - to može običan replace
+                // For EMPTY, replace the placeholder with an empty string.
                 body = body.replace("{R[" + key + "]}", "");
             }
         }
 
-        // Čišćenje JSON-a: ako je ostao zarez pre zatvorene zagrade " , }" -> " }"
+        // Clean up trailing commas before closing JSON objects or arrays.
         body = body.replaceAll(",\\s*\\}", " }")
                    .replaceAll(",\\s*\\]", " ]");
 
@@ -466,9 +515,9 @@ public class YamlTestCaseLoader {
                 }
 
                 if (tcIdx == -1) {
-                    return "# Greška: Test Case sa ID-jem '"
+                    return "# Error: Test Case with ID '"
                             + identifier
-                            + "' nije pronađen u fajlu.";
+                            + "' was not found in the file.";
                 }
 
                 for (int i = tcIdx; i < lines.size(); i++) {
@@ -539,9 +588,9 @@ public class YamlTestCaseLoader {
 
             int targetListIdx = targetStepIndex - 1;
             if (targetListIdx < 0 || targetListIdx >= stepStartIndices.size()) {
-                return "# Greška: Korak "
+                return "# Error: Step "
                         + targetStepIndex
-                        + " ne postoji u ovom Test Case-u. (Pronađeno ukupno: "
+                        + " does not exist in this Test Case. (Total steps found: "
                         + stepStartIndices.size()
                         + ")";
             }

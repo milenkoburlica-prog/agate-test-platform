@@ -1,0 +1,1845 @@
+testCases: 
+
+  - id: "GET_Alive"
+    description: "GET Alive"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.alive.get_request
+        response: get_request_response
+
+      # GET Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "204"
+        response: get_request_response
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.alive.get_request
+        response: get_request_response
+
+      # GET Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "204"
+        response: get_request_response
+
+  - id: "1)_TC_Gültige_Karte_GF"
+    description: "1) TC Gültige Karte GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "cin"
+        condition: ""
+        value: "80040000016000051867"
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.cin.get_request
+        response: get_request_response
+
+      # GET Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: get_request_response
+
+      # GET Response - valid (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "valid"
+        action: "EQUALS"
+        expected: "True"
+        response: get_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: |
+            SELECT TO_CHAR(imp.VALID_UNTIL, 'YYYY-MM-DD"T"HH24: MI:SS') FROM CARD_VCARD imp WHERE STATUS_CODE = 'PRODUCED' AND CIN = '{B[cin]}
+        response: tbox_db_expert_module_res
+
+
+
+      # DB Check: 0
+      - type: SQL
+        op: BUFFER
+        name: validUntilDB
+        row: "0"
+        column: "0"
+        response: tbox_db_expert_module_res
+
+      - type: BUFFER
+        op: EXEC
+        name: "DateTimeParameters"
+        condition: ""
+        value: "{DATETIME['2027-01-27 00:00:00'][][]}"
+      - type: BUFFER
+        op: EXEC
+        name: "validUntilDBformated"
+        condition: ""
+        value: "{DATETIME[{B[validUntilDB]}][][]}"
+
+  - id: "2)_TC_Ungültige_Karte_FF"
+    description: "2) TC Ungültige Karte FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "cin"
+        condition: ""
+        value: "80040000016000010020"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT STATUS_CODE FROM CARD_VCARD imp WHERE CIN = '{B[cin]}'"
+        response: tbox_db_expert_module_res
+
+
+
+
+      # DB Check: 0
+      - type: SQL
+        op: ASSERT
+        action: EQUALS
+        expected: "FINAL_BLOCK"
+        row: "0"
+        column: "0"
+        response: tbox_db_expert_module_res
+
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.cin.get_request
+        response: get_request_response
+
+      # GET Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: get_request_response
+
+      # GET Response - valid (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "valid"
+        action: "EQUALS"
+        expected: "False"
+        response: get_request_response
+
+  - id: "3)_TC_Abgelaufene_Karte_FF"
+    description: "3) TC Abgelaufene Karte FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "cin"
+        condition: ""
+        value: "80040000016000030234"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: |
+            UPDATE CARD_VCARD SET VALID_UNTIL = ("{"ts '2025-12-18 00: 00:00.0'"}") WHERE STATUS_CODE = 'PRODUCED' AND CIN = '{B[cin]}
+        response: tbox_db_expert_module_res
+
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.cin.get_request
+        response: get_request_response
+
+      # GET Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "200"
+        response: get_request_response
+
+      # GET Response - valid (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "valid"
+        action: "EQUALS"
+        expected: "False"
+        response: get_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: |
+            UPDATE CARD_VCARD SET VALID_UNTIL = ("{"ts '2026-12-18 00: 00:00.0'"}") WHERE STATUS_CODE = 'PRODUCED' AND CIN = '{B[cin]}
+        response: tbox_db_expert_module_res
+
+
+  - id: "4)_TC_404_Not_Found_FF"
+    description: "4) TC 404 Not Found FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "cin"
+        condition: ""
+        value: "{EMPTY}"
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.cin.get_request
+        response: get_request_response
+
+      # GET Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "404"
+        response: get_request_response
+
+      # GET Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:resourceNotFound"
+        response: get_request_response
+
+      # GET Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/resourceNotFound.html"
+        response: get_request_response
+
+      # GET Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "title"
+        action: "EQUALS"
+        expected: "Resource Not Found"
+        response: get_request_response
+
+      # GET Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "404"
+        response: get_request_response
+
+      # GET Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards//"
+        response: get_request_response
+
+  - id: "5)_TC_400_Bad_Request_FF"
+    description: "5) TC 400 Bad Request FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "cin"
+        condition: ""
+        value: "8004000001600005186"
+
+      # GET Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.cin.get_request
+        response: get_request_response
+
+      # GET Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "400"
+        response: get_request_response
+
+      # GET Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:input-validation:schemaViolation"
+        response: get_request_response
+
+      # GET Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html"
+        response: get_request_response
+
+      # GET Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "Input value is invalid with respect to the schema"
+        response: get_request_response
+
+      # GET Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "400"
+        response: get_request_response
+
+      # GET Response _ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: |
+            CIN is not in a valid format (^"[0-9"]"{20"}$).
+        response: get_request_response
+
+      # GET Response _ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "path"
+        response: get_request_response
+
+      # GET Response _ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "cin"
+        response: get_request_response
+
+      # GET Response _ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{B[cin]}"
+        response: get_request_response
+
+      # GET Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards/{B[cin]}/"
+        response: get_request_response
+
+  - id: "1)_Erste_Karte_wird_produziert__Force=False_GF"
+    description: "1) Erste Karte wird produziert  Force=False GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+  - id: "2)_Folgekarte_wird_produziert_GF"
+    description: "2) Folgekarte wird produziert GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+  - id: "3)_Erste_Karte_wird_abgelehnt_CPS-01003_FF"
+    description: "3) Erste Karte wird abgelehnt CPS-01003 FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "False"
+
+      # POST Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:input-validation:invalidInput"
+        response: post_request_response
+
+      # POST Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html"
+        response: post_request_response
+
+      # POST Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "Invalid input"
+        response: post_request_response
+
+      # POST Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: "A digital ecard already exists for the svnr."
+        response: post_request_response
+
+      # POST Response _ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "body"
+        response: post_request_response
+
+      # POST Response _ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "svnr"
+        response: post_request_response
+
+      # POST Response _ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+      # POST Response _ERROR - code (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].code"
+        action: "EQUALS"
+        expected: "CPS-01003"
+        response: post_request_response
+
+      # POST Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8');"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+  - id: "4)_Produktion_abgelehnt_(keine_Aufstellungsauftrag)_CPS-01002_FF"
+    description: "4) Produktion abgelehnt (keine Aufstellungsauftrag) CPS-01002 FF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211050"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "False"
+
+      # POST Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:input-validation:invalidInput"
+        response: post_request_response
+
+      # POST Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html"
+        response: post_request_response
+
+      # POST Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "Invalid input"
+        response: post_request_response
+
+      # POST Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: "No card can be issued for the svnr."
+        response: post_request_response
+
+      # POST Response _ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "body"
+        response: post_request_response
+
+      # POST Response _ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "svnr"
+        response: post_request_response
+
+      # POST Response _ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+      # POST Response _ERROR - code (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].code"
+        action: "EQUALS"
+        expected: "CPS-01002"
+        response: post_request_response
+
+      # POST Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards"
+        response: post_request_response
+
+  - id: "5)_Erste_Karte_wird_produziert__Force=True_GF"
+    description: "5) Erste Karte wird produziert  Force=True GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8');"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+  - id: "6)_Erste_Karte_wird_produziert__Force=False,_VALID_UNTIL_in_Vergangenheit_GF_1"
+    description: "6) Erste Karte wird produziert  Force=False, VALID_UNTIL in Vergangenheit GF_1"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp-1d"
+        condition: ""
+        value: "{DATETIME[][-1d][yyyy-MM-dd HH:mm:ss]}"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp+1y"
+        condition: ""
+        value: "{DATETIME[][+1y][yyyy-MM-dd HH:mm:ss]}"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE CARD_VCARD SET VALID_UNTIL = TO_DATE('{B[timeStamp-1d]}', 'YYYY-MM-DD HH24:MI:SS') WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'FINAL_BLOCK' AND CSN = '7'"
+        response: tbox_db_expert_module__update_res
+
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD_AUD WHERE ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8');"
+        response: tbox_db_expert_module__delete_from_card_vcard_aud_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_PERSON WHERE CARD_ID in (SELECT ID FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8')"
+        response: tbox_db_expert_module__delete_from_card_person_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "DELETE FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND CSN = '8'"
+        response: tbox_db_expert_module__delete_from_card_vcard_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE CARD_VCARD SET VALID_UNTIL = TO_DATE('{B[timeStamp+1y]}', 'YYYY-MM-DD HH24:MI:SS') WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'FINAL_BLOCK' AND CSN = '7'"
+        response: tbox_db_expert_module__update_res
+
+
+  - id: "7)_Schlüssel_ungültig_-_CPS-01001"
+    description: "7) Schlüssel ungültig - CPS-01001"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_CA_ICC"
+        condition: ""
+        value: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_CA_ICC_False"
+        condition: ""
+        value: "{B[PuK_CA_ICC]}="
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "{B[PuK_CA_ICC_False]}"
+          force: "True"
+
+      # POST Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:input-validation:invalidInput"
+        response: post_request_response
+
+      # POST Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html"
+        response: post_request_response
+
+      # POST Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "Invalid input"
+        response: post_request_response
+
+      # POST Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: "The data does not represent an EC key."
+        response: post_request_response
+
+      # POST Response _ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "body"
+        response: post_request_response
+
+      # POST Response _ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "PuK_CA_ICC"
+        response: post_request_response
+
+      # POST Response _ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{B[PuK_CA_ICC_False]}"
+        response: post_request_response
+
+      # POST Response _ERROR - code (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].code"
+        action: "EQUALS"
+        expected: "CPS-01001"
+        response: post_request_response
+
+      # POST Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards"
+        response: post_request_response
+
+  - id: "8)_SVNR_nicht_vorhanden_-_CPS-01002"
+    description: "8) SVNR nicht vorhanden - CPS-01002"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "0111111111"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_CA_ICC"
+        condition: ""
+        value: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT SV_NUMMER FROM HVB_SVPERSON WHERE SV_NUMMER = '{B[SVNR]}'"
+        response: tbox_db_expert_module__check_res
+
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "{B[PuK_CA_ICC]}"
+          force: "True"
+
+      # POST Response _ERROR - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - type (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].type"
+        action: "EQUALS"
+        expected: "urn:problem-type:belgif:input-validation:invalidInput"
+        response: post_request_response
+
+      # POST Response _ERROR - href (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "href"
+        action: "EQUALS"
+        expected: "https://www.belgif.be/specification/rest/api-guide/problems/badRequest.html"
+        response: post_request_response
+
+      # POST Response _ERROR - title (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].title"
+        action: "EQUALS"
+        expected: "Invalid input"
+        response: post_request_response
+
+      # POST Response _ERROR - status (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "status"
+        action: "EQUALS"
+        expected: "400"
+        response: post_request_response
+
+      # POST Response _ERROR - detail (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].detail"
+        action: "EQUALS"
+        expected: "No card can be issued for the svnr."
+        response: post_request_response
+
+      # POST Response _ERROR - in (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].in"
+        action: "EQUALS"
+        expected: "body"
+        response: post_request_response
+
+      # POST Response _ERROR - name (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].name"
+        action: "EQUALS"
+        expected: "svnr"
+        response: post_request_response
+
+      # POST Response _ERROR - value (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].value"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+      # POST Response _ERROR - code (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "issues[*].code"
+        action: "EQUALS"
+        expected: "CPS-01002"
+        response: post_request_response
+
+      # POST Response _ERROR - instance (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "instance"
+        action: "EQUALS"
+        expected: "/cps/v1/cards"
+        response: post_request_response
+
+  - id: "9)_Aufruf_am_14._Geburtstag_=_1_Jahr_gültig_GF"
+    description: "9) Aufruf am 14. Geburtstag = 1 Jahr gültig GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp"
+        condition: ""
+        value: "{DATETIME[][-14y][yyyyMMdd]}"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp_eval"
+        condition: ""
+        value: "{DATETIME[][+1y+1d][dd.MM.yyyy]} 00:00:00"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE HVB_SVPERSON SET GEBURTSDATUM = '{B[timeStamp]}' WHERE SV_NUMMER IN (SELECT SVNR FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' )"
+        response: tbox_db_expert_module__update_res
+
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV, VALID_UNTIL FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: VALID_UNTIL
+      - type: SQL
+        op: BUFFER
+        name: VU_DB
+        row: "0"
+        column: "VALID_UNTIL"
+        response: tbox_db_expert_module__check_res
+
+
+  - id: "10)_Aufruf_1_Tag_vor_dem_14._Geburtstag_=_bis_Ende_des_Tages_gültig_GF"
+    description: "10) Aufruf 1 Tag vor dem 14. Geburtstag = bis Ende des Tages gültig GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp"
+        condition: ""
+        value: "{DATETIME[][-14y+1d][yyyyMMdd]}"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp_eval"
+        condition: ""
+        value: "{DATETIME[][+1d][dd.MM.yyyy]} 00:00:00"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE HVB_SVPERSON SET GEBURTSDATUM = '{B[timeStamp]}' WHERE SV_NUMMER IN (SELECT SVNR FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' )"
+        response: tbox_db_expert_module__update_res
+
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV, VALID_UNTIL FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: VALID_UNTIL
+      - type: SQL
+        op: BUFFER
+        name: VU_DB
+        row: "0"
+        column: "VALID_UNTIL"
+        response: tbox_db_expert_module__check_res
+
+
+  - id: "11)_Aufruf_mit__<_13_Jahre_=_Gültigkeit_x_Monate_GF"
+    description: "11) Aufruf mit  < 13 Jahre = Gültigkeit x Monate GF"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      {}
+
+    steps: 
+      - type: BUFFER
+        op: EXEC
+        name: "SVNR"
+        condition: ""
+        value: "6664211051"
+      - type: BUFFER
+        op: EXEC
+        name: "PuK_SV"
+        condition: ""
+        value: "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAELmTKwvQOyfZF2wkArNzPV5Wa/grasO9C2RlTohlunphkwGlJW5cG0PyPVWUyUFhcV/qCcY7MY3E2zt3Ww2ibYeNLzrGlZzvxtkkLapvmOi27Du9dvuxRLkqksN+3VOba"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp"
+        condition: ""
+        value: "{DATETIME[][-13y-6M-22d][yyyyMMdd]}"
+      - type: BUFFER
+        op: EXEC
+        name: "timeStamp_eval"
+        condition: ""
+        value: "{DATETIME[][+5M+9d][dd.MM.yyyy]} 00:00:00"
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE HVB_SVPERSON SET GEBURTSDATUM = '{B[timeStamp]}' WHERE SV_NUMMER IN (SELECT SVNR FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' )"
+        response: tbox_db_expert_module__update_res
+
+
+      # POST Request
+      - type: REST
+        op: EXEC
+        endpoint: "{B[URL]}"
+        command: rest.cps.v1.cards.post_request
+        response: post_request_response
+        parameters: 
+          svnr: "{B[SVNR]}"
+          PuK_SV: "{B[PuK_SV]}"
+          PuK_CA_ICC: "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAERPznIRAIKoYfBHCCUTqtj5lXh1blTTwnjoPwvK8nUk97/XkkDzgmQRGftxtXzUpO2K15BIHbJXGaLfEM1iQkoQ=="
+          force: "True"
+
+      # POST Response - StatusCode (Verify)
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: "201"
+        response: post_request_response
+
+      # POST Response - svnr (Verify)
+      - type: REST
+        op: ASSERT
+        source: BODY
+        path: "svnr"
+        action: "EQUALS"
+        expected: "{B[SVNR]}"
+        response: post_request_response
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "SELECT CSN, CIN, PUBLIC_KEY_SV, VALID_UNTIL FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' AND STATUS_CODE = 'PRODUCED'"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CSN
+      - type: SQL
+        op: BUFFER
+        name: csn_DB
+        row: "0"
+        column: "CSN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: CIN
+      - type: SQL
+        op: BUFFER
+        name: cin_DB
+        row: "0"
+        column: "CIN"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: PUBLIC_KEY_SV
+      - type: SQL
+        op: BUFFER
+        name: PKS_DB
+        row: "0"
+        column: "PUBLIC_KEY_SV"
+        response: tbox_db_expert_module__check_res
+
+
+
+      # DB Check: VALID_UNTIL
+      - type: SQL
+        op: BUFFER
+        name: VU_DB
+        row: "0"
+        column: "VALID_UNTIL"
+        response: tbox_db_expert_module__check_res
+
+
+
+
+      # Execute SQL Query
+      - type: SQL
+        op: EXEC
+        command: "UPDATE HVB_SVPERSON SET GEBURTSDATUM = '20040720' WHERE SV_NUMMER IN (SELECT SVNR FROM CARD_VCARD WHERE SVNR = '{B[SVNR]}' )"
+        response: tbox_db_expert_module__update_res
+

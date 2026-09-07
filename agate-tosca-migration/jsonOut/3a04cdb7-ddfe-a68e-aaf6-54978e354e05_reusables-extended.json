@@ -1,0 +1,1597 @@
+[
+  {
+    "ObjectClass": "ReuseableTestStepBlock",
+    "Surrogate": "3a04cdb7-ddfe-a68e-aaf6-54978e354e05",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Description": "",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "DB DMP Lösche aus 6 Tabellen ausser DMP_ANFRAGE alle Datensätze zu SVNR"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParameterLayer": [
+        "3a04cdb7-df0a-2eef-b3d2-e0019b31b9f0"
+      ],
+      "Items": [
+        "3a04cdb7-df94-615e-5263-8d3b5566a8c5"
+      ],
+      "Library": [
+        "3a04cdbf-89bf-4837-86e5-0397813129da"
+      ],
+      "UsedBy": [
+        "01KERZT0JX15X64528YG7SJ26V"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowItem",
+    "Surrogate": "3a04cdb7-df94-615e-5263-8d3b5566a8c5",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "MaximumRepetitions": "30",
+      "StatementType": "3",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche wiederholt Datensätze bis VSNR in DMP_BETREUUNGSVERHAELTNIS gleich 1 Eintrag"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ControlFlowFolders": [
+        "3a04cdb7-df94-f063-52db-cea250cbfa68",
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-ddfe-a68e-aaf6-54978e354e05"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a04cdb7-df94-f063-52db-cea250cbfa68",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "0",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Wenn VSNR in DMP_BETREUUNGSVERHAELTNIS ungleich 1 Eintrag"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a04cdb7-df94-615e-5263-8d3b5566a8c5"
+      ],
+      "Items": [
+        "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "BVID aus DMP_BETREUUNGSVERHAELTNIS buffern"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df94-bc20-69b7-a78ddb5045a4",
+        "3a04cdb7-df95-00c6-8655-bc40822d1e7f",
+        "3a04cdb7-df95-71e2-0af3-cb74e5069653",
+        "3a04cdb7-df95-344d-1b47-874af1c74de6"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df94-f063-52db-cea250cbfa68"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df94-bc20-69b7-a78ddb5045a4",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7"
+      ],
+      "SubValues": [
+        "3a04cdb7-df94-35ac-88f3-8daeadace830"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df94-35ac-88f3-8daeadace830",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df94-ab1b-d762-215340a635fd",
+        "3a04cdb7-df95-621d-43c1-a5a6879a3440"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df94-bc20-69b7-a78ddb5045a4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df94-ab1b-d762-215340a635fd",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df94-35ac-88f3-8daeadace830"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-621d-43c1-a5a6879a3440",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df94-35ac-88f3-8daeadace830"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-00c6-8655-bc40822d1e7f",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "SELECT  BVID FROM DMP_BETREUUNGSVERHAELTNIS WHERE FK_SV_NUMMER \u003d \u0027{PL[VSNR]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-71e2-0af3-cb74e5069653",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "69",
+      "Operator": "2",
+      "Value": "1",
+      "ActionProperty": "RowCount",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f3f0-3fb5-3786412f9a42"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-344d-1b47-874af1c74de6",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df94-0b75-20ab-2d8f1ef223e7"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "TestCaseControlFlowFolder",
+    "Surrogate": "3a04cdb7-df95-1327-78a8-691b2581a6e0",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "StatementType": "1",
+      "Pausable": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Dann lösche via BVID Datensätze in mehreren Tabellen"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "ExecutionContainerLogs": [],
+      "ParentControlFlowItem": [
+        "3a04cdb7-df94-615e-5263-8d3b5566a8c5"
+      ],
+      "Items": [
+        "3a04cdb7-df95-12d0-88b5-1bab584ff531",
+        "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6",
+        "3a04cdb7-df95-982c-5408-e5be7ceeae17",
+        "3a04cdb7-df96-de91-f7da-8abc3b30545c",
+        "3a1a4715-5478-7d7d-9578-0889e9335d1a",
+        "3a04cdb7-df96-8e88-aa22-41e1ca0940c5"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df95-12d0-88b5-1bab584ff531",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "BVID aus DMP_BETREUUNGSVERHAELTNIS buffern"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df95-80c1-03e0-f391e43fce72",
+        "3a04cdb7-df95-e636-b333-921532505d4d",
+        "3a04cdb7-df95-f6b2-c544-e35e214d5cb8",
+        "3a04cdb7-df95-5c07-08de-28fbdc8d38c6"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-80c1-03e0-f391e43fce72",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-12d0-88b5-1bab584ff531"
+      ],
+      "SubValues": [
+        "3a04cdb7-df95-ba4e-e037-58cef96189b0"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-ba4e-e037-58cef96189b0",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df95-634e-5fb5-833aac652bdb",
+        "3a04cdb7-df95-a2f1-d21b-25a60f98b5d7"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df95-80c1-03e0-f391e43fce72"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-634e-5fb5-833aac652bdb",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df95-ba4e-e037-58cef96189b0"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-a2f1-d21b-25a60f98b5d7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df95-ba4e-e037-58cef96189b0"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-e636-b333-921532505d4d",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "SELECT  BVID FROM DMP_BETREUUNGSVERHAELTNIS WHERE FK_SV_NUMMER \u003d \u0027{PL[VSNR]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-12d0-88b5-1bab584ff531"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-f6b2-c544-e35e214d5cb8",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "0",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-12d0-88b5-1bab584ff531"
+      ],
+      "SubValues": [
+        "3a04cdb7-df95-7fe5-13f3-80abe8c412b2"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f3f0-3fb5-3786412f9a42"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-7fe5-13f3-80abe8c412b2",
+    "Attributes": {
+      "ExplicitName": "#2",
+      "DataType": "0",
+      "ActionMode": "517",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df95-60be-acb1-7968af2b236d"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df95-f6b2-c544-e35e214d5cb8"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e5bf-4b58-7c96-0b0bdc2a31f8"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-60be-acb1-7968af2b236d",
+    "Attributes": {
+      "ExplicitName": "#1",
+      "DataType": "0",
+      "ActionMode": "165",
+      "Operator": "0",
+      "Value": "BVID",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df95-7fe5-13f3-80abe8c412b2"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e5de-84b4-d50e-4f8f34eb66aa"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-5c07-08de-28fbdc8d38c6",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-12d0-88b5-1bab584ff531"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche aus DMP_MED_PATIENTENINFO"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df95-6e2d-3daa-8e514913cb7b",
+        "3a04cdb7-df95-c8b2-c2bd-188f974c4b69",
+        "3a04cdb7-df95-9c40-f62e-17d2e2f17d91"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-6e2d-3daa-8e514913cb7b",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6"
+      ],
+      "SubValues": [
+        "3a04cdb7-df95-f5ae-2aef-b0887735ca85"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-f5ae-2aef-b0887735ca85",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df95-5bcf-8c4c-2dfc25b0bfc2",
+        "3a04cdb7-df95-ef95-783c-40991f5d4fd7"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df95-6e2d-3daa-8e514913cb7b"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-5bcf-8c4c-2dfc25b0bfc2",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df95-f5ae-2aef-b0887735ca85"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-ef95-783c-40991f5d4fd7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df95-f5ae-2aef-b0887735ca85"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-c8b2-c2bd-188f974c4b69",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "DELETE FROM DMP_MED_PATIENTENINFO WHERE FK_BVID\u003d\u0027{B[BVID]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-9c40-f62e-17d2e2f17d91",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df95-982c-5408-e5be7ceeae17",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche aus DMP_ADMIN_PATIENTENINFO"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df95-1a69-e5f2-d20698ce349d",
+        "3a04cdb7-df96-1339-bcdf-2b5334ff86ec",
+        "3a04cdb7-df96-32c4-c940-5f3b3a2747b9"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df95-1a69-e5f2-d20698ce349d",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-982c-5408-e5be7ceeae17"
+      ],
+      "SubValues": [
+        "3a04cdb7-df96-d965-6455-82f9f94a256e"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-d965-6455-82f9f94a256e",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df96-2eb7-dfbe-ab1974b9d759",
+        "3a04cdb7-df96-a912-9d34-0025b6035b11"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df95-1a69-e5f2-d20698ce349d"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-2eb7-dfbe-ab1974b9d759",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-d965-6455-82f9f94a256e"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-a912-9d34-0025b6035b11",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-d965-6455-82f9f94a256e"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-1339-bcdf-2b5334ff86ec",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "DELETE FROM DMP_ADMIN_PATIENTENINFO WHERE FK_BVID\u003d\u0027{B[BVID]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-982c-5408-e5be7ceeae17"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-32c4-c940-5f3b3a2747b9",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df95-982c-5408-e5be7ceeae17"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df96-de91-f7da-8abc3b30545c",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche aus DBAS_DMP_ABRECHNUNGSDATEN"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df96-f642-ef14-34a471ff9258",
+        "3a04cdb7-df96-3aca-94ee-d41cab0c46aa",
+        "3a04cdb7-df96-dfdb-5b8f-71b23a4d94d9"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-f642-ef14-34a471ff9258",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-de91-f7da-8abc3b30545c"
+      ],
+      "SubValues": [
+        "3a04cdb7-df96-75e5-33ea-94e0e05cd4c4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-75e5-33ea-94e0e05cd4c4",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df96-8feb-bca1-7f5a1be2556f",
+        "3a04cdb7-df96-0317-aa29-aace43b40cbb"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df96-f642-ef14-34a471ff9258"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-8feb-bca1-7f5a1be2556f",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-75e5-33ea-94e0e05cd4c4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-0317-aa29-aace43b40cbb",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-75e5-33ea-94e0e05cd4c4"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-3aca-94ee-d41cab0c46aa",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "DELETE FROM DBAS_DMP_ABRECHNUNGSDATEN WHERE FK_BVID\u003d\u0027{B[BVID]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-de91-f7da-8abc3b30545c"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-dfdb-5b8f-71b23a4d94d9",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-de91-f7da-8abc3b30545c"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a1a4715-5478-7d7d-9578-0889e9335d1a",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche aus DMP_BETREUUNGSVERHAELTNIS_HM13"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a1a4715-5478-ba2e-027f-ab2f52222cea",
+        "3a1a4715-5488-8587-e429-80059003d2e1",
+        "3a1a4715-5488-a181-6f0a-220f31eea778"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5478-ba2e-027f-ab2f52222cea",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a1a4715-5478-7d7d-9578-0889e9335d1a"
+      ],
+      "SubValues": [
+        "3a1a4715-5478-772d-ec91-a6270748c453"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5478-772d-ec91-a6270748c453",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a1a4715-5478-1ff7-8813-d733b9d7d223",
+        "3a1a4715-5488-1acd-372f-320f32e20382"
+      ],
+      "ParentValue": [
+        "3a1a4715-5478-ba2e-027f-ab2f52222cea"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5478-1ff7-8813-d733b9d7d223",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a1a4715-5478-772d-ec91-a6270748c453"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5488-1acd-372f-320f32e20382",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a1a4715-5478-772d-ec91-a6270748c453"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5488-8587-e429-80059003d2e1",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "DELETE FROM DMP_BETREUUNGSVERHAELTNIS_HM13 WHERE FK_BVID\u003d\u0027{B[BVID]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a1a4715-5478-7d7d-9578-0889e9335d1a"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a1a4715-5488-a181-6f0a-220f31eea778",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a1a4715-5478-7d7d-9578-0889e9335d1a"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "3a04cdb7-df96-8e88-aa22-41e1ca0940c5",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "0",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Lösche aus DMP_BETREUUNGSVERHAELTNIS"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "3a04cdb7-df96-2b9d-4f19-fab0facdcc62",
+        "3a04cdb7-df96-6cb8-8032-2979f2ff8f09",
+        "3a04cdb7-df96-b039-5149-31a70b1ce6bf"
+      ],
+      "ExecutionContainerLogs": [],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-e4e4-5f42-f86d-b8917810ae1a"
+      ],
+      "ParentFolder": [
+        "3a04cdb7-df95-1327-78a8-691b2581a6e0"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-2b9d-4f19-fab0facdcc62",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{NULL}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-8e88-aa22-41e1ca0940c5"
+      ],
+      "SubValues": [
+        "3a04cdb7-df96-0eaf-9bab-9337a81ab8f7"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-c634-c186-fa5d8cf3d64a"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-0eaf-9bab-9337a81ab8f7",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_DSN]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [
+        "3a04cdb7-df96-f594-2033-323b9071adf2",
+        "3a04cdb7-df96-a151-cc80-0cb08f4195c0"
+      ],
+      "ParentValue": [
+        "3a04cdb7-df96-2b9d-4f19-fab0facdcc62"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-70bf-c291-106507e7388d"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-f594-2033-323b9071adf2",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "{B[EC_DB_SCHEMA]}",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-0eaf-9bab-9337a81ab8f7"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-aeaa-c853-619877e83913"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-a151-cc80-0cb08f4195c0",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "4",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ParentValue": [
+        "3a04cdb7-df96-0eaf-9bab-9337a81ab8f7"
+      ],
+      "ModuleAttribute": [
+        "39ef0b81-e4e4-0eee-78db-9f1cc399253f"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-6cb8-8032-2979f2ff8f09",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "0",
+      "ActionMode": "1",
+      "Operator": "1",
+      "Value": "DELETE FROM DMP_BETREUUNGSVERHAELTNIS WHERE BVID\u003d\u0027{B[BVID]}\u0027",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-8e88-aa22-41e1ca0940c5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-d8ef-7938-b7eb8d1b03a6"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "3a04cdb7-df96-b039-5149-31a70b1ce6bf",
+    "Attributes": {
+      "ExplicitName": "",
+      "DataType": "3",
+      "ActionMode": "37",
+      "Operator": "0",
+      "Value": "True",
+      "ActionProperty": "",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": ""
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStep": [
+        "3a04cdb7-df96-8e88-aa22-41e1ca0940c5"
+      ],
+      "SubValues": [],
+      "ModuleAttribute": [
+        "39ef0b81-e551-f6c7-6d8a-46e855260253"
+      ],
+      "ExecutionLogs": []
+    }
+  },
+  {
+    "ObjectClass": "ParameterLayer",
+    "Surrogate": "3a04cdb7-df0a-2eef-b3d2-e0019b31b9f0",
+    "Attributes": {
+      "Name": "Business Parameters"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "Parameters": [
+        "3a04cdb7-df54-ff9e-87b7-d26c77d1cb96"
+      ],
+      "ParameterLayerReferences": [
+        "01KERZT0JX15X64528YG7SJ26W"
+      ],
+      "ReuseableTestStepBlock": [
+        "3a04cdb7-ddfe-a68e-aaf6-54978e354e05"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "Parameter",
+    "Surrogate": "3a04cdb7-df54-ff9e-87b7-d26c77d1cb96",
+    "Attributes": {
+      "Description": "",
+      "ValueSelectionGroup": "",
+      "Name": "VSNR"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "Parameters": [],
+      "ParameterReferences": [
+        "01KERZT0JX15X64528YG7SJ26X"
+      ],
+      "ParameterLayer": [
+        "3a04cdb7-df0a-2eef-b3d2-e0019b31b9f0"
+      ],
+      "Properties": []
+    }
+  }
+]

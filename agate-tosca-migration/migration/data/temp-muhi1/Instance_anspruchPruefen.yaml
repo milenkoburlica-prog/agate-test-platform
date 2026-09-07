@@ -1,0 +1,2019 @@
+testCases:
+
+- id: OclMuhi_SS12_SVNR gesetzt_Eigenanspruch_ÖGK_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 11.10.1955
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364011003'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Éliás
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Törőcsik-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_vorauss. Geburtsdatum 11 W u1 Tag_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+85d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 11.10.1955
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364011003'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Éliás
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Törőcsik-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '28'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_vorauss. Geburtsdatum morgen_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+1d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 11.10.1955
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364011003'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Éliás
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Törőcsik-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '40'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_CardToken gesetzt_mit_SVNR_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '3364011003'
+      VpNummer: '336010'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: '{B[token]}'
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 11.10.1955
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364011003'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Éliás
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Törőcsik-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_mehrfach_versichert_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3366001941'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 29.07.1971
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Sascha
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3366001941'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Bauer-Ederle-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_kein Druckname_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364012081'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 05.02.1988
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Herbert
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364012081'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Obertupfinger-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR gesetzt_APO-Vertrag_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682602'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-A0005
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '62'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es existiert keine Berechtigung zum Aufruf dieser Funktion.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_VP_kein_Recht_MUHI.CORE_BVA_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336026'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682601'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-A0005
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '62'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='AccessException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es existiert keine Berechtigung zum Aufruf dieser Funktion.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_nicht-in-DB_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '0000000000'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300002
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '2'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die SV-Nummer ist im e-Card System nicht bekannt.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_ungültig_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '1234567890'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300024
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in SV-Nummer ist ungültig.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_Anspruch_nicht_ÖGK_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3366013002'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300003
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '5'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Patientin hat keinen für MUHI passenden Anspruch.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVNR_abgeleiteter_Anspruch_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3367000932'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+280d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 25.12.1954
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Ruth
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3367000932'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Hirschhausen-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId Länge (33)_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId not existing_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId NULL_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{NULL}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_DialogId leer_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{EMPTY}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVSV-Token, SVNR-Eingabe unterschiedlich_ZS00167_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '3364011003'
+      VpNummer: '336010'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: '{B[token]}'
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00167
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '65'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die SV-Nummer der verwendeten e-card stimmt nicht mit der angegebenen SV-Nummer überein.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_e-Card-Token ungültig_ZS-00165_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '3364011003'
+      VpNummer: '336010'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: '{B[token]}'
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00165
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '63'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene e-card-Token ist ungültig.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_SVSV-Token, anderer VP_ZS-00168_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '3364011003'
+      VpNummer: '336026'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: '{B[token]}'
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00168
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '66'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene e-card-Token ist einem anderen Vertragspartner zugeordnet.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Token Null, SVN-Eingabe_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364011003'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 11.10.1955
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364011003'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Éliás
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Törőcsik-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '29'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Token , Token Empty, SVN-Eingabe_GF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: '{EMPTY}'
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='geburtsdatum']
+    action: EQUALS
+    expected: 26.04.1954
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vsnr']
+    action: EQUALS
+    expected: '3364013041'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='vorname']
+    action: EQUALS
+    expected: Ludmilla
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='patientin']/*[local-name()='zuname']
+    action: EQUALS
+    expected: Łódź-MUHI-SS12
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='anspruchPruefenResponse']/*[local-name()='return']/*[local-name()='schwangerschaftswoche']
+    action: EQUALS
+    expected: '29'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Keine e-card gesteckt, keine SV-Numer angegeben_ ZS-3300001_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '{EMPTY}'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+84d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300001
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_voraussichtlicher Geburtstermin fehlt_ZS-3300011_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{NULL}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300011
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '6'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Voraussichtlicher Geburtstermin ist ein Pflichtfeld.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtstermin -Datum falsches Format_ ZS-3300013_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: aa.bb.cccc
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300013
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '7'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das Format von voraussichtlicher Geburtstermin ist ungültig.
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtstermin -Datum liegt in der Vergangenheit_ ZS-3300014_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][-1d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300014
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '8'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in voraussichtlicher Geburtstermin ist ungültig. (Der Wert darf nicht in der Vergangenheit liegen.)
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: OclMuhi_SS12_Geburtsdatum liegt mehr als 40 Wochen in der Zukunft_ZS-3300015_FF
+  description: anspruchPruefen
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '336010'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682607'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.muhi.1.anspruchpruefen_request
+    response: anspruchpruefen_request_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      vsnr: '3364013041'
+      cardToken: ''
+      voraussichtlicherGeburtstermin: '{DATE[][+281d][]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-3300015
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '9'
+    response: anspruchpruefen_request_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='MuhiException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in voraussichtlicher Geburtstermin ist ungültig. (Der Wert darf nicht mehr als 40 Wochen in der Zukunft liegen.)
+    response: anspruchpruefen_request_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

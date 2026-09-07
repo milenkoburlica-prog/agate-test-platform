@@ -1,0 +1,3826 @@
+testCases:
+
+- id: DialogId Länge (33)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAAhU
+      dmpCode: '{NULL}'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DialogId not existing
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: Mj00rinv1nfRMji2KbgKwwGCnbhGRwAA
+      dmpCode: '{NULL}'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DialogId NULL
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{NULL}'
+      dmpCode: '{NULL}'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DialogId leer
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{EMPTY}'
+      dmpCode: '{NULL}'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-01085
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Dialog ist ungültig. Bitte melden Sie sich erneut an.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code valild (01)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code valild (02)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '02'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '02'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '02'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code valild (03)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '03'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '03'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '03'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code nicht valid (04)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '04'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02001
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in Therapie Aktiv Programm ist ungültig oder fehlt.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code Sonderzeichen (%&)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '%$'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02001
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in Therapie Aktiv Programm ist ungültig oder fehlt.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code Länge (003)
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '003'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02001
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '1'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Der Wert in Therapie Aktiv Programm ist ungültig oder fehlt.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code leer
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{EMPTY}'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: DMP Code NULL
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '{NULL}'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern Länge
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '645801251099'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern Sonderzeichen
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: AABBCCDDEE
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern non existing
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '0000000000'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-02019
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es konnte kein gültiges Betreuungsverhältnis für das gewählte Programm gefunden werden.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern not valid
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '1234567890'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern not_set
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern leer
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{EMPTY}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SVNummern null
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SvNummer angegeben - valid, kein CT
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: SvNummer angegeben -  nicht valid, kein CT
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '1234567890'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT00  Gutfall: CT-SVSV ohne Eingabe einer SVNR'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '6458012510'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '6458012510'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT01  Gutfall: CT-SVSV und Eingabe von SVNR, idente SVNR'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '6458012510'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '6458012510'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '200'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='betreuungsStatus']
+    action: EQUALS
+    expected: Ein
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='dmpCode']
+    action: EQUALS
+    expected: '01'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='einschreibungSeit']
+    action: EQUALS
+    expected: '{DATE[][][]}'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='fachgebietsCode']
+    action: EQUALS
+    expected: '07'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='nachname']
+    action: EQUALS
+    expected: McLaughlin-DMP-SS12
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='svNummer']
+    action: EQUALS
+    expected: '6458012510'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='patient']/*[local-name()='vorname']
+    action: EQUALS
+    expected: John
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='searchBetreuungsverhaeltnisseForPatientResponse']/*[local-name()='return']/*[local-name()='svtCode']
+    action: EQUALS
+    expected: '12'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT02  Schlechtfall: CT-SVSV und Eingabe von SVNR, andere SVNR - ZS-00167'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '6456010511'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '6456010511'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00167
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '65'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die SV-Nummer der verwendeten e-card stimmt nicht mit der angegebenen SV-Nummer überein.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT03  Schlechtfall: CT-VPSV und Eingabe von identer SVNR - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458012510'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT04  Schlechtfall: CT-VPSV und Eingabe von anderer SVNR - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458012510'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6456010511'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT05  Schlechtfall: CT-VPSV ohne Eingabe einer SVNR - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458012510'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT06  Schlechtfall: CT-VPVP ohne Eingabe einer SVNR - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_vpsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT07  Schlechtfall: CT-VPVP_VPNR-X ohne Eingabe einer SVNR, - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645052'
+
+  - type: CALL
+    command: reusable.create_cardtoken_vpsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT08  Schlechtfall: CT-VPSV_VPNR-X ohne Eingabe einer SVNR, - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645052'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458012510'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT09  Schlechtfall: CT-VPSV_SVNR-X mit Eingabe von SVNR, - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6456010511'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0A  Schlechtfall: CT-VPSV_VPNR-X_SVNR-X mit Eingabe von SVNR, - ZS-00174'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645052'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6456010511'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '6458012510'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00174
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '67'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Die Verwendung dieser Funktion mit einer Admin-Karte ist nicht zulässig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0B  Schlechtfall: CT leer, keine SV Nummer, SV-Karte nicht gesteckt - CL-02004'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0C  Schlechtfall: kein CT, keine SvNummer angegeben, SV-Karte nicht gesteckt - CL-02004'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: ''
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0D  Schlechtfall: CT-SVSV und Eingabe von ungültiger SVNR - CL-02004'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '6458012510'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '6458012510'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '1234567890'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='code']
+    action: EQUALS
+    expected: CL-02004
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '4'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DmpInvalidParameterException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Es wurde weder eine e-card verwendet, noch eine gültige SV-Nummer angegeben. (CL-02004)
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0E  Schlechtfall:  e-Card-Token ungültig - ZS-00165'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '6458012510'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_e_card
+    parameters:
+      SvNummer: '6458012510'
+      VpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00165
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '63'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene e-card-Token ist ungültig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0F  Schlechtfall:  o-Card-Token ungültig - ZS-00165'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_EKarte
+    value: '6458012510'
+
+  - type: CALL
+    command: reusable.create_cardtoken_svsig_o_card
+    parameters:
+      VpNummer: '{B[B_Karte]}'
+      SvNummer: '{B[B_EKarte]}'
+      cardSlot: baseContact
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: '{B[token]}BBBB'
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00165
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '63'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene Admin-Karten-Token ist ungültig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'
+
+- id: 'CT0G  Schlechtfall: CardToken ungültig - ZS-00165'
+  description: dmp_11_searchBetreuungsverhaeltnisseForPatient
+  stage: '*'
+  priority: HIGH
+  variables: {}
+  steps:
+
+  - type: CALL
+    command: reusable.db_dmp_delete_dmp_patient
+    parameters:
+      VSNR: '6458012510'
+
+  - type: CALL
+    command: reusable.soap_ss30_schreibedmppatientein
+    parameters:
+      SVT: '12'
+      EingabeArtCode: Einschreibung
+      VSNR: '6458012510'
+      VPNR: '645031'
+      ProgrammCode: '01'
+      Fachgebiet: '07'
+      BEAntragsdatum: '{DATE[][][yyyy-MM-dd]}'
+      EingabeArtUebersteuert_Bool: 'false'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_Karte
+    value: '645031'
+
+  - type: BUFFER
+    op: EXEC
+    name: B_OrdinationsId
+    value: '15682076'
+
+  - type: CALL
+    command: reusable.ru_dialog_aufbau_mit_ordid
+    parameters:
+      ORD_ID: '{B[B_OrdinationsId]}'
+      vpNummer: '{B[B_Karte]}'
+      cardSlot: baseContact
+
+  - type: BUFFER
+    op: EXEC
+    name: token
+    value: '{EMPTY}'
+
+  - type: SOAP
+    op: EXEC
+    endpoint: https://{E[env.ecard.service]}
+    command: soap.dmp.11.searchbetreuungsverhaeltnisseforpatient_request_v11
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+    parameters:
+      dialogId: '{B[dialogId]}'
+      dmpCode: '01'
+      svNummer: '{NULL}'
+      cardToken: eyJhbGciOiJFUzI1NiJ9.eyJpYXQiOjE1ODM0MzA2ODgsInN2bnIiOiIxODk4MDgxMTU0IiwidnBuciI6IjEzNTY3OSIsInNpZyI6Ik1JSFBBZ0VCTVFzd0NRWUZLdzREQWhvRkFEQUxCZ2txaGtpRzl3MEJCd0V4Z2E4d2dhd0NBUUV3V0RCTU1Rc3dDUVlEVlFRR0V3SkJWREViTUJrR0ExVUVDaE1TVTI5NmFXRnNkbVZ5YzJsamFHVnlkVzVuTVE0d0RBWURWUVFMRXdWVFZsTnBaekVRTUE0R0ExVUVBeE1IVkdWemXRDMURRUUlJZm1iR3lvdGptb0l3Q1FZRkt3NERBaG9GQURBSkJnY3Foa2pPUFFRQkJEY3dOUUlZS2pmWFdZWSs3N3BDOUdhSmN2dDVOTEJubmFlWjh1bFZBaGtBL2VxYzBDaThMVGkrbGEvV2Fub1VQTE10RW1VMWR0NG4iLCJzaWdUeXBlIjoic3YiLCJjaW4iOiI4MDA0MDAwMDAxMjEwMDAwMDE5MyIsImNhcmQiOiJlIiwicmRySWQiOiIwMDowMDowYTo4NjpmMzphOSIsImdpbmFJZCI6IjAyZDE5N2ViLTIyZmQtNGJiNS1hYjE3LWVjNGZiNTg0YTM0NyIsInYiOjEsInNlcSI6NDV9.3Vl5vC1r9qqKjZIZMENmo0Y-QSsjlKpovk0iRsQp2j_utRkbuBv9D5e2jnKJPxB-aP-KwsSyyn9m4Uy41LTZAA
+
+  - type: SOAP
+    op: ASSERT
+    source: STATUS
+    action: EQUALS
+    expected: '500'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='code']
+    action: EQUALS
+    expected: ZS-00165
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='errorCode']
+    action: EQUALS
+    expected: '63'
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: SOAP
+    op: ASSERT
+    source: BODY
+    path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='detail']/*[local-name()='DialogException']/*[local-name()='message']
+    action: CONTAINS
+    expected: Das angegebene CardToken ist ungültig.
+    response: searchbetreuungsverhaeltnisseforpatient_request_v11_response
+
+  - type: CALL
+    command: reusable.dialogclose_auth1
+    parameters:
+      dialogId: '{B[dialogId]}'

@@ -1,0 +1,107 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a1b4dcb-31bd-967d-20b2-56c5cd5514d5",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Tx_CMStoCKV-PC_TxFilesFromKams"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "Items" : [ "3a1b4dcb-32bb-b3e2-23b8-c972d8d980c7", "3a1b4dcb-32bb-eb08-119c-badb5c458e13" ],
+    "Library" : [ "3a1ab3e4-9134-a5b8-9a89-5523569acd05" ],
+    "UsedBy" : [ "01M1BBZFRW7P6EHPXQPNECS7D5" ]
+  },
+  "BusinessParameters" : [ ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1b4dcb-32bb-b3e2-23b8-c972d8d980c7",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "TBox Set Buffer"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1b4dcb-32bb-a1d7-39db-2343d0656ba1", "3a1b4dcb-32bb-e7e9-7c45-b170407e391c", "3a1b4dcb-32bb-fba1-e50f-fad295af8e46" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-c955-8ad6-4495-d85735b6c215" ],
+    "ParentFolder" : [ "3a1b4dcb-31bd-967d-20b2-56c5cd5514d5" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b4dcb-32bb-a1d7-39db-2343d0656ba1",
+    "Value" : "{B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\.",
+    "ExplicitName" : "DIRPC",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "DIRPC",
+    "ToscaPathID" : "3a1b4dcb-32bb-a1d7-39db-2343d0656ba1"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b4dcb-32bb-e7e9-7c45-b170407e391c",
+    "Value" : "{B[OMS.SS2_CMStoCKV.TransferVerzeichnis]}/.",
+    "ExplicitName" : "DIRPOD",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "DIRPOD",
+    "ToscaPathID" : "3a1b4dcb-32bb-e7e9-7c45-b170407e391c"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1b4dcb-32bb-fba1-e50f-fad295af8e46",
+    "Value" : "{B[KS_POD_Name]}",
+    "ExplicitName" : "PODNAME",
+    "ActionMode" : "Insert",
+    "ActionProperty" : "",
+    "ToscaPath" : "PODNAME",
+    "ToscaPathID" : "3a1b4dcb-32bb-fba1-e50f-fad295af8e46"
+  } ]
+}, {
+  "ObjectClass" : "TestStepFolderReference",
+  "Surrogate" : "3a1b4dcb-32bb-eb08-119c-badb5c458e13",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : ""
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ParameterLayerReference" : [ "3a1b4dcb-32bb-68f5-e973-ecfb36de0759" ],
+    "ExecutionContainerLogs" : [ ],
+    "ReusedItem" : [ "3a13a6fe-2171-c8d2-da02-80b57899d454" ],
+    "ParentFolder" : [ "3a1b4dcb-31bd-967d-20b2-56c5cd5514d5" ]
+  },
+  "Parameters" : [ {
+    "Value" : "get",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[DIRPC]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[DIRPOD]}",
+    "ExplicitName" : ""
+  }, {
+    "Value" : "{B[PODNAME]}",
+    "ExplicitName" : ""
+  } ]
+} ]

@@ -1,0 +1,479 @@
+[ {
+  "ObjectClass" : "ReuseableTestStepBlock",
+  "Surrogate" : "3a04cdb7-ddfe-a68e-aaf6-54978e354e05",
+  "Attributes" : {
+    "Condition" : "",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Description" : "",
+    "Pausable" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "DB DMP Lösche aus 6 Tabellen ausser DMP_ANFRAGE alle Datensätze zu SVNR"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "ExecutionContainerLogs" : [ ],
+    "ParameterLayer" : [ "3a04cdb7-df0a-2eef-b3d2-e0019b31b9f0" ],
+    "Items" : [ "3a04cdb7-df94-615e-5263-8d3b5566a8c5" ],
+    "Library" : [ "3a04cdbf-89bf-4837-86e5-0397813129da" ],
+    "UsedBy" : [ "01KERZT0JX15X64528YG7SJ26V" ]
+  },
+  "BusinessParameters" : [ {
+    "Name" : "VSNR",
+    "ValueSelectionGroup" : ""
+  } ],
+  "Parameters" : [ ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a04cdb7-df95-12d0-88b5-1bab584ff531",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "BVID aus DMP_BETREUUNGSVERHAELTNIS buffern"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a04cdb7-df95-80c1-03e0-f391e43fce72", "3a04cdb7-df95-e636-b333-921532505d4d", "3a04cdb7-df95-f6b2-c544-e35e214d5cb8", "3a04cdb7-df95-5c07-08de-28fbdc8d38c6" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-80c1-03e0-f391e43fce72",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a04cdb7-df95-80c1-03e0-f391e43fce72"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-ba4e-e037-58cef96189b0",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a04cdb7-df95-80c1-03e0-f391e43fce72.3a04cdb7-df95-ba4e-e037-58cef96189b0"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-634e-5fb5-833aac652bdb",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a04cdb7-df95-80c1-03e0-f391e43fce72.3a04cdb7-df95-ba4e-e037-58cef96189b0.3a04cdb7-df95-634e-5fb5-833aac652bdb"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-a2f1-d21b-25a60f98b5d7",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a04cdb7-df95-80c1-03e0-f391e43fce72.3a04cdb7-df95-ba4e-e037-58cef96189b0.3a04cdb7-df95-a2f1-d21b-25a60f98b5d7"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-e636-b333-921532505d4d",
+    "Value" : "SELECT BVID FROM DMP_BETREUUNGSVERHAELTNIS WHERE FK_SV_NUMMER = '{PL[VSNR]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a04cdb7-df95-e636-b333-921532505d4d"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-f6b2-c544-e35e214d5cb8",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Result Table",
+    "ToscaPathID" : "3a04cdb7-df95-f6b2-c544-e35e214d5cb8"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-60be-acb1-7968af2b236d",
+    "Value" : "BVID",
+    "ExplicitName" : "#1",
+    "ActionMode" : "Buffer",
+    "ActionProperty" : "",
+    "ToscaPath" : "#2.#1",
+    "ToscaPathID" : "3a04cdb7-df95-f6b2-c544-e35e214d5cb8.3a04cdb7-df95-7fe5-13f3-80abe8c412b2.3a04cdb7-df95-60be-acb1-7968af2b236d"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a04cdb7-df95-c284-3bfc-f2b7d2c0b3e6",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche aus DMP_MED_PATIENTENINFO"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a04cdb7-df95-6e2d-3daa-8e514913cb7b", "3a04cdb7-df95-c8b2-c2bd-188f974c4b69", "3a04cdb7-df95-9c40-f62e-17d2e2f17d91" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-6e2d-3daa-8e514913cb7b",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a04cdb7-df95-6e2d-3daa-8e514913cb7b"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-f5ae-2aef-b0887735ca85",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a04cdb7-df95-6e2d-3daa-8e514913cb7b.3a04cdb7-df95-f5ae-2aef-b0887735ca85"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-5bcf-8c4c-2dfc25b0bfc2",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a04cdb7-df95-6e2d-3daa-8e514913cb7b.3a04cdb7-df95-f5ae-2aef-b0887735ca85.3a04cdb7-df95-5bcf-8c4c-2dfc25b0bfc2"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-ef95-783c-40991f5d4fd7",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a04cdb7-df95-6e2d-3daa-8e514913cb7b.3a04cdb7-df95-f5ae-2aef-b0887735ca85.3a04cdb7-df95-ef95-783c-40991f5d4fd7"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-c8b2-c2bd-188f974c4b69",
+    "Value" : "DELETE FROM DMP_MED_PATIENTENINFO WHERE FK_BVID='{B[BVID]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a04cdb7-df95-c8b2-c2bd-188f974c4b69"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a04cdb7-df95-982c-5408-e5be7ceeae17",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche aus DMP_ADMIN_PATIENTENINFO"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a04cdb7-df95-1a69-e5f2-d20698ce349d", "3a04cdb7-df96-1339-bcdf-2b5334ff86ec", "3a04cdb7-df96-32c4-c940-5f3b3a2747b9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df95-1a69-e5f2-d20698ce349d",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a04cdb7-df95-1a69-e5f2-d20698ce349d"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-d965-6455-82f9f94a256e",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a04cdb7-df95-1a69-e5f2-d20698ce349d.3a04cdb7-df96-d965-6455-82f9f94a256e"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-2eb7-dfbe-ab1974b9d759",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a04cdb7-df95-1a69-e5f2-d20698ce349d.3a04cdb7-df96-d965-6455-82f9f94a256e.3a04cdb7-df96-2eb7-dfbe-ab1974b9d759"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-a912-9d34-0025b6035b11",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a04cdb7-df95-1a69-e5f2-d20698ce349d.3a04cdb7-df96-d965-6455-82f9f94a256e.3a04cdb7-df96-a912-9d34-0025b6035b11"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-1339-bcdf-2b5334ff86ec",
+    "Value" : "DELETE FROM DMP_ADMIN_PATIENTENINFO WHERE FK_BVID='{B[BVID]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a04cdb7-df96-1339-bcdf-2b5334ff86ec"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a04cdb7-df96-de91-f7da-8abc3b30545c",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche aus DBAS_DMP_ABRECHNUNGSDATEN"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a04cdb7-df96-f642-ef14-34a471ff9258", "3a04cdb7-df96-3aca-94ee-d41cab0c46aa", "3a04cdb7-df96-dfdb-5b8f-71b23a4d94d9" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-f642-ef14-34a471ff9258",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a04cdb7-df96-f642-ef14-34a471ff9258"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-75e5-33ea-94e0e05cd4c4",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a04cdb7-df96-f642-ef14-34a471ff9258.3a04cdb7-df96-75e5-33ea-94e0e05cd4c4"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-8feb-bca1-7f5a1be2556f",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a04cdb7-df96-f642-ef14-34a471ff9258.3a04cdb7-df96-75e5-33ea-94e0e05cd4c4.3a04cdb7-df96-8feb-bca1-7f5a1be2556f"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-0317-aa29-aace43b40cbb",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a04cdb7-df96-f642-ef14-34a471ff9258.3a04cdb7-df96-75e5-33ea-94e0e05cd4c4.3a04cdb7-df96-0317-aa29-aace43b40cbb"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-3aca-94ee-d41cab0c46aa",
+    "Value" : "DELETE FROM DBAS_DMP_ABRECHNUNGSDATEN WHERE FK_BVID='{B[BVID]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a04cdb7-df96-3aca-94ee-d41cab0c46aa"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a1a4715-5478-7d7d-9578-0889e9335d1a",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche aus DMP_BETREUUNGSVERHAELTNIS_HM13"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a1a4715-5478-ba2e-027f-ab2f52222cea", "3a1a4715-5488-8587-e429-80059003d2e1", "3a1a4715-5488-a181-6f0a-220f31eea778" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1a4715-5478-ba2e-027f-ab2f52222cea",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a1a4715-5478-ba2e-027f-ab2f52222cea"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1a4715-5478-772d-ec91-a6270748c453",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a1a4715-5478-ba2e-027f-ab2f52222cea.3a1a4715-5478-772d-ec91-a6270748c453"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1a4715-5478-1ff7-8813-d733b9d7d223",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a1a4715-5478-ba2e-027f-ab2f52222cea.3a1a4715-5478-772d-ec91-a6270748c453.3a1a4715-5478-1ff7-8813-d733b9d7d223"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1a4715-5488-1acd-372f-320f32e20382",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a1a4715-5478-ba2e-027f-ab2f52222cea.3a1a4715-5478-772d-ec91-a6270748c453.3a1a4715-5488-1acd-372f-320f32e20382"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a1a4715-5488-8587-e429-80059003d2e1",
+    "Value" : "DELETE FROM DMP_BETREUUNGSVERHAELTNIS_HM13 WHERE FK_BVID='{B[BVID]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a1a4715-5488-8587-e429-80059003d2e1"
+  } ]
+}, {
+  "ObjectClass" : "XTestStep",
+  "Surrogate" : "3a04cdb7-df96-8e88-aa22-41e1ca0940c5",
+  "Attributes" : {
+    "Condition" : "(true)",
+    "Path" : "",
+    "DisabledDescription" : "",
+    "Pausable" : "0",
+    "ReorderAllowed" : "0",
+    "BreakInstantiation" : "0",
+    "Repetition" : "",
+    "Name" : "Lösche aus DMP_BETREUUNGSVERHAELTNIS"
+  },
+  "Assocs" : {
+    "ConfigurationLinks" : [ ],
+    "TestStepValues" : [ "3a04cdb7-df96-2b9d-4f19-fab0facdcc62", "3a04cdb7-df96-6cb8-8032-2979f2ff8f09", "3a04cdb7-df96-b039-5149-31a70b1ce6bf" ],
+    "ExecutionContainerLogs" : [ ],
+    "ExecutionLogs" : [ ],
+    "Module" : [ "39ef0b81-e4e4-5f42-f86d-b8917810ae1a" ],
+    "ParentFolder" : [ "3a04cdb7-df95-1327-78a8-691b2581a6e0" ]
+  },
+  "Parameters" : [ {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-2b9d-4f19-fab0facdcc62",
+    "Value" : "{NULL}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection",
+    "ToscaPathID" : "3a04cdb7-df96-2b9d-4f19-fab0facdcc62"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-0eaf-9bab-9337a81ab8f7",
+    "Value" : "{B[EC_DB_DSN]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN",
+    "ToscaPathID" : "3a04cdb7-df96-2b9d-4f19-fab0facdcc62.3a04cdb7-df96-0eaf-9bab-9337a81ab8f7"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-f594-2033-323b9071adf2",
+    "Value" : "{B[EC_DB_SCHEMA]}",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.User ID",
+    "ToscaPathID" : "3a04cdb7-df96-2b9d-4f19-fab0facdcc62.3a04cdb7-df96-0eaf-9bab-9337a81ab8f7.3a04cdb7-df96-f594-2033-323b9071adf2"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-a151-cc80-0cb08f4195c0",
+    "Value" : "21489a0b-c163-4a62-b61e-501090c9506aMgAxADQAOAA5AGEAMABiAC0AYwAxADYAMwAtADQAYQA2ADIALQBiADYAMQBlAC0ANQAwADEAMAA5ADAAYwA5ADUAMAA2AGEAoxXYQxbGvImtI0TRrqjJ1WrfLoZ6j5MfIygTMCIiX0Bf35/TfAhiAXm8hLX3uYLU",
+    "ExplicitName" : "",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "Open Connection.DSN.Password",
+    "ToscaPathID" : "3a04cdb7-df96-2b9d-4f19-fab0facdcc62.3a04cdb7-df96-0eaf-9bab-9337a81ab8f7.3a04cdb7-df96-a151-cc80-0cb08f4195c0"
+  }, {
+    "XmlPath" : "",
+    "JsonPath" : "",
+    "ModuleAttributeSurrogate" : "3a04cdb7-df96-6cb8-8032-2979f2ff8f09",
+    "Value" : "DELETE FROM DMP_BETREUUNGSVERHAELTNIS WHERE BVID='{B[BVID]}'",
+    "ExplicitName" : "SQL Statement",
+    "ActionMode" : "Constraint",
+    "ActionProperty" : "",
+    "ToscaPath" : "SQL Statement",
+    "ToscaPathID" : "3a04cdb7-df96-6cb8-8032-2979f2ff8f09"
+  } ]
+} ]
