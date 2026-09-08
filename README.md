@@ -478,28 +478,128 @@ AGATE deliberately does not invent business behavior that is not described by th
 
 # 🚀 Getting Started
 
-Clone the repository:
+The fastest way to understand AGATE is to **run the existing demo tests and explore the accompanying documentation**.
+
+## Clone the Repository
 
 ```bash
 git clone https://github.com/milenkoburlica-prog/agate-test-platform.git
 cd agate-test-platform
 ```
-Execute Existing AGATE Tests
-```bash
+
+## Execute Existing AGATE Tests
+
+Run a specific demo test suite:
+
+```cmd
 cd agate-server
 startTests.bat DEMOS DEMOS DEMO rest_engine_demo.yaml
 ```
 
-or execute all suites for the selected application/stage:
+Or execute all suites for the selected application and stage:
 
-```bash
+```cmd
 startTests.bat DEMOS DEMOS DEMO
 ```
 
+## Explore the Demo Application
 
-Conceptually:
+A ready-to-run demo application is included under:
 
 ```text
+agate-server/data/demo/
+```
+
+It contains practical examples for the AGATE DSL and the available test engines, including:
+
+```text
+rest_engine_demo.yaml
+soap_engine_demo.yaml
+sql_engine_demo.yaml
+cmd_engine_demo.yaml
+file_engine_demo.yaml
+buffer_engine_demo.yaml
+wait_engine_demo.yaml
+variables_demo.yaml
+reusable_engine_demo.yaml
+```
+
+The demo application also contains the supporting artifacts used by these tests:
+
+```text
+agate-server/data/demo/
+│
+├── *_engine_demo.yaml       Test suites
+│
+├── modules/
+│   ├── rest/
+│   │   └── .../
+│   │       ├── metadata.json
+│   │       └── request.json
+│   │
+│   └── soap/
+│       └── .../
+│           ├── metadata.json
+│           └── request.xml
+│
+├── references/              Reference responses used for validation
+│
+└── reusable/                Reusable AGATE test flows
+```
+
+This makes the demo application useful not only for executing tests, but also for understanding how **test suites, reusable REST/SOAP modules, references, variables and reusable test flows fit together**.
+
+## Read the Documentation
+
+Additional documentation is available under:
+
+```text
+agate-documentation/
+```
+
+It provides detailed descriptions of the AGATE DSL, individual test engines, supported operations and practical usage examples.
+
+For new users, a good way to explore AGATE is:
+
+```text
+Clone AGATE
+    │
+    ▼
+Run a Demo Test
+    │
+    ▼
+Explore data/demo
+    │
+    ├── Test Suites
+    ├── REST/SOAP Modules
+    ├── References
+    └── Reusable Tests
+    │
+    ▼
+Read the Documentation
+    │
+    ▼
+Modify an Existing Demo
+    │
+    ▼
+Create Your Own Test
+```
+
+## Choose Your Starting Point
+
+Depending on what you already have, there are several ways to start working with AGATE:
+
+```text
+Want to learn AGATE?
+        │
+        ├──► agate-documentation/
+        │
+        └──► agate-server/data/demo/
+                       │
+                       ▼
+                  Run & Explore
+
+
 Already have AGATE tests?
         │
         ▼
@@ -518,7 +618,7 @@ Have an OpenAPI specification?
      generate
         │
         ▼
-    AGATE tests
+ Native AGATE Artifacts
         │
         ▼
    agate-server
@@ -543,7 +643,7 @@ Have Tricentis Tosca tests?
  agate-tosca-migrator
         │
         ▼
-    AGATE tests
+ Native AGATE Artifacts
         │
         ▼
    agate-server
@@ -551,6 +651,10 @@ Have Tricentis Tosca tests?
         ▼
       Execute
 ```
+
+The **demo application and documentation are the recommended starting point for new users**.
+
+They provide working examples of the same native AGATE structures used in real test applications, making it possible to learn the platform incrementally before creating tests from scratch.
 
 ---
 
