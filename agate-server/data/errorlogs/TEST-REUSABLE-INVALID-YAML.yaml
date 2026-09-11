@@ -1,0 +1,11 @@
+testCases:
+
+- id: REUSABLE_INVALID_YAML
+  description: CALL references a reusable module containing invalid YAML syntax
+  stage: '*'
+  priority: HIGH
+
+  steps:
+
+  - type: CALL
+    command: "reusable.demo_reusable_invalid_yaml"

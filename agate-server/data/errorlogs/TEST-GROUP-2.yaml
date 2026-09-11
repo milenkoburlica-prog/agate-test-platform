@@ -1,0 +1,200 @@
+# TEST-GROUP-2.yaml
+#
+# Purpose:
+#   Capture CURRENT agate-server behavior for runtime/execution problems.
+#
+# This YAML is intentionally valid AGATE-style DSL.
+# Every test case triggers one controlled runtime failure or failed assertion.
+#
+# No database, OpenShift cluster, or remote REST service is required.
+#
+# If execution stops after the first failing test case, temporarily comment
+# out completed cases and continue with the next one.
+
+testCases:
+
+  - id: G2_01_FILE_READ_MISSING
+    description: "Runtime error - read a file that does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "output/agate-error-tests/file-that-does-not-exist.txt"
+        response: missing_file
+
+  - id: G2_02_FILE_COPY_MISSING_SOURCE
+    description: "Runtime error - copy from a source file that does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: COPY
+        source: "output/agate-error-tests/missing-source.txt"
+        target: "output/agate-error-tests/copy-target.txt"
+        overwrite: true
+
+  - id: G2_03_FILE_DELETE_MISSING
+    description: "Runtime error - delete a missing file"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: DELETE
+        path: "output/agate-error-tests/missing-delete-target.txt"
+        missingOk: false
+
+  - id: G2_04_CMD_COMMAND_NOT_FOUND
+    description: "Runtime error - command does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "agate_command_that_definitely_does_not_exist_987654"
+        response: cmd_response
+
+  - id: G2_05_CMD_EXITCODE_ASSERTION
+    description: "Assertion failure - CMD returns exit code 7 instead of 0"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "cmd /c exit 7"
+        response: cmd_response
+        checkExitCode: false
+
+      - type: CMD
+        op: ASSERT
+        action: EXITCODE
+        expected: 0
+
+  - id: G2_06_FILE_EXISTS_ASSERTION
+    description: "Assertion failure - expected file does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: ASSERT
+        action: EXISTS
+        path: "output/agate-error-tests/assert-this-file-exists.txt"
+
+  - id: G2_07_FILE_CONTENT_ASSERTION
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: WRITE
+        path: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "output/agate-error-tests/content-assertion.txt"
+        response: file_content
+
+      - type: FILE
+        op: ASSERT
+        response: file_content
+        action: CONTAINS
+        value: "AGATE_ERROR_TEST_EXPECTED_BUT_MISSING"
+
+
+
+
+  - id: G2_8_ERRoRNOUS_OP
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXE
+        action: WRITE
+        path: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+
+  - id: G2_09_ERRoRNOUS_ACTION1
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXE
+        actions: WRITE
+        path: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+
+
+  - id: G2_10_ERRoRNOUS_ACTION2
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: RITE
+        path: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+
+  - id: G2_11_ERRoRNOUS_ACTION3
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        path: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+
+  - id: G2_12_ERRoRNOUS_PATH1
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: WRITE
+        pat: "output/agate-error-tests/content-assertion.txt"
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+
+
+  - id: G2_13_ERRoRNOUS_PATH2
+    description: "Assertion failure - file content does not contain expected text"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        text: "AGATE_ERROR_TEST_ACTUAL_VALUE"
+        overwrite: true
+

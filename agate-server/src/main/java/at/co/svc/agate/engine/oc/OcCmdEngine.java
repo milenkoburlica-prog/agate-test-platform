@@ -13,6 +13,7 @@ import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.engine.AbstractStepEngine;
+import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.env.EnvironmentManager;
 import at.co.svc.agate.core.interfaces.TestLogger;
 
@@ -93,8 +94,10 @@ public class OcCmdEngine extends AbstractStepEngine {
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unsupported OC operation: " + op);
+            throw AgateStepException.builder("Unsupported OC operation")
+                    .actual(op)
+                    .hint("Supported operations: EXEC, PUT, GET, ASSERT, BUFFER")
+                    .build();
         }
     }
 
@@ -110,14 +113,18 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         if (step.getCommand() == null
                 || step.getCommand().isBlank()) {
-            throw new RuntimeException(
-                    "OC EXEC requires 'command'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("command")
+                    .hint("OC EXEC requires a command to execute inside the pod.")
+                    .build();
         }
 
         if (step.getPod() == null
                 || step.getPod().isBlank()) {
-            throw new RuntimeException(
-                    "OC EXEC requires 'pod'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("pod")
+                    .hint("OC EXEC requires the target pod or service name.")
+                    .build();
         }
 
         YamlPlaceholderResolver resolver =
@@ -324,21 +331,29 @@ public class OcCmdEngine extends AbstractStepEngine {
         }
 
         if (result.isTimedOut()) {
-            throw new RuntimeException(
-                    "OC command timed out after "
-                            + timeout
-                            + " seconds.");
+            throw AgateStepException.builder("OC command timed out")
+                    .expected("completion within " + timeout + " seconds")
+                    .actual("timeout")
+                    .command(resolvedCommand)
+                    .hint("Check the pod/command or increase timeout if the longer runtime is expected.")
+                    .build();
         }
 
         if (checkExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
-            throw new RuntimeException(
-                    "OC command failed. Expected exit code "
-                            + expectedExitCode
-                            + " but got "
-                            + result.getExitCode());
+            String expectedDisplay =
+                    step.getExpectedExitCode() == null
+                            ? expectedExitCode + " (default)"
+                            : String.valueOf(expectedExitCode);
+
+            throw AgateStepException.builder("Unexpected exit code")
+                    .expected(expectedDisplay)
+                    .actual(result.getExitCode())
+                    .command(resolvedCommand)
+                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .build();
         }
     }
 
@@ -357,20 +372,26 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         if (step.getPod() == null
                 || step.getPod().isBlank()) {
-            throw new RuntimeException(
-                    "OC " + op + " requires 'pod'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("pod")
+                    .hint("OC " + op + " requires the target pod or service name.")
+                    .build();
         }
 
         if (step.getFrom() == null
                 || step.getFrom().isBlank()) {
-            throw new RuntimeException(
-                    "OC " + op + " requires 'from'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("from")
+                    .hint("OC " + op + " requires a source path.")
+                    .build();
         }
 
         if (step.getTo() == null
                 || step.getTo().isBlank()) {
-            throw new RuntimeException(
-                    "OC " + op + " requires 'to'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("to")
+                    .hint("OC " + op + " requires a target path.")
+                    .build();
         }
 
         Map<String, Object> combinedVars =
@@ -585,25 +606,29 @@ public class OcCmdEngine extends AbstractStepEngine {
         }
 
         if (result.isTimedOut()) {
-            throw new RuntimeException(
-                    "OC "
-                            + op
-                            + " timed out after "
-                            + timeout
-                            + " seconds.");
+            throw AgateStepException.builder("OC " + op + " timed out")
+                    .expected("completion within " + timeout + " seconds")
+                    .actual("timeout")
+                    .command(fullCommand)
+                    .hint("Check the transfer paths/pod or increase timeout if the longer runtime is expected.")
+                    .build();
         }
 
         if (checkExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
-            throw new RuntimeException(
-                    "OC "
-                            + op
-                            + " failed. Expected exit code "
-                            + expectedExitCode
-                            + " but got "
-                            + result.getExitCode());
+            String expectedDisplay =
+                    step.getExpectedExitCode() == null
+                            ? expectedExitCode + " (default)"
+                            : String.valueOf(expectedExitCode);
+
+            throw AgateStepException.builder("Unexpected exit code")
+                    .expected(expectedDisplay)
+                    .actual(result.getExitCode())
+                    .command(fullCommand)
+                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .build();
         }
     }
 
@@ -660,17 +685,36 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         String action =
                 step.getAction() != null
-                        ? step.getAction().toUpperCase()
+                        ? step.getAction().trim().toUpperCase()
                         : "";
+
+        String responseKey =
+                step.getResponse();
+
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("OC ASSERT must reference a response created by a previous OC EXEC/PUT/GET step.")
+                    .build();
+        }
+
+        if (action.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("action")
+                    .hint("Supported OC ASSERT actions: EXITCODE, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                    .build();
+        }
 
         Object raw =
                 context.getBuffer(
-                        step.getResponse());
+                        responseKey);
 
         if (raw == null) {
-            throw new RuntimeException(
-                    "No response found for key: "
-                            + step.getResponse());
+            throw AgateStepException.builder("OC response was not found")
+                    .actual(responseKey)
+                    .field("response")
+                    .hint("Check that a previous OC EXEC/PUT/GET step stores this response.")
+                    .build();
         }
 
         CommandResult result =
@@ -680,7 +724,7 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         String output =
                 result != null
-                        ? result.getOutput()
+                        ? (result.getOutput() != null ? result.getOutput() : "")
                         : raw.toString();
 
         String expected =
@@ -698,18 +742,34 @@ public class OcCmdEngine extends AbstractStepEngine {
         case "EXITCODE":
 
             if (result == null) {
-                throw new RuntimeException(
-                        "EXITCODE requires an OC command response.");
+                throw AgateStepException.builder(
+                                "EXITCODE assertion requires an OC command response")
+                        .actual(responseKey)
+                        .field("response")
+                        .hint("Reference the response created by a previous OC command step.")
+                        .build();
             }
 
-            if (result.getExitCode()
-                    != Integer.parseInt(expected)) {
+            final int expectedExitCode;
 
-                throw new RuntimeException(
-                        "Assertion EXITCODE failed. Expected "
-                                + expected
-                                + " but got "
-                                + result.getExitCode());
+            try {
+                expectedExitCode =
+                        Integer.parseInt(expected);
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid EXITCODE assertion value")
+                        .expected("integer exit code")
+                        .actual(expected)
+                        .field("expected")
+                        .hint("Use an integer value such as expected: 0")
+                        .cause(e)
+                        .build();
+            }
+
+            if (result.getExitCode() != expectedExitCode) {
+                throw AgateStepException.builder("EXITCODE assertion failed")
+                        .expected(expectedExitCode)
+                        .actual(result.getExitCode())
+                        .build();
             }
 
             break;
@@ -717,8 +777,10 @@ public class OcCmdEngine extends AbstractStepEngine {
         case "CONTAINS":
 
             if (!output.contains(value)) {
-                throw new RuntimeException(
-                        "Assertion CONTAINS failed.");
+                throw AgateStepException.builder("CONTAINS assertion failed")
+                        .expected(value)
+                        .actual(output.trim())
+                        .build();
             }
 
             break;
@@ -726,51 +788,75 @@ public class OcCmdEngine extends AbstractStepEngine {
         case "NOT_CONTAINS":
 
             if (output.contains(value)) {
-                throw new RuntimeException(
-                        "Assertion NOT_CONTAINS failed.");
+                throw AgateStepException.builder("NOT_CONTAINS assertion failed")
+                        .expected("output must not contain: " + value)
+                        .actual(output.trim())
+                        .build();
             }
 
             break;
 
         case "EQUALS":
 
-            if (!output.trim()
-                    .equals(value.trim())) {
-
-                throw new RuntimeException(
-                        "Assertion EQUALS failed.");
+            if (!output.trim().equals(value.trim())) {
+                throw AgateStepException.builder("EQUALS assertion failed")
+                        .expected(value.trim())
+                        .actual(output.trim())
+                        .build();
             }
 
             break;
 
         case "NOT_EQUALS":
 
-            if (output.trim()
-                    .equals(value.trim())) {
-
-                throw new RuntimeException(
-                        "Assertion NOT_EQUALS failed.");
+            if (output.trim().equals(value.trim())) {
+                throw AgateStepException.builder("NOT_EQUALS assertion failed")
+                        .expected("value different from: " + value.trim())
+                        .actual(output.trim())
+                        .build();
             }
 
             break;
 
         case "COUNT":
 
-            if (countOccurrences(
-                    output,
-                    value)
-                    != Integer.parseInt(expected)) {
+            final int expectedCount;
 
-                throw new RuntimeException(
-                        "Assertion COUNT failed.");
+            try {
+                expectedCount =
+                        Integer.parseInt(expected);
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid COUNT assertion value")
+                        .expected("integer count")
+                        .actual(expected)
+                        .field("expected")
+                        .hint("Use an integer value such as expected: 1")
+                        .cause(e)
+                        .build();
+            }
+
+            int actualCount =
+                    countOccurrences(
+                            output,
+                            value);
+
+            if (actualCount != expectedCount) {
+                throw AgateStepException.builder("COUNT assertion failed")
+                        .expected(expectedCount)
+                        .actual(actualCount)
+                        .detail("Value", value)
+                        .build();
             }
 
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unknown assertion type: "
-                            + action);
+
+            throw AgateStepException.builder("Unsupported OC ASSERT action")
+                    .actual(action)
+                    .field("action")
+                    .hint("Supported actions: EXITCODE, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                    .build();
         }
 
         if (Boolean.TRUE.equals(printExecution)
@@ -783,7 +869,8 @@ public class OcCmdEngine extends AbstractStepEngine {
                             ConsoleColors.RESET));
         }
     }
-
+    
+    
     private void handleBuffer(
             TestStep step,
             ExecutionContext context,
@@ -796,9 +883,11 @@ public class OcCmdEngine extends AbstractStepEngine {
                         step.getResponse());
 
         if (!(raw instanceof CommandResult)) {
-            throw new RuntimeException(
-                    "No OC response found for key: "
-                            + step.getResponse());
+            throw AgateStepException.builder("OC response was not found")
+                    .actual(step.getResponse())
+                    .field("response")
+                    .hint("Check that a previous OC command step stores this response.")
+                    .build();
         }
 
         CommandResult commandResult =
@@ -867,9 +956,10 @@ public class OcCmdEngine extends AbstractStepEngine {
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unsupported OC BUFFER action: "
-                            + action);
+            throw AgateStepException.builder("Unsupported OC BUFFER action")
+                    .actual(action)
+                    .hint("Supported actions: TEXT, COUNT, FILTER, LINE, LAST_LINE")
+                    .build();
         }
 
         context.storeBuffer(

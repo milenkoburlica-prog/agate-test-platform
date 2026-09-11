@@ -12,6 +12,7 @@ import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.engine.AbstractStepEngine;
+import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class CmdEngine extends AbstractStepEngine {
@@ -84,8 +85,10 @@ public class CmdEngine extends AbstractStepEngine {
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unsupported CMD operation: " + op);
+            throw AgateStepException.builder("Unsupported CMD operation")
+                    .actual(op)
+                    .hint("Supported operations: EXEC, ASSERT, BUFFER")
+                    .build();
         }
     }
 
@@ -104,8 +107,10 @@ public class CmdEngine extends AbstractStepEngine {
         if (rawCommand == null
                 || rawCommand.isBlank()) {
 
-            throw new RuntimeException(
-                    "CMD EXEC requires 'command'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("command")
+                    .hint("CMD EXEC requires a command to execute.")
+                    .build();
         }
 
         YamlPlaceholderResolver resolver =
@@ -180,8 +185,11 @@ public class CmdEngine extends AbstractStepEngine {
                         || step.getCheckExitCode();
 
         if (timeout <= 0) {
-            throw new RuntimeException(
-                    "CMD timeout must be greater than 0.");
+            throw AgateStepException.builder("Invalid CMD timeout")
+                    .expected("greater than 0 seconds")
+                    .actual(timeout)
+                    .field("timeout")
+                    .build();
         }
 
         if (Boolean.TRUE.equals(printExecution)
@@ -250,21 +258,29 @@ public class CmdEngine extends AbstractStepEngine {
         }
 
         if (result.isTimedOut()) {
-            throw new RuntimeException(
-                    "Command timed out after "
-                            + timeout
-                            + " seconds.");
+            throw AgateStepException.builder("Command timed out")
+                    .expected("completion within " + timeout + " seconds")
+                    .actual("timeout")
+                    .command(resolvedCommand)
+                    .hint("Check the command or increase timeout if the longer runtime is expected.")
+                    .build();
         }
 
         if (checkExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
-            throw new RuntimeException(
-                    "Command execution failed. Expected exit code "
-                            + expectedExitCode
-                            + " but got "
-                            + result.getExitCode());
+            String expectedDisplay =
+                    step.getExpectedExitCode() == null
+                            ? expectedExitCode + " (default)"
+                            : String.valueOf(expectedExitCode);
+
+            throw AgateStepException.builder("Unexpected exit code")
+                    .expected(expectedDisplay)
+                    .actual(result.getExitCode())
+                    .command(resolvedCommand)
+                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .build();
         }
     }
 
@@ -283,7 +299,7 @@ public class CmdEngine extends AbstractStepEngine {
 
         String action =
                 step.getAction() != null
-                        ? step.getAction().toUpperCase()
+                        ? step.getAction().trim().toUpperCase()
                         : "";
 
         String expected =
@@ -296,14 +312,30 @@ public class CmdEngine extends AbstractStepEngine {
                         ? step.getValue()
                         : "";
 
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("CMD ASSERT must reference a response created by a previous CMD EXEC step.")
+                    .build();
+        }
+
+        if (action.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("action")
+                    .hint("Supported CMD ASSERT actions: EXITCODE, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                    .build();
+        }
+
         Object rawVal =
                 context.getBuffer(
                         responseKey);
 
         if (rawVal == null) {
-            throw new RuntimeException(
-                    "No response or buffer found for key: "
-                            + responseKey);
+            throw AgateStepException.builder("CMD response was not found")
+                    .actual(responseKey)
+                    .field("response")
+                    .hint("Check that a previous CMD EXEC step stores response: " + responseKey)
+                    .build();
         }
 
         CommandResult commandResult =
@@ -313,90 +345,111 @@ public class CmdEngine extends AbstractStepEngine {
 
         String outputToCheck =
                 commandResult != null
-                        ? commandResult.getOutput()
+                        ? (commandResult.getOutput() != null ? commandResult.getOutput() : "")
                         : rawVal.toString();
 
         switch (action) {
 
         case "EXITCODE":
             if (commandResult == null) {
-                throw new RuntimeException(
-                        "Assertion [EXITCODE] requires a CMD command response.");
+                throw AgateStepException.builder("EXITCODE assertion requires a CMD command response")
+                        .actual(responseKey)
+                        .field("response")
+                        .hint("Reference the response created by the preceding CMD EXEC step.")
+                        .build();
             }
 
-            if (commandResult.getExitCode()
-                    != Integer.parseInt(expected)) {
+            final int expectedExitCode;
+            try {
+                expectedExitCode = Integer.parseInt(expected);
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid EXITCODE assertion value")
+                        .expected("integer exit code")
+                        .actual(expected)
+                        .field("expected")
+                        .hint("Use an integer value such as expected: 0")
+                        .cause(e)
+                        .build();
+            }
 
-                throw new RuntimeException(
-                        "Assertion EXITCODE failed! Expected: "
-                                + expected
-                                + ", Actual: "
-                                + commandResult.getExitCode());
+            if (commandResult.getExitCode() != expectedExitCode) {
+                throw AgateStepException.builder("EXITCODE assertion failed")
+                        .expected(expectedExitCode)
+                        .actual(commandResult.getExitCode())
+                        .build();
             }
             break;
 
         case "CONTAINS":
             if (!outputToCheck.contains(value)) {
-                throw new RuntimeException(
-                        "Assertion CONTAINS failed! String \""
-                                + value
-                                + "\" not found.");
+                throw AgateStepException.builder("CONTAINS assertion failed")
+                        .expected(value)
+                        .actual(outputToCheck.trim())
+                        .build();
             }
             break;
 
         case "NOT_CONTAINS":
             if (outputToCheck.contains(value)) {
-                throw new RuntimeException(
-                        "Assertion NOT_CONTAINS failed! String \""
-                                + value
-                                + "\" found.");
+                throw AgateStepException.builder("NOT_CONTAINS assertion failed")
+                        .expected("output must not contain: " + value)
+                        .actual(outputToCheck.trim())
+                        .build();
             }
             break;
 
         case "EQUALS":
-            if (!outputToCheck.trim()
-                    .equals(value.trim())) {
-
-                throw new RuntimeException(
-                        "Assertion EQUALS failed! Expected: \""
-                                + value
-                                + "\", Actual: \""
-                                + outputToCheck.trim()
-                                + "\"");
+            if (!outputToCheck.trim().equals(value.trim())) {
+                throw AgateStepException.builder("EQUALS assertion failed")
+                        .expected(value.trim())
+                        .actual(outputToCheck.trim())
+                        .build();
             }
             break;
 
         case "NOT_EQUALS":
-            if (outputToCheck.trim()
-                    .equals(value.trim())) {
-
-                throw new RuntimeException(
-                        "Assertion NOT_EQUALS failed.");
+            if (outputToCheck.trim().equals(value.trim())) {
+                throw AgateStepException.builder("NOT_EQUALS assertion failed")
+                        .expected("value different from: " + value.trim())
+                        .actual(outputToCheck.trim())
+                        .build();
             }
             break;
 
         case "COUNT":
+            final int expectedCount;
+            try {
+                expectedCount = Integer.parseInt(expected);
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid COUNT assertion value")
+                        .expected("integer count")
+                        .actual(expected)
+                        .field("expected")
+                        .hint("Use an integer value such as expected: 1")
+                        .cause(e)
+                        .build();
+            }
+
             int actualCount =
                     countOccurrences(
                             outputToCheck,
                             value);
 
-            if (actualCount
-                    != Integer.parseInt(expected)) {
-
-                throw new RuntimeException(
-                        "Assertion COUNT failed! Expected: "
-                                + expected
-                                + ", Actual: "
-                                + actualCount);
+            if (actualCount != expectedCount) {
+                throw AgateStepException.builder("COUNT assertion failed")
+                        .expected(expectedCount)
+                        .actual(actualCount)
+                        .detail("Value", value)
+                        .build();
             }
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unknown assertion type: \""
-                            + action
-                            + "\"");
+            throw AgateStepException.builder("Unsupported CMD ASSERT action")
+                    .actual(action)
+                    .field("action")
+                    .hint("Supported actions: EXITCODE, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                    .build();
         }
 
         if (Boolean.TRUE.equals(printExecution)

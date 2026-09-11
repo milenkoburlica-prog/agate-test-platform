@@ -1,0 +1,606 @@
+# TEST-SQL-ERROR-HANDLING.yaml
+#
+# NOK / error-handling suite for AGATE SQL Engine.
+# Based on the existing Oracle SQL happy-path tests using DUAL.
+#
+# Run:
+#   startTests.bat Milenko ECA_SYST_AUT1 testlogs TEST-SQL-ERROR-HANDLING.yaml
+#
+# Each error scenario is a separate testcase so one failure does not block the rest.
+
+testCases:
+
+  # ---------------------------------------------------------------------------
+  # Q1_01 - Normal cell assertion mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_01_VALUE_MISMATCH
+    description: SQL cell value assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'Active' AS STATUS, '5' AS COUNTER
+          FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "COUNTER"
+        action: EQUALS
+        expected: "999"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_02 - ROW_COUNT mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_02_ROW_COUNT_MISMATCH
+    description: SQL ROW_COUNT assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'A' AS STATUS FROM DUAL
+          UNION ALL
+          SELECT 'B' AS STATUS FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        action: ROW_COUNT
+        expected: "3"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_03 - Unknown response
+  # ---------------------------------------------------------------------------
+  - id: Q1_03_RESPONSE_NOT_FOUND
+    description: SQL ASSERT uses an unknown response buffer
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: ASSERT
+        response: sql_response_that_does_not_exist
+        row: 0
+        column: "STATUS"
+        action: EQUALS
+        expected: "Active"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_04 - Missing response
+  # Important null-key/NPE candidate, same class of problem as REST/SOAP.
+  # ---------------------------------------------------------------------------
+  - id: Q1_04_RESPONSE_MISSING
+    description: SQL ASSERT is missing mandatory response
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: ASSERT
+        row: 0
+        column: "STATUS"
+        action: EQUALS
+        expected: "Active"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_05 - Unsupported SQL op
+  # ---------------------------------------------------------------------------
+  - id: Q1_05_INVALID_OP
+    description: SQL step uses unsupported operation
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXE
+        command: |
+          SELECT 1 AS VALUE_COL FROM DUAL
+        response: sql_response
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_06 - Missing EXEC command
+  # ---------------------------------------------------------------------------
+  - id: Q1_06_COMMAND_MISSING
+    description: SQL EXEC is missing command
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        response: sql_response
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_07 - Invalid SQL syntax
+  # ---------------------------------------------------------------------------
+  - id: Q1_07_INVALID_SQL_SYNTAX
+    description: SQL EXEC contains invalid SQL syntax
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELEC THIS IS NOT VALID SQL FROM DUAL
+        response: sql_response
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_08 - Unsupported ASSERT action
+  # ---------------------------------------------------------------------------
+  - id: Q1_08_INVALID_ASSERT_ACTION
+    description: SQL ASSERT uses unsupported action
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT '5' AS COUNTER FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "COUNTER"
+        action: IS_EQUALZZ
+        expected: "5"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_09 - Missing ASSERT action
+  # ---------------------------------------------------------------------------
+  - id: Q1_09_ACTION_MISSING
+    description: SQL ASSERT is missing action
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT '5' AS COUNTER FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "COUNTER"
+        expected: "5"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_10 - Unknown column by name
+  # ---------------------------------------------------------------------------
+  - id: Q1_10_COLUMN_NAME_NOT_FOUND
+    description: SQL ASSERT references a column that does not exist
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'Active' AS STATUS, '5' AS COUNTER
+          FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "DOES_NOT_EXIST"
+        action: EQUALS
+        expected: "x"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_11 - Invalid numeric column index
+  # Existing tests show columns are zero based.
+  # ---------------------------------------------------------------------------
+  - id: Q1_11_COLUMN_INDEX_OUT_OF_RANGE
+    description: SQL ASSERT uses column index outside the result set
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'Active' AS STATUS, '5' AS COUNTER
+          FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "99"
+        action: EQUALS
+        expected: "x"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_12 - Row index outside result set
+  # ---------------------------------------------------------------------------
+  - id: Q1_12_ROW_INDEX_OUT_OF_RANGE
+    description: SQL ASSERT uses row index outside the result set
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'Active' AS STATUS FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 99
+        column: "STATUS"
+        action: EQUALS
+        expected: "Active"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_13 - BETWEEN mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_13_BETWEEN_MISMATCH
+    description: SQL BETWEEN assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 50 AS AMOUNT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "AMOUNT"
+        action: BETWEEN
+        expected: "100..200"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_14 - Invalid BETWEEN expression
+  # ---------------------------------------------------------------------------
+  - id: Q1_14_BETWEEN_INVALID_FORMAT
+    description: SQL BETWEEN uses malformed expected range
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 50 AS AMOUNT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "AMOUNT"
+        action: BETWEEN
+        expected: "100-200"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_15 - Numeric comparison with non-numeric expected value
+  # ---------------------------------------------------------------------------
+  - id: Q1_15_INVALID_NUMERIC_EXPECTED
+    description: SQL numeric assertion uses non-numeric expected value
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 5 AS COUNTER FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "COUNTER"
+        action: GREATER_THAN
+        expected: "abc"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_16 - DATE_EQUALS mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_16_DATE_EQUALS_MISMATCH
+    description: SQL DATE_EQUALS assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT SYSDATE - 5 AS DAY_COL
+          FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "DAY_COL"
+        action: DATE_EQUALS
+        expected: "TODAY"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_17 - Invalid DATE_EQUALS keyword/value
+  # ---------------------------------------------------------------------------
+  - id: Q1_17_DATE_EQUALS_INVALID_EXPECTED
+    description: SQL DATE_EQUALS uses unsupported expected value
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT SYSDATE AS DAY_COL
+          FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "DAY_COL"
+        action: DATE_EQUALS
+        expected: "SOMEDAY"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_18 - ANY_MATCH with zero matching rows
+  # This is a true NOK case for ANY_MATCH.
+  # ---------------------------------------------------------------------------
+  - id: Q1_18_ANY_MATCH_NO_MATCH
+    description: SQL ANY_MATCH finds no matching rows
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' AS STATUS, 100 AS AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'COMPLETED' AS STATUS, 200 AS AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'FAILED' AS STATUS, 50 AS AMOUNT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        column: "STATUS"
+        action: ANY_MATCH
+        expected: "UNKNOWN_STATUS"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_19 - IS_NULL mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_19_IS_NULL_MISMATCH
+    description: SQL IS_NULL assertion on a non-null value
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'Active' AS STATUS FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "STATUS"
+        action: IS_NULL
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_20 - IS_NOT_NULL mismatch
+  # ---------------------------------------------------------------------------
+  - id: Q1_20_IS_NOT_NULL_MISMATCH
+    description: SQL IS_NOT_NULL assertion on a NULL value
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT NULL AS DELETED_AT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: ASSERT
+        response: sql_response
+        row: 0
+        column: "DELETED_AT"
+        action: IS_NOT_NULL
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_21 - BUFFER unknown response
+  # ---------------------------------------------------------------------------
+  - id: Q1_21_BUFFER_RESPONSE_NOT_FOUND
+    description: SQL BUFFER uses unknown response
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: BUFFER
+        response: sql_response_that_does_not_exist
+        row: 0
+        column: "AMOUNT"
+        name: amount
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_22 - BUFFER missing response
+  # Another null-key/NPE candidate.
+  # ---------------------------------------------------------------------------
+  - id: Q1_22_BUFFER_RESPONSE_MISSING
+    description: SQL BUFFER is missing mandatory response
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: BUFFER
+        row: 0
+        column: "AMOUNT"
+        name: amount
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_23 - BUFFER row out of range
+  # ---------------------------------------------------------------------------
+  - id: Q1_23_BUFFER_ROW_OUT_OF_RANGE
+    description: SQL BUFFER uses row outside result set
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 50 AS AMOUNT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: BUFFER
+        response: sql_response
+        row: 99
+        column: "AMOUNT"
+        name: amount
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_24 - BUFFER column not found
+  # ---------------------------------------------------------------------------
+  - id: Q1_24_BUFFER_COLUMN_NOT_FOUND
+    description: SQL BUFFER references missing column
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 50 AS AMOUNT FROM DUAL
+        response: sql_response
+
+      - type: SQL
+        op: BUFFER
+        response: sql_response
+        row: 0
+        column: "DOES_NOT_EXIST"
+        name: amount
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_25 - Constraint mismatch
+  # Based on your working constraints example.
+  # We want to see whether constraint mismatch is reported as assertion failure,
+  # query failure, empty result, or something else.
+  # ---------------------------------------------------------------------------
+  - id: Q1_25_CONSTRAINT_NO_MATCH
+    description: SQL EXEC constraints filter out all rows
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' AS STATUS, 100 AS AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'COMPLETED' AS STATUS, 200 AS AMOUNT FROM DUAL
+          UNION ALL
+          SELECT 'FAILED' AS STATUS, 50 AS AMOUNT FROM DUAL
+        response: sql_response
+        constraints:
+          - column: "status"
+            action: "EQUALS"
+            expected: "DOES_NOT_EXIST"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_26 - Invalid constraint column
+  # ---------------------------------------------------------------------------
+  - id: Q1_26_CONSTRAINT_COLUMN_NOT_FOUND
+    description: SQL constraint references missing column
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' AS STATUS, 100 AS AMOUNT FROM DUAL
+        response: sql_response
+        constraints:
+          - column: "DOES_NOT_EXIST"
+            action: "EQUALS"
+            expected: "COMPLETED"
+
+
+  # ---------------------------------------------------------------------------
+  # Q1_27 - Invalid constraint action
+  # ---------------------------------------------------------------------------
+  - id: Q1_27_CONSTRAINT_INVALID_ACTION
+    description: SQL constraint uses unsupported action
+    stage: '*'
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: SQL
+        op: EXEC
+        command: |
+          SELECT 'COMPLETED' AS STATUS, 100 AS AMOUNT FROM DUAL
+        response: sql_response
+        constraints:
+          - column: "STATUS"
+            action: "IS_EQUALZZ"
+            expected: "COMPLETED"

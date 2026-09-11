@@ -1,0 +1,176 @@
+testCases:
+
+  - id: VAR_ERR_01_UNKNOWN_BUFFER_VARIABLE
+    description: Unknown B[] variable must not remain unresolved
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[does_not_exist]}'
+        response: buff_out
+
+  - id: VAR_ERR_02_UNKNOWN_ENV_VARIABLE
+    description: Unknown E[] environment value must not remain unresolved
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[env.does.not.exist]}'
+        response: buff_out
+
+  - id: VAR_ERR_03_UNKNOWN_USER_VARIABLE
+    description: Unknown users value must not remain unresolved
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[users.does_not_exist]}'
+        response: buff_out
+
+  - id: VAR_ERR_04_EMPTY_BUFFER_NAME
+    description: Empty B[] reference is invalid
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[]}'
+        response: buff_out
+
+  - id: VAR_ERR_05_EMPTY_ENV_NAME
+    description: Empty E[] reference is invalid
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[]}'
+        response: buff_out
+
+  - id: VAR_ERR_06_UNCLOSED_BUFFER_TAG
+    description: Malformed B[] tag with missing closing brace
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[test]'
+        response: buff_out
+
+  - id: VAR_ERR_07_UNCLOSED_ENV_TAG
+    description: Malformed E[] tag with missing closing brace
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {E[env.database.user]'
+        response: buff_out
+
+  - id: VAR_ERR_08_INVALID_DATE_BASE
+    description: DATE contains invalid base date
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATE[99.99.2026][][]}'
+        response: buff_out
+
+  - id: VAR_ERR_09_INVALID_DATE_OFFSET
+    description: DATE contains unsupported offset syntax
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATE[][+XYZ][]}'
+        response: buff_out
+
+  - id: VAR_ERR_10_INVALID_DATE_OFFSET_NUMBER
+    description: DATE offset has missing numeric value
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATE[][+d][]}'
+        response: buff_out
+
+  - id: VAR_ERR_11_INVALID_DATE_FORMAT
+    description: DATE contains invalid Java date format
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATE[][][INVALID_FORMAT_[]]}'
+        response: buff_out
+
+  - id: VAR_ERR_12_INVALID_DATETIME_OFFSET
+    description: DATETIME contains invalid offset syntax
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATETIME[][-ABC][dd-MM-yyyy HH:mm:ss]}'
+        response: buff_out
+
+  - id: VAR_ERR_13_VARIABLE_SELF_REFERENCE
+    description: Variable references itself
+    stage: '*'
+    priority: HIGH
+    variables:
+      loop: '{B[loop]}'
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[loop]}'
+        response: buff_out
+
+  - id: VAR_ERR_14_VARIABLE_CIRCULAR_REFERENCE
+    description: Two variables reference each other
+    stage: '*'
+    priority: HIGH
+    variables:
+      first: '{B[second]}'
+      second: '{B[first]}'
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {B[first]}'
+        response: buff_out
+
+  - id: VAR_ERR_15_UNKNOWN_SPECIAL_TOKEN
+    description: Unknown special AGATE token must be reported
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATETIM}'
+        response: buff_out
+
+  - id: VAR_ERR_16_MALFORMED_DATE_BRACKETS
+    description: DATE expression has malformed bracket count
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATE[][+1d]}'
+        response: buff_out
+
+  - id: VAR_ERR_17_MALFORMED_DATETIME_BRACKETS
+    description: DATETIME expression has malformed bracket count
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo {DATETIME[[]}'
+        response: buff_out

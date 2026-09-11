@@ -109,6 +109,7 @@ import at.co.svc.agate.core.reference.ResponseFormat;
 import at.co.svc.agate.core.reference.xml.XmlResponseComparator;
 
 import at.co.svc.agate.core.engine.AbstractStepEngine;
+import at.co.svc.agate.core.error.AgateStepException;
 
 import at.co.svc.agate.core.interfaces.TestLogger;
 
@@ -149,6 +150,13 @@ public class SoapEngine extends AbstractStepEngine {
         }
 
         String op = (step.getOp() != null) ? step.getOp().toUpperCase() : "EXEC";
+
+        if (!"EXEC".equals(op) && !"ASSERT".equals(op) && !"BUFFER".equals(op)) {
+            throw AgateStepException.builder("Unsupported SOAP operation")
+                    .actual(op)
+                    .hint("Supported operations: EXEC, ASSERT, BUFFER")
+                    .build();
+        }
 
         if (isAssertionStep(step)) {
 
@@ -196,7 +204,9 @@ public class SoapEngine extends AbstractStepEngine {
 
             }
 
-            throw new RuntimeException("URL or Action not found for SOAP step (Check command mapping / metadata.json)");
+            throw AgateStepException.builder("SOAP URL is missing")
+                    .hint("Check the SOAP command mapping / metadata.json and the configured endpoint.")
+                    .build();
 
         }
 
@@ -580,11 +590,37 @@ public class SoapEngine extends AbstractStepEngine {
 
         } catch (Exception e) {
 
+            if (e instanceof AgateStepException agateStepException) {
+                throw agateStepException;
+            }
+
             logger.info(String.format("    %s>>> RESULT%s  : %sFAILURE (%s)%s", ConsoleColors.GREEN,
+                    ConsoleColors.RESET, ConsoleColors.RED,
+                    e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName(),
+                    ConsoleColors.RESET));
 
-                    ConsoleColors.RESET, ConsoleColors.RED, e.getMessage(), ConsoleColors.RESET));
+            if (hasCause(e, java.net.http.HttpConnectTimeoutException.class)
+                    || hasCause(e, java.net.http.HttpTimeoutException.class)) {
+                throw AgateStepException.builder("SOAP connection timed out")
+                        .detail("URL", safeUrl(step, tc, yamlFile, stepIndex))
+                        .hint("Check whether the endpoint is reachable and whether the timeout is sufficient.")
+                        .cause(e)
+                        .build();
+            }
 
-            throw new RuntimeException("SOAP Call Failed: " + e.getMessage(), e);
+            if (hasCause(e, java.net.ConnectException.class)) {
+                throw AgateStepException.builder("SOAP connection failed")
+                        .detail("URL", safeUrl(step, tc, yamlFile, stepIndex))
+                        .hint("Check whether the endpoint is reachable and whether host/port are correct.")
+                        .cause(e)
+                        .build();
+            }
+
+            throw AgateStepException.builder("SOAP call failed")
+                    .detail("Technical cause", technicalCause(e))
+                    .hint("Check the SOAP request configuration. Enable DEBUG logging for the technical exception.")
+                    .cause(e)
+                    .build();
 
         }
 
@@ -734,7 +770,15 @@ public class SoapEngine extends AbstractStepEngine {
 
             TestLogger logger, boolean isVerbose) throws Exception {
 
-        RestResponse res = (RestResponse) context.getBuffer(step.getResponse());
+        String responseKey = step.getResponse();
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("Reference the response created by a previous SOAP EXEC step.")
+                    .build();
+        }
+
+        RestResponse res = (RestResponse) context.getBuffer(responseKey);
 
         String source = step.getSource();
 
@@ -745,38 +789,17 @@ public class SoapEngine extends AbstractStepEngine {
         Object expected = step.getExpected();
 
         if (res == null) {
-
-            throwMissingResponseDiagnostic(
-                    step,
-                    logger,
-                    printExecution,
-                    isVerbose,
-                    "ASSERT");
-
+            throw AgateStepException.builder("SOAP response was not found")
+                    .detail("Response", responseKey)
+                    .hint("Make sure a SOAP EXEC step runs before this step and uses the same response name.")
+                    .build();
         }
 
         if (action == null || action.isBlank()) {
-
-            logSoapConfigurationError(
-                    logger,
-                    printExecution,
-                    isVerbose,
-                    "SOAP ASSERT cannot be executed.",
-                    "The required field 'action' is missing.",
-                    """
-                    Define an assertion action, for example:
-
-                      action: EQUALS
-
-                    or:
-
-                      action: MATCH_REFERENCE
-                    """,
-                    step);
-
-            throw new RuntimeException(
-                    "SOAP ASSERT cannot be executed because 'action' is missing.");
-
+            throw AgateStepException.builder("Required property is missing")
+                    .field("action")
+                    .hint("Define an assertion action, for example: EQUALS, CONTAINS, EXISTS or MATCH_REFERENCE.")
+                    .build();
         }
 
         // =========================================================
@@ -841,19 +864,35 @@ public class SoapEngine extends AbstractStepEngine {
 
         String actual;
 
-        if (source == null) {
-
-            throw new RuntimeException("source not found: " + step.getSource());
-
+        if (source == null || source.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("source")
+                    .hint("Supported SOAP ASSERT sources: STATUS, BODY, HEADERS")
+                    .build();
         }
 
         switch (source.toUpperCase()) {
 
         case "STATUS":
 
-            int status = res.getStatusCode();
+            if (expected == null) {
+                throw AgateStepException.builder("Required property is missing")
+                        .field("expected")
+                        .hint("SOAP STATUS ASSERT requires an expected HTTP status value.")
+                        .build();
+            }
 
-            int exp = Integer.parseInt(expected.toString());
+            int status = res.getStatusCode();
+            int exp;
+            try {
+                exp = Integer.parseInt(expected.toString());
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid expected HTTP status")
+                        .actual(expected)
+                        .hint("Use a numeric HTTP status, for example: expected: 200")
+                        .cause(e)
+                        .build();
+            }
 
             passed = compareNumbers(status, exp, action);
 
@@ -863,15 +902,40 @@ public class SoapEngine extends AbstractStepEngine {
 
         case "BODY":
 
-            actual = evaluateXPath(res.getBody(), path);
+            if (path == null || path.isBlank()) {
+                throw AgateStepException.builder("Required property is missing")
+                        .field("path")
+                        .hint("SOAP BODY ASSERT requires an XPath expression.")
+                        .build();
+            }
+
+            try {
+                actual = evaluateXPath(res.getBody(), path);
+            } catch (Exception e) {
+                throw AgateStepException.builder("Invalid SOAP XPath expression")
+                        .path(path)
+                        .hint("Check the XPath syntax.")
+                        .cause(e)
+                        .build();
+            }
+
+            boolean xpathFound = actual != null
+                    && !actual.trim().isEmpty()
+                    && !"NULL".equalsIgnoreCase(actual.trim());
 
             if ("EXISTS".equalsIgnoreCase(action)) {
 
-                passed = (actual != null && !actual.trim().isEmpty());
-
+                passed = xpathFound;
                 actual = passed ? "FOUND" : "NOT_FOUND";
 
             } else {
+
+                if (!xpathFound) {
+                    throw AgateStepException.builder("SOAP XPath was not found")
+                            .path(path)
+                            .hint("Check the SOAP response structure and the configured XPath.")
+                            .build();
+                }
 
                 passed = compareStrings(actual, expected, action);
 
@@ -913,7 +977,10 @@ public class SoapEngine extends AbstractStepEngine {
 
             } else {
 
-                throw new RuntimeException("Unsupported HEADERS action: " + action);
+                throw AgateStepException.builder("Unsupported SOAP HEADERS assertion action")
+                        .actual(action)
+                        .hint("Supported SOAP HEADERS action: IS_HEADER_PRESENT")
+                        .build();
 
             }
 
@@ -921,7 +988,10 @@ public class SoapEngine extends AbstractStepEngine {
 
         default:
 
-            throw new RuntimeException("Unsupported source: " + source);
+            throw AgateStepException.builder("Unsupported SOAP assertion source")
+                    .actual(source)
+                    .hint("Supported SOAP ASSERT sources: STATUS, BODY, HEADERS")
+                    .build();
 
         }
 
@@ -948,19 +1018,18 @@ public class SoapEngine extends AbstractStepEngine {
         }
 
         if (!passed) {
+            AgateStepException.Builder failure =
+                    AgateStepException.builder("SOAP assertion failed")
+                            .expected(expected)
+                            .actual(actual)
+                            .detail("Source", source)
+                            .detail("Action", action);
 
-            throw new RuntimeException(
+            if (path != null && !path.isBlank()) {
+                failure.path(path);
+            }
 
-                    String.format(
-
-                            "Assertion %s failed! Expected: %s, Actual: %s",
-
-                            action,
-
-                            expected,
-
-                            actual));
-
+            throw failure.build();
         }
 
     }
@@ -985,21 +1054,19 @@ public class SoapEngine extends AbstractStepEngine {
 
         if (source != null && !"BODY".equalsIgnoreCase(source)) {
 
-            throw new RuntimeException(
-
-                    "MATCH_REFERENCE currently supports source BODY only. Actual source: "
-
-                            + source);
+            throw AgateStepException.builder("Unsupported source for MATCH_REFERENCE")
+                    .actual(source)
+                    .hint("SOAP MATCH_REFERENCE supports source BODY only.")
+                    .build();
 
         }
 
         if (step.getId() == null || step.getId().isBlank()) {
 
-            throw new RuntimeException(
-
-                    "MATCH_REFERENCE requires a step id. "
-
-                            + "Define 'id' in YAML or ensure the loader creates a fallback id.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("id")
+                    .hint("SOAP MATCH_REFERENCE requires a step id.")
+                    .build();
 
         }
 
@@ -1077,15 +1144,11 @@ public class SoapEngine extends AbstractStepEngine {
 
         }
 
-        throw new RuntimeException(
-
-                "SOAP MATCH_REFERENCE failed with "
-
-                        + result.getComparisonResult().getDifferenceCount()
-
-                        + " difference(s). Reference: "
-
-                        + result.getReferenceFile().toAbsolutePath());
+        throw AgateStepException.builder("SOAP reference comparison failed")
+                .detail("Differences", result.getComparisonResult().getDifferenceCount())
+                .detail("Reference", result.getReferenceFile().toAbsolutePath())
+                .hint("Review the reported XML differences or update the reference if the new response is correct.")
+                .build();
 
     }
 
@@ -1157,73 +1220,19 @@ public class SoapEngine extends AbstractStepEngine {
             String operation) {
 
         String responseName = step.getResponse();
-        String displayResponseName =
-                responseName == null || responseName.isBlank()
-                        ? "<not defined>"
-                        : responseName;
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-
-            logger.info("");
-            logger.info(String.format(
-                    "    %s>>> SOAP %s ERROR%s",
-                    ConsoleColors.RED,
-                    operation,
-                    ConsoleColors.RESET));
-
-            logger.info(String.format(
-                    "        %sResponse '%s' was not found.%s",
-                    ConsoleColors.RED,
-                    displayResponseName,
-                    ConsoleColors.RESET));
-
-            logger.info("");
-            logger.info("        What happened:");
-            logger.info("          This SOAP step expects a response produced by");
-            logger.info("          a previously executed SOAP EXEC step, but AGATE");
-            logger.info("          cannot find that response in the current execution context.");
-
-            logger.info("");
-            logger.info(String.format(
-                    "        %sPossible causes:%s",
-                    ConsoleColors.YELLOW,
-                    ConsoleColors.RESET));
-
-            logger.info("          - the corresponding SOAP EXEC step was not executed");
-            logger.info("          - the EXEC step uses a different 'response:' name");
-            logger.info("          - the EXEC step was skipped because its condition was false");
-            logger.info("          - this step is placed before the corresponding EXEC step");
-
-            if (responseName == null || responseName.isBlank()) {
-                logger.info("          - this step does not define 'response:' at all");
-            }
-
-            logger.info("");
-            logger.info(String.format(
-                    "        %sHow to fix:%s",
-                    ConsoleColors.YELLOW,
-                    ConsoleColors.RESET));
-
-            if (responseName != null && !responseName.isBlank()) {
-                logger.info("          Make sure a SOAP EXEC step is executed before this step:");
-                logger.info("");
-                logger.info("            - type: SOAP");
-                logger.info("              op: EXEC");
-                logger.info("              ...");
-                logger.info("              response: \"" + responseName + "\"");
-            } else {
-                logger.info("          Define 'response:' in this step and use the same name");
-                logger.info("          in the corresponding SOAP EXEC step.");
-            }
-
-            logCurrentSoapStep(logger, step);
+        if (responseName == null || responseName.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("Reference the response created by a previous SOAP EXEC step.")
+                    .build();
         }
 
-        throw new RuntimeException(
-                "SOAP " + operation
-                        + " cannot find response '"
-                        + displayResponseName
-                        + "'. See diagnostic information above.");
+        throw AgateStepException.builder("SOAP response was not found")
+                .detail("Response", responseName)
+                .detail("Operation", operation)
+                .hint("Make sure a SOAP EXEC step runs before this step and uses the same response name.")
+                .build();
     }
 
 
@@ -1364,32 +1373,49 @@ public class SoapEngine extends AbstractStepEngine {
 
             Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
 
-        RestResponse res = (RestResponse) context.getBuffer(step.getResponse());
+        String responseKey = step.getResponse();
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("Reference the response created by a previous SOAP EXEC step.")
+                    .build();
+        }
+
+        RestResponse res = (RestResponse) context.getBuffer(responseKey);
+
+        if (res == null) {
+            throw AgateStepException.builder("SOAP response was not found")
+                    .detail("Response", responseKey)
+                    .hint("Make sure a SOAP EXEC step runs before this step and uses the same response name.")
+                    .build();
+        }
 
         String source = step.getSource();
+        if (source == null || source.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("source")
+                    .hint("Supported SOAP BUFFER sources: BODY, STATUS, HEADERS")
+                    .build();
+        }
 
         String path = step.getPath();
 
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
+        if (("BODY".equalsIgnoreCase(source) || "HEADERS".equalsIgnoreCase(source))
+                && (path == null || path.isBlank())) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("path")
+                    .hint("SOAP " + source.toUpperCase() + " BUFFER requires 'path'.")
+                    .build();
+        }
 
-        String pathResolved = resolver.resolve(tc, path, tc.getVariables(), yamlFile, stepIndex, "body");
-
-        pathResolved = resolver.resolve(tc, pathResolved, tc.getVariables(), yamlFile, stepIndex, "body", step);
-
-        path = pathResolved;
+        if (path != null) {
+            YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
+            String pathResolved = resolver.resolve(tc, path, tc.getVariables(), yamlFile, stepIndex, "body");
+            pathResolved = resolver.resolve(tc, pathResolved, tc.getVariables(), yamlFile, stepIndex, "body", step);
+            path = pathResolved;
+        }
 
         String value;
-
-        if (res == null) {
-
-            throwMissingResponseDiagnostic(
-                    step,
-                    logger,
-                    printExecution,
-                    isVerbose,
-                    "BUFFER");
-
-        }
 
         switch (source.toUpperCase()) {
 
@@ -1417,7 +1443,10 @@ public class SoapEngine extends AbstractStepEngine {
 
             if (value == null) {
 
-                throw new RuntimeException("Header not found: " + path);
+                throw AgateStepException.builder("SOAP header was not found")
+                        .path(path)
+                        .hint("Check the response headers and the configured header name.")
+                        .build();
 
             }
 
@@ -1425,7 +1454,10 @@ public class SoapEngine extends AbstractStepEngine {
 
         default:
 
-            throw new RuntimeException("Unsupported source: " + source);
+            throw AgateStepException.builder("Unsupported SOAP buffer source")
+                    .actual(source)
+                    .hint("Supported SOAP BUFFER sources: BODY, STATUS, HEADERS")
+                    .build();
 
         }
 
@@ -1593,7 +1625,10 @@ public class SoapEngine extends AbstractStepEngine {
 
         default:
 
-            throw new RuntimeException("Invalid action: " + action);
+            throw AgateStepException.builder("Unsupported SOAP assertion action")
+                    .actual(action)
+                    .hint("Supported text actions: EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS, EMPTY, NOT_EMPTY")
+                    .build();
 
         }
 
@@ -1627,7 +1662,10 @@ public class SoapEngine extends AbstractStepEngine {
 
         default:
 
-            throw new RuntimeException("Invalid numeric action: " + action);
+            throw AgateStepException.builder("Unsupported SOAP numeric assertion action")
+                    .actual(action)
+                    .hint("Supported numeric actions: EQUALS, GREATER_THAN, GREATER_OR_EQUALS, LESS_THAN, LESS_OR_EQUALS, EXITCODE")
+                    .build();
 
         }
 
@@ -1896,6 +1934,77 @@ public class SoapEngine extends AbstractStepEngine {
         return xml;
 
     }
+
+    private boolean hasCause(Throwable error, Class<? extends Throwable> type) {
+        Throwable current = error;
+        while (current != null) {
+            if (type.isInstance(current)) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private String technicalCause(Throwable error) {
+        Throwable current = error;
+        while (current.getCause() != null) {
+            current = current.getCause();
+        }
+
+        String message = current.getMessage();
+        return current.getClass().getSimpleName()
+                + (message == null || message.isBlank() ? "" : ": " + message);
+    }
+
+    private String safeUrl(
+            TestStep step,
+            TestCase tc,
+            String yamlFile,
+            int stepIndex) {
+
+        try {
+            String rawUrl =
+                    step.getUrl() != null && !step.getUrl().isBlank()
+                            ? step.getUrl()
+                            : step.getAction();
+
+            if (rawUrl == null) {
+                return "<not resolved>";
+            }
+
+            YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
+            String result = rawUrl;
+
+            if (step.getEndpoint() != null && !step.getEndpoint().isBlank()) {
+                String endpoint = resolver.resolve(
+                        tc,
+                        step.getEndpoint(),
+                        tc.getVariables(),
+                        yamlFile,
+                        stepIndex,
+                        "endpoint");
+
+                if (endpoint.endsWith("/")) {
+                    endpoint = endpoint.substring(0, endpoint.length() - 1);
+                }
+
+                result = result.replace("{{endpoint}}", endpoint);
+            }
+
+            return resolver.resolve(
+                    tc,
+                    result,
+                    tc.getVariables(),
+                    yamlFile,
+                    stepIndex,
+                    "url");
+
+        } catch (Exception ignored) {
+            return "<not resolved>";
+        }
+    }
+
 
     private static HttpClient createUnsafeClient() {
 

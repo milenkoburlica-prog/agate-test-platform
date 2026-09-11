@@ -1,0 +1,5 @@
+steps:
+
+- type: RSET
+  op: EXEC
+  command: "echo invalid"

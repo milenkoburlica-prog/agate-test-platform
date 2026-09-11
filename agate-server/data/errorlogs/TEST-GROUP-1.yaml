@@ -1,0 +1,91 @@
+# TEST-GROUP-1.yaml
+#
+# Purpose:
+#   Capture CURRENT agate-server behavior for tester mistakes in a syntactically
+#   valid YAML test definition.
+#
+# Important:
+#   These test cases are intentionally invalid from the AGATE DSL perspective.
+#   Do not fix them before running.
+#
+# If the suite stops at the first error, run the test cases one by one
+# or temporarily comment out the preceding test cases.
+
+testCases:
+
+  - id: G1_01_UNKNOWN_ENGINE
+    description: "Definition error - unknown step type"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: RSET
+        op: EXEC
+        command: "dummy"
+
+  - id: G1_02_MISSING_OP
+    description: "Definition error - FILE step without op"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        action: READ
+        path: "output/does-not-matter.txt"
+        response: file_content
+
+  - id: G1_03_UNKNOWN_FILE_ACTION
+    description: "Definition error - unsupported FILE action"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: EXEC
+        action: MAGIC_COPY
+        source: "output/source.txt"
+        target: "output/target.txt"
+
+  - id: G1_04_MISSING_REUSABLE
+    description: "Definition error - referenced reusable does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: CALL
+        command: "reusable.this_reusable_does_not_exist"
+        parameters:
+          Dummy: "value"
+
+  - id: G1_05_FILE_ASSERT_WITHOUT_RESPONSE
+    description: "Definition error - FILE content ASSERT without response"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: FILE
+        op: ASSERT
+        action: CONTAINS
+        value: "SUCCESS"
+
+  - id: G1_06_UNKNOWN_CMD_ASSERT_ACTION
+    description: "Definition error - unsupported CMD assertion action"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: CMD
+        op: ASSERT
+        action: THIS_ACTION_DOES_NOT_EXIST
+        expected: 0
+
+  - id: G1_07_UNRESOLVED_BUFFER
+    description: "Definition error - referenced buffer variable is not defined"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "echo {B[VARIABLE_THAT_DOES_NOT_EXIST]}"
+        response: cmd_response

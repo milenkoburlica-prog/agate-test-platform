@@ -1,0 +1,16 @@
+
+steps:
+
+  # --------------------------------------------------------------------------
+  # 1. Execute command from TestCase B-variable
+  # --------------------------------------------------------------------------
+  - type: CMD
+    op: EXEC
+    command: "cmd /c echo AGATE_REUSABLE_DEMO"
+    response: reusableResponse
+    
+  - type: CMD
+    op: ASSERT
+    response: reusableResponse
+    action: CONTAINS
+    value: "THIS_TEXT_DOES_NOT_EXIST"

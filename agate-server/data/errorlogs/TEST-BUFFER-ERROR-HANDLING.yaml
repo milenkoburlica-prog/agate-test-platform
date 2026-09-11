@@ -1,0 +1,101 @@
+testCases:
+
+  - id: BUF_ERR_01_ASSERT_MISMATCH
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        name: application_env
+        value: Customer-Service-PROD
+
+      - type: BUFFER
+        op: ASSERT
+        name: application_env
+        action: EQUALS
+        expected: Customer-Service-TEST
+
+  - id: BUF_ERR_02_UNKNOWN_BUFFER
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: ASSERT
+        name: does_not_exist
+        action: EQUALS
+        expected: test
+
+  - id: BUF_ERR_03_MISSING_NAME
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        value: test
+
+  - id: BUF_ERR_04_INVALID_OP
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXE
+        name: test
+        value: abc
+
+  - id: BUF_ERR_05_MISSING_ACTION
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        name: test
+        value: abc
+
+      - type: BUFFER
+        op: ASSERT
+        name: test
+        expected: abc
+
+  - id: BUF_ERR_06_INVALID_ACTION
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        name: test
+        value: abc
+
+      - type: BUFFER
+        op: ASSERT
+        name: test
+        action: IS_EQUALZZ
+        expected: abc
+
+  - id: BUF_ERR_07_EXPECTED_MISSING
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        name: test
+        value: abc
+
+      - type: BUFFER
+        op: ASSERT
+        name: test
+        action: EQUALS
+
+  - id: BUF_ERR_08_CONTAINS_MISMATCH
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: BUFFER
+        op: EXEC
+        name: test
+        value: Customer-Service-PROD
+
+      - type: BUFFER
+        op: ASSERT
+        name: test
+        action: CONTAINS
+        expected: Payment

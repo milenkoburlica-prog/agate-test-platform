@@ -1,0 +1,10 @@
+testCases:
+
+- id: REUSABLE_INVALID_STEP_TYPE
+  description: Reusable module contains an unsupported step type
+  stage: '*'
+  priority: HIGH
+  steps:
+
+  - type: CALL
+    command: reusable.demo_reusable_invalid_type

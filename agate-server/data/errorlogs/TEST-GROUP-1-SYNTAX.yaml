@@ -1,0 +1,23 @@
+# TEST-GROUP-1-SYNTAX.yaml
+#
+# Purpose:
+#   Capture CURRENT agate-server/SnakeYAML behavior for a real YAML syntax error.
+#
+# This file is intentionally NOT valid YAML.
+# The double-quoted scalar contains an invalid YAML escape sequence: \q
+# Run this file separately from TEST-GROUP-1.yaml.
+
+testCases:
+  - id: G1_SYNTAX_01_INVALID_ESCAPE
+    description: "YAML syntax error - invalid escape sequence"
+    stage: "*"
+    priority: HIGH
+
+    variables:
+      brokenPath: "C:\agate\qa\report.txt"
+
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "echo test"
+        response: cmd_response

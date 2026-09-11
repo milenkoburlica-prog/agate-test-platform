@@ -1,0 +1,10 @@
+testCases:
+
+- id: REUSABLE_ASSERT_FAILED
+  description: Reusable module contains an assertion that is expected to fail
+  stage: '*'
+  priority: HIGH
+  steps:
+
+  - type: CALL
+    command: reusable.demo_reusable_assert_failed

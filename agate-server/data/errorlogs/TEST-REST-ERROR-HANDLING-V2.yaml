@@ -1,0 +1,344 @@
+# TEST-REST-ERROR-HANDLING.yaml
+#
+# Run with:
+#   startTests.bat Milenko ECA_SYST_AUT1 demo TEST-REST-ERROR-HANDLING.yaml
+#
+# Uses the same existing REST module as rest_engine_matcher_demo.yaml:
+#   rest.jsonplaceholder.typicode.todos.1
+#
+# Each error scenario is a separate test case.
+
+testCases:
+
+  # ---------------------------------------------------------------------------
+  # R1_01 - STATUS assertion mismatch
+  # ---------------------------------------------------------------------------
+  - id: R1_01_STATUS_MISMATCH
+    description: REST STATUS assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: 201
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_02 - BODY / JSON_PATH value mismatch
+  # Real value: "delectus aut autem"
+  # ---------------------------------------------------------------------------
+  - id: R1_02_BODY_VALUE_MISMATCH
+    description: REST BODY JSON_PATH assertion mismatch
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: BODY
+        selector: JSON_PATH
+        path: "$.title"
+        action: EQUALS
+        expected: "THIS_VALUE_MUST_NOT_MATCH"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_03 - JSON_PATH not found
+  # ---------------------------------------------------------------------------
+  - id: R1_03_JSON_PATH_NOT_FOUND
+    description: REST JSON_PATH points to a non-existing field
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: BODY
+        selector: JSON_PATH
+        path: "$.field_that_does_not_exist"
+        action: EQUALS
+        expected: "something"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_04 - ASSERT references response which does not exist
+  # ---------------------------------------------------------------------------
+  - id: R1_04_RESPONSE_NOT_FOUND
+    description: REST ASSERT uses an unknown response buffer
+    stage: '*'
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: 200
+        response: response_that_does_not_exist
+
+
+  # ---------------------------------------------------------------------------
+  # R1_05 - ASSERT missing response
+  # ---------------------------------------------------------------------------
+  - id: R1_05_RESPONSE_MISSING
+    description: REST ASSERT is missing mandatory response
+    stage: '*'
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: EQUALS
+        expected: 200
+
+
+  # ---------------------------------------------------------------------------
+  # R1_06 - Unsupported STATUS assertion action
+  # ---------------------------------------------------------------------------
+  - id: R1_06_INVALID_ASSERT_ACTION
+    description: REST STATUS ASSERT uses unsupported action
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        action: IS_EQUALZZ
+        expected: 200
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_07 - Unsupported source
+  # ---------------------------------------------------------------------------
+  - id: R1_07_INVALID_SOURCE
+    description: REST ASSERT uses unsupported source
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: BODYY
+        action: EQUALS
+        expected: "x"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_08 - Unsupported REST operation
+  # ---------------------------------------------------------------------------
+  - id: R1_08_INVALID_OP
+    description: REST step uses unsupported operation
+    stage: '*'
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: REST
+        op: EXE
+        command: rest.jsonplaceholder.typicode.todos.1
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_09 - Connection failure
+  #
+  # Important:
+  # We first load the valid module and only replace {{endpoint}}.
+  # This reaches RestEngine.handleHttpCall instead of failing in module loading.
+  # ---------------------------------------------------------------------------
+  - id: R1_09_CONNECTION_FAILED
+    description: REST endpoint cannot be reached
+    stage: '*'
+    priority: HIGH
+    variables:
+      broken.endpoint: "http://127.0.0.1:1"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[broken.endpoint]}"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_10 - BUFFER JSON_PATH not found
+  # ---------------------------------------------------------------------------
+  - id: R1_10_BUFFER_PATH_NOT_FOUND
+    description: REST BUFFER tries to extract a non-existing JSON path
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: BUFFER
+        name: "missingValue"
+        source: BODY
+        action: EQUALS
+        path: "$.doesNotExist"
+        expected: "x"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_11 - MATCH_REFERENCE mismatch
+  #
+  # We deliberately reuse the existing reference id from the working demo,
+  # but change the actual response by calling /todos/2 through a direct URL.
+  #
+  # If your loader always overwrites URL from command metadata, this case may
+  # need a second existing REST module. The other ten cases remain valid.
+  # ---------------------------------------------------------------------------
+  - id: R1_11_REFERENCE_MISMATCH
+    description: REST MATCH_REFERENCE compares against a different body
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - id: verify_readers_response
+        type: REST
+        op: ASSERT
+        response: response_rest
+        source: BODY
+        action: MATCH_REFERENCE
+
+
+  # ---------------------------------------------------------------------------
+  # R1_12 - BODY ASSERT missing path
+  # ---------------------------------------------------------------------------
+  - id: R1_12_BODY_PATH_MISSING
+    description: REST BODY ASSERT is missing path
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: BODY
+        action: EQUALS
+        expected: "delectus aut autem"
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_13 - Missing action
+  # ---------------------------------------------------------------------------
+  - id: R1_13_ACTION_MISSING
+    description: REST ASSERT is missing action
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        source: STATUS
+        expected: 200
+        response: response_rest
+
+
+  # ---------------------------------------------------------------------------
+  # R1_14 - Missing source
+  # ---------------------------------------------------------------------------
+  - id: R1_14_SOURCE_MISSING
+    description: REST ASSERT is missing source
+    stage: '*'
+    priority: HIGH
+    variables:
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
+
+    steps:
+      - type: REST
+        op: EXEC
+        command: rest.jsonplaceholder.typicode.todos.1
+        endpoint: "{B[jsonplaceholder.endpoint]}"
+        response: response_rest
+
+      - type: REST
+        op: ASSERT
+        action: EQUALS
+        expected: 200
+        response: response_rest

@@ -18,6 +18,7 @@ import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.engine.AbstractStepEngine;
+import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class FileEngine extends AbstractStepEngine {
@@ -85,9 +86,10 @@ public class FileEngine extends AbstractStepEngine {
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unsupported FILE operation: "
-                            + op);
+            throw AgateStepException.builder("Unsupported FILE operation")
+                    .actual(op)
+                    .hint("Supported operations: EXEC, BUFFER, ASSERT")
+                    .build();
         }
     }
 
@@ -192,9 +194,10 @@ public class FileEngine extends AbstractStepEngine {
             break;
 
         default:
-            throw new RuntimeException(
-                    "Unsupported FILE EXEC action: "
-                            + action);
+            throw AgateStepException.builder("Unsupported FILE EXEC action")
+                    .actual(action)
+                    .hint("Supported actions: READ, WRITE, APPEND, COPY, MOVE, DELETE, EXISTS")
+                    .build();
         }
 
         if (Boolean.TRUE.equals(printExecution)
@@ -230,9 +233,10 @@ public class FileEngine extends AbstractStepEngine {
                                 step));
 
         if (!Files.exists(path)) {
-            throw new RuntimeException(
-                    "File does not exist: "
-                            + path);
+            throw AgateStepException.builder("File does not exist")
+                    .path(path)
+                    .hint("Check the file path or verify that a previous step created the file.")
+                    .build();
         }
 
         Charset charset =
@@ -415,9 +419,10 @@ public class FileEngine extends AbstractStepEngine {
                                 step));
 
         if (!Files.exists(source)) {
-            throw new RuntimeException(
-                    "Source file does not exist: "
-                            + source);
+            throw AgateStepException.builder("Source file does not exist")
+                    .path(source)
+                    .hint("Check the source path or verify that a previous step created the file.")
+                    .build();
         }
 
         Path parent =
@@ -479,9 +484,10 @@ public class FileEngine extends AbstractStepEngine {
                                 step));
 
         if (!Files.exists(source)) {
-            throw new RuntimeException(
-                    "Source file does not exist: "
-                            + source);
+            throw AgateStepException.builder("Source file does not exist")
+                    .path(source)
+                    .hint("Check the source path or verify that a previous step created the file.")
+                    .build();
         }
 
         Path parent =
@@ -537,6 +543,12 @@ public class FileEngine extends AbstractStepEngine {
         if (missingOk) {
             Files.deleteIfExists(path);
         } else {
+            if (!Files.exists(path)) {
+                throw AgateStepException.builder("File does not exist")
+                        .path(path)
+                        .hint("Set missingOk: true if a missing file should be ignored.")
+                        .build();
+            }
             Files.delete(path);
         }
 
@@ -726,17 +738,21 @@ public class FileEngine extends AbstractStepEngine {
             if ("EXISTS".equals(action)
                     && !exists) {
 
-                throw new RuntimeException(
-                        "FILE ASSERT EXISTS failed: "
-                                + path);
+                throw AgateStepException.builder("FILE EXISTS assertion failed")
+                        .expected("File exists")
+                        .actual("File not found")
+                        .path(path)
+                        .build();
             }
 
             if ("NOT_EXISTS".equals(action)
                     && exists) {
 
-                throw new RuntimeException(
-                        "FILE ASSERT NOT_EXISTS failed: "
-                                + path);
+                throw AgateStepException.builder("FILE NOT_EXISTS assertion failed")
+                        .expected("File does not exist")
+                        .actual("File exists")
+                        .path(path)
+                        .build();
             }
 
         } else {
@@ -768,15 +784,19 @@ public class FileEngine extends AbstractStepEngine {
 
             case "CONTAINS":
                 if (!text.contains(value)) {
-                    throw new RuntimeException(
-                            "FILE ASSERT CONTAINS failed.");
+                    throw AgateStepException.builder("FILE CONTAINS assertion failed")
+                            .expected(value)
+                            .actual(abbreviate(text, 300))
+                            .build();
                 }
                 break;
 
             case "NOT_CONTAINS":
                 if (text.contains(value)) {
-                    throw new RuntimeException(
-                            "FILE ASSERT NOT_CONTAINS failed.");
+                    throw AgateStepException.builder("FILE NOT_CONTAINS assertion failed")
+                            .expected("Text must not contain: " + value)
+                            .actual(abbreviate(text, 300))
+                            .build();
                 }
                 break;
 
@@ -784,8 +804,10 @@ public class FileEngine extends AbstractStepEngine {
                 if (!text.trim()
                         .equals(value.trim())) {
 
-                    throw new RuntimeException(
-                            "FILE ASSERT EQUALS failed.");
+                    throw AgateStepException.builder("FILE EQUALS assertion failed")
+                            .expected(value)
+                            .actual(abbreviate(text.trim(), 300))
+                            .build();
                 }
                 break;
 
@@ -793,8 +815,10 @@ public class FileEngine extends AbstractStepEngine {
                 if (text.trim()
                         .equals(value.trim())) {
 
-                    throw new RuntimeException(
-                            "FILE ASSERT NOT_EQUALS failed.");
+                    throw AgateStepException.builder("FILE NOT_EQUALS assertion failed")
+                            .expected("Value different from: " + value)
+                            .actual(abbreviate(text.trim(), 300))
+                            .build();
                 }
                 break;
 
@@ -808,18 +832,18 @@ public class FileEngine extends AbstractStepEngine {
                         != Integer.parseInt(
                                 expected)) {
 
-                    throw new RuntimeException(
-                            "FILE ASSERT COUNT failed. Expected "
-                                    + expected
-                                    + " but got "
-                                    + count);
+                    throw AgateStepException.builder("FILE COUNT assertion failed")
+                            .expected(expected)
+                            .actual(count)
+                            .build();
                 }
                 break;
 
             default:
-                throw new RuntimeException(
-                        "Unsupported FILE ASSERT action: "
-                                + action);
+                throw AgateStepException.builder("Unsupported FILE ASSERT action")
+                        .actual(action)
+                        .hint("Supported actions: EXISTS, NOT_EXISTS, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                        .build();
             }
         }
 
@@ -906,8 +930,10 @@ public class FileEngine extends AbstractStepEngine {
         if (value == null
                 || value.isBlank()) {
 
-            throw new RuntimeException(
-                    "File path is required.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("path")
+                    .hint("Provide a path for this FILE operation.")
+                    .build();
         }
 
         Path path =
@@ -950,8 +976,12 @@ public class FileEngine extends AbstractStepEngine {
         if (step.getAction() == null
                 || step.getAction().isBlank()) {
 
-            throw new RuntimeException(
-                    "FILE step requires 'action'.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("action")
+                    .hint("Add an action appropriate for FILE op: "
+                            + (step.getOp() != null ? step.getOp().toUpperCase() : "EXEC")
+                            + ".")
+                    .build();
         }
 
         return step.getAction()
@@ -1026,6 +1056,17 @@ public class FileEngine extends AbstractStepEngine {
         }
 
         return lines[index].trim();
+    }
+
+    private String abbreviate(String value, int maxLength) {
+        if (value == null) {
+            return "null";
+        }
+        String normalized = value.replace("\r", "\\r").replace("\n", "\\n");
+        if (normalized.length() <= maxLength) {
+            return normalized;
+        }
+        return normalized.substring(0, maxLength) + "...";
     }
 
     private int countOccurrences(

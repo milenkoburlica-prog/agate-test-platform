@@ -1,0 +1,209 @@
+# TEST-GROUP-3.yaml
+#
+# Purpose:
+#   Verify AGATE runtime semantics and tester-friendly logging.
+#
+# Focus:
+#   - CMD default exit-code handling
+#   - CMD checkExitCode=false
+#   - CMD EXITCODE assertion
+#   - FILE runtime error
+#   - FILE invalid action
+#   - FILE missing mandatory action
+#
+# These test cases are intentionally designed to fail or behave differently
+# depending on the configured semantics.
+#
+# Expected behavior is documented above each test case.
+
+testCases:
+
+  # ----------------------------------------------------------------------
+  # G3_01
+  #
+  # Expected:
+  #   CMD EXEC must FAIL because checkExitCode is not specified.
+  #
+  # Default behavior:
+  #   checkExitCode    = true
+  #   expectedExitCode = 0
+  #
+  # Desired tester log:
+  #
+  # >>> CMD       : cmd /c exit 7
+  # <<< RESULT    : Exit=7, Timeout=false, Duration=...
+  #
+  # >>> CMD STEP FINISHED | Status: FAILED | Duration: ...
+  #     Reason   : Unexpected exit code
+  #     Expected : 0 (default)
+  #     Actual   : 7
+  #     Hint     : Set checkExitCode: false to accept any exit code.
+  # ----------------------------------------------------------------------
+
+  - id: G3_01_CMD_DEFAULT_EXITCODE
+    description: "CMD EXEC fails because default expected exit code is 0"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "cmd /c exit 7"
+        response: cmd_response
+
+
+  # ----------------------------------------------------------------------
+  # G3_02
+  #
+  # Expected:
+  #   CMD EXEC must be SUCCESS even though exit code is 7,
+  #   because checkExitCode is explicitly disabled.
+  #
+  # Desired tester log:
+  #
+  # >>> CMD       : cmd /c exit 7
+  # <<< RESULT    : Exit=7, Timeout=false, Duration=...
+  # >>> CMD STEP FINISHED | Status: SUCCESS | Duration: ...
+  # ----------------------------------------------------------------------
+
+  - id: G3_02_CMD_IGNORE_EXITCODE
+    description: "CMD EXEC accepts exit code 7 when checkExitCode is false"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "cmd /c exit 7"
+        response: cmd_response
+        checkExitCode: false
+
+
+  # ----------------------------------------------------------------------
+  # G3_03
+  #
+  # Expected:
+  #   EXEC succeeds because checkExitCode=false.
+  #   ASSERT then compares expected exit code 0 with actual exit code 7.
+  #
+  # Desired tester log:
+  #
+  # >>> CMD STEP FINISHED | Status: SUCCESS
+  #
+  # >>> DSL      - type: CMD
+  # >>> DSL        op: ASSERT
+  # >>> DSL        action: EXITCODE
+  # >>> DSL        expected: 0
+  #
+  # >>> CMD STEP FINISHED | Status: FAILED
+  #     Reason   : EXITCODE assertion failed
+  #     Expected : 0
+  #     Actual   : 7
+  # ----------------------------------------------------------------------
+
+  - id: G3_03_CMD_ASSERT_EXITCODE
+    description: "CMD EXITCODE assertion fails with expected 0 and actual 7"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: CMD
+        op: EXEC
+        command: "cmd /c exit 7"
+        response: cmd_response
+        checkExitCode: false
+
+      - type: CMD
+        op: ASSERT
+        response: cmd_response
+        action: EXITCODE
+        expected: 0
+
+
+  # ----------------------------------------------------------------------
+  # G3_04
+  #
+  # Expected:
+  #   FILE READ fails because the file does not exist.
+  #
+  # Desired tester log:
+  #
+  # >>> FILE STEP FINISHED | Status: FAILED
+  #     Reason : File does not exist
+  #     Path   : output/agate-error-tests/g3-missing-file.txt
+  #     Hint   : Check the file path or verify that a previous step created it.
+  # ----------------------------------------------------------------------
+
+  - id: G3_04_FILE_READ_MISSING
+    description: "FILE READ fails because file does not exist"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: FILE
+        op: EXEC
+        action: READ
+        path: "output/agate-error-tests/g3-missing-file.txt"
+        response: file_content
+
+
+  # ----------------------------------------------------------------------
+  # G3_05
+  #
+  # Expected:
+  #   FILE step fails because RITE is not a supported EXEC action.
+  #
+  # Desired tester log:
+  #
+  # >>> FILE STEP FINISHED | Status: FAILED
+  #     Reason : Unsupported FILE EXEC action
+  #     Actual : RITE
+  #     Hint   : Supported actions: READ, WRITE, APPEND, COPY, MOVE,
+  #              DELETE, EXISTS
+  # ----------------------------------------------------------------------
+
+  - id: G3_05_FILE_INVALID_ACTION
+    description: "FILE EXEC fails because action RITE is unsupported"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: FILE
+        op: EXEC
+        action: RITE
+        path: "output/agate-error-tests/g3-invalid-action.txt"
+        text: "test"
+        overwrite: true
+
+
+  # ----------------------------------------------------------------------
+  # G3_06
+  #
+  # Expected:
+  #   FILE step fails because mandatory property 'action' is missing.
+  #
+  # Desired tester log:
+  #
+  # >>> FILE STEP FINISHED | Status: FAILED
+  #     Reason : Required property is missing
+  #     Field  : action
+  #     Hint   : Add an action appropriate for FILE op: EXEC.
+  # ----------------------------------------------------------------------
+
+  - id: G3_06_FILE_MISSING_ACTION
+    description: "FILE EXEC fails because mandatory action is missing"
+    stage: "*"
+    priority: HIGH
+    variables: {}
+
+    steps:
+      - type: FILE
+        op: EXEC
+        path: "output/agate-error-tests/g3-missing-action.txt"
+        text: "test"
+        overwrite: true

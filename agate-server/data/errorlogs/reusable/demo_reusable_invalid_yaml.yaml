@@ -1,0 +1,6 @@
+steps:
+
+- type: CMD
+  op: EXEC
+  command: "java -version
+  response: resp1

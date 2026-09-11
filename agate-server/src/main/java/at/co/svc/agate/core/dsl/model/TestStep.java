@@ -8,6 +8,9 @@ import at.co.svc.agate.core.reference.UnorderedRule;
 
 public class TestStep {
 
+    private String sourceFile;
+    private Integer sourceStepIndex;
+    
     private List<String> ignore = new ArrayList<>();
     private List<UnorderedRule> unordered = new ArrayList<>();
 
@@ -513,4 +516,21 @@ public class TestStep {
     public void setOutputFile(String outputFile) {
         this.outputFile = outputFile;
     }
+
+    public String getSourceFile() {
+        return sourceFile;
+    }
+
+    public void setSourceFile(String sourceFile) {
+        this.sourceFile = sourceFile;
+    }
+
+    public Integer getSourceStepIndex() {
+        return sourceStepIndex;
+    }
+
+    public void setSourceStepIndex(Integer sourceStepIndex) {
+        this.sourceStepIndex = sourceStepIndex;
+    }
+    
 }

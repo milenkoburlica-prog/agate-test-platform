@@ -12,6 +12,7 @@ import at.co.svc.agate.core.dsl.model.TestStep;
 import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
+import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.interfaces.TestStepEngine;
 import at.co.svc.agate.engine.buffer.BufferEngine;
@@ -129,6 +130,7 @@ public class TestExecutor {
             int currentStepNumber, boolean isVerbose) throws Exception {
         long startTime = System.currentTimeMillis();
         boolean lastStepStatusFailed = false;
+        Exception stepFailure = null;
         // =========================================================================
         // NOVO: Logika za selektivni default (CALL = false, izvan CALL-a = true)
         // =========================================================================
@@ -195,6 +197,7 @@ public class TestExecutor {
 
         } catch (Exception e) {
             lastStepStatusFailed = true;
+            stepFailure = e;
             Allure.getLifecycle().updateStep(stepUuid, s -> s.setStatus(Status.FAILED));
             throw e;
         } finally {
@@ -204,23 +207,128 @@ public class TestExecutor {
 
             // LOGUJ SAMO AKO NIJE CALL STEP (jer CallEngine to radi za sebe)
             // ILI ako je FAILED (jer grešku moramo videti u svakom slučaju)
-            if (step.getType() != StepType.CALL || lastStepStatusFailed) {
-                if (isVerbose) 
-                {
-                    String status = lastStepStatusFailed ? "FAILED" : "SUCCESS";
-                    String color = lastStepStatusFailed ? ConsoleColors.RED : ConsoleColors.GREEN;
+            /*
+             * Normal reusable substeps may be silent when verbose=false.
+             *
+             * A FAILED step, however, must ALWAYS be visible.
+             * Otherwise a failing step inside CALL/reusable would disappear
+             * and only the parent test-case failure would be shown.
+             */
+            if (lastStepStatusFailed) {
 
-                    logger.info(String.format("    %s>>> %s STEP FINISHED | Status: %s | Duration: %d ms%s", 
-                                color, step.getType(), status, duration, ConsoleColors.RESET));
+                // If the reusable step was executed silently, show the DSL now
+                // so that the tester can see exactly which inner step failed.
+                if (!isVerbose
+                        && step.getType() != StepType.CALL
+                        && step.getTextYaml() != null
+                        && !step.getTextYaml().isBlank()) {
+
+                    logger.info("");
+                    logger.info("    >>> REUSABLE STEP " + formatStepNumber(step));
+                    logger.info("");
+
+                    for (String yamlLine : step.getTextYaml().split("\\R")) {
+                        logger.info("    >>> DSL      " + yamlLine);
+                    }
+
+                    logger.info("");
                 }
-            } else {
-                String status = lastStepStatusFailed ? "FAILED" : "SUCCESS";
-                String color = lastStepStatusFailed ? ConsoleColors.RED : ConsoleColors.GREEN;
-                
-                logger.info(String.format("    %s>>> %s STEP FINISHED | Status: %s | Duration: %d ms%s", 
-                        color, step.getType(), status, duration, ConsoleColors.RESET));
+
+                logger.info(String.format(
+                        "    %s>>> %s STEP FINISHED | Status: FAILED | Duration: %d ms%s",
+                        ConsoleColors.RED,
+                        step.getType(),
+                        duration,
+                        ConsoleColors.RESET));
+
+                // Show structured failure details directly at the failing step.
+                // CALL only propagates the inner exception and must not duplicate
+                // the same Reason / Expected / Actual block.
+                if (stepFailure != null && step.getType() != StepType.CALL) {
+                    logFailureDetails(stepFailure);
+                }
+
+            } else if (isVerbose) {
+
+                // Normal visible step
+                logger.info(String.format(
+                        "    %s>>> %s STEP FINISHED | Status: SUCCESS | Duration: %d ms%s",
+                        ConsoleColors.GREEN,
+                        step.getType(),
+                        duration,
+                        ConsoleColors.RESET));
+
+            } else if (step.getType() == StepType.CALL) {
+
+                /*
+                 * Keep current CALL behaviour if you want CALL completion
+                 * to remain visible even when its inner steps are silent.
+                 */
+                logger.info(String.format(
+                        "    %s>>> %s STEP FINISHED | Status: SUCCESS | Duration: %d ms%s",
+                        ConsoleColors.GREEN,
+                        step.getType(),
+                        duration,
+                        ConsoleColors.RESET));
             }
+        
         }
+    }
+    private String formatStepNumber(TestStep step) {
+
+        if (step == null
+                || step.getId() == null
+                || step.getId().isBlank()) {
+
+            return "?";
+        }
+
+        String id = step.getId();
+
+        /*
+         * Generated hierarchical IDs:
+         *
+         * step_1     -> 1
+         * step_1_1   -> 1.1
+         * step_1_2   -> 1.2
+         * step_1_2_3 -> 1.2.3
+         */
+        if (id.startsWith("step_")) {
+            return id
+                    .substring("step_".length())
+                    .replace('_', '.');
+        }
+
+        // Explicit user-defined step id
+        return id;
+    }
+    private void logFailureDetails(Exception failure) {
+        if (failure instanceof AgateStepException) {
+            AgateStepException agateFailure = (AgateStepException) failure;
+
+            logger.info(String.format(
+                    "        %-8s : %s",
+                    "Reason",
+                    agateFailure.getReason()));
+
+            agateFailure.getDetails().forEach((label, value) ->
+                    logger.info(String.format(
+                            "        %-8s : %s",
+                            label,
+                            value)));
+
+            return;
+        }
+
+        String message = failure.getMessage();
+        if (message == null || message.isBlank()) {
+            message = failure.getClass().getSimpleName();
+        }
+
+        logger.info(String.format(
+                "        %-8s : %s",
+                "Reason",
+                message.trim()));
     }
 
     private boolean isConditionMet(TestCase tc, TestStep step, YamlPlaceholderResolver resolver, String yamlPath,

@@ -1,0 +1,10 @@
+testCases:
+
+- id: REUSABLE_WITHOUT_STEPS
+  description: Reusable module exists but contains no steps section
+  stage: '*'
+  priority: HIGH
+  steps:
+
+  - type: CALL
+    command: reusable.demo_reusable_no_steps

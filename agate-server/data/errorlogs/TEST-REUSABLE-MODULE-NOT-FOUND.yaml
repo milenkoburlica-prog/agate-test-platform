@@ -1,0 +1,10 @@
+testCases:
+
+  - id: REUSABLE_MODULE_NOT_FOUND
+    description: CALL references a reusable YAML module that does not exist
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+        command: "reusable.does_not_exist"

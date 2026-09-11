@@ -15,6 +15,7 @@ import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.env.EnvironmentManager;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.report.ReportEngine;
+import at.co.svc.agate.core.validation.StartupValidator;
 import at.co.svc.agate.engine.gui.GuiEngine;
 
 public class MainTestCaseExecute {
@@ -202,6 +203,10 @@ public class MainTestCaseExecute {
 
     public static void start2(String user, String instance, String apps, String file, String targetTestCase, String targetPriority) throws Exception {
 
+        // Validate the complete startup context before EnvironmentManager, YAML loading
+        // or any test execution is started.
+        StartupValidator.validateOrThrow(user, instance, apps, file);
+
         System.setProperty("PERSON", user);
         System.setProperty("INSTANCE", instance);
         // Postavljamo prioritet kao sistemski parametar (izvor istine)
@@ -215,38 +220,27 @@ public class MainTestCaseExecute {
         List<String> yamlFilesToExecute = new ArrayList<>();
         String sanitizedApps = apps.toLowerCase().trim();
 
-        // 1. Resolve execution file scope strategy
+        // 1. Resolve execution file scope strategy.
+        // Existence checks are handled centrally by StartupValidator above.
         if (file == null || file.trim().isEmpty()) {
             Path appFolder = Paths.get("data", sanitizedApps);
-            if (!Files.exists(appFolder) || !Files.isDirectory(appFolder)) {
-                System.err.println("Error: Directory " + appFolder.toAbsolutePath() + " does not exist.");
-                System.exit(1);
-            }
-            
+
             yamlFilesToExecute = Files.walk(appFolder, 1)
-                    .filter(Files::isRegularFile) // Osigurava da uzimamo samo fajlove, ne i folder
+                    .filter(Files::isRegularFile)
                     .map(Path::toString)
                     .filter(f -> f.endsWith(".yaml") || f.endsWith(".yml"))
-                    .sorted() // <--- Ovde se vrši alfabetno sortiranje
+                    .sorted()
                     .collect(Collectors.toList());
-            
-            
-            if (yamlFilesToExecute.isEmpty()) {
-                System.out.println("No YAML files found inside folder directory: " + appFolder.toAbsolutePath());
-                System.exit(0);
-            }
-            System.out.println(">>> Found " + yamlFilesToExecute.size() + " test suites inside [" + sanitizedApps + "] for execution.");
+
+            System.out.println(">>> Found " + yamlFilesToExecute.size()
+                    + " test suites inside [" + sanitizedApps + "] for execution.");
         } else {
             String targetFile = file.trim();
             if (!targetFile.endsWith(".yaml") && !targetFile.endsWith(".yml")) {
                 targetFile += ".yaml";
             }
-            
+
             Path singlePath = Paths.get("data", sanitizedApps, targetFile);
-            if (!Files.exists(singlePath)) {
-                System.err.println("Error: Target execution file " + singlePath.toAbsolutePath() + " does not exist.");
-                System.exit(1);
-            }
             yamlFilesToExecute.add(singlePath.toString());
         }
 
@@ -507,34 +501,43 @@ public class MainTestCaseExecute {
     }
     
     private static void printCleanHeader(TestCase tc) {
-        YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
-        String name = tc.getName() != null ? tc.getName() : tc.getName();
+
+        String name = tc.getName() != null
+                ? tc.getName()
+                : "Unnamed Test Case";
+
         System.out.println("======================================================================");
         System.out.println("TEST CASE: " + name);
-        System.out.println("DESC     : " + (tc.getDescription() != null ? tc.getDescription() : "N/A"));
-        System.out.println("STAGE    : " + (tc.getStage() != null ? tc.getStage() : "N/A") +
-                           " | PRIO: " + (tc.getPriority() != null ? tc.getPriority() : "N/A"));
+        System.out.println("DESC     : "
+                + (tc.getDescription() != null ? tc.getDescription() : "N/A"));
+        System.out.println("STAGE    : "
+                + (tc.getStage() != null ? tc.getStage() : "N/A")
+                + " | PRIO: "
+                + (tc.getPriority() != null ? tc.getPriority() : "N/A"));
+
         System.out.println("----------------------------------------------------------------------");
         System.out.println("VARIABLES:");
-        if (tc.getVariables() != null) {
-            tc.getVariables().forEach((k, v) -> {
-                // Wir simulieren einen leeren Kontext für die Header-Anzeige,
-                // da wir nur wissen wollen, wie der Wert aktuell aufgelöst aussieht.
-                String resolvedValue = resolver.resolve(
-                    tc, 
-                    v.toString(), 
-                    tc.getVariables(), // Die Variablen als Kontext
-                    null,              // yamlPath (für Header nicht zwingend)
-                    0,                 // stepIndex
-                    "HEADER_PRINT"     // Action Name
-                );
-                System.out.printf("  %-15s = %s%n", k, resolvedValue);
+
+        if (tc.getVariables() != null && !tc.getVariables().isEmpty()) {
+
+            tc.getVariables().forEach((key, value) -> {
+
+                String displayValue =
+                        value != null
+                                ? String.valueOf(value)
+                                : "null";
+
+                System.out.printf(
+                        "  %-15s = %s%n",
+                        key,
+                        displayValue);
             });
-            
         }
+
         System.out.println("----------------------------------------------------------------------");
     }
-
+    
+    
     private static void printCleanFooter(TestCase tc, boolean passed, long durationMs, String error) {
         double seconds = durationMs / 1000.0;
         String name = tc.getName() != null ? tc.getName() : tc.getName();

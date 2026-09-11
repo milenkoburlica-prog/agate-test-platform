@@ -1,0 +1,63 @@
+testCases:
+  - id: TC_WAIT_ERROR_01
+    description: WAIT Test Step
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+      # 1. Wait 2 sec
+      - type: BUFFER
+        op: EXEC
+        name: "timeout"
+        value: "-2s"
+ 
+ 
+  - id: TC_WAIT_ERROR_02
+    description: WAIT Test Step
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+ 
+      # 1. Wait 1 sec
+      - type: WAIT
+        value: "{B[xtimeout]}" 
+
+  - id: TC_WAIT_ERROR_03
+    description: WAIT Test Step
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+      # 1. Wait 1 sec
+      - type: WAIT
+        value: aba 
+ 
+  - id: TC_WAIT_ERROR_04
+    description: WAIT Test Step
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+     # 1. Wait 200ms
+      - type: WAIT
+ 
+  - id: TC_WAIT_ERROR_05
+    description: WAIT Test Step
+    stage: '*'
+    priority: HIGH  
+    variables:
+      command: "java -version"
+    steps:
+
+      # 1. Wait 200 ms
+      - type: WAIT
+        valuex: "200 ms" 

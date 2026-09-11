@@ -1,0 +1,180 @@
+testCases:
+
+  # ==========================================================================
+  # 1. REUSABLE MODULE DOES NOT EXIST
+  # ==========================================================================
+  - id: REUSABLE_MODULE_NOT_FOUND
+    description: CALL references a reusable YAML module that does not exist
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+        command: "reusable.does_not_exist"
+
+
+  # ==========================================================================
+  # 2. CALL WITHOUT COMMAND
+  # ==========================================================================
+  - id: REUSABLE_COMMAND_MISSING
+    description: CALL step without reusable module command
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+
+
+  # ==========================================================================
+  # 3. UNKNOWN R VARIABLE INSIDE REUSABLE MODULE
+  # ==========================================================================
+  - id: REUSABLE_UNKNOWN_R_VARIABLE
+    description: Reusable module references an R variable that was not provided
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+
+
+  # ==========================================================================
+  # 4. UNKNOWN B VARIABLE INSIDE REUSABLE MODULE
+  # ==========================================================================
+  - id: REUSABLE_UNKNOWN_B_VARIABLE
+    description: Reusable module references a B variable that does not exist
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable_missing_b"
+        parameters:
+          command: "mvn --version"
+
+
+  # ==========================================================================
+  # 5. REUSABLE COMMAND RETURNS NON-ZERO EXIT CODE
+  # ==========================================================================
+  - id: REUSABLE_COMMAND_EXIT_CODE_FAILED
+    description: Command passed to reusable module returns a non-zero exit code
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: "cmd /c exit 7"
+
+
+  # ==========================================================================
+  # 6. REUSABLE MODULE HAS INVALID STEP TYPE
+  # ==========================================================================
+  - id: REUSABLE_INVALID_STEP_TYPE
+    description: Reusable YAML contains an unsupported step type
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable_invalid_type"
+
+
+  # ==========================================================================
+  # 7. REUSABLE MODULE HAS MALFORMED YAML
+  # ==========================================================================
+  - id: REUSABLE_INVALID_YAML
+    description: Reusable module contains malformed YAML
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable_invalid_yaml"
+
+
+  # ==========================================================================
+  # 8. REUSABLE MODULE WITHOUT STEPS
+  # ==========================================================================
+  - id: REUSABLE_WITHOUT_STEPS
+    description: Reusable module exists but contains no steps section
+    stage: '*'
+    priority: HIGH
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable_no_steps"
+
+
+  # ==========================================================================
+  # 9. REUSABLE R VARIABLE IS EMPTY
+  # ==========================================================================
+  - id: REUSABLE_EMPTY_R_VARIABLE
+    description: Empty parameter is passed into reusable module
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: ""
+
+
+  # ==========================================================================
+  # 10. REUSABLE R VARIABLE SELF REFERENCE
+  # ==========================================================================
+  - id: REUSABLE_R_SELF_REFERENCE
+    description: Parameter passed to reusable module references itself
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          command: "{R[command]}"
+
+
+  # ==========================================================================
+  # 11. VALID CALL - CONTROL TEST
+  # ==========================================================================
+  - id: REUSABLE_VALID_CONTROL
+    description: Valid reusable module execution used as control test
+    stage: '*'
+    priority: HIGH
+
+    variables:
+      command: "java -version"
+      command2: "java -version"
+
+    steps:
+      - type: CALL
+        command: "reusable.demo_reusable"
+        parameters:
+          verbose: "true"
+          command: "mvn --version"

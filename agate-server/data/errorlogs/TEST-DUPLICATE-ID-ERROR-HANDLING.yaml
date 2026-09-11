@@ -1,0 +1,24 @@
+testCases:
+  - id: DUPLICATE_TEST_CASE_ID
+    description: First test case
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo first'
+        response: buff_out
+
+  - id: DUPLICATE_TEST_CASE_ID
+    description: Second test case with the same ID
+    stage: '*'
+    priority: HIGH
+    steps:
+      - type: CMD
+        op: EXEC
+        command: 'echo second'
+        response: buff_out
+      - type: CMD
+        op: EXEC
+        command: 'echo another-step'
+        response: buff_out

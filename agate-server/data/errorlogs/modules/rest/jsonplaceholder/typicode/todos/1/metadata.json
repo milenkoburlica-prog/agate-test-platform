@@ -1,0 +1,5 @@
+{
+  "url" : "{{endpoint}}/todos/1",
+  "method" : "GET",
+  "headers" : {}
+}

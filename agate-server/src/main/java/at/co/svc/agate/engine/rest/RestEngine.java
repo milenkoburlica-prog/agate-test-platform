@@ -25,6 +25,7 @@ import at.co.svc.agate.core.dsl.register.PrintDslStepContext;
 import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
+import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.interfaces.TestStepEngine;
 import at.co.svc.agate.core.reference.ComparisonDifference;
@@ -57,6 +58,12 @@ public class RestEngine implements TestStepEngine {
 
         String op = (step.getOp() != null) ? step.getOp().toUpperCase() : "EXEC";
 
+        if (!"EXEC".equals(op) && !"ASSERT".equals(op) && !"BUFFER".equals(op)) {
+            throw AgateStepException.builder("Unsupported REST operation")
+                    .actual(op)
+                    .hint("Supported operations: EXEC, ASSERT, BUFFER").build();
+        }
+
         if (isAssertionStep(step)) {
             handleAssertion(tc, step, context, yamlFile, stepIndex, printExecution, logger, isVerbose);
         } else if (isBufferStep(step)) {
@@ -77,8 +84,10 @@ public class RestEngine implements TestStepEngine {
         String method = step.getMethod();
 
         String rawUrl = step.getUrl();
-        if (rawUrl == null) {
-            throw new RuntimeException("URL or Action not found for REST step");
+        if (rawUrl == null || rawUrl.isBlank()) {
+            throw AgateStepException.builder("REST URL is missing")
+                    .field("url")
+                    .hint("Check the REST module metadata or define a URL for this REST EXEC step.").build();
         }
 
         String providedEndpoint = step.getEndpoint();
@@ -267,19 +276,34 @@ public class RestEngine implements TestStepEngine {
                 RestPrinter.printResponse(response.statusCode(), response.headers().map(), response.body(), logger);
             }
 
+        } catch (AgateStepException e) {
+            throw e;
         } catch (Exception e) {
-            String msg = (e.getMessage() != null) ? e.getMessage() : e.getClass().getSimpleName();
-
             if (e instanceof HttpConnectTimeoutException) {
-                msg = "Connection timed out (10s).";
-            } else if (e instanceof java.net.ConnectException) {
-                msg = "Connection refused/failed: " + e.getClass().getSimpleName();
-            } else if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-                msg = "Thread execution interrupted during retry delay.";
+                throw AgateStepException.builder("REST connection timed out")
+                        .detail("URL", finalUrl)
+                        .hint("Check endpoint availability, network connectivity, proxy/firewall settings, or increase the HTTP timeout if appropriate.")
+                        .cause(e).build();
             }
 
-            throw new RuntimeException(msg);
+            if (e instanceof java.net.ConnectException) {
+                throw AgateStepException.builder("REST connection failed")
+                        .detail("URL", finalUrl)
+                        .hint("Check whether the endpoint is reachable and whether host/port are correct.")
+                        .cause(e).build();
+            }
+
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+                throw AgateStepException.builder("REST execution was interrupted")
+                        .detail("URL", finalUrl)
+                        .cause(e).build();
+            }
+
+            throw AgateStepException.builder("REST call failed")
+                    .detail("URL", finalUrl)
+                    .detail("Technical", e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                    .cause(e).build();
         }
     }
 
@@ -296,8 +320,15 @@ public class RestEngine implements TestStepEngine {
             TestLogger logger,
             boolean isVerbose) throws Exception {
 
+        String responseKey = step.getResponse();
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("Reference the response created by a previous REST EXEC step.").build();
+        }
+
         RestResponse res =
-                (RestResponse) context.getBuffer(step.getResponse());
+                (RestResponse) context.getBuffer(responseKey);
 
         String source = step.getSource();
         String action = step.getAction();
@@ -308,17 +339,15 @@ public class RestEngine implements TestStepEngine {
         // =========================================================
 
         if (res == null) {
-            throwMissingResponseDiagnostic(
-                    step,
-                    logger,
-                    printExecution,
-                    isVerbose,
-                    "ASSERT");
+            throw AgateStepException.builder("REST response was not found")
+                    .detail("Response", responseKey)
+                    .hint("Make sure a REST EXEC step runs before this step and uses the same response name.").build();
         }
 
         if (action == null || action.isBlank()) {
-            throw new RuntimeException(
-                    "action not found: " + step.getAction());
+            throw AgateStepException.builder("Required property is missing")
+                    .field("action")
+                    .hint("Define an assertion action, for example: EQUALS, CONTAINS, EXISTS or MATCH_REFERENCE.").build();
         }
 
         // =========================================================
@@ -351,7 +380,9 @@ public class RestEngine implements TestStepEngine {
         // =========================================================
 
         if (source == null || source.isBlank()) {
-            throw new RuntimeException("source not found!");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("source")
+                    .hint("Supported REST ASSERT sources: STATUS, BODY, HEADERS").build();
         }
 
         Object rawExpected = step.getExpected();
@@ -394,7 +425,17 @@ public class RestEngine implements TestStepEngine {
         case "STATUS":
 
             int status = res.getStatusCode();
-            int expStatus = Integer.parseInt(expected);
+            int expStatus;
+            try {
+                expStatus = Integer.parseInt(expected);
+            } catch (NumberFormatException e) {
+                throw AgateStepException.builder("Invalid expected HTTP status")
+                        .expected("integer status code")
+                        .actual(expected)
+                        .field("expected")
+                        .hint("Use a numeric HTTP status, for example: 200")
+                        .cause(e).build();
+            }
 
             passed = compareNumbers(
                     status,
@@ -419,9 +460,9 @@ public class RestEngine implements TestStepEngine {
             }
 
             if (path == null || path.isBlank()) {
-                throw new RuntimeException(
-                        "REST BODY ASSERT requires 'path'. "
-                                + "Example: path: \"$.title\"");
+                throw AgateStepException.builder("Required property is missing")
+                        .field("path")
+                        .hint("REST BODY ASSERT requires a JSON path, for example: path: \"$.title\"").build();
             }
 
             Object jsonPathResult = null;
@@ -443,8 +484,9 @@ public class RestEngine implements TestStepEngine {
                     && !"EXISTS".equalsIgnoreCase(action)
                     && !"COUNT".equalsIgnoreCase(action)) {
 
-                throw new RuntimeException(
-                        "Path not found: " + path);
+                throw AgateStepException.builder("JSON path was not found")
+                        .path(path)
+                        .hint("Check the JSON response structure and the configured path.").build();
             }
 
             switch (action.toUpperCase()) {
@@ -590,9 +632,9 @@ public class RestEngine implements TestStepEngine {
             default:
 
                 if (!pathExists || jsonPathResult == null) {
-
-                    throw new RuntimeException(
-                            "Path not found: " + path);
+                    throw AgateStepException.builder("JSON path was not found")
+                            .path(path)
+                            .hint("Check the JSON response structure and the configured path.").build();
                 }
 
                 if (jsonPathResult instanceof java.util.List) {
@@ -601,14 +643,10 @@ public class RestEngine implements TestStepEngine {
                             (java.util.List<?>) jsonPathResult;
 
                     if (list.size() > 1) {
-
-                        throw new RuntimeException(
-                                "Validation failed: Path '"
-                                        + path
-                                        + "' returned multiple elements ("
-                                        + list.size()
-                                        + "). You must specify an index like "
-                                        + "$[0] or use EXISTS/COUNT action!");
+                        throw AgateStepException.builder("JSON path returned multiple elements")
+                                .path(path)
+                                .actual(list.size() + " elements")
+                                .hint("Specify an array index such as $[0], or use EXISTS/COUNT.").build();
                     }
 
                     if (list.size() == 1) {
@@ -649,37 +687,42 @@ public class RestEngine implements TestStepEngine {
 
             } else {
 
-                throw new RuntimeException(
-                        "Unsupported HEADERS action: " + action);
+                throw AgateStepException.builder("Unsupported REST HEADERS assertion action")
+                        .actual(action)
+                        .hint("Supported HEADERS action: IS_HEADER_PRESENT").build();
             }
 
             break;
 
         default:
 
-            throw new RuntimeException(
-                    "Unsupported source: " + source);
+            throw AgateStepException.builder("Unsupported REST assertion source")
+                    .actual(source)
+                    .hint("Supported REST ASSERT sources: STATUS, BODY, HEADERS").build();
         }
 
-        if (Boolean.TRUE.equals(printExecution) && isVerbose) {
-
+        if (passed && Boolean.TRUE.equals(printExecution) && isVerbose) {
             logAssertionResult(
                     logger,
-                    passed,
+                    true,
                     action,
                     expected,
                     actual,
-                    passed ? null : null);
+                    null);
         }
 
         if (!passed) {
+            AgateStepException.Builder failure = AgateStepException.builder("REST assertion failed")
+                    .expected(expected)
+                    .actual(actual)
+                    .detail("Source", source)
+                    .detail("Action", action);
 
-            throw new RuntimeException(
-                    String.format(
-                            "Assertion %s failed! Expected: %s, Actual: %s",
-                            action,
-                            expected,
-                            actual));
+            if (path != null && !path.isBlank()) {
+                failure.path(path);
+            }
+
+            throw failure.build();
         }
     }
     
@@ -696,14 +739,16 @@ public class RestEngine implements TestStepEngine {
         String source = step.getSource();
 
         if (source != null && !"BODY".equalsIgnoreCase(source)) {
-            throw new RuntimeException(
-                    "MATCH_REFERENCE currently supports source BODY only. Actual source: " + source);
+            throw AgateStepException.builder("Unsupported source for MATCH_REFERENCE")
+                    .expected("BODY")
+                    .actual(source)
+                    .hint("REST MATCH_REFERENCE currently supports source BODY only.").build();
         }
 
         if (step.getId() == null || step.getId().isBlank()) {
-            throw new RuntimeException(
-                    "MATCH_REFERENCE requires a step id. "
-                            + "Define 'id' in YAML or ensure the loader creates a fallback id.");
+            throw AgateStepException.builder("Required property is missing")
+                    .field("id")
+                    .hint("MATCH_REFERENCE requires a step id so AGATE can resolve the reference file.").build();
         }
 
         ReferenceCompareConfig config = new ReferenceCompareConfig()
@@ -749,11 +794,10 @@ public class RestEngine implements TestStepEngine {
             logReferenceDifferences(logger, result);
         }
 
-        throw new RuntimeException(
-                "REST MATCH_REFERENCE failed with "
-                        + result.getComparisonResult().getDifferenceCount()
-                        + " difference(s). Reference: "
-                        + result.getReferenceFile().toAbsolutePath());
+        throw AgateStepException.builder("REST reference comparison failed")
+                .actual(result.getComparisonResult().getDifferenceCount() + " difference(s)")
+                .detail("Reference", result.getReferenceFile().toAbsolutePath())
+                .hint("Review the reported differences. Update the reference only if the new response is correct.").build();
     }
 
     private void logReferenceDifferences(
@@ -875,11 +919,9 @@ public class RestEngine implements TestStepEngine {
             logger.info("");
         }
 
-        throw new RuntimeException(
-                "REST " + operation
-                        + " cannot find response '"
-                        + displayResponseName
-                        + "'. See diagnostic information above.");
+        throw AgateStepException.builder("REST response was not found")
+                .detail("Response", displayResponseName)
+                .hint("Make sure a REST EXEC step runs before this step and uses the same response name.").build();
     }
 
     private String valueOrMissing(String value) {
@@ -913,19 +955,46 @@ public class RestEngine implements TestStepEngine {
     private void handleBuffer(TestCase tc, TestStep step, ExecutionContext context, int stepIndex,
             Boolean printExecution, TestLogger logger, boolean isVerbose) throws Exception {
 
-        RestResponse res = (RestResponse) context.getBuffer(step.getResponse());
+        String responseKey = step.getResponse();
+        if (responseKey == null || responseKey.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("response")
+                    .hint("REST BUFFER must reference a response created by a previous REST EXEC step.").build();
+        }
+
+        RestResponse res = (RestResponse) context.getBuffer(responseKey);
 
         String source = step.getSource();
         String path = step.getPath();
         String value;
 
         if (res == null) {
-            throwMissingResponseDiagnostic(step, logger, printExecution, isVerbose, "BUFFER");
+            throw AgateStepException.builder("REST response was not found")
+                    .detail("Response", responseKey)
+                    .hint("Make sure a REST EXEC step runs before this BUFFER step and uses the same response name.").build();
+        }
+
+        if (source == null || source.isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("source")
+                    .hint("Supported REST BUFFER sources: BODY, STATUS, HEADERS").build();
+        }
+
+        if (step.getName() == null || step.getName().isBlank()) {
+            throw AgateStepException.builder("Required property is missing")
+                    .field("name")
+                    .hint("REST BUFFER requires 'name' to store the extracted value.").build();
         }
 
         switch (source.toUpperCase()) {
 
         case "BODY":
+            if (path == null || path.isBlank()) {
+                throw AgateStepException.builder("Required property is missing")
+                        .field("path")
+                        .hint("REST BUFFER with source BODY requires a JSON path, for example: path: \"$.title\"").build();
+            }
+
             JsonNode root = MAPPER.readTree(res.getBody());
             JsonNode node;
 
@@ -940,7 +1009,9 @@ public class RestEngine implements TestStepEngine {
             }
 
             if (node == null || node.isMissingNode()) {
-                throw new RuntimeException("Path not found: " + path);
+                throw AgateStepException.builder("JSON path was not found")
+                        .path(path)
+                        .hint("Check the JSON response structure and the configured path.").build();
             }
 
             // DEO ZA PODRŠKU "COUNT" AKCIJE
@@ -965,12 +1036,16 @@ public class RestEngine implements TestStepEngine {
         case "HEADERS":
             value = res.getHeadersMap().get(path);
             if (value == null) {
-                throw new RuntimeException("Header not found: " + path);
+                throw AgateStepException.builder("REST header was not found")
+                        .path(path)
+                        .hint("Check the response headers and the configured header name.").build();
             }
             break;
 
         default:
-            throw new RuntimeException("Unsupported source: " + source);
+            throw AgateStepException.builder("Unsupported REST buffer source")
+                    .actual(source)
+                    .hint("Supported REST BUFFER sources: BODY, STATUS, HEADERS").build();
         }
 
         tc.addVariable(step.getName(), value);
@@ -1003,7 +1078,9 @@ public class RestEngine implements TestStepEngine {
         case "IS_NOT_EMPTY":
             return actual != null && !actual.isEmpty();
         default:
-            throw new RuntimeException("Invalid action: " + action);
+            throw AgateStepException.builder("Unsupported REST assertion action")
+                    .actual(action)
+                    .hint("Supported string actions: EQUALS, NOT_EQUALS, CONTAINS, IS_EMPTY, IS_NOT_EMPTY").build();
         }
     }
 
@@ -1021,7 +1098,9 @@ public class RestEngine implements TestStepEngine {
         case "LESS_OR_EQUALS":
             return actual <= expected;
         default:
-            throw new RuntimeException("Invalid numeric action: " + action);
+            throw AgateStepException.builder("Unsupported REST numeric assertion action")
+                    .actual(action)
+                    .hint("Supported numeric actions: EQUALS, GREATER_THAN, GREATER_OR_EQUALS, LESS_THAN, LESS_OR_EQUALS").build();
         }
     }
 

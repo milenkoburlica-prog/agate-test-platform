@@ -835,3 +835,11 @@ AGATE Test Platform is released under the MIT License.
 * Added shared command execution infrastructure for timeout handling, exit-code validation and command results.
 * Added and validated extended CMD, OpenShift and FILE Engine demo scenarios.
 
+## 2026-09-11
+
+### Error Handling Improvements
+
+* Improved error reporting across AGATE with tester-friendly messages instead of developer-oriented exceptions.
+* Added structured error details such as `Reason`, `Expected`, `Actual`, `Field` and `Hint`.
+* Improved error reporting for reusable test steps and startup configuration validation.
+
