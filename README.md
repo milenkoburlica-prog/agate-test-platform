@@ -2,20 +2,27 @@
 
 > **One test. Multiple technologies. One execution flow.**
 
-**AGATE** is an open-source enterprise test orchestration platform for automating complex business processes across multiple technical layers.
+**AGATE** is an open-source test automation and orchestration platform designed for complex integration and system tests across multiple technical layers.
 
 A single AGATE test can combine:
 
 **REST · SOAP · SQL · CMD · FILE · OpenShift · CALL · JSON · PDF · WAIT**
 
-within the same execution flow — using a human-readable YAML DSL.
+within one execution flow, using a human-readable YAML DSL.
 
-Instead of assembling separate tools, libraries and scripts for each technology, AGATE models supported technologies as **first-class test steps within one unified execution model**.
+Instead of writing technology-specific test code, maintaining custom helper libraries, or combining multiple proprietary tools, AGATE provides a **unified execution model** in which supported technologies are first-class test steps.
 
-
-This is the core idea behind AGATE:
+Tests describe **what should be tested**, while AGATE handles **how the required technologies are executed and coordinated**.
 
 > **The tester describes the business test. AGATE orchestrates the technologies.**
+
+AGATE is not intended to replace developer-focused unit testing frameworks such as JUnit. It complements them by providing a higher-level automation layer for integration, system, and business-process testing.
+
+At the same time, AGATE offers a lightweight, Git- and CI-friendly alternative for test scenarios that would otherwise require large model-based enterprise testing platforms.
+
+The goal is simple:
+
+> **Readable tests. Reusable execution engines. Minimal framework code. No vendor lock-in.**
 
 ---
 
