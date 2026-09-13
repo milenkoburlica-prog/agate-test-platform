@@ -21,8 +21,16 @@ testCases:
         action: EQUALS
         expected: 200
         response: response_rest1
-      
-      # 3
+
+      # 3       
+      - id: verify_readers_response
+        type: REST
+        op: ASSERT
+        response: response_rest1
+        source: BODY
+        action: MATCH_REFERENCE
+        
+      # 4
       - type: REST
         op: BUFFER
         name: "title"
@@ -32,14 +40,14 @@ testCases:
         expected: "delectus aut autem"
         response: response_rest1
       
-      # 4
+      # 5
       - type: BUFFER
         op: ASSERT
         name: "title"
         action: EQUALS
         expected: "delectus aut autem"
       
-      # 5
+      # 6
       - type: REST
         op: ASSERT
         source: BODY
@@ -71,3 +79,11 @@ testCases:
         action: EQUALS
         expected: 200
         response: response_rest2
+
+      # 3
+      - id: verify_readers_response2
+        type: REST
+        op: ASSERT
+        response: response_rest2
+        source: BODY
+        action: MATCH_REFERENCE

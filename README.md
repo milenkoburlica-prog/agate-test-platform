@@ -843,3 +843,36 @@ AGATE Test Platform is released under the MIT License.
 * Added structured error details such as `Reason`, `Expected`, `Actual`, `Field` and `Hint`.
 * Improved error reporting for reusable test steps and startup configuration validation.
 
+## 2026-09-13
+
+### Test Suite Validation
+
+* Added optional pre-execution validation for AGATE test suite YAML files.
+* Added validation for YAML structure, supported engine types and engine-specific schemas.
+* Added data-flow validation for buffers, responses and runtime variable references.
+* Added tester-friendly validation messages with error codes, affected fields and hints.
+* Added CLI support for validating test suites without executing them.
+* Example:
+
+```bat
+startTests.bat validate data\demo\variables_demo.yaml
+```
+
+## 2026-XX-XX
+
+### Step-by-Step Debugging
+
+* Planned interactive debug mode for AGATE test execution.
+* Planned step-by-step execution of test cases and reusable modules.
+* Planned support for pausing before individual steps and continuing execution manually.
+* Planned inspection of current variables, buffers, responses and reusable parameters during debugging.
+
+## 2026-XX-XX
+
+### Project-Based Test Organization
+
+* Planned project concept for organizing AGATE test assets.
+* Test cases, test data, reusable modules and settings will be organized by project instead of relying on the current global `data` folder structure.
+* Planned project-specific configuration and environment handling.
+* Planned clearer separation of independent applications and test projects.
+

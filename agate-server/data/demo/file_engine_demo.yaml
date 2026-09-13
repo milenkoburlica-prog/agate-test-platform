@@ -251,3 +251,4 @@ testCases:
         action: DELETE
         path: "{B[baseDir]}/{B[filename]}"
         missingOk: true
+

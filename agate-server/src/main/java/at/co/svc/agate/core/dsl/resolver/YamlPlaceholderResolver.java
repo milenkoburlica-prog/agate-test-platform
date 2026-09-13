@@ -410,7 +410,15 @@ public class YamlPlaceholderResolver {
         if (value == null) {
             return null;
         }
-
+//        System.out.println(
+//                "[DEBUG-R] step=" +
+//                (currentStep != null ? currentStep.getId() : "null")
+//                + ", type=" +
+//                (currentStep != null ? currentStep.getType() : "null")
+//                + ", params=" +
+//                (currentStep != null ? currentStep.getParameters() : "null")
+//                + ", value=" + value
+//        );
         Matcher matcher = R_PATTERN.matcher(value);
         StringBuilder sb = new StringBuilder();
 
@@ -464,13 +472,20 @@ public class YamlPlaceholderResolver {
             return null;
         }
 
-        Matcher matcher = B_PATTERN.matcher(value);
-        StringBuilder sb = new StringBuilder();
+        Matcher matcher =
+                B_PATTERN.matcher(value);
+
+        StringBuilder sb =
+                new StringBuilder();
 
         while (matcher.find()) {
-            String varName = matcher.group(1);
 
-            if (varName == null || varName.isBlank()) {
+            String varName =
+                    matcher.group(1);
+
+            if (varName == null
+                    || varName.isBlank()) {
+
                 throw missingPlaceholderName(
                         "B",
                         matcher.group(0),
@@ -479,9 +494,42 @@ public class YamlPlaceholderResolver {
                         originalAction);
             }
 
-            if (variables == null
-                    || !variables.containsKey(varName)
-                    || variables.get(varName) == null) {
+            String varValue = null;
+
+            /*
+             * 1. Runtime variables have priority.
+             */
+            if (variables != null
+                    && variables.containsKey(varName)
+                    && variables.get(varName) != null) {
+
+                varValue =
+                        variables.get(varName);
+            }
+
+            /*
+             * 2. Fallback to variables defined
+             *    directly on the TestCase.
+             */
+            if (varValue == null
+                    && tc != null
+                    && tc.getVariables() != null
+                    && tc.getVariables().containsKey(varName)) {
+
+                Object tcValue =
+                        tc.getVariables().get(varName);
+
+                if (tcValue != null) {
+
+                    varValue =
+                            String.valueOf(tcValue);
+                }
+            }
+
+            /*
+             * 3. Variable was not found in either source.
+             */
+            if (varValue == null) {
 
                 throw unresolvedPlaceholder(
                         "Buffer variable was not found",
@@ -490,21 +538,23 @@ public class YamlPlaceholderResolver {
                         tc,
                         stepIndex,
                         originalAction,
-                        "Make sure variable '" + varName + "' is defined before it is referenced.");
+                        "Make sure variable '"
+                                + varName
+                                + "' is defined before it is referenced.");
             }
-
-            String varValue =
-                    variables.get(varName);
 
             matcher.appendReplacement(
                     sb,
-                    Matcher.quoteReplacement(varValue));
+                    Matcher.quoteReplacement(
+                            varValue));
         }
 
         matcher.appendTail(sb);
+
         return sb.toString();
     }
-
+    
+    
     private String resolveT(
             TestCase tc,
             String value,
@@ -807,7 +857,8 @@ public class YamlPlaceholderResolver {
         if (value == null || value.isEmpty()) {
             return;
         }
-
+        value = normalizeDateExpression(value);
+        
         validateSimplePlaceholderSyntax(
                 value,
                 "B",
@@ -892,12 +943,26 @@ public class YamlPlaceholderResolver {
         }
     }
 
+    private String normalizeDateExpression(String value) {
+
+        if (value == null) {
+            return null;
+        }
+
+        return value
+                .replace("{DATETIME}", "{DATETIME[][][]}")
+                .replace("{DATE}", "{DATE[][][]}");
+    }
+    
+    
     private void validateToscaDateExpressions(
             String value,
             TestCase tc,
             int stepIndex,
             String originalAction) {
 
+        value = normalizeDateExpression(value);
+        
         Matcher prefixMatcher =
                 DATE_PREFIX_PATTERN.matcher(value);
 

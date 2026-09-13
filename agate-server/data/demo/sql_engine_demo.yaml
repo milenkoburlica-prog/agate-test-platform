@@ -2,7 +2,7 @@ testCases:
 
   - id: TC_01_Demo_SQL
     description: TC_01 Demo SQL - Standard Workflow
-    stage: INT
+    stage: '*'
     priority: HIGH
     variables:
       {}

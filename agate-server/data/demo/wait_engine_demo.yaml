@@ -1,7 +1,7 @@
 testCases:
   - id: TC_WAIT_01
     description: WAIT Test Step
-    stage: DEMOS
+    stage: "*"
     priority: HIGH  
     variables:
       command: "java -version"

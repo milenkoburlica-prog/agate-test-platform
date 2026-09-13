@@ -315,49 +315,223 @@ public class YamlTestCaseLoader {
             return null;
         }
     }   
-    private static void resolveStepDetails(TestCase tc, TestStep step, YamlPlaceholderResolver resolver, String path, int idx) {
-        // Pass the current step to every resolver call so R[...] variables can be resolved.
-        if (step.getRow() != null) step.setRow(resolver.resolve(tc, step.getRow(), tc.getVariables(), path, idx, "row", step));
-        if (step.getColumn() != null) step.setColumn(resolver.resolve(tc, step.getColumn(), tc.getVariables(), path, idx, "column", step));
-        if (step.getUrl() != null) step.setUrl(resolver.resolve(tc, step.getUrl(), tc.getVariables(), path, idx, "url", step));
-        if (step.getAction() != null) step.setAction(resolver.resolve(tc, step.getAction(), tc.getVariables(), path, idx, "action", step));
-        if (step.getBody() != null) step.setBody(resolver.resolve(tc, step.getBody(), tc.getVariables(), path, idx, "body", step));
-       ///// if (step.getValue() != null) step.setValue(resolver.resolve(tc, step.getValue(), tc.getVariables(), path, idx, "value", step));
-        if (step.getExpected() != null) step.setExpected(resolver.resolve(tc, step.getExpected(), tc.getVariables(), path, idx, "expected", step));
-        if (step.getEndpoint() != null) step.setEndpoint(resolver.resolve(tc, step.getEndpoint(), tc.getVariables(), path, idx, "endpoint", step));
-        if (step.getCondition() != null) step.setCondition(resolver.resolve(tc, step.getCondition(), tc.getVariables(), path, idx, "condition", step));
-        
-     // Resolve step parameters used as R variables.
-        if (step.getParameters() != null && !step.getParameters().isEmpty()) {
-            Map<String, Object> resolvedParams = new HashMap<>();
-            for (Map.Entry<String, Object> entry : step.getParameters().entrySet()) {
-                Object rawValue = entry.getValue();
-                if (rawValue instanceof String) {
-                    // Example: "{B[vpNummer]}" becomes "136099".
-                    String resolvedValue = resolver.resolve(tc, (String) rawValue, tc.getVariables(), path, idx, "param-" + entry.getKey(), step);
-                    String escapedValue = resolvedValue;
-                    if (step.getType().equals(StepType.SOAP) && step.getOp().equals("EXEC")) {
-                       escapedValue = escapeXml(resolvedValue);
+
+
+    private static void resolveStepDetails(
+            TestCase tc,
+            TestStep step,
+            YamlPlaceholderResolver resolver,
+            String path,
+            int idx) {
+
+        // Resolve only values that are safe at load time.
+        // Runtime-dependent placeholders B[...] and R[...] must remain unresolved
+        // until the step is actually executed.
+
+        if (step.getRow() != null) {
+            step.setRow(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getRow(),
+                    path, idx, "row"));
+        }
+
+        if (step.getColumn() != null) {
+            step.setColumn(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getColumn(),
+                    path, idx, "column"));
+        }
+
+        if (step.getUrl() != null) {
+            step.setUrl(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getUrl(),
+                    path, idx, "url"));
+        }
+
+        if (step.getAction() != null) {
+            step.setAction(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getAction(),
+                    path, idx, "action"));
+        }
+
+        if (step.getBody() != null) {
+            step.setBody(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getBody(),
+                    path, idx, "body"));
+        }
+
+        if (step.getValue() != null) {
+            step.setValue(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getValue(),
+                    path, idx, "value"));
+        }
+
+        if (step.getExpected() != null) {
+            step.setExpected(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getExpected(),
+                    path, idx, "expected"));
+        }
+
+        if (step.getEndpoint() != null) {
+            step.setEndpoint(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getEndpoint(),
+                    path, idx, "endpoint"));
+        }
+
+        /*
+         * condition is intentionally NOT resolved here.
+         * It is evaluated during runtime when all previous step buffers exist.
+         */
+
+        // Parameters
+        if (step.getParameters() != null
+                && !step.getParameters().isEmpty()) {
+
+            Map<String, Object> resolvedParams =
+                    new HashMap<>();
+
+            for (Map.Entry<String, Object> entry :
+                    step.getParameters().entrySet()) {
+
+                Object rawValue =
+                        entry.getValue();
+
+                if (rawValue instanceof String rawString) {
+
+                    String resolvedValue =
+                            resolveLoadTime(
+                                    tc,
+                                    step,
+                                    resolver,
+                                    rawString,
+                                    path,
+                                    idx,
+                                    "param-" + entry.getKey());
+
+                    /*
+                     * Do NOT XML-escape unresolved runtime expressions.
+                     *
+                     * Example:
+                     * {B[token]}
+                     *
+                     * must first be resolved during runtime and only then escaped.
+                     */
+                    if (!containsRuntimePlaceholder(resolvedValue)
+                            && step.getType() == StepType.SOAP
+                            && "EXEC".equalsIgnoreCase(step.getOp())) {
+
+                        resolvedValue =
+                                escapeXml(resolvedValue);
                     }
-                    resolvedParams.put(entry.getKey(), escapedValue);
+
+                    resolvedParams.put(
+                            entry.getKey(),
+                            resolvedValue);
+
                 } else {
-                    resolvedParams.put(entry.getKey(), rawValue);
+
+                    resolvedParams.put(
+                            entry.getKey(),
+                            rawValue);
                 }
             }
-            // Store the resolved parameters back on the step.
-            step.setParameters(resolvedParams);
+
+            step.setParameters(
+                    resolvedParams);
         }
-        
-        if (step.getHeaders() != null) {
-            Map<String, String> resolvedHeaders = new HashMap<>();
-            step.getHeaders().forEach((k, v) -> {
-                resolvedHeaders.put(k, resolver.resolve(tc, v, tc.getVariables(), path, idx, "header-" + k, step));
-            });
-            step.setHeaders(resolvedHeaders);
+
+        // Headers
+        if (step.getHeaders() != null
+                && !step.getHeaders().isEmpty()) {
+
+            Map<String, String> resolvedHeaders =
+                    new HashMap<>();
+
+            step.getHeaders().forEach(
+                    (key, value) -> {
+
+                        String resolvedValue =
+                                resolveLoadTime(
+                                        tc,
+                                        step,
+                                        resolver,
+                                        value,
+                                        path,
+                                        idx,
+                                        "header-" + key);
+
+                        resolvedHeaders.put(
+                                key,
+                                resolvedValue);
+                    });
+
+            step.setHeaders(
+                    resolvedHeaders);
         }
-        if (step.getFrom() != null) step.setFrom(resolver.resolve(tc, step.getFrom(), tc.getVariables(), path, idx, "from", step));
-        if (step.getTo() != null) step.setTo(resolver.resolve(tc, step.getTo(), tc.getVariables(), path, idx, "to", step));
+
+        if (step.getFrom() != null) {
+            step.setFrom(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getFrom(),
+                    path, idx, "from"));
+        }
+
+        if (step.getTo() != null) {
+            step.setTo(resolveLoadTime(
+                    tc, step, resolver,
+                    step.getTo(),
+                    path, idx, "to"));
+        }
     }
+
+    private static String resolveLoadTime(
+            TestCase tc,
+            TestStep step,
+            YamlPlaceholderResolver resolver,
+            String value,
+            String path,
+            int idx,
+            String field) {
+
+        if (value == null) {
+            return null;
+        }
+
+        /*
+         * B[...] and R[...] may depend on previous runtime steps.
+         * Leave the complete value untouched for runtime resolution.
+         */
+        if (containsRuntimePlaceholder(value)) {
+            return value;
+        }
+
+        return resolver.resolve(
+                tc,
+                value,
+                tc.getVariables(),
+                path,
+                idx,
+                field,
+                step);
+    }
+
+    private static boolean containsRuntimePlaceholder(
+            String value) {
+
+        if (value == null) {
+            return false;
+        }
+
+        return value.contains("{B[")
+                || value.contains("{R[");
+    }
+    
     private static String escapeXml(String input) {
         if (input == null) return null;
         return input.replace("&", "&amp;")

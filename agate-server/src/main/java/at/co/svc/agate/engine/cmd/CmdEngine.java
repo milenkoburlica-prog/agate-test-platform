@@ -123,7 +123,8 @@ public class CmdEngine extends AbstractStepEngine {
                         tc.getVariables(),
                         yamlFile,
                         stepIndex,
-                        "command");
+                        "command",
+                        step);
 
         if (resolvedCommand != null
                 && step.getParameters() != null) {

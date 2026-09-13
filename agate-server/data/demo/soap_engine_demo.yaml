@@ -121,16 +121,6 @@ testCases:
         path: "//*[local-name()='AddResult']/text()"
         action: NOT_EMPTY
 
-      # Testing a non-existent tag returns "NULL" (Your code converts expected "{NULL}" to "NULL" to match XPath's empty return)
-      # 13.
-      - type: SOAP
-        op: ASSERT
-        response: response
-        source: BODY
-        path: "//*[local-name()='NonExistingTag']"
-        action: EQUALS
-        expected: "{NULL}"
-
 
 
       # ==========================================

@@ -7,50 +7,23 @@ import java.nio.file.Paths;
 
 import at.co.svc.agate.core.dsl.register.YamlTestInstantiator;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
+import at.co.svc.agate.server.validation.ValidationIssue;
+import at.co.svc.agate.server.validation.ValidationOptions;
+import at.co.svc.agate.server.validation.ValidationResult;
+import at.co.svc.agate.server.validation.ValidationService;
 
 public class Main {
 
     static {
-        // Isključuje upozorenje o LogManager-u tako što ga postavlja
-        // pre nego što ga JBoss potraži.
         System.setProperty(
                 "java.util.logging.manager",
                 "org.jboss.logmanager.LogManager");
 
-        // Dodatno ućutkivanje JBoss logger-a za konzolu.
         java.util.logging.Logger
                 .getLogger("org.jboss.logmanager")
                 .setLevel(java.util.logging.Level.SEVERE);
     }
 
-    /**
-     * Option 1: with pom.xml
-     *
-     * java -jar target/agate-server-1.0.0-SNAPSHOT-jar-with-dependencies.jar
-     *      %USER_NAME% %INSTANCE% %APP_NAME% %TEST_SUITE% %TEST_CASE%
-     *
-     * startTests.bat "Milenko" "DEMOS" "demo" "003_table_buffer_demo_test"
-     *
-     * Option 2:
-     *
-     * mvn dependency:copy-dependencies
-     *
-     * java -cp "target/classes;target/dependency/*"
-     *      at.co.svc.test.framework.dsl.main.Main
-     *      "Milenko" "DEMOS" "demo"
-     *
-     * java -cp "target/classes;target/dependency/*"
-     *      at.co.svc.test.framework.dsl.main.Main
-     *      "Milenko" "DEMOS" "demo"
-     *      "003_table_buffer_demo_test"
-     *
-     * startTests.bat "Milenko" "DEMOS" "DEMO"
-     * startTests.bat "Milenko" "DEMOS" "DEMO" "001_windows_cmd_basic_test"
-     * startTests.bat "Milenko" "DEMOS" "DEMO"
-     *      "001_windows_cmd_basic_test" "TC_CMD_01"
-     *
-     * @param args command line arguments
-     */
     public static void main(String[] args) {
 
         System.setProperty("allure.enabled", "false");
@@ -60,16 +33,16 @@ public class Main {
             // ================================================================
             // MODE 1: TEST CASE INSTANTIATION
             // ================================================================
+
             if (args.length > 0
                     && "instantiate".equalsIgnoreCase(args[0])) {
 
-                // Expected:
-                // java Main instantiate <appName> <templateFile> <dataFile>
                 if (args.length < 4) {
                     System.err.println(
                             "Usage for instantiation: "
                                     + "java Main instantiate "
                                     + "<appName> <templateFile> <dataFile>");
+
                     System.exit(1);
                 }
 
@@ -82,11 +55,48 @@ public class Main {
             }
 
             // ================================================================
-            // MODE 2: NORMAL TEST EXECUTION
+            // MODE 2: YAML VALIDATION
             // ================================================================
+
+            if (args.length > 0
+                    && "validate".equalsIgnoreCase(args[0])) {
+
+                if (args.length < 2) {
+                    System.err.println(
+                            "Usage for validation: "
+                                    + "java Main validate <yamlFile>");
+
+                    System.exit(1);
+                }
+
+                startValidation(args[1]);
+
+                return;
+            }
+
+            // ================================================================
+            // MODE 3: NORMAL TEST EXECUTION
+            // ================================================================
+
             if (args.length < 3) {
+
                 System.err.println(
                         "Error: Insufficient parameters provided!");
+
+                System.err.println();
+                System.err.println("Usage:");
+                System.err.println(
+                        "  java Main "
+                                + "<user> <instance> <app> "
+                                + "[testSuite] [testCase] [priority]");
+
+                System.err.println(
+                        "  java Main instantiate "
+                                + "<appName> <templateFile> <dataFile>");
+
+                System.err.println(
+                        "  java Main validate <yamlFile>");
+
                 System.exit(1);
             }
 
@@ -120,19 +130,151 @@ public class Main {
         } catch (Exception e) {
 
             /*
-             * The lower execution / loader layers are responsible for
-             * printing the tester-facing structured error message.
+             * Lower layers should print structured errors.
              *
-             * Important:
-             * Do NOT print e.printStackTrace() here.
-             *
-             * Otherwise expected YAML / test-definition errors such as
-             * duplicate IDs would again end with:
-             *
-             * Exception in thread "main" ...
+             * Do not print the stack trace here for expected
+             * YAML / DSL / validation errors.
              */
             System.exit(1);
         }
+    }
+
+    // ========================================================================
+    // YAML VALIDATION
+    // ========================================================================
+
+    private static void startValidation(
+            String yamlFile) {
+
+        Path file =
+                Paths.get(yamlFile)
+                        .toAbsolutePath()
+                        .normalize();
+
+        System.out.println("=".repeat(80));
+        System.out.println(
+                "                         AGATE YAML VALIDATION");
+        System.out.println("=".repeat(80));
+
+        System.out.println(
+                "  File   : " + file);
+
+        System.out.println("=".repeat(80));
+        System.out.println();
+
+        ValidationService validationService =
+                ValidationService.defaultService();
+
+        ValidationOptions options =
+                ValidationOptions.defaults();
+
+        ValidationResult result =
+                validationService.validate(
+                        file,
+                        options);
+
+        for (ValidationIssue issue :
+                result.sortedIssues()) {
+
+            printValidationIssue(issue);
+        }
+
+        System.out.println();
+
+        System.out.println("-".repeat(80));
+
+        System.out.println(
+                "  Errors   : " + result.errors());
+
+        System.out.println(
+                "  Warnings : " + result.warnings());
+
+        System.out.println(
+                "  Info     : " + result.infos());
+
+        System.out.println("-".repeat(80));
+
+        if (result.valid()) {
+
+            System.out.println(
+                    ConsoleColors.GREEN
+                            + "  STATUS : VALIDATION SUCCESSFUL"
+                            + ConsoleColors.RESET);
+
+            System.out.println("=".repeat(80));
+
+            return;
+        }
+
+        System.out.println(
+                ConsoleColors.RED
+                        + "  STATUS : VALIDATION FAILED"
+                        + ConsoleColors.RESET);
+
+        System.out.println("=".repeat(80));
+
+        System.exit(2);
+    }
+    
+    
+    private static void printValidationIssue(
+            ValidationIssue issue) {
+
+        String color =
+                switch (issue.severity()) {
+
+                    case ERROR ->
+                            ConsoleColors.RED;
+
+                    case WARNING ->
+                            ConsoleColors.YELLOW;
+
+                    case INFO ->
+                            ConsoleColors.RESET;
+                };
+
+        StringBuilder location =
+                new StringBuilder();
+
+        if (issue.file() != null) {
+
+            location.append(
+                    issue.file()
+                            .getFileName());
+
+            if (issue.line() != null) {
+
+                location.append(":")
+                        .append(issue.line());
+
+                if (issue.column() != null) {
+
+                    location.append(":")
+                            .append(issue.column());
+                }
+            }
+        }
+
+        System.out.println(
+                color
+                        + "["
+                        + issue.severity()
+                        + "] "
+                        + issue.code()
+                        + ConsoleColors.RESET);
+
+        if (!location.isEmpty()) {
+
+            System.out.println(
+                    "        "
+                            + location);
+        }
+
+        System.out.println(
+                "        "
+                        + issue.message());
+
+        System.out.println();
     }
 
     // ========================================================================
@@ -145,14 +287,13 @@ public class Main {
             String dataFile) {
 
         System.out.println("=".repeat(80));
+
         System.out.println(
                 "            BATCH TEST CASE INSTANTIATION");
+
         System.out.println("=".repeat(80));
 
         try {
-
-            // Optional cleanup:
-            // cleanupOldInstances("data/" + appName);
 
             YamlTestInstantiator instantiator =
                     new YamlTestInstantiator();
@@ -163,6 +304,7 @@ public class Main {
                     dataFile);
 
             System.out.println("=".repeat(80));
+
             System.out.println(
                     "  STATUS : "
                             + ConsoleColors.GREEN
@@ -177,12 +319,6 @@ public class Main {
                             + "FATAL ERROR:"
                             + ConsoleColors.RESET);
 
-            /*
-             * Instantiator currently keeps its own technical error output.
-             *
-             * This can later be migrated to the same structured
-             * AGATE error handling model.
-             */
             e.printStackTrace();
 
             System.exit(1);

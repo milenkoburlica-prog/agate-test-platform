@@ -230,7 +230,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "path",
-                                step));
+                                step),
+                        "path");
 
         if (!Files.exists(path)) {
             throw AgateStepException.builder("File does not exist")
@@ -274,7 +275,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "path",
-                                step));
+                                step),
+                        "path");
 
         String text =
                 resolve(
@@ -341,7 +343,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "path",
-                                step));
+                                step),
+                        "path");
 
         String text =
                 resolve(
@@ -404,7 +407,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "source",
-                                step));
+                                step),
+                        "source");
 
         Path target =
                 resolvePath(
@@ -416,7 +420,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "target",
-                                step));
+                                step),
+                        "target");
 
         if (!Files.exists(source)) {
             throw AgateStepException.builder("Source file does not exist")
@@ -469,7 +474,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "source",
-                                step));
+                                step),
+                        "source");
 
         Path target =
                 resolvePath(
@@ -481,7 +487,8 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "target",
-                                step));
+                                step),
+                        "target");
 
         if (!Files.exists(source)) {
             throw AgateStepException.builder("Source file does not exist")
@@ -534,21 +541,27 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "path",
-                                step));
+                                step),
+                        "path");
 
         boolean missingOk =
                 Boolean.TRUE.equals(
                         step.getMissingOk());
 
         if (missingOk) {
+
             Files.deleteIfExists(path);
+
         } else {
+
             if (!Files.exists(path)) {
+
                 throw AgateStepException.builder("File does not exist")
                         .path(path)
                         .hint("Set missingOk: true if a missing file should be ignored.")
                         .build();
             }
+
             Files.delete(path);
         }
 
@@ -576,12 +589,14 @@ public class FileEngine extends AbstractStepEngine {
                                 yamlFile,
                                 stepIndex,
                                 "path",
-                                step));
+                                step),
+                        "path");
 
         boolean exists =
                 Files.exists(path);
 
         if (step.getResponse() != null) {
+
             context.storeBuffer(
                     step.getResponse(),
                     exists);
@@ -600,6 +615,7 @@ public class FileEngine extends AbstractStepEngine {
                         step.getResponse());
 
         if (raw == null) {
+
             throw new RuntimeException(
                     "No FILE response found for key: "
                             + step.getResponse());
@@ -629,7 +645,8 @@ public class FileEngine extends AbstractStepEngine {
         switch (action) {
 
         case "TEXT":
-            result = text.trim();
+            result =
+                    text.trim();
             break;
 
         case "FILTER":
@@ -730,7 +747,8 @@ public class FileEngine extends AbstractStepEngine {
 
             Path path =
                     resolvePath(
-                            resolvedPath);
+                            resolvedPath,
+                            "path");
 
             boolean exists =
                     Files.exists(path);
@@ -738,7 +756,8 @@ public class FileEngine extends AbstractStepEngine {
             if ("EXISTS".equals(action)
                     && !exists) {
 
-                throw AgateStepException.builder("FILE EXISTS assertion failed")
+                throw AgateStepException.builder(
+                                "FILE EXISTS assertion failed")
                         .expected("File exists")
                         .actual("File not found")
                         .path(path)
@@ -748,7 +767,8 @@ public class FileEngine extends AbstractStepEngine {
             if ("NOT_EXISTS".equals(action)
                     && exists) {
 
-                throw AgateStepException.builder("FILE NOT_EXISTS assertion failed")
+                throw AgateStepException.builder(
+                                "FILE NOT_EXISTS assertion failed")
                         .expected("File does not exist")
                         .actual("File exists")
                         .path(path)
@@ -762,6 +782,7 @@ public class FileEngine extends AbstractStepEngine {
                             step.getResponse());
 
             if (raw == null) {
+
                 throw new RuntimeException(
                         "No FILE response found for key: "
                                 + step.getResponse());
@@ -783,46 +804,79 @@ public class FileEngine extends AbstractStepEngine {
             switch (action) {
 
             case "CONTAINS":
+
                 if (!text.contains(value)) {
-                    throw AgateStepException.builder("FILE CONTAINS assertion failed")
+
+                    throw AgateStepException.builder(
+                                    "FILE CONTAINS assertion failed")
                             .expected(value)
-                            .actual(abbreviate(text, 300))
+                            .actual(
+                                    abbreviate(
+                                            text,
+                                            300))
                             .build();
                 }
+
                 break;
 
             case "NOT_CONTAINS":
+
                 if (text.contains(value)) {
-                    throw AgateStepException.builder("FILE NOT_CONTAINS assertion failed")
-                            .expected("Text must not contain: " + value)
-                            .actual(abbreviate(text, 300))
+
+                    throw AgateStepException.builder(
+                                    "FILE NOT_CONTAINS assertion failed")
+                            .expected(
+                                    "Text must not contain: "
+                                            + value)
+                            .actual(
+                                    abbreviate(
+                                            text,
+                                            300))
                             .build();
                 }
+
                 break;
 
             case "EQUALS":
-                if (!text.trim()
-                        .equals(value.trim())) {
 
-                    throw AgateStepException.builder("FILE EQUALS assertion failed")
+                if (!text.trim()
+                        .equals(
+                                value.trim())) {
+
+                    throw AgateStepException.builder(
+                                    "FILE EQUALS assertion failed")
                             .expected(value)
-                            .actual(abbreviate(text.trim(), 300))
+                            .actual(
+                                    abbreviate(
+                                            text.trim(),
+                                            300))
                             .build();
                 }
+
                 break;
 
             case "NOT_EQUALS":
-                if (text.trim()
-                        .equals(value.trim())) {
 
-                    throw AgateStepException.builder("FILE NOT_EQUALS assertion failed")
-                            .expected("Value different from: " + value)
-                            .actual(abbreviate(text.trim(), 300))
+                if (text.trim()
+                        .equals(
+                                value.trim())) {
+
+                    throw AgateStepException.builder(
+                                    "FILE NOT_EQUALS assertion failed")
+                            .expected(
+                                    "Value different from: "
+                                            + value)
+                            .actual(
+                                    abbreviate(
+                                            text.trim(),
+                                            300))
                             .build();
                 }
+
                 break;
 
             case "COUNT":
+
                 int count =
                         countOccurrences(
                                 text,
@@ -832,17 +886,22 @@ public class FileEngine extends AbstractStepEngine {
                         != Integer.parseInt(
                                 expected)) {
 
-                    throw AgateStepException.builder("FILE COUNT assertion failed")
+                    throw AgateStepException.builder(
+                                    "FILE COUNT assertion failed")
                             .expected(expected)
                             .actual(count)
                             .build();
                 }
+
                 break;
 
             default:
-                throw AgateStepException.builder("Unsupported FILE ASSERT action")
+                throw AgateStepException.builder(
+                                "Unsupported FILE ASSERT action")
                         .actual(action)
-                        .hint("Supported actions: EXISTS, NOT_EXISTS, CONTAINS, NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
+                        .hint(
+                                "Supported actions: EXISTS, NOT_EXISTS, CONTAINS, "
+                                        + "NOT_CONTAINS, EQUALS, NOT_EQUALS, COUNT")
                         .build();
             }
         }
@@ -866,6 +925,7 @@ public class FileEngine extends AbstractStepEngine {
                 new HashMap<>();
 
         if (tc.getVariables() != null) {
+
             variables.putAll(
                     tc.getVariables());
         }
@@ -878,6 +938,7 @@ public class FileEngine extends AbstractStepEngine {
         }
 
         if (context != null) {
+
             variables.putAll(
                     context.getBufferMap());
         }
@@ -925,14 +986,19 @@ public class FileEngine extends AbstractStepEngine {
     }
 
     private Path resolvePath(
-            String value) {
+            String value,
+            String field) {
 
         if (value == null
                 || value.isBlank()) {
 
-            throw AgateStepException.builder("Required property is missing")
-                    .field("path")
-                    .hint("Provide a path for this FILE operation.")
+            throw AgateStepException.builder(
+                            "Required property is missing")
+                    .field(field)
+                    .hint(
+                            "Provide '"
+                                    + field
+                                    + "' for this FILE operation.")
                     .build();
         }
 
@@ -940,10 +1006,11 @@ public class FileEngine extends AbstractStepEngine {
                 Path.of(value);
 
         if (!path.isAbsolute()) {
+
             path =
                     Path.of(
-                            System.getProperty(
-                                    "user.dir"))
+                                    System.getProperty(
+                                            "user.dir"))
                             .resolve(path);
         }
 
@@ -960,8 +1027,10 @@ public class FileEngine extends AbstractStepEngine {
         }
 
         try {
+
             return Charset.forName(
                     encoding);
+
         } catch (Exception e) {
 
             throw new RuntimeException(
@@ -976,11 +1045,15 @@ public class FileEngine extends AbstractStepEngine {
         if (step.getAction() == null
                 || step.getAction().isBlank()) {
 
-            throw AgateStepException.builder("Required property is missing")
+            throw AgateStepException.builder(
+                            "Required property is missing")
                     .field("action")
-                    .hint("Add an action appropriate for FILE op: "
-                            + (step.getOp() != null ? step.getOp().toUpperCase() : "EXEC")
-                            + ".")
+                    .hint(
+                            "Add an action appropriate for FILE op: "
+                                    + (step.getOp() != null
+                                    ? step.getOp().toUpperCase()
+                                    : "EXEC")
+                                    + ".")
                     .build();
         }
 
@@ -993,6 +1066,7 @@ public class FileEngine extends AbstractStepEngine {
             ExecutionContext context) {
 
         if (step.getResponse() != null) {
+
             context.storeBuffer(
                     step.getResponse(),
                     Boolean.TRUE);
@@ -1012,11 +1086,13 @@ public class FileEngine extends AbstractStepEngine {
             if (line.contains(search)) {
 
                 result.append(line)
-                        .append(System.lineSeparator());
+                        .append(
+                                System.lineSeparator());
             }
         }
 
-        return result.toString().trim();
+        return result.toString()
+                .trim();
     }
 
     private String getLine(
@@ -1034,7 +1110,8 @@ public class FileEngine extends AbstractStepEngine {
                             + index);
         }
 
-        return lines[index].trim();
+        return lines[index]
+                .trim();
     }
 
     private String getLastLine(
@@ -1045,7 +1122,9 @@ public class FileEngine extends AbstractStepEngine {
                 text.split("\\R");
 
         int index =
-                lines.length - 1 - offset;
+                lines.length
+                        - 1
+                        - offset;
 
         if (index < 0
                 || index >= lines.length) {
@@ -1055,18 +1134,36 @@ public class FileEngine extends AbstractStepEngine {
                             + offset);
         }
 
-        return lines[index].trim();
+        return lines[index]
+                .trim();
     }
 
-    private String abbreviate(String value, int maxLength) {
+    private String abbreviate(
+            String value,
+            int maxLength) {
+
         if (value == null) {
             return "null";
         }
-        String normalized = value.replace("\r", "\\r").replace("\n", "\\n");
-        if (normalized.length() <= maxLength) {
+
+        String normalized =
+                value.replace(
+                                "\r",
+                                "\\r")
+                        .replace(
+                                "\n",
+                                "\\n");
+
+        if (normalized.length()
+                <= maxLength) {
+
             return normalized;
         }
-        return normalized.substring(0, maxLength) + "...";
+
+        return normalized.substring(
+                0,
+                maxLength)
+                + "...";
     }
 
     private int countOccurrences(

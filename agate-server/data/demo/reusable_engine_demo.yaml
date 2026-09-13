@@ -60,8 +60,3 @@ testCases:
           verbose: "true"
           command: "mvn --version"
         
-      # 4. Buffer response 1
-      - type: BUFFER
-        op: EXEC
-        name: "RResponse1"
-        action: TEXT

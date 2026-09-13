@@ -156,7 +156,7 @@ testCases:
       # 2
       - type: CMD
         op: EXEC
-        command: 'echo {E[users.staat]}'
+        command: 'echo {E[users.serverip]}'
         response: buff_out
 
   - id: TC Hello World 2
@@ -172,7 +172,7 @@ testCases:
         command: 'echo {B[retryCount]}'
         response: buff_out
 
-  - id: TC Hello World 2
+  - id: TC Hello World 3
     description: Hello World 2
     stage: "*"
     priority: HIGH  
