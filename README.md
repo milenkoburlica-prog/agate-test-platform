@@ -884,3 +884,23 @@ startTests.bat clean data\demo\variables_demo.yaml
 * Planned project-specific configuration and environment handling.
 * Planned clearer separation of independent applications and test projects.
 
+## 2026-XX-XX
+
+### Reusable Module Organization
+
+* Planned extension of the reusable module concept beyond simple technical reuse.
+* Reusable modules will also be used to structure complex test cases into clear logical sections such as preparation, business execution, validation and cleanup.
+* Planned support for application-local reusable module hierarchies using dot notation.
+* Example:
+
+  * `reusable.orders.preparation.clean_database`
+  * `reusable.orders.business.change_priority`
+  * `reusable.orders.validation.verify_result`
+* Planned support for shared reusable modules that can be used across multiple applications.
+* Shared modules will use a dedicated namespace such as:
+
+  * `shared.ssh_execute`
+  * `shared.file_transfer`
+  * `shared.database.execute_sql`
+* The goal is to keep the main test case focused on the business flow while moving repeatable technical implementation details into reusable modules.
+
