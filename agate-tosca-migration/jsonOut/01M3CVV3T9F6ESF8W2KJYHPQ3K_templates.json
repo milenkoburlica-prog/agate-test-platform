@@ -1,0 +1,309 @@
+[
+  {
+    "ObjectClass": "TestCase",
+    "Surrogate": "01M3CVV3T9F6ESF8W2KJYHPQ3K",
+    "Attributes": {
+      "IncludeForSynchronization": "1",
+      "CheckoutWorkspace": "0382ae8d-f104-4485-886a-70c08fee7142",
+      "IsBusinessTestCase": "0",
+      "Description": "",
+      "SynchronizationPolicy": "2",
+      "Revision": "138661",
+      "DerivedFromName": "",
+      "CheckOutState": "2",
+      "Pausable": "1",
+      "TestCaseWorkState": "2",
+      "Name": "AGATE_Demo"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TemplateDetail": [
+        "01M3CW5YAC2GCB5BEGCQ9356B9"
+      ],
+      "ExecutionLogs": [],
+      "ReferencedBy": [],
+      "ExecutionEntries": [],
+      "Items": [
+        "01M3CW0A9G7NH9NXH228DFWGH2",
+        "01M3CW1EW756XTQCHXA4F9GDVK",
+        "01M3CW1ZG3FJBBK6PJKF4TF700",
+        "01M3CVWR9RFRHGABGA0WM3DWDM",
+        "01M3CVWRA70VY22Q183FNF2JX6"
+      ],
+      "Properties": [],
+      "AttachedFiles": [],
+      "ParentFolder": [
+        "01M3CVTT369MX1J3H2ERSXRJ60"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01M3CW0A9G7NH9NXH228DFWGH2",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer X"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01M3CW12YB070Q6DWPVN6QDJAW"
+      ],
+      "ExecutionContainerLogs": [],
+      "TestCase": [
+        "01M3CVV3T9F6ESF8W2KJYHPQ3K"
+      ],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01M3CW12YB070Q6DWPVN6QDJAW",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "x",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "{XL[x]}",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "01M3CW0A9G7NH9NXH228DFWGH2"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01M3CW1EW756XTQCHXA4F9GDVK",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer Y"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01M3CW1EW756XTQCHXA4F9GDVM"
+      ],
+      "ExecutionContainerLogs": [],
+      "TestCase": [
+        "01M3CVV3T9F6ESF8W2KJYHPQ3K"
+      ],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01M3CW1EW756XTQCHXA4F9GDVM",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "y",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "{XL[y]}",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "01M3CW1EW756XTQCHXA4F9GDVK"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01M3CW1ZG3FJBBK6PJKF4TF700",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "TBox Set Buffer Z"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01M3CW1ZG3FJBBK6PJKF4TF701"
+      ],
+      "ExecutionContainerLogs": [],
+      "TestCase": [
+        "01M3CVV3T9F6ESF8W2KJYHPQ3K"
+      ],
+      "ExecutionLogs": [],
+      "Module": [
+        "39ef0b81-c955-8ad6-4495-d85735b6c215"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01M3CW1ZG3FJBBK6PJKF4TF701",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "z",
+      "ActionProperty": "",
+      "ActionMode": "37",
+      "Value": "{XL[z]}",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "01M3CW1ZG3FJBBK6PJKF4TF700"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "39ef0b81-c955-70bb-aba1-58b76349c91b"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01M3CVWR9RFRHGABGA0WM3DWDM",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Math-Request"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [
+        "01M3CVZ4ZXD0P5B0CZ7EGTPW8N",
+        "01M3CVZE4R8DV66E7V15H1QY3W"
+      ],
+      "ExecutionContainerLogs": [],
+      "TestCase": [
+        "01M3CVV3T9F6ESF8W2KJYHPQ3K"
+      ],
+      "ExecutionLogs": [],
+      "Module": [
+        "01M3CTEHWH2FDX98W7VNAE160B"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01M3CVZ4ZXD0P5B0CZ7EGTPW8N",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "515",
+      "Value": "{B[MATH_URL]}",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "01M3CVWR9RFRHGABGA0WM3DWDM"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "01M3CTVDJ790CF6WBG6DFQN0TR"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStepValue",
+    "Surrogate": "01M3CVZE4R8DV66E7V15H1QY3W",
+    "Attributes": {
+      "Operator": "0",
+      "DisabledDescription": "",
+      "Condition": "",
+      "Path": "",
+      "ExplicitName": "",
+      "ActionProperty": "",
+      "ActionMode": "515",
+      "Value": "/v4/?expr\u003d{B[x]}*({B[y]}-{B[z]})",
+      "DataType": "0"
+    },
+    "Assocs": {
+      "TestStep": [
+        "01M3CVWR9RFRHGABGA0WM3DWDM"
+      ],
+      "ConfigurationLinks": [],
+      "SubValues": [],
+      "ExecutionLogs": [],
+      "ModuleAttribute": [
+        "01M3CTVKGB0077QXK3PXRD82JT"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "XTestStep",
+    "Surrogate": "01M3CVWRA70VY22Q183FNF2JX6",
+    "Attributes": {
+      "Condition": "",
+      "Path": "",
+      "DisabledDescription": "",
+      "Pausable": "2",
+      "ReorderAllowed": "0",
+      "BreakInstantiation": "0",
+      "Repetition": "",
+      "Name": "Math-Response"
+    },
+    "Assocs": {
+      "ConfigurationLinks": [],
+      "TestStepValues": [],
+      "ExecutionContainerLogs": [],
+      "TestCase": [
+        "01M3CVV3T9F6ESF8W2KJYHPQ3K"
+      ],
+      "ExecutionLogs": [],
+      "Module": [
+        "01M3CTEHWH2FDX98W7VNAE160E"
+      ]
+    }
+  }
+]

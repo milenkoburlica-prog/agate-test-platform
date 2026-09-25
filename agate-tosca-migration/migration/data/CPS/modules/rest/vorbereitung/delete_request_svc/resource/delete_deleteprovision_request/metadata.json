@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/{XL[Vorbereitung.Delete Request_SVC.Resource]}",
-  "method" : "DELETE",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

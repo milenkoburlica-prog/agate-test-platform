@@ -1,7 +1,0 @@
-steps:
-
-      # Execute CMD Command: TBox Start Program - powershell - Replace-Zeit.ps1
-      - type: CMD
-        op: EXEC
-        command: "powershell -ExecutionPolicy Bypass -File {B[KS_Bin_Folder]}\\Replace-Zeit.ps1 {B[KS_Testdaten_BaseDir]}\\TxFilesFromKams\\{B[FILENAME]}"
-        response: cmd_response

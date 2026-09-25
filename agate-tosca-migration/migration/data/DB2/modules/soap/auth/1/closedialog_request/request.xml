@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <closeDialog xmlns="http://soap.auth.client.chipkarte.at">
-      <dialogId>{B[dialogId]}</dialogId>
-    </closeDialog>
-  </s:Body>
-</s:Envelope>

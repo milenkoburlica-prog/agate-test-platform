@@ -63,7 +63,9 @@ public class ProcessAPILogic {
         if (myModule == null) return;
 
         String rawName = myModule.getAttributes().get("Name");
-        String cleanModuleName = rawName.toLowerCase().trim().replaceAll("\\s+", "_");
+//        String cleanModuleName = rawName.toLowerCase().trim().replaceAll("\\s+", "_");
+        String cleanModuleName =
+                normalizeApiModuleName(rawName);
 
         String rawPayload = myModule.getAttributes().get("Payload");
         String decodedPayload = decodeBase64(rawPayload).trim();
@@ -161,20 +163,20 @@ public class ProcessAPILogic {
             ToscaToAgaPhase1.writeLine("        op: EXEC"); 
             if ((step.getCondition() != null) && (!step.getCondition().equals(""))) {
                 String condition = step.getCondition();
-                String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
+                String cleanCondition = ToscaValueTranslator.translateToscaValues(condition);
 
                 String formattedCondition = cleanCondition.replace("\"", "'");
                 ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
             }
 
-            String newEndpoint = SVCToscaTranslator.translateToscaValues(endpoint);
+            String newEndpoint = ToscaValueTranslator.translateToscaValues(endpoint);
             if (newEndpoint.startsWith("{E[env.ecard.service]}")) {
                 newEndpoint= "https://{E[env.ecard.service]}";
                 
             }
             ToscaToAgaPhase1.writeLine("        endpoint: \"" + newEndpoint + "\""); 
 
-            String translatedCommand = SVCToscaTranslator.translateToscaValues(step.getAction());
+            String translatedCommand = ToscaValueTranslator.translateToscaValues(step.getAction());
 
             if (translatedCommand != null) {
                 translatedCommand = translatedCommand.replace("{B", "")
@@ -194,12 +196,18 @@ public class ProcessAPILogic {
                     if ("File".equalsIgnoreCase(details.getActionMode())) {
                         
                         String sourceFile = details.getValue();
-                        sourceFile = SVCToscaTranslator.translateToscaValues(sourceFile);
+                        sourceFile = ToscaValueTranslator.translateToscaValues(sourceFile);
                         
                         ToscaToAgaPhase1.writeLine("        download:");
                         ToscaToAgaPhase1.writeLine("          - method: MTOM");
                         
-                        sourceFile = sourceFile.replace("{S[SVC.Projekt root path]}", "..").replace("\\", "\\\\");
+                        //sourceFile = sourceFile.replace("{S[SVC.Projekt root path]}", "..").replace("\\", "\\\\");
+                        sourceFile = sourceFile
+                                .replace(
+                                        "{S[SVC.Projekt root path]}",
+                                        "{E[env.SVC_Projekt_root_path]}"
+                                )
+                                .replace("\\", "\\\\");
                         ToscaToAgaPhase1.writeLine("            targetPath: \"" + sourceFile + "\"");
                         
                         break; 
@@ -231,7 +239,7 @@ public class ProcessAPILogic {
                     if (detailsList.size() == 1) {
                         StepValueDetails details = detailsList.get(0);
                         String tValue = details.getValue();
-                        tValue = SVCToscaTranslator.translateToscaValues(tValue);
+                        tValue = ToscaValueTranslator.translateToscaValues(tValue);
 
                         ToscaToAgaPhase1.writeLine("          " + k + ": \"" + tValue + "\"");
                     } 
@@ -242,16 +250,28 @@ public class ProcessAPILogic {
                         
                         for (StepValueDetails details : detailsList) {
                             String tValue = details.getValue();
-                            tValue = SVCToscaTranslator.translateToscaValues(tValue);
+                            tValue = ToscaValueTranslator.translateToscaValues(tValue);
 
-                            String condition = details.getxCondition(); 
+                            String condition =
+                                    normalizeApiParameterCondition(
+                                            details.getxCondition()
+                                    );
 
-                            if (condition == null) {
+                            if (condition == null || condition.isBlank()) {
                                 condition = "true";
                             }
 
-                            ToscaToAgaPhase1.writeLine("            - condition: \"" + condition + "\"");
-                            ToscaToAgaPhase1.writeLine("              value: \"" + tValue + "\"");
+                            ToscaToAgaPhase1.writeLine(
+                                    "            - condition: \""
+                                            + escapeYamlDoubleQuoted(condition)
+                                            + "\""
+                            );
+
+                            ToscaToAgaPhase1.writeLine(
+                                    "              value: \""
+                                            + escapeYamlDoubleQuoted(tValue)
+                                            + "\""
+                            );
                         }
                     }
                 }
@@ -376,174 +396,656 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
         return decodedPayload;
     }
 
-    private static void processApiResponseAsserts(CleanStep step, String protocol, String decodedPayload) throws Exception {
-        if (step.getValues() == null) return;
+    private static void processApiResponseAsserts(
+            CleanStep step,
+            String protocol,
+            String decodedPayload)
+            throws Exception {
+
+        if (step.getValues() == null) {
+            return;
+        }
 
         for (StepValueDetails details : step.getValues()) {
+
             String key = details.getName();
+
             String value = details.getValue();
+
             String expectedValue = details.getValue();
 
-            String actionProperty = details.getActionProperty() != null ? details.getActionProperty().trim() : "";
-            
-            String mode = translateActionMode(details.getActionMode());
+            /*
+             * Translate Tosca placeholders before generating AGATE ASSERT YAML.
+             *
+             * Important for reusable parameters, e.g.:
+             *
+             *   {PL[Response.SVTCode]}
+             *
+             * must become:
+             *
+             *   {R[Response.SVTCode]}
+             *
+             * provided ToscaValueTranslator contains the PL -> R mapping.
+             */
+            expectedValue =
+                    ToscaValueTranslator.translateToscaValues(
+                            expectedValue
+                    );
 
-            String lastPart = key.contains(".") ? key.substring(key.lastIndexOf(".") + 1) : key;
+            String actionProperty =
+                    details.getActionProperty() != null
+                            ? details.getActionProperty().trim()
+                            : "";
 
-            if (actionProperty.isEmpty() && ("{NULL}".equals(expectedValue) || lastPart.equalsIgnoreCase(expectedValue))) {
-                continue; 
+            String mode =
+                    translateActionMode(
+                            details.getActionMode()
+                    );
+
+            String lastPart =
+                    key.contains(".")
+                            ? key.substring(
+                                    key.lastIndexOf(".") + 1
+                            )
+                            : key;
+
+            if (actionProperty.isEmpty()
+                    && ("{NULL}".equals(expectedValue)
+                    || lastPart.equalsIgnoreCase(expectedValue))) {
+
+                continue;
             }
-            
-            ToscaToAgaPhase1.writeLine("\n      # " + step.getName() + " - " + key + " (" + mode + ")");
-            String typ = "REST";
-            if (protocol.equals("soap"))
-                typ = "SOAP";
 
-            List<Constraint> relevantConstraints = new ArrayList<>();
+            ToscaToAgaPhase1.writeLine(
+                    "\n      # "
+                            + step.getName()
+                            + " - "
+                            + key
+                            + " ("
+                            + mode
+                            + ")"
+            );
+
+            String typ = "REST";
+
+            if (protocol.equals("soap")) {
+                typ = "SOAP";
+            }
+
+            List<Constraint> relevantConstraints =
+                    new ArrayList<>();
 
             if ("Verify".equalsIgnoreCase(mode)) {
-                ToscaToAgaPhase1.writeLine("      - type: " + typ);
-                ToscaToAgaPhase1.writeLine("        op: ASSERT");
+
+                ToscaToAgaPhase1.writeLine(
+                        "      - type: " + typ
+                );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        op: ASSERT"
+                );
 
                 if (!relevantConstraints.isEmpty()) {
-                    ToscaToAgaPhase1.writeLine("        constraints:");
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        constraints:"
+                    );
+
                     for (Constraint c : relevantConstraints) {
-                        ToscaToAgaPhase1.writeLine("          - path: \"" + c.getPath() + "\"");
-                        ToscaToAgaPhase1.writeLine("            action: \"" + c.getAction() + "\"");
-                        ToscaToAgaPhase1.writeLine("            expected: \"" + c.getExpected() + "\"");
+
+                        ToscaToAgaPhase1.writeLine(
+                                "          - path: \""
+                                        + c.getPath()
+                                        + "\""
+                        );
+
+                        ToscaToAgaPhase1.writeLine(
+                                "            action: \""
+                                        + c.getAction()
+                                        + "\""
+                        );
+
+                        ToscaToAgaPhase1.writeLine(
+                                "            expected: \""
+                                        + c.getExpected()
+                                        + "\""
+                        );
                     }
                 }
 
                 {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
+                    String condition =
+                            step.getCondition();
 
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    String combined = step.getCombinedCondition(details.getxCondition(), formattedCondition);
+                    String cleanCondition =
+                            condition != null
+                                    ? ToscaValueTranslator.translateToscaValues(
+                                            condition
+                                    )
+                                    : "";
+
+                    String formattedCondition =
+                            cleanCondition != null
+                                    ? cleanCondition.replace(
+                                            "\"",
+                                            "'"
+                                    )
+                                    : "";
+
+                    String combined =
+                            step.getCombinedCondition(
+                                    details.getxCondition(),
+                                    formattedCondition
+                            );
+
                     if (!"".equals(combined)) {
-                        ToscaToAgaPhase1.writeLine("        condition: \"" + combined + "\"");                        
+
+                        ToscaToAgaPhase1.writeLine(
+                                "        condition: \""
+                                        + combined
+                                        + "\""
+                        );
                     }
                 }
-                if ("StatusCode".equalsIgnoreCase(key)) {
-                    ToscaToAgaPhase1.writeLine("        source: STATUS");
-                    ToscaToAgaPhase1.writeLine("        action: EQUALS");
-                    
-                    if (expectedValue != null && expectedValue.matches("^\\d{3}.*")) {
-                        expectedValue = expectedValue.substring(0, 3);
-                    }
-                    if (expectedValue.contains("\"")) {
-                        ToscaToAgaPhase1.writeLine("        expected: |");
-                        
-                        expectedValue = expectedValue.replace("\"\"\"\"", "\"");
-                        expectedValue = expectedValue.replace("\"\"\"", "\"");
 
-                        ToscaToAgaPhase1.writeLine("            " + expectedValue);
+                if ("StatusCode".equalsIgnoreCase(key)) {
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        source: STATUS"
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        action: EQUALS"
+                    );
+
+                    if (expectedValue != null
+                            && expectedValue.matches("^\\d{3}.*")) {
+
+                        expectedValue =
+                                expectedValue.substring(
+                                        0,
+                                        3
+                                );
+                    }
+
+                    if (expectedValue.contains("\"")) {
+
+                        ToscaToAgaPhase1.writeLine(
+                                "        expected: |"
+                        );
+
+                        expectedValue =
+                                expectedValue.replace(
+                                        "\"\"\"\"",
+                                        "\""
+                                );
+
+                        expectedValue =
+                                expectedValue.replace(
+                                        "\"\"\"",
+                                        "\""
+                                );
+
+                        ToscaToAgaPhase1.writeLine(
+                                "            "
+                                        + expectedValue
+                        );
+
                     } else {
-                        ToscaToAgaPhase1.writeLine("        expected: \"" + expectedValue + "\"");
+
+                        ToscaToAgaPhase1.writeLine(
+                                "        expected: \""
+                                        + expectedValue
+                                        + "\""
+                        );
                     }
 
                 } else {
-                    
-                    ToscaToAgaPhase1.writeLine("        source: BODY");
 
-                    String overridePath = details.getToscaPath();
-                    
-                    String constraintCond = findConstraintForPath(step, details.getToscaPath());
-                    key = getPath(protocol, details, key, overridePath, constraintCond);
-                    ToscaToAgaPhase1.writeLine("        path: \"" + key + "\"");
+                    ToscaToAgaPhase1.writeLine(
+                            "        source: BODY"
+                    );
 
-                    if ("Exists".equalsIgnoreCase(actionProperty)) {
-                        
-                        ToscaToAgaPhase1.writeLine("        action: \"EXISTS\"");
-                        
+                    String overridePath =
+                            details.getToscaPath();
+
+                    String constraintCond =
+                            findConstraintForPath(
+                                    step,
+                                    details.getToscaPath()
+                            );
+
+                    key =
+                            getPath(
+                                    protocol,
+                                    details,
+                                    key,
+                                    overridePath,
+                                    constraintCond
+                            );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        path: \""
+                                    + key
+                                    + "\""
+                    );
+
+                    if ("Exists".equalsIgnoreCase(
+                            actionProperty
+                    )) {
+
+                        ToscaToAgaPhase1.writeLine(
+                                "        action: \"EXISTS\""
+                        );
+
                     } else {
-                        
+
                         if (expectedValue.contains("*")) {
-                            ToscaToAgaPhase1.writeLine("        action: \"CONTAINS\"");
-                            expectedValue = expectedValue.replace("*", "");
+
+                            ToscaToAgaPhase1.writeLine(
+                                    "        action: \"CONTAINS\""
+                            );
+
+                            expectedValue =
+                                    expectedValue.replace(
+                                            "*",
+                                            ""
+                                    );
+
                         } else {
 
-                            ToscaToAgaPhase1.writeLine("        action: \"EQUALS\""); 
+                            ToscaToAgaPhase1.writeLine(
+                                    "        action: \"EQUALS\""
+                            );
                         }
+
                         if (expectedValue.contains("\"")) {
-                            ToscaToAgaPhase1.writeLine("        expected: |");
-                            String cleaned = expectedValue.replaceAll("\\r?\\n", " ").trim();
-                            
-                            cleaned = cleaned.replaceAll("^\"+|\"+$", "");
-                            cleaned = cleaned.replaceAll("^'+|'+$", "");
-                            
-                            expectedValue = expectedValue.replace("\"\"\"\"", "\"");
-                            expectedValue = expectedValue.replace("\"\"\"", "\"");
 
-                            ToscaToAgaPhase1.writeLine("            " + cleaned);
+                            ToscaToAgaPhase1.writeLine(
+                                    "        expected: |"
+                            );
+
+                            String cleaned =
+                                    expectedValue
+                                            .replaceAll(
+                                                    "\\r?\\n",
+                                                    " "
+                                            )
+                                            .trim();
+
+                            cleaned =
+                                    cleaned.replaceAll(
+                                            "^\"+|\"+$",
+                                            ""
+                                    );
+
+                            cleaned =
+                                    cleaned.replaceAll(
+                                            "^'+|'+$",
+                                            ""
+                                    );
+
+                            expectedValue =
+                                    expectedValue.replace(
+                                            "\"\"\"\"",
+                                            "\""
+                                    );
+
+                            expectedValue =
+                                    expectedValue.replace(
+                                            "\"\"\"",
+                                            "\""
+                                    );
+
+                            ToscaToAgaPhase1.writeLine(
+                                    "            "
+                                            + cleaned
+                            );
+
                         } else {
-                            ToscaToAgaPhase1.writeLine("        expected: \"" + expectedValue + "\"");
-                        }
 
+                            ToscaToAgaPhase1.writeLine(
+                                    "        expected: \""
+                                            + expectedValue
+                                            + "\""
+                            );
+                        }
                     }
                 }
-                ToscaToAgaPhase1.writeLine("        response: " + ToscaToAgaPhase1.lastApiResponseName);
+
+                ToscaToAgaPhase1.writeLine(
+                        "        response: "
+                                + ToscaToAgaPhase1.lastApiResponseName
+                );
+
                 if (details.getConstrain() != null) {
-                    String cAction = details.getConstrain().getAction();
-                    String cExpected = details.getConstrain().getExpected();
-                    String cPath = details.getConstrain().getPath();
-                    ToscaToAgaPhase1.writeLine("        constraints: ");
-                    ToscaToAgaPhase1.writeLine("          - path: \"" + cPath + "\"");
-                    ToscaToAgaPhase1.writeLine("            action: \"" + cAction + "\"");
-                    ToscaToAgaPhase1.writeLine("            expected: \"" + cExpected + "\"");
+
+                    String cAction =
+                            details.getConstrain()
+                                    .getAction();
+
+                    String cExpected =
+                            details.getConstrain()
+                                    .getExpected();
+
+                    String cPath =
+                            details.getConstrain()
+                                    .getPath();
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        constraints: "
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "          - path: \""
+                                    + cPath
+                                    + "\""
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "            action: \""
+                                    + cAction
+                                    + "\""
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "            expected: \""
+                                    + cExpected
+                                    + "\""
+                    );
                 }
 
             } else if ("Buffer".equalsIgnoreCase(mode)) {
-                
-                ToscaToAgaPhase1.writeLine("      - type: " + typ);
-                ToscaToAgaPhase1.writeLine("        op: BUFFER");
-                
-                if ((step.getCondition() != null) && !step.getCondition().equals("")) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
 
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
+                ToscaToAgaPhase1.writeLine(
+                        "      - type: " + typ
+                );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        op: BUFFER"
+                );
+
+                if ((step.getCondition() != null)
+                        && !step.getCondition()
+                        .equals("")) {
+
+                    String condition =
+                            step.getCondition();
+
+                    String cleanCondition =
+                            ToscaValueTranslator.translateToscaValues(
+                                    condition
+                            );
+
+                    String formattedCondition =
+                            cleanCondition.replace(
+                                    "\"",
+                                    "'"
+                            );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        condition: \""
+                                    + formattedCondition
+                                    + "\""
+                    );
                 }
-                
-                String varName = cleanBufferName(expectedValue);
-                ToscaToAgaPhase1.writeLine("        name: " + varName); 
-                ToscaToAgaPhase1.writeLine("        source: BODY");
 
-                String overridePath = details.getToscaPath();
+                String varName =
+                        cleanBufferName(
+                                expectedValue
+                        );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        name: "
+                                + varName
+                );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        source: BODY"
+                );
+
+                String overridePath =
+                        details.getToscaPath();
+
                 if (protocol.equals("rest")) {
-                    ToscaToAgaPhase1.writeLine("        selector: JSON_PATH");
-                    overridePath = details.getJsonPath();
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        selector: JSON_PATH"
+                    );
+
+                    overridePath =
+                            details.getJsonPath();
+
                 } else {
-                    ToscaToAgaPhase1.writeLine("        selector: XML_PATH");
-                    overridePath = details.getXmlPath();
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        selector: XML_PATH"
+                    );
+
+                    overridePath =
+                            details.getXmlPath();
                 }
-                
-                String constraintCond = findConstraintForPath(step, details.getToscaPath());
-                key = getPath(protocol, details, key, overridePath, constraintCond);
-                
-                ToscaToAgaPhase1.writeLine("        path: \"" + key + "\"");
-                
-                ToscaToAgaPhase1.writeLine("        response: " + ToscaToAgaPhase1.lastApiResponseName);
+
+                String constraintCond =
+                        findConstraintForPath(
+                                step,
+                                details.getToscaPath()
+                        );
+
+                key =
+                        getPath(
+                                protocol,
+                                details,
+                                key,
+                                overridePath,
+                                constraintCond
+                        );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        path: \""
+                                + key
+                                + "\""
+                );
+
+                ToscaToAgaPhase1.writeLine(
+                        "        response: "
+                                + ToscaToAgaPhase1.lastApiResponseName
+                );
+
                 if (details.getConstrain() != null) {
-                    String cAction = details.getConstrain().getAction();
-                    String cExpected = details.getConstrain().getExpected();
-                    String cPath = details.getConstrain().getPath();
-                    ToscaToAgaPhase1.writeLine("        constraints: ");
-                    ToscaToAgaPhase1.writeLine("          - path: \"" + cPath + "\"");
-                    ToscaToAgaPhase1.writeLine("            action: \"" + cAction + "\"");
-                    ToscaToAgaPhase1.writeLine("            expected: \"" + cExpected + "\"");
+
+                    String cAction =
+                            details.getConstrain()
+                                    .getAction();
+
+                    String cExpected =
+                            details.getConstrain()
+                                    .getExpected();
+
+                    String cPath =
+                            details.getConstrain()
+                                    .getPath();
+
+                    ToscaToAgaPhase1.writeLine(
+                            "        constraints: "
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "          - path: \""
+                                    + cPath
+                                    + "\""
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "            action: \""
+                                    + cAction
+                                    + "\""
+                    );
+
+                    ToscaToAgaPhase1.writeLine(
+                            "            expected: \""
+                                    + cExpected
+                                    + "\""
+                    );
                 }
-                
+
             } else if ("FileUpload".equalsIgnoreCase(mode)) {
-                ToscaToAgaPhase1.writeLine("      # [Warning] Skipped " + key + ". Unsupported ActionMode: " + mode);
+
+                ToscaToAgaPhase1.writeLine(
+                        "      # [Warning] Skipped "
+                                + key
+                                + ". Unsupported ActionMode: "
+                                + mode
+                );
+
             } else {
-            
-                ToscaToAgaPhase1.writeLine("      # [Warning] Skipped " + key + ". Unsupported ActionMode: " + mode);
+
+                ToscaToAgaPhase1.writeLine(
+                        "      # [Warning] Skipped "
+                                + key
+                                + ". Unsupported ActionMode: "
+                                + mode
+                );
             }
         }
     }
+    /**
+     * Normalizes Tosca API parameter xCondition expressions before they are
+     * written to AGATE YAML.
+     *
+     * Examples:
+     *
+     *   'CardTokenDMP.TokenWert' != NULL
+     *
+     * becomes:
+     *
+     *   {XL[CardTokenDMP.TokenWert]} != NULL
+     *
+     * and:
+     *
+     *   'CardTokenDMP.TokenWert' == "{NULL}"
+     *
+     * becomes:
+     *
+     *   {XL[CardTokenDMP.TokenWert]} == NULL
+     *
+     * Important:
+     * We intentionally only convert quoted identifiers which contain a dot.
+     * This avoids treating normal string literals such as 'ACTIVE' as AGATE
+     * variables.
+     */
+    private static String normalizeApiParameterCondition(
+            String condition) {
 
+        if (condition == null) {
+            return null;
+        }
+
+        String normalized =
+                condition.trim();
+
+        if (normalized.isEmpty()) {
+            return normalized;
+        }
+
+        normalized =
+                ToscaValueTranslator.translateToscaValues(
+                        normalized
+                );
+
+        normalized =
+                normalized.replace(
+                        "\"{NULL}\"",
+                        "NULL"
+                );
+
+        normalized =
+                normalized.replace(
+                        "'{NULL}'",
+                        "NULL"
+                );
+
+        normalized =
+                normalized.replace(
+                        "{NULL}",
+                        "NULL"
+                );
+
+        java.util.regex.Pattern quotedDataReference =
+                java.util.regex.Pattern.compile(
+                        "'([\\p{L}\\p{N}_-]+(?:\\.[\\p{L}\\p{N}_-]+)+)'"
+                );
+
+        java.util.regex.Matcher matcher =
+                quotedDataReference.matcher(
+                        normalized
+                );
+
+        StringBuffer buffer =
+                new StringBuffer();
+
+        while (matcher.find()) {
+
+            String reference =
+                    matcher.group(1);
+
+            String replacement =
+                    "{XL["
+                            + reference
+                            + "]}";
+
+            matcher.appendReplacement(
+                    buffer,
+                    java.util.regex.Matcher.quoteReplacement(
+                            replacement
+                    )
+            );
+        }
+
+        matcher.appendTail(
+                buffer
+        );
+
+        String result =
+                buffer.toString();
+
+        result =
+                result.replaceAll(
+                        "\\s*==\\s*NULL",
+                        " == NULL"
+                );
+
+        result =
+                result.replaceAll(
+                        "\\s*!=\\s*NULL",
+                        " != NULL"
+                );
+
+        return result;
+    }
+    
+    
+    /**
+     * Escapes a scalar that is written inside YAML double quotes.
+     */
+    private static String escapeYamlDoubleQuoted(
+            String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace(
+                        "\\",
+                        "\\\\"
+                )
+                .replace(
+                        "\"",
+                        "\\\""
+                );
+    }
+    
     private static String buildPathWithConstraints(String key, List<Constraint> constraints) {
         if (constraints == null || constraints.isEmpty()) {
             return key;
@@ -888,5 +1390,17 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
         }
         return "";
     }    
+    private static String normalizeApiModuleName(String name) {
 
+        if (name == null || name.isBlank()) {
+            return "";
+        }
+
+        return name
+                .trim()
+                .toLowerCase()
+                .replaceAll("[^a-z0-9]+", "_")
+                .replaceAll("_+", "_")
+                .replaceAll("^_+|_+$", "");
+    }
 }

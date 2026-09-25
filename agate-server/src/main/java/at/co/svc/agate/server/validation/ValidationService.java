@@ -35,10 +35,19 @@ public final class ValidationService {
                         new WaitSchemaValidator(),
                         new SqlSchemaValidator(),
                         new OcSchemaValidator(),
-                        new DataFlowValidator()                )
+
+                        /*
+                         * Validate YAML syntax of reusable modules
+                         * before attempting data-flow analysis.
+                         */
+                        new ReusableYamlSyntaxValidator(),
+                        new SuspiciousYamlEscapeValidator(),
+                        new PlaceholderSyntaxValidator(),
+
+                        new DataFlowValidator()
+                )
         );
     }
-
     public ValidationResult validate(
             Path file) {
 

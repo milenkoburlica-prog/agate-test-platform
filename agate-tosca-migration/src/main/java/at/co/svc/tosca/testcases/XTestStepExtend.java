@@ -52,6 +52,7 @@ public class XTestStepExtend {
     // =====================================================
     // EXTEND
     // =====================================================
+
     public static void extend(
             String inputFile,
             String tsuFile,
@@ -155,6 +156,7 @@ public class XTestStepExtend {
     // =====================================================
     // CORE EXPAND LOGIC
     // =====================================================
+
     private static void expandNode(
             JsonObject node,
             Map<String, JsonObject> tsuIndex,
@@ -175,6 +177,7 @@ public class XTestStepExtend {
         // =====================================================
         // SKIP DISABLED STEPS
         // =====================================================
+
         if (node.has("Attributes")
                 && node.getAsJsonObject("Attributes")
                         .has("DisabledDescription")) {
@@ -194,6 +197,7 @@ public class XTestStepExtend {
         // =====================================================
         // CYCLE GUARD
         // =====================================================
+
         if (stack.contains(surrogate)) {
             return;
         }
@@ -203,6 +207,7 @@ public class XTestStepExtend {
         // =====================================================
         // OUTPUT DEDUPLICATION
         // =====================================================
+
         boolean isNew =
                 visited.add(surrogate);
 
@@ -218,7 +223,10 @@ public class XTestStepExtend {
 
         // =====================================================
         // XTESTSTEP
+        //
+        // EXISTING LOGIC - UNCHANGED
         // =====================================================
+
         if ("XTestStep".equals(objectClass)) {
 
             JsonArray values =
@@ -236,6 +244,7 @@ public class XTestStepExtend {
                         );
 
                 if (obj != null) {
+
                     expandNode(
                             obj,
                             tsuIndex,
@@ -249,13 +258,20 @@ public class XTestStepExtend {
 
         // =====================================================
         // XTESTSTEPVALUE
+        //
+        // EXISTING LOGIC - UNCHANGED
         // =====================================================
+
         else if ("XTestStepValue".equals(objectClass)) {
 
             JsonObject assocs =
                     node.getAsJsonObject("Assocs");
 
             if (assocs != null) {
+
+                // -------------------------------------------------
+                // SUB VALUES
+                // -------------------------------------------------
 
                 JsonArray subValues =
                         assocs.getAsJsonArray("SubValues");
@@ -270,6 +286,7 @@ public class XTestStepExtend {
                                 );
 
                         if (obj != null) {
+
                             expandNode(
                                     obj,
                                     tsuIndex,
@@ -280,6 +297,10 @@ public class XTestStepExtend {
                         }
                     }
                 }
+
+                // -------------------------------------------------
+                // PARENT VALUES
+                // -------------------------------------------------
 
                 JsonArray parentValues =
                         assocs.getAsJsonArray("ParentValue");
@@ -294,6 +315,7 @@ public class XTestStepExtend {
                                 );
 
                         if (obj != null) {
+
                             expandNode(
                                     obj,
                                     tsuIndex,
@@ -308,8 +330,112 @@ public class XTestStepExtend {
         }
 
         // =====================================================
-        // TESTSTEPFOLDERREFERENCE
+        // TEST CASE CONTROL FLOW ITEM
+        //
+        // NEW:
+        //
+        // TestCaseControlFlowItem
+        //      |
+        //      +-- ControlFlowFolders[]
+        //
+        // Example:
+        //
+        // Warte bis Datensätze ... existieren
+        //
+        //      +-- Wenn Datensatz nicht existiert
+        //      +-- Warte auf Datensätze in der DB
+        //
+        // Existing behavior for all other object types
+        // remains unchanged.
         // =====================================================
+
+        else if ("TestCaseControlFlowItem".equals(objectClass)) {
+
+            JsonArray folders =
+                    safeArray(
+                            node,
+                            "Assocs",
+                            "ControlFlowFolders"
+                    );
+
+            for (JsonElement el : folders) {
+
+                JsonObject obj =
+                        tsuIndex.get(
+                                el.getAsString()
+                        );
+
+                if (obj != null) {
+
+                    expandNode(
+                            obj,
+                            tsuIndex,
+                            result,
+                            visited,
+                            stack
+                    );
+                }
+            }
+        }
+
+        // =====================================================
+        // TEST CASE CONTROL FLOW FOLDER
+        //
+        // NEW:
+        //
+        // TestCaseControlFlowFolder
+        //      |
+        //      +-- Items[]
+        //             |
+        //             +-- XTestStep
+        //
+        // The child XTestStep is then processed by the EXISTING
+        // XTestStep logic above.
+        //
+        // This is important:
+        //
+        // We do NOT introduce a special SQL/WAIT implementation
+        // for LOOPs.
+        //
+        // The existing SQL/WAIT processing remains responsible
+        // for those steps.
+        // =====================================================
+
+        else if ("TestCaseControlFlowFolder".equals(objectClass)) {
+
+            JsonArray items =
+                    safeArray(
+                            node,
+                            "Assocs",
+                            "Items"
+                    );
+
+            for (JsonElement el : items) {
+
+                JsonObject obj =
+                        tsuIndex.get(
+                                el.getAsString()
+                        );
+
+                if (obj != null) {
+
+                    expandNode(
+                            obj,
+                            tsuIndex,
+                            result,
+                            visited,
+                            stack
+                    );
+                }
+            }
+        }
+
+        // =====================================================
+        // TESTSTEPFOLDERREFERENCE
+        //
+        // EXISTING LOGIC - UNCHANGED
+        // =====================================================
+
         else if ("TestStepFolderReference".equals(objectClass)) {
 
             JsonArray layers =
@@ -327,6 +453,7 @@ public class XTestStepExtend {
                         );
 
                 if (obj != null) {
+
                     expandNode(
                             obj,
                             tsuIndex,
@@ -340,7 +467,10 @@ public class XTestStepExtend {
 
         // =====================================================
         // PARAMETER LAYER REFERENCE
+        //
+        // EXISTING LOGIC - UNCHANGED
         // =====================================================
+
         else if ("ParameterLayerReference".equals(objectClass)) {
 
             JsonArray refs =
@@ -358,6 +488,7 @@ public class XTestStepExtend {
                         );
 
                 if (obj != null) {
+
                     expandNode(
                             obj,
                             tsuIndex,
@@ -371,7 +502,10 @@ public class XTestStepExtend {
 
         // =====================================================
         // PARAMETER REFERENCE
+        //
+        // EXISTING LOGIC - UNCHANGED
         // =====================================================
+
         else if ("ParameterReference".equals(objectClass)) {
 
             JsonArray params =
@@ -389,6 +523,7 @@ public class XTestStepExtend {
                         );
 
                 if (obj != null) {
+
                     expandNode(
                             obj,
                             tsuIndex,
@@ -402,16 +537,25 @@ public class XTestStepExtend {
 
         // =====================================================
         // LEAF: Parameter
+        //
+        // EXISTING LOGIC - UNCHANGED
         // =====================================================
+
         else if ("Parameter".equals(objectClass)) {
+
             // No further expansion is required.
         }
 
         // =====================================================
         // BACKTRACK
         // =====================================================
+
         stack.remove(surrogate);
     }
+
+    // =====================================================
+    // SAFE ARRAY
+    // =====================================================
 
     private static JsonArray safeArray(
             JsonObject node,
@@ -436,13 +580,16 @@ public class XTestStepExtend {
     // =====================================================
     // LOAD TSU
     // =====================================================
+
     private static JsonObject loadTsu(
             String tsuFile) throws Exception {
 
         try (FileInputStream fis =
                      new FileInputStream(tsuFile);
+
              GZIPInputStream gis =
                      new GZIPInputStream(fis);
+
              InputStreamReader reader =
                      new InputStreamReader(
                              gis,
@@ -457,6 +604,7 @@ public class XTestStepExtend {
     // =====================================================
     // HELPER
     // =====================================================
+
     private static String getString(
             JsonObject obj,
             String key) {

@@ -1,5 +1,0 @@
-name: b_karte_o_oder_e_card_stecken_de
-steps:
-      - type: CALL
-        command: "reusable.o_e_card_stecken"
-        parameters: {}

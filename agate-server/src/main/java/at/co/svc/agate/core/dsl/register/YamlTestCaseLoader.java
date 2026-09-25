@@ -171,57 +171,338 @@ public class YamlTestCaseLoader {
         return tc;
     }
 
+    private static String resolveInheritedRParameters(
+            String value,
+            Map<String, Object> inheritedParams) {
+
+        if (value == null
+                || inheritedParams == null
+                || inheritedParams.isEmpty()) {
+
+            return value;
+        }
+
+        String result = value;
+
+        Pattern pattern =
+                Pattern.compile("\\{R\\[([^]]+)]}");
+
+        Matcher matcher =
+                pattern.matcher(result);
+
+        StringBuffer sb =
+                new StringBuffer();
+
+        while (matcher.find()) {
+
+            String parameterName =
+                    matcher.group(1);
+
+            if (!inheritedParams.containsKey(parameterName)) {
+
+                // Leave unresolved here.
+                // Normal runtime/error handling can deal with it later.
+                continue;
+            }
+
+            Object inheritedValue =
+                    inheritedParams.get(parameterName);
+
+            String replacement =
+                    inheritedValue == null
+                            ? ""
+                            : String.valueOf(inheritedValue);
+
+            matcher.appendReplacement(
+                    sb,
+                    Matcher.quoteReplacement(replacement)
+            );
+        }
+
+        matcher.appendTail(sb);
+
+        return sb.toString();
+    }
+    
     @SuppressWarnings("unchecked")
-    private static List<TestStep> processSteps(TestCase tc, List<Map<String, Object>> stepList, String yamlPath, YamlPlaceholderResolver resolver, String idPrefix, Map<String, Object> inheritedParams, boolean isFragment) throws Exception {
-        List<TestStep> resultList = new ArrayList<>();
+    private static List<TestStep> processSteps(
+            TestCase tc,
+            List<Map<String, Object>> stepList,
+            String yamlPath,
+            YamlPlaceholderResolver resolver,
+            String idPrefix,
+            Map<String, Object> inheritedParams,
+            boolean isFragment) throws Exception {
+
+        List<TestStep> resultList =
+                new ArrayList<>();
+
         int localIndex = 1;
 
         for (Map<String, Object> stepMap : stepList) {
-            validateStepDefinition(tc, stepMap, localIndex, yamlPath);
 
-            String type = asString(stepMap.get("type"));
-            String currentIdNum = idPrefix.isEmpty() ? String.valueOf(localIndex) : idPrefix + "." + localIndex;
+            validateStepDefinition(
+                    tc,
+                    stepMap,
+                    localIndex,
+                    yamlPath
+            );
 
-            TestStep step = StepParserFactory.parseStep(tc, stepMap, yamlPath, localIndex, resolver);
-            step.setSourceFile(yamlPath);
-            step.setSourceStepIndex(localIndex);
-            
-            // Keep an explicit YAML id stable. If no id is provided, generate a
-            // deterministic fallback id for backward compatibility.
-            if (step.getId() == null || step.getId().isBlank()) {
-                step.setId("step_" + currentIdNum.replace(".", "_"));
+            String type =
+                    asString(
+                            stepMap.get("type")
+                    );
+
+            String currentIdNum =
+                    idPrefix.isEmpty()
+                            ? String.valueOf(localIndex)
+                            : idPrefix + "." + localIndex;
+
+            TestStep step =
+                    StepParserFactory.parseStep(
+                            tc,
+                            stepMap,
+                            yamlPath,
+                            localIndex,
+                            resolver
+                    );
+
+            step.setSourceFile(
+                    yamlPath
+            );
+
+            step.setSourceStepIndex(
+                    localIndex
+            );
+
+            /*
+             * Keep explicit YAML IDs unchanged.
+             * Generate a deterministic fallback ID only when no ID exists.
+             */
+            if (step.getId() == null
+                    || step.getId().isBlank()) {
+
+                step.setId(
+                        "step_"
+                                + currentIdNum.replace(
+                                        ".",
+                                        "_"
+                                )
+                );
             }
 
-            // Use the explicit fragment flag instead of inferring fragment context from the path.
-            String identifier = isFragment ? yamlPath : tc.getName();
+            /*
+             * Store original YAML text for logging/debugging.
+             */
+            String identifier =
+                    isFragment
+                            ? yamlPath
+                            : tc.getName();
 
-            String originalYamlText = extractOriginalStepYaml(yamlPath, identifier, localIndex, isFragment);
-            step.setTextYaml(originalYamlText);
-            // ------------------------------------------------------------------
-            
-            // R-variable context:
-            Map<String, Object> effectiveParams = new HashMap<>();
+            String originalYamlText =
+                    extractOriginalStepYaml(
+                            yamlPath,
+                            identifier,
+                            localIndex,
+                            isFragment
+                    );
+
+            step.setTextYaml(
+                    originalYamlText
+            );
+
+            /*
+             * ---------------------------------------------------------
+             * Build effective parameter context.
+             * ---------------------------------------------------------
+             *
+             * inheritedParams:
+             *     parameters passed by the parent CALL.
+             *
+             * local parameters:
+             *     parameters defined on the current child step.
+             *
+             * Important:
+             *
+             * Local R[...] references must be resolved against the
+             * inherited parent context BEFORE the local parameter
+             * replaces the inherited value.
+             *
+             * Example:
+             *
+             * Parent CALL:
+             *
+             *   parameters:
+             *     bevid: "100"
+             *
+             * Child SOAP:
+             *
+             *   parameters:
+             *     bevid: "{R[bevid]}"
+             *
+             * Result:
+             *
+             *   bevid = "100"
+             *
+             *
+             * Runtime placeholders must NOT be resolved here.
+             *
+             * Example:
+             *
+             * Parent CALL:
+             *
+             *   parameters:
+             *     vpNummer: "{B[B_Karte]}"
+             *
+             * Child:
+             *
+             *   parameters:
+             *     vpNummer: "{R[vpNummer]}"
+             *
+             * Result after this method:
+             *
+             *   vpNummer = "{B[B_Karte]}"
+             *
+             * The B[...] placeholder remains untouched and will be
+             * resolved later during runtime.
+             * ---------------------------------------------------------
+             */
+
+            Map<String, Object> effectiveParams =
+                    new HashMap<>();
+
+            /*
+             * Start with parameters inherited from the parent CALL.
+             */
             if (inheritedParams != null) {
-                effectiveParams.putAll(inheritedParams);
-            }
-            if (stepMap.get("parameters") instanceof Map) {
-                effectiveParams.putAll((Map<String, Object>) stepMap.get("parameters"));
-            }
-            step.setParameters(effectiveParams);
 
+                effectiveParams.putAll(
+                        inheritedParams
+                );
+            }
+
+            /*
+             * Now process parameters defined directly on this step.
+             */
+            Object parametersObj =
+                    stepMap.get("parameters");
+
+            if (parametersObj instanceof Map<?, ?> rawLocalParams) {
+
+                for (Map.Entry<?, ?> entry :
+                        rawLocalParams.entrySet()) {
+
+                    String parameterName =
+                            String.valueOf(
+                                    entry.getKey()
+                            );
+
+                    Object parameterValue =
+                            entry.getValue();
+
+                    /*
+                     * Resolve only inherited R[...] placeholders.
+                     *
+                     * Do NOT use the general YamlPlaceholderResolver here,
+                     * because it would also try to resolve runtime B[...]
+                     * placeholders while the suite is still being loaded.
+                     */
+                    if (parameterValue instanceof String stringValue
+                            && inheritedParams != null
+                            && !inheritedParams.isEmpty()) {
+
+                        String resolvedValue =
+                                resolveInheritedRParameters(
+                                        stringValue,
+                                        inheritedParams
+                                );
+
+                        effectiveParams.put(
+                                parameterName,
+                                resolvedValue
+                        );
+
+                    } else {
+
+                        effectiveParams.put(
+                                parameterName,
+                                parameterValue
+                        );
+                    }
+                }
+            }
+
+            /*
+             * Store the final parameter context on the step.
+             */
+            step.setParameters(
+                    effectiveParams
+            );
+
+            /*
+             * ---------------------------------------------------------
+             * CALL / reusable handling
+             * ---------------------------------------------------------
+             */
             if ("CALL".equalsIgnoreCase(type)) {
-                String action = asString(stepMap.get("command"));
-                String fragmentPath = "data" + File.separator + System.getProperty("APPLICATION") + File.separator + action.replace(".", File.separator) + ".yaml";
-                
-                // Pass the effective parameter context into the reusable fragment.
-                List<TestStep> subTree = loadFragmentStepsHierarchical(tc, fragmentPath, resolver, currentIdNum, effectiveParams);
-                step.setSubSteps(subTree);
+
+                String action =
+                        asString(
+                                stepMap.get("command")
+                        );
+
+                String fragmentPath =
+                        "data"
+                                + File.separator
+                                + System.getProperty("APPLICATION")
+                                + File.separator
+                                + action.replace(
+                                        ".",
+                                        File.separator
+                                )
+                                + ".yaml";
+
+                /*
+                 * Pass the effective parameter context into the reusable.
+                 *
+                 * These parameters become the R-context of the child
+                 * reusable steps.
+                 */
+                List<TestStep> subTree =
+                        loadFragmentStepsHierarchical(
+                                tc,
+                                fragmentPath,
+                                resolver,
+                                currentIdNum,
+                                effectiveParams
+                        );
+
+                step.setSubSteps(
+                        subTree
+                );
             }
 
-            resolveStepDetails(tc, step, resolver, yamlPath, localIndex);
-            resultList.add(step);
+            /*
+             * Resolve values that are safe to resolve during load time.
+             *
+             * Runtime B[...] and R[...] placeholders are intentionally
+             * kept unresolved by resolveStepDetails where necessary.
+             */
+            resolveStepDetails(
+                    tc,
+                    step,
+                    resolver,
+                    yamlPath,
+                    localIndex
+            );
+
+            resultList.add(
+                    step
+            );
+
             localIndex++;
         }
+
         return resultList;
     }
     
@@ -243,7 +524,7 @@ public class YamlTestCaseLoader {
             );
         }
 
-        System.out.println("[YAML] Loading reusable fragment: " + file.getPath());
+        //System.out.println("[YAML] Loading reusable fragment: " + file.getPath());
 
         try (FileInputStream fis = new FileInputStream(file);
              InputStreamReader reader =
@@ -673,19 +954,104 @@ public class YamlTestCaseLoader {
         // Process the request when either JSON or XML exists.
         if (reqFile.exists()) {
             String bodyContent = Files.readString(reqFile.toPath(), StandardCharsets.UTF_8);
-            
-            // Pass the current step to the resolver. kako bi {R[vpNummer]} bio zamenjen vrednošću iz parametara
-            // Apply NULL-removal and EMPTY-value handling before placeholder resolution.
+
+//            System.out.println("[SOAP-BODY-DEBUG-PARAM] cardToken = "
+//                    + (step.getParameters() != null
+//                            ? step.getParameters().get("cardToken")
+//                            : null));
+
+//            System.out.println("[SOAP-BODY-DEBUG-1] raw body =\n" + bodyContent);
+
+            bodyContent =
+                    preferStepParametersOverBufferPlaceholders(
+                            bodyContent,
+                            step.getParameters());
+
+//            System.out.println("[SOAP-BODY-DEBUG-2] after B->R =\n" + bodyContent);
+
+            // Apply NULL-removal and EMPTY-value handling after B->R compatibility mapping.
             bodyContent = resolveNullableRule(bodyContent, step.getParameters());
-            
-            // Resolve parameters and variables inside the request body for both JSON and XML.
-            // Parameters take precedence over test-case variables.
-            String resolvedBody = resolver.resolve(tc, bodyContent, step.getParameters(), reqFile.getPath(), 0, "body", step);
-            resolvedBody = resolver.resolve(tc, resolvedBody, tc.getVariables(), reqFile.getPath(), 0, "body", step);            
+
+            String resolvedBody = resolver.resolve(
+                    tc,
+                    bodyContent,
+                    step.getParameters(),
+                    reqFile.getPath(),
+                    0,
+                    "body",
+                    step);
+
+//            System.out.println("[SOAP-BODY-DEBUG-3] after parameters =\n" + resolvedBody);
+
+            resolvedBody = resolver.resolve(
+                    tc,
+                    resolvedBody,
+                    tc.getVariables(),
+                    reqFile.getPath(),
+                    0,
+                    "body",
+                    step);
+
+//            System.out.println("[SOAP-BODY-DEBUG-4] after variables =\n" + resolvedBody);
+
             // Store the final JSON or XML text under the "body" key.
             stepMap.put("body", resolvedBody);
         }
         
+    }
+    
+    private static String preferStepParametersOverBufferPlaceholders(
+            String body,
+            Map<String, Object> parameters) {
+
+        if (body == null
+                || parameters == null
+                || parameters.isEmpty()) {
+            return body;
+        }
+
+        Pattern pattern =
+                Pattern.compile("\\{B\\[([^\\]]+)]}");
+
+        Matcher matcher =
+                pattern.matcher(body);
+
+        StringBuffer sb =
+                new StringBuffer();
+
+        boolean changed =
+                false;
+
+        while (matcher.find()) {
+
+            String name =
+                    matcher.group(1);
+
+            if (!parameters.containsKey(name)) {
+                continue;
+            }
+
+            String replacement =
+                    "{R[" + name + "]}";
+
+            matcher.appendReplacement(
+                    sb,
+                    Matcher.quoteReplacement(
+                            replacement
+                    )
+            );
+
+            changed =
+                    true;
+        }
+
+        if (!changed) {
+            return body;
+        }
+
+        matcher.appendTail(sb);
+
+        return sb.toString();
     }
     
     private static String resolveNullableRule(String body, Map<String, Object> parameters) {
@@ -1178,11 +1544,50 @@ public class YamlTestCaseLoader {
         System.err.println("============================================================");
         System.err.println("[ERROR] Test suite cannot be loaded");
         System.err.println("============================================================");
-        System.err.println("File   : " + new File(yamlPath).getAbsolutePath());
-        System.err.println("Reason : " + cleanMessage(e.getMessage()));
+
+        System.err.println("File      : " + new File(yamlPath).getAbsolutePath());
+
+        if (e instanceof at.co.svc.agate.core.error.AgateStepException agateError) {
+
+            System.err.println("Reason    : " + agateError.getReason());
+
+            for (Map.Entry<String, String> entry : agateError.getDetails().entrySet()) {
+
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                if (key != null
+                        && value != null
+                        && !value.isBlank()) {
+
+                    System.err.printf(
+                            "%-10s: %s%n",
+                            key,
+                            value);
+                }
+            }
+
+            Throwable cause = agateError.getCause();
+
+            if (cause != null
+                    && cause.getMessage() != null
+                    && !cause.getMessage().isBlank()) {
+
+                System.err.println(
+                        "Why       : " + cleanMessage(cause.getMessage()));
+            }
+
+        } else {
+
+            System.err.println(
+                    "Reason    : " + cleanMessage(e.getMessage()));
+        }
+
         System.err.println("============================================================");
         System.err.println();
     }
+    
+    
 
     private static String yamlSyntaxSuggestion(String problem) {
 
@@ -1379,13 +1784,13 @@ public class YamlTestCaseLoader {
                 int tcIdx = -1;
 
                 String cleanIdentifier =
-                        identifier.replace("\"", "").trim();
+                        unquoteYamlScalar(identifier);
 
                 for (int i = 0; i < lines.size(); i++) {
 
                     String line = lines.get(i);
                     String cleanLine =
-                            line.replace("\"", "").trim();
+                            line.trim();
 
                     if (cleanLine.startsWith("id:")
                             || cleanLine.startsWith("- id:")
@@ -1393,9 +1798,10 @@ public class YamlTestCaseLoader {
 
                         String actualValue =
                                 cleanLine
-                                        .substring(cleanLine.indexOf(":") + 1)
-                                        .replace("\"", "")
-                                        .trim();
+                                        .substring(cleanLine.indexOf(":") + 1);
+
+                        actualValue =
+                                unquoteYamlScalar(actualValue);
 
                         if (actualValue.equals(cleanIdentifier)) {
                             tcIdx = i;

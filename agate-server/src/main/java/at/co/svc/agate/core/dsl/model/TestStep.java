@@ -66,6 +66,7 @@ public class TestStep {
 
     private Integer expectedExitCode;
     private Boolean checkExitCode;
+    private Boolean ignoreExitCode;
     private Integer timeout;
     private String outputFile;
 
@@ -501,6 +502,14 @@ public class TestStep {
         this.checkExitCode = checkExitCode;
     }
 
+    public Boolean getIgnoreExitCode() {
+        return ignoreExitCode;
+    }
+
+    public void setIgnoreExitCode(Boolean ignoreExitCode) {
+        this.ignoreExitCode = ignoreExitCode;
+    }
+
     public Integer getTimeout() {
         return timeout;
     }
@@ -531,6 +540,17 @@ public class TestStep {
 
     public void setSourceStepIndex(Integer sourceStepIndex) {
         this.sourceStepIndex = sourceStepIndex;
+    }
+    
+    
+    private String datasource;
+
+    public String getDatasource() {
+        return datasource;
+    }
+
+    public void setDatasource(String datasource) {
+        this.datasource = datasource;
     }
     
 }

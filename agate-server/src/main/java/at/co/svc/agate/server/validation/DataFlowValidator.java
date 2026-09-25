@@ -22,7 +22,8 @@ public final class DataFlowValidator
                     "SOAP",
                     "SQL",
                     "CMD",
-                    "OC"
+                    "OC",
+                    "FILE"
             );
 
     private static final Set<String> BUFFER_PRODUCER_ENGINES =
@@ -31,7 +32,8 @@ public final class DataFlowValidator
                     "SOAP",
                     "SQL",
                     "CMD",
-                    "OC"
+                    "OC",
+                    "FILE"
             );
 
     private static final ObjectMapper YAML_MAPPER =
@@ -63,10 +65,8 @@ public final class DataFlowValidator
             /*
              * Variables actually used by this testcase.
              *
-             * This includes:
-             *
-             *   - direct {B[...]} references
-             *   - {B[...]} references inside called reusable modules
+             * Includes direct references and references
+             * inside reusable modules.
              */
             Set<String> usedVariables =
                     new LinkedHashSet<>();
@@ -78,19 +78,8 @@ public final class DataFlowValidator
                     new LinkedHashSet<>();
 
             /*
-             * Avoid recursive reusable cycles:
-             *
-             * reusable.a
-             *     -> reusable.b
-             *         -> reusable.a
-             */
-            Set<Path> visitedReusableFiles =
-                    new HashSet<>();
-
-            /*
-             * If a CALL cannot be analyzed, V420 cannot be determined
-             * reliably. In that case we suppress only unused-variable
-             * reporting for this testcase.
+             * If reusable analysis cannot be completed,
+             * unused-variable reporting is suppressed.
              */
             boolean reusableAnalysisComplete =
                     true;
@@ -150,16 +139,10 @@ public final class DataFlowValidator
                  * 2. CALL / reusable module
                  * =========================================================
                  *
-                 * Example:
+                 * Reusable modules are analyzed step-by-step.
                  *
-                 * - type: CALL
-                 *   command: reusable.demo_reusable
-                 *
-                 * We inspect:
-                 *
-                 * reusable/demo_reusable.yaml
-                 *
-                 * and collect all {B[...]} references from it.
+                 * The current variable state is passed into the reusable
+                 * module so references can be checked in execution order.
                  */
                 if ("CALL".equals(type)) {
 
@@ -171,25 +154,25 @@ public final class DataFlowValidator
                     if (command != null
                             && command.startsWith("reusable.")) {
 
-                        ReusableUsage usage =
-                                collectReusableUsage(
+                        boolean complete =
+                                validateReusableFlow(
                                         c.file(),
                                         command,
-                                        visitedReusableFiles
-                                );
+                                        variables,
+                                        usedVariables,
+                                        new HashSet<>(),
+                                        issues);
 
-                        usedVariables.addAll(
-                                usage.bufferRefs());
-
-                        if (!usage.complete()) {
+                        if (!complete) {
 
                             reusableAnalysisComplete =
                                     false;
                         }
+
                     } else {
 
                         /*
-                         * CALL exists but we cannot safely analyze it.
+                         * CALL exists but cannot be analyzed safely.
                          */
                         reusableAnalysisComplete =
                                 false;
@@ -302,9 +285,7 @@ public final class DataFlowValidator
 
                         /*
                          * CMD BUFFER result may later be consumed by
-                         * another CMD operation using:
-                         *
-                         * response: <name>
+                         * another CMD operation using response:<name>.
                          */
                         if ("CMD".equals(type)) {
 
@@ -338,11 +319,6 @@ public final class DataFlowValidator
              * =============================================================
              * 8. Unused testcase variables
              * =============================================================
-             *
-             * V420 is only emitted if reusable analysis was complete.
-             *
-             * That means we now actually know whether the variable is
-             * referenced directly OR inside a reusable module.
              */
             if (c.options()
                     .warnUnusedVariables()
@@ -383,20 +359,23 @@ public final class DataFlowValidator
 
     /*
      * =============================================================
-     * Reusable analysis
+     * Reusable data-flow analysis
      * =============================================================
      */
 
-    private ReusableUsage collectReusableUsage(
+    private boolean validateReusableFlow(
             Path testSuiteFile,
             String command,
-            Set<Path> visited) {
+            Set<String> variables,
+            Set<String> usedVariables,
+            Set<Path> callStack,
+            List<ValidationIssue> issues) {
 
         if (testSuiteFile == null
                 || command == null
                 || !command.startsWith("reusable.")) {
 
-            return ReusableUsage.incomplete();
+            return false;
         }
 
         Path reusableFile =
@@ -407,7 +386,7 @@ public final class DataFlowValidator
         if (reusableFile == null
                 || !Files.isRegularFile(reusableFile)) {
 
-            return ReusableUsage.incomplete();
+            return false;
         }
 
         Path normalized =
@@ -416,60 +395,52 @@ public final class DataFlowValidator
                         .normalize();
 
         /*
-         * Already visited:
+         * Detect only real recursion in the current call chain.
          *
-         * Do not recurse forever.
-         *
-         * This is considered complete because this file has already
-         * contributed its references earlier in the traversal.
+         * The same reusable module may be called multiple times
+         * at different points in a testcase.
          */
-        if (!visited.add(normalized)) {
+        if (!callStack.add(normalized)) {
 
-            return ReusableUsage.complete(
-                    Set.of());
+            return false;
         }
-
-        JsonNode root;
 
         try {
 
-            root =
-                    YAML_MAPPER.readTree(
-                            normalized.toFile());
+            JsonNode root;
 
-        } catch (IOException e) {
+            try {
 
-            return ReusableUsage.incomplete();
-        }
+                root =
+                        YAML_MAPPER.readTree(
+                                normalized.toFile());
 
-        if (root == null) {
+            } catch (IOException e) {
 
-            return ReusableUsage.incomplete();
-        }
+                return false;
+            }
 
-        Set<String> refs =
-                new LinkedHashSet<>(
-                        ValidationUtil.bufferRefs(root)
-                );
+            if (root == null) {
 
-        boolean complete =
-                true;
+                return false;
+            }
 
-        /*
-         * Reusable files currently have:
-         *
-         * steps:
-         *   - ...
-         *
-         * Analyze nested CALL operations as well.
-         */
-        JsonNode steps =
-                root.get("steps");
+            JsonNode steps =
+                    root.get("steps");
 
-        if (steps != null
-                && steps.isArray()) {
+            if (steps == null
+                    || !steps.isArray()) {
 
-            for (JsonNode step : steps) {
+                return false;
+            }
+
+            int stepIndex =
+                    0;
+
+            for (JsonNode step :
+                    steps) {
+
+                stepIndex++;
 
                 if (step == null
                         || !step.isObject()) {
@@ -480,70 +451,192 @@ public final class DataFlowValidator
                 String type =
                         ValidationUtil.type(step);
 
-                if (!"CALL".equals(type)) {
+                String op =
+                        ValidationUtil.op(step);
 
-                    continue;
-                }
+                /*
+                 * =====================================================
+                 * 1. Validate {B[...]} references BEFORE producers.
+                 * =====================================================
+                 *
+                 * Example:
+                 *
+                 * - type: BUFFER
+                 *   op: EXEC
+                 *   name: L_LogDir
+                 *   value: "{B[G_EC_OpenShift_LogDir]}"
+                 *
+                 * G_EC_OpenShift_LogDir must already exist.
+                 * L_LogDir becomes available only after this step.
+                 */
+                for (String ref :
+                        ValidationUtil.bufferRefs(step)) {
 
-                String nestedCommand =
-                        ValidationUtil.text(
-                                step,
-                                "command");
+                    usedVariables.add(ref);
 
-                if (nestedCommand == null
-                        || !nestedCommand.startsWith(
-                                "reusable.")) {
+                    if (!variables.contains(ref)) {
 
-                    complete =
-                            false;
-
-                    continue;
-                }
-
-                ReusableUsage nested =
-                        collectReusableUsage(
-                                testSuiteFile,
-                                nestedCommand,
-                                visited
+                        issues.add(
+                                ValidationIssue.error(
+                                        "AGATE-V401",
+                                        "Variable/buffer '"
+                                                + ref
+                                                + "' is referenced before initialization "
+                                                + "in reusable step "
+                                                + stepIndex
+                                                + ".",
+                                        normalized,
+                                        lineOfBufferReference(
+                                                normalized,
+                                                ref)
+                                )
                         );
+                    }
+                }
 
-                refs.addAll(
-                        nested.bufferRefs());
+                /*
+                 * =====================================================
+                 * 2. BUFFER / ASSERT
+                 * =====================================================
+                 */
+                if ("BUFFER".equals(type)
+                        && "ASSERT".equals(op)) {
 
-                if (!nested.complete()) {
+                    String name =
+                            ValidationUtil.text(
+                                    step,
+                                    "name");
 
-                    complete =
-                            false;
+                    String action =
+                            ValidationUtil.action(step);
+
+                    if (name != null
+                            && !name.isBlank()) {
+
+                        usedVariables.add(name);
+
+                        if (!"IS_NULL".equals(action)
+                                && !variables.contains(name)) {
+
+                            issues.add(
+                                    ValidationIssue.error(
+                                            "AGATE-V403",
+                                            "Buffer variable '"
+                                                    + name
+                                                    + "' is used before it is initialized "
+                                                    + "in reusable step "
+                                                    + stepIndex
+                                                    + ".",
+                                            normalized,
+                                            lineOfProperty(
+                                                    normalized,
+                                                    "name",
+                                                    name)
+                                    )
+                            );
+                        }
+                    }
+                }
+
+                /*
+                 * =====================================================
+                 * 3. Nested CALL
+                 * =====================================================
+                 */
+                if ("CALL".equals(type)) {
+
+                    String nestedCommand =
+                            ValidationUtil.text(
+                                    step,
+                                    "command");
+
+                    if (nestedCommand == null
+                            || !nestedCommand.startsWith("reusable.")) {
+
+                        return false;
+                    }
+
+                    boolean nestedComplete =
+                            validateReusableFlow(
+                                    testSuiteFile,
+                                    nestedCommand,
+                                    variables,
+                                    usedVariables,
+                                    callStack,
+                                    issues);
+
+                    if (!nestedComplete) {
+
+                        return false;
+                    }
+                }
+
+                /*
+                 * =====================================================
+                 * 4. Engine BUFFER creates variable
+                 * =====================================================
+                 */
+                if (createsBufferVariable(
+                        type,
+                        op)) {
+
+                    String name =
+                            ValidationUtil.text(
+                                    step,
+                                    "name");
+
+                    if (name != null
+                            && !name.isBlank()) {
+
+                        variables.add(name);
+                    }
+                }
+
+                /*
+                 * =====================================================
+                 * 5. Native BUFFER / EXEC creates variable
+                 * =====================================================
+                 */
+                if ("BUFFER".equals(type)
+                        && "EXEC".equals(op)) {
+
+                    String name =
+                            ValidationUtil.text(
+                                    step,
+                                    "name");
+
+                    if (name != null
+                            && !name.isBlank()) {
+
+                        variables.add(name);
+                    }
                 }
             }
-        }
 
-        return new ReusableUsage(
-                refs,
-                complete);
+            return true;
+
+        } finally {
+
+            /*
+             * callStack describes only the current recursion path.
+             */
+            callStack.remove(normalized);
+        }
     }
 
     /*
-     * command:
-     *
-     * reusable.demo_reusable
-     *
-     * test suite:
-     *
-     * data/demo/reusable_engine_demo.yaml
-     *
-     * resolves to:
-     *
-     * data/demo/reusable/demo_reusable.yaml
+     * =============================================================
+     * Reusable file resolution
+     * =============================================================
      */
+
     private Path resolveReusableFile(
             Path testSuiteFile,
             String command) {
 
         if (testSuiteFile == null
                 || command == null
-                || !command.startsWith(
-                        "reusable.")) {
+                || !command.startsWith("reusable.")) {
 
             return null;
         }
@@ -569,7 +662,15 @@ public final class DataFlowValidator
         }
 
         /*
-         * Also supports:
+         * Supports:
+         *
+         * reusable.demo
+         *
+         * ->
+         *
+         * reusable/demo.yaml
+         *
+         * and:
          *
          * reusable.subfolder.demo
          *
@@ -586,6 +687,102 @@ public final class DataFlowValidator
                 .resolve("reusable")
                 .resolve(relative + ".yaml")
                 .normalize();
+    }
+
+    /*
+     * =============================================================
+     * Source-location helpers for reusable files
+     * =============================================================
+     */
+
+    private Integer lineOfBufferReference(
+            Path file,
+            String variable) {
+
+        if (file == null
+                || variable == null
+                || variable.isBlank()) {
+
+            return null;
+        }
+
+        String token =
+                "{B[" + variable + "]}";
+
+        try {
+
+            List<String> lines =
+                    Files.readAllLines(file);
+
+            for (int i = 0;
+                 i < lines.size();
+                 i++) {
+
+                if (lines.get(i)
+                        .contains(token)) {
+
+                    return i + 1;
+                }
+            }
+
+        } catch (IOException ignored) {
+
+            /*
+             * Line information improves diagnostics,
+             * but validation itself must still work.
+             */
+        }
+
+        return null;
+    }
+
+    private Integer lineOfProperty(
+            Path file,
+            String property,
+            String value) {
+
+        if (file == null
+                || property == null
+                || property.isBlank()) {
+
+            return null;
+        }
+
+        try {
+
+            List<String> lines =
+                    Files.readAllLines(file);
+
+            for (int i = 0;
+                 i < lines.size();
+                 i++) {
+
+                String line =
+                        lines.get(i)
+                                .trim();
+
+                if (!line.startsWith(
+                        property + ":")) {
+
+                    continue;
+                }
+
+                if (value == null
+                        || value.isBlank()
+                        || line.contains(value)) {
+
+                    return i + 1;
+                }
+            }
+
+        } catch (IOException ignored) {
+
+            /*
+             * Location is optional.
+             */
+        }
+
+        return null;
     }
 
     /*
@@ -639,31 +836,5 @@ public final class DataFlowValidator
 
         return BUFFER_PRODUCER_ENGINES.contains(type)
                 && "BUFFER".equals(op);
-    }
-
-    /*
-     * =============================================================
-     * Reusable result
-     * =============================================================
-     */
-
-    private record ReusableUsage(
-            Set<String> bufferRefs,
-            boolean complete) {
-
-        private static ReusableUsage complete(
-                Set<String> refs) {
-
-            return new ReusableUsage(
-                    refs,
-                    true);
-        }
-
-        private static ReusableUsage incomplete() {
-
-            return new ReusableUsage(
-                    Set.of(),
-                    false);
-        }
     }
 }

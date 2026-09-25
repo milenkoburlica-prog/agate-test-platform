@@ -1,9 +1,0 @@
-{
-  "url" : "{{endpoint}}/muhi/1",
-  "method" : "POST",
-  "headers" : {
-    "Content-Type" : "text/xml;charset=UTF-8",
-    "SOAPAction" : "\"\"",
-    "User-Agent" : "Agate-HttpClient (Version 1.0.0)"
-  }
-}

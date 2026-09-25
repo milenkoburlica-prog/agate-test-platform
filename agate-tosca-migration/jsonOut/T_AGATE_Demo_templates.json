@@ -1,0 +1,118 @@
+[ {
+  "name" : "AGATE_Demo",
+  "surrogate" : "01M3CVV3T9F6ESF8W2KJYHPQ3K",
+  "steps" : [ {
+    "index" : 1,
+    "name" : "TBox Set Buffer X",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01M3CW0A9G7NH9NXH228DFWGH2",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "x",
+      "value" : "{XL[x]}",
+      "actionMode" : "Insert",
+      "operator" : "0",
+      "toscaPath" : "x",
+      "toscaPathID" : "01M3CW12YB070Q6DWPVN6QDJAW"
+    } ]
+  }, {
+    "index" : 2,
+    "name" : "TBox Set Buffer Y",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01M3CW1EW756XTQCHXA4F9GDVK",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "y",
+      "value" : "{XL[y]}",
+      "actionMode" : "Insert",
+      "operator" : "0",
+      "toscaPath" : "y",
+      "toscaPathID" : "01M3CW1EW756XTQCHXA4F9GDVM"
+    } ]
+  }, {
+    "index" : 3,
+    "name" : "TBox Set Buffer Z",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01M3CW1ZG3FJBBK6PJKF4TF700",
+    "module" : "TBox Set Buffer",
+    "moduleSurrogate" : "39ef0b81-c955-8ad6-4495-d85735b6c215",
+    "moduleClass" : "XModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "z",
+      "value" : "{XL[z]}",
+      "actionMode" : "Insert",
+      "operator" : "0",
+      "toscaPath" : "z",
+      "toscaPathID" : "01M3CW1ZG3FJBBK6PJKF4TF701"
+    } ]
+  }, {
+    "index" : 4,
+    "name" : "Math-Request",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01M3CVWR9RFRHGABGA0WM3DWDM",
+    "module" : "Math-Request",
+    "moduleSurrogate" : "01M3CTEHWH2FDX98W7VNAE160B",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "Endpoint",
+      "value" : "{B[MATH_URL]}",
+      "actionMode" : "Insert",
+      "operator" : "0",
+      "toscaPath" : "Endpoint",
+      "toscaPathID" : "01M3CVZ4ZXD0P5B0CZ7EGTPW8N"
+    }, {
+      "name" : "Resource",
+      "value" : "/v4/?expr={B[x]}*({B[y]}-{B[z]})",
+      "actionMode" : "Insert",
+      "operator" : "0",
+      "toscaPath" : "Resource",
+      "toscaPathID" : "01M3CVZE4R8DV66E7V15H1QY3W"
+    } ]
+  }, {
+    "index" : 5,
+    "name" : "Math-Response",
+    "type" : null,
+    "op" : null,
+    "surrogate" : "01M3CVWRA70VY22Q183FNF2JX6",
+    "module" : "Math-Response",
+    "moduleSurrogate" : "01M3CTEHWH2FDX98W7VNAE160E",
+    "moduleClass" : "ApiModule",
+    "reusableName" : null,
+    "reusableSurrogate" : null,
+    "condition" : null,
+    "action" : null,
+    "values" : [ {
+      "name" : "StatusCode",
+      "value" : "{NULL}",
+      "actionMode" : "Verify"
+    }, {
+      "name" : "item",
+      "value" : "{NULL}",
+      "actionMode" : "Verify"
+    } ]
+  } ]
+} ]

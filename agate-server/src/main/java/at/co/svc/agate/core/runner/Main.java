@@ -73,9 +73,23 @@ public class Main {
 
                 return;
             }
+         // ================================================================
+         // MODE 3: DSL DESCRIPTION
+         // ================================================================
 
+         if (args.length > 0
+                 && "describe".equalsIgnoreCase(args[0])) {
+
+             if (args.length < 2) {
+                 AgateDescribe.describe(null);
+                 return;
+             }
+
+             AgateDescribe.describe(args[1]);
+             return;
+         }
             // ================================================================
-            // MODE 3: NORMAL TEST EXECUTION
+            // MODE 4: NORMAL TEST EXECUTION
             // ================================================================
 
             if (args.length < 3) {
@@ -94,6 +108,8 @@ public class Main {
                         "  java Main instantiate "
                                 + "<appName> <templateFile> <dataFile>");
 
+                System.err.println(
+                        "  java Main describe <type>");
                 System.err.println(
                         "  java Main validate <yamlFile>");
 

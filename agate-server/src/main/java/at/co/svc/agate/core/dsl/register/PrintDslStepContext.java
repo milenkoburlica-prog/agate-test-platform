@@ -9,82 +9,384 @@ import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class PrintDslStepContext {
-    public static void logDslStepContext(TestLogger logger, TestStep step) {
+
+    public static void logDslStepContext(
+            TestLogger logger,
+            TestStep step) {
+
         logger.log("");
-        // 1. Ako imamo validan originalni YAML tekst bez grešaka, koristimo njega
-        if (step.getTextYaml() != null && !step.getTextYaml().trim().isEmpty() && !step.getTextYaml().contains("Greška:")) {
-            String[] lines = step.getTextYaml().split("\n");
+
+        /*
+         * ---------------------------------------------------------
+         * 1. Original YAML verwenden, wenn er wirklich gültig ist
+         * ---------------------------------------------------------
+         */
+        String originalYaml =
+                step.getTextYaml();
+
+        if (isValidOriginalYaml(originalYaml)) {
+
+            String[] lines =
+                    originalYaml.split("\\R");
+
             for (String line : lines) {
+
                 if (!line.trim().isEmpty()) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "      " + line);
+
+                    logger.log(
+                            ConsoleColors.BLUE
+                                    + ">>> DSL"
+                                    + ConsoleColors.RESET
+                                    + "      "
+                                    + line
+                    );
                 }
             }
+
             return;
         }
 
-        // 2. PAMETNI FALLBACK: Ručno sklapanje strukture u zavisnosti od tipa koraka (Engine-safe)
+        /*
+         * ---------------------------------------------------------
+         * 2. Fallback aus dem bereits geparsten TestStep
+         * ---------------------------------------------------------
+         *
+         * Wichtig:
+         *
+         * Eine interne YAML-Extraktionsfehlermeldung wie
+         *
+         *   # Error: Test Case ...
+         *
+         * darf niemals als DSL ausgegeben werden.
+         */
         try {
-            // Svaki korak počinje sa svojim tipom
-            logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "       - type: " + step.getType());
-            
-            // Prikaz uslova (condition) ako postoji i nije prazan
-            if (step.getCondition() != null && !step.getCondition().trim().isEmpty()) {
-                logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         condition: \"" + step.getCondition() + "\"");
+
+            logLine(
+                    logger,
+                    "- type: " + step.getType()
+            );
+
+            if (notBlank(step.getCondition())) {
+
+                logLine(
+                        logger,
+                        "  condition: \""
+                                + step.getCondition()
+                                + "\""
+                );
             }
 
-            // --- SPECIFIČAN ISPIS ZA 'CALL' TIP (Reusable roditelj) ---
+            /*
+             * -----------------------------------------------------
+             * CALL
+             * -----------------------------------------------------
+             */
             if (step.getType() == StepType.CALL) {
-                if (step.getCommand() != null) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         command: \"" + step.getCommand() + "\"");
-                }
-                if (step.getParameters() != null && !step.getParameters().isEmpty()) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         parameters:");
-                    for (Map.Entry<String, Object> param : step.getParameters().entrySet()) {
-                        String formattedVal = (param.getValue() instanceof String) ? "\"" + param.getValue() + "\"" : String.valueOf(param.getValue());
-                        logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "           " + param.getKey() + ": " + formattedVal);
-                    }
-                }
-                return; // Završavamo ovde za CALL
-            }
 
-            // --- SPECIFIČAN ISPIS ZA 'BUFFER' TIP (Unutar fragmenta) ---
-            if (step.getType() == StepType.BUFFER) {
-                if (step.getOp() != null) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         op: " + step.getOp());
+                if (notBlank(step.getCommand())) {
+
+                    logLine(
+                            logger,
+                            "  command: "
+                                    + quote(step.getCommand())
+                    );
                 }
-                if (step.getName() != null) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         name: " + step.getName());
-                }
-                if (step.getValue() != null) {
-                    String formattedVal = (step.getValue() instanceof String) ? "\"" + step.getValue() + "\"" : String.valueOf(step.getValue());
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         value: " + formattedVal);
-                }
+
+                logParameters(
+                        logger,
+                        step
+                );
+
                 return;
             }
 
-            // --- GENERIČKI ISPIS ZA SVE OSTALE ENGINS (REST, SOAP, SQL, CMD...) ---
-            if (step.getOp() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         op: " + step.getOp());
-            if (step.getCommand() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         command: \"" + step.getCommand() + "\"");
-            if (step.getUrl() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         url: \"" + step.getUrl() + "\"");
-            if (step.getSource() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         source: " + step.getSource());
-            if (step.getPath() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         path: " + step.getPath());
-            if (step.getAction() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         action: " + step.getAction());
-            if (step.getExpected() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         expected: \"" + step.getExpected() + "\"");
-            if (step.getResponse() != null) logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         response: \"" + step.getResponse() + "\"");
-            
-         // --- OVDE UBAČI BLOK ZA CONSTRAINTS ---
-            if (step.getConstraints() != null && !step.getConstraints().isEmpty()) {
-                logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "         constraints:");
-                for (Constraint c : step.getConstraints()) {
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "           - path: " + c.getPath());
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "             action: " + c.getAction());
-                    logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "             expected: '" + c.getExpected() + "'");
+            /*
+             * -----------------------------------------------------
+             * BUFFER
+             * -----------------------------------------------------
+             */
+            if (step.getType() == StepType.BUFFER) {
+
+                if (notBlank(step.getOp())) {
+
+                    logLine(
+                            logger,
+                            "  op: "
+                                    + step.getOp()
+                    );
+                }
+
+                if (notBlank(step.getName())) {
+
+                    logLine(
+                            logger,
+                            "  name: "
+                                    + step.getName()
+                    );
+                }
+
+                if (step.getValue() != null) {
+
+                    logLine(
+                            logger,
+                            "  value: "
+                                    + formatValue(
+                                            step.getValue()
+                                    )
+                    );
+                }
+
+                return;
+            }
+
+            /*
+             * -----------------------------------------------------
+             * REST / SOAP / SQL / CMD / FILE / OC / ...
+             * -----------------------------------------------------
+             */
+            if (notBlank(step.getOp())) {
+
+                logLine(
+                        logger,
+                        "  op: "
+                                + step.getOp()
+                );
+            }
+
+            if (notBlank(step.getCommand())) {
+
+                logLine(
+                        logger,
+                        "  command: "
+                                + quote(step.getCommand())
+                );
+            }
+
+            if (notBlank(step.getEndpoint())) {
+
+                logLine(
+                        logger,
+                        "  endpoint: "
+                                + quote(step.getEndpoint())
+                );
+            }
+
+            if (notBlank(step.getUrl())) {
+
+                logLine(
+                        logger,
+                        "  url: "
+                                + quote(step.getUrl())
+                );
+            }
+
+            if (notBlank(step.getSource())) {
+
+                logLine(
+                        logger,
+                        "  source: "
+                                + step.getSource()
+                );
+            }
+
+            if (notBlank(step.getPath())) {
+
+                logLine(
+                        logger,
+                        "  path: "
+                                + quote(step.getPath())
+                );
+            }
+
+            if (notBlank(step.getAction())) {
+
+                logLine(
+                        logger,
+                        "  action: "
+                                + step.getAction()
+                );
+            }
+
+            if (step.getExpected() != null) {
+
+                logLine(
+                        logger,
+                        "  expected: "
+                                + formatValue(
+                                        step.getExpected()
+                                )
+                );
+            }
+
+            if (notBlank(step.getResponse())) {
+
+                logLine(
+                        logger,
+                        "  response: "
+                                + step.getResponse()
+                );
+            }
+
+            logParameters(
+                    logger,
+                    step
+            );
+
+            /*
+             * -----------------------------------------------------
+             * Constraints
+             * -----------------------------------------------------
+             */
+            if (step.getConstraints() != null
+                    && !step.getConstraints().isEmpty()) {
+
+                logLine(
+                        logger,
+                        "  constraints:"
+                );
+
+                for (Constraint c :
+                        step.getConstraints()) {
+
+                    logLine(
+                            logger,
+                            "    - path: "
+                                    + c.getPath()
+                    );
+
+                    logLine(
+                            logger,
+                            "      action: "
+                                    + c.getAction()
+                    );
+
+                    logLine(
+                            logger,
+                            "      expected: "
+                                    + formatValue(
+                                            c.getExpected()
+                                    )
+                    );
                 }
             }
-            
+
         } catch (Exception e) {
-            logger.log(ConsoleColors.BLUE + ">>> DSL" + ConsoleColors.RESET + "     : [Greška pri prikazu koraka: " + e.getMessage() + "]");
+
+            logger.log(
+                    ConsoleColors.BLUE
+                            + ">>> DSL"
+                            + ConsoleColors.RESET
+                            + "      [Unable to display DSL step: "
+                            + e.getMessage()
+                            + "]"
+            );
         }
     }
 
+    private static boolean isValidOriginalYaml(
+            String yaml) {
+
+        if (yaml == null
+                || yaml.isBlank()) {
+
+            return false;
+        }
+
+        String normalized =
+                yaml.trim();
+
+        /*
+         * Internal extraction errors must trigger fallback.
+         */
+        return !normalized.startsWith("# Error:")
+                && !normalized.startsWith("Error extracting YAML")
+                && !normalized.startsWith("# Greška:")
+                && !normalized.startsWith("Greška:");
+    }
+
+    private static void logParameters(
+            TestLogger logger,
+            TestStep step) {
+
+        if (step.getParameters() == null
+                || step.getParameters().isEmpty()) {
+
+            return;
+        }
+
+        logLine(
+                logger,
+                "  parameters:"
+        );
+
+        for (Map.Entry<String, Object> param :
+                step.getParameters().entrySet()) {
+
+            logLine(
+                    logger,
+                    "    "
+                            + param.getKey()
+                            + ": "
+                            + formatValue(
+                                    param.getValue()
+                            )
+            );
+        }
+    }
+
+    private static void logLine(
+            TestLogger logger,
+            String text) {
+
+        logger.log(
+                ConsoleColors.BLUE
+                        + ">>> DSL"
+                        + ConsoleColors.RESET
+                        + "      "
+                        + text
+        );
+    }
+
+    private static String formatValue(
+            Object value) {
+
+        if (value == null) {
+
+            return "null";
+        }
+
+        if (value instanceof String) {
+
+            return quote(
+                    value.toString()
+            );
+        }
+
+        return String.valueOf(
+                value
+        );
+    }
+
+    private static String quote(
+            String value) {
+
+        if (value == null) {
+
+            return "\"\"";
+        }
+
+        return "\""
+                + value.replace(
+                        "\"",
+                        "\\\""
+                )
+                + "\"";
+    }
+
+    private static boolean notBlank(
+            String value) {
+
+        return value != null
+                && !value.isBlank();
+    }
 }

@@ -1,0 +1,37 @@
+[ {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW8WTHF7KCCN00AP0K3WDY",
+  "Attributes" : {
+    "Name" : "x"
+  },
+  "Assocs" : {
+    "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+    "ParentItem" : [ ],
+    "OwningClass" : [ ],
+    "Values" : [ "01M3CW9Y7D8N4T218GTY08HV3X", "01M3CWAWE6A5E0J7276B12CH24" ]
+  }
+}, {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW93ENF6F6FMYX1JK1BZC3",
+  "Attributes" : {
+    "Name" : "y"
+  },
+  "Assocs" : {
+    "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+    "ParentItem" : [ ],
+    "OwningClass" : [ ],
+    "Values" : [ "01M3CWA16HEXFSVAPPM96ANRJC", "01M3CWB3H9CP4Y9PWCRVT3TVHS" ]
+  }
+}, {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW974W2QWK9N5W4V8P5RZM",
+  "Attributes" : {
+    "Name" : "z"
+  },
+  "Assocs" : {
+    "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+    "ParentItem" : [ ],
+    "OwningClass" : [ ],
+    "Values" : [ "01M3CWA4972YRTF0PSE7W6YQ46", "01M3CWB6Z82JG66429E1525E85" ]
+  }
+} ]

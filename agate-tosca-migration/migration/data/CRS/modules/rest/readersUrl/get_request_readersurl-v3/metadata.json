@@ -1,8 +1,0 @@
-{
-  "url" : "{{endpoint}}/readersUrl",
-  "method" : "GET",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8",
-    "X-SVC-CLIENT-IP" : "{B[X-SVC-CLIENT-IP]}"
-  }
-}

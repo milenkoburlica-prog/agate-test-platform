@@ -41,11 +41,14 @@ public class StepParserFactory {
 
         step.setCommand(asString(stepMap.get("command")));
         step.setResponse(asString(stepMap.get("response")));
+        step.setDatasource(asString(stepMap.get("datasource")));
 
         step.setExpectedExitCode(
                 asInteger(stepMap.get("expectedExitCode")));
         step.setCheckExitCode(
                 asBoolean(stepMap.get("checkExitCode")));
+        step.setIgnoreExitCode(
+                asBoolean(stepMap.get("ignoreExitCode")));
         step.setTimeout(
                 asInteger(stepMap.get("timeout")));
         step.setOutputFile(

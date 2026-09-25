@@ -1,0 +1,305 @@
+{
+  "Entities" : [ {
+    "ObjectClass" : "TCProject",
+    "Surrogate" : "39f95f3f-4567-c229-e2ac-8bf13f388c45",
+    "Attributes" : {
+      "Name" : "R25a",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "138649",
+      "IncludeForSynchronization" : "1",
+      "SpecialProjectName" : "2025",
+      "TestConfigurationParameters" : "H4sIAAAAAAAACrxRS07DMBC9SuQ9bamEhFBDVUxAbEqFQ1eWkBumacDxROMxtGdjwZG4AtOPKhYsWLH0+82b8dfH52i8bn32BhQbDLk67Q1UBqHC5ybUuUq8PDlX48tRCZE1hmVTJ3Is0pkj1wIDafQeqi0kKj0j7IB4k02FzdUV4XsEUtnc+STvuyCOAFysO4+0I5rYLLxQN85HUJlJHUGMGrvNEduZy00nKsMkxQ6QgcPkW8LU5UplkovEJZq0iMC5KimJv/9LMzOf6hVUr5j4URoaYJbgOHO8OrbVF7bEWLkn8b7IpGi3Z2hdcDW0ENiW90ZPbKEnD9d2OBie7eW2aEJk8D6FGoL9Gd+TY//bzv0/fdo3AAAA//8DAB//Nv8EAgAA"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "AttachedFiles" : [ ],
+      "Items" : [ "39f95f3f-4799-6794-d2a0-621a79d66871" ],
+      "Groups" : [ ],
+      "Users" : [ ],
+      "UserBookmarks" : [ ],
+      "ObjectPropertiesDefinitions" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TestSheet",
+    "Surrogate" : "01M3CW766XC0YXC9B6RE5EENDH",
+    "Attributes" : {
+      "Name" : "TestSheet-Agate-Demo",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "138659",
+      "IncludeForSynchronization" : "1"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "ParentFolder" : [ "01M3CW6KSD2NKKKBNG0VPXXRS5" ],
+      "AttachedFiles" : [ ],
+      "Instances" : [ "01M3CW7KFGA5DV1JK9C0PTFXWJ" ],
+      "Relations" : [ ],
+      "AsNotTDMFilteringRelevantDefinedAttributes" : [ ],
+      "Items" : [ "01M3CW8WTHF7KCCN00AP0K3WDY", "01M3CW93ENF6F6FMYX1JK1BZC3", "01M3CW974W2QWK9N5W4V8P5RZM" ]
+    }
+  }, {
+    "ObjectClass" : "TDAttribute",
+    "Surrogate" : "01M3CW8WTHF7KCCN00AP0K3WDY",
+    "Attributes" : {
+      "Name" : "x",
+      "Description" : "",
+      "Weight" : "0",
+      "BusinessRelevant" : "1",
+      "TDM" : "0"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+      "Items" : [ ],
+      "Values" : [ "01M3CW9Y7D8N4T218GTY08HV3X", "01M3CWAWE6A5E0J7276B12CH24" ],
+      "ReferencingRelationItems" : [ ],
+      "AsNotRelevantDefinedAttributes" : [ ],
+      "AsNotTDMFilteringRelevantDefinedAttributes" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TDAttribute",
+    "Surrogate" : "01M3CW93ENF6F6FMYX1JK1BZC3",
+    "Attributes" : {
+      "Name" : "y",
+      "Description" : "",
+      "Weight" : "0",
+      "BusinessRelevant" : "1",
+      "TDM" : "0"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+      "Items" : [ ],
+      "Values" : [ "01M3CWA16HEXFSVAPPM96ANRJC", "01M3CWB3H9CP4Y9PWCRVT3TVHS" ],
+      "ReferencingRelationItems" : [ ],
+      "AsNotRelevantDefinedAttributes" : [ ],
+      "AsNotTDMFilteringRelevantDefinedAttributes" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TDAttribute",
+    "Surrogate" : "01M3CW974W2QWK9N5W4V8P5RZM",
+    "Attributes" : {
+      "Name" : "z",
+      "Description" : "",
+      "Weight" : "0",
+      "BusinessRelevant" : "1",
+      "TDM" : "0"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "TestSheet" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+      "Items" : [ ],
+      "Values" : [ "01M3CWA4972YRTF0PSE7W6YQ46", "01M3CWB6Z82JG66429E1525E85" ],
+      "ReferencingRelationItems" : [ ],
+      "AsNotRelevantDefinedAttributes" : [ ],
+      "AsNotTDMFilteringRelevantDefinedAttributes" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TDInstances",
+    "Surrogate" : "01M3CW7KFGA5DV1JK9C0PTFXWJ",
+    "Attributes" : {
+      "Name" : "Instances"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "DefiningItem" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+      "Items" : [ "01M3CW7KFGA5DV1JK9C0PTFXWK", "01M3CW8N8R281R1MSZKX7701QN" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstance",
+    "Surrogate" : "01M3CW7KFGA5DV1JK9C0PTFXWK",
+    "Attributes" : {
+      "Name" : "Demo_Test_01",
+      "Character" : "0",
+      "Position" : "0",
+      "Weight" : "1",
+      "Description" : "",
+      "InstanceUsage" : "0",
+      "Workstate" : "0"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instances" : [ "01M3CW7KFGA5DV1JK9C0PTFXWJ" ],
+      "Values" : [ "01M3CW9Y7D8N4T218GTY08HV3X", "01M3CWA16HEXFSVAPPM96ANRJC", "01M3CWA4972YRTF0PSE7W6YQ46" ],
+      "UsedInValues" : [ ],
+      "ReferencingRelationItems" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CW9Y7D8N4T218GTY08HV3X",
+    "Attributes" : {
+      "Value" : "2"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW7KFGA5DV1JK9C0PTFXWK" ],
+      "Element" : [ "01M3CW8WTHF7KCCN00AP0K3WDY" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CWA16HEXFSVAPPM96ANRJC",
+    "Attributes" : {
+      "Value" : "7"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW7KFGA5DV1JK9C0PTFXWK" ],
+      "Element" : [ "01M3CW93ENF6F6FMYX1JK1BZC3" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CWA4972YRTF0PSE7W6YQ46",
+    "Attributes" : {
+      "Value" : "3"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW7KFGA5DV1JK9C0PTFXWK" ],
+      "Element" : [ "01M3CW974W2QWK9N5W4V8P5RZM" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstance",
+    "Surrogate" : "01M3CW8N8R281R1MSZKX7701QN",
+    "Attributes" : {
+      "Name" : "Demo_Test_02",
+      "Character" : "0",
+      "Position" : "0",
+      "Weight" : "1",
+      "Description" : "",
+      "InstanceUsage" : "0",
+      "Workstate" : "0"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instances" : [ "01M3CW7KFGA5DV1JK9C0PTFXWJ" ],
+      "Values" : [ "01M3CWAWE6A5E0J7276B12CH24", "01M3CWB3H9CP4Y9PWCRVT3TVHS", "01M3CWB6Z82JG66429E1525E85" ],
+      "UsedInValues" : [ ],
+      "ReferencingRelationItems" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CWAWE6A5E0J7276B12CH24",
+    "Attributes" : {
+      "Value" : "22"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW8N8R281R1MSZKX7701QN" ],
+      "Element" : [ "01M3CW8WTHF7KCCN00AP0K3WDY" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CWB3H9CP4Y9PWCRVT3TVHS",
+    "Attributes" : {
+      "Value" : "70"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW8N8R281R1MSZKX7701QN" ],
+      "Element" : [ "01M3CW93ENF6F6FMYX1JK1BZC3" ]
+    }
+  }, {
+    "ObjectClass" : "TDInstanceValue",
+    "Surrogate" : "01M3CWB6Z82JG66429E1525E85",
+    "Attributes" : {
+      "Value" : "3"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Instance" : [ "01M3CW8N8R281R1MSZKX7701QN" ],
+      "Element" : [ "01M3CW974W2QWK9N5W4V8P5RZM" ]
+    }
+  }, {
+    "ObjectClass" : "TCFolder",
+    "Surrogate" : "01M3CW6KSD2NKKKBNG0VPXXRS5",
+    "Attributes" : {
+      "Name" : "TCD-AGATE-Demo",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "138659",
+      "IncludeForSynchronization" : "1",
+      "ContentPolicy" : "+-----+-------"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "ParentFolder" : [ "39fc9163-1c63-3a88-8151-5c232db07b86" ],
+      "AttachedFiles" : [ ],
+      "Items" : [ "01M3CW766XC0YXC9B6RE5EENDH" ],
+      "ExecutionEntryFolders" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TCFolder",
+    "Surrogate" : "39fc9163-1c63-3a88-8151-5c232db07b86",
+    "Attributes" : {
+      "Name" : "Milenko",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "138656",
+      "IncludeForSynchronization" : "1",
+      "ContentPolicy" : "+-----+-------"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "ParentFolder" : [ "39f95f4a-2d36-92dc-28ed-49a86743054c" ],
+      "AttachedFiles" : [ ],
+      "Items" : [ "01M3CW6KSD2NKKKBNG0VPXXRS5" ],
+      "ExecutionEntryFolders" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TCFolder",
+    "Surrogate" : "39f95f4a-2d36-92dc-28ed-49a86743054c",
+    "Attributes" : {
+      "Name" : "Sandbox",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "128934",
+      "IncludeForSynchronization" : "1",
+      "ContentPolicy" : "+-----+-------"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "ParentFolder" : [ "39f95f3f-4799-6794-d2a0-621a79d66871" ],
+      "AttachedFiles" : [ ],
+      "Items" : [ "39fc9163-1c63-3a88-8151-5c232db07b86" ],
+      "ExecutionEntryFolders" : [ ]
+    }
+  }, {
+    "ObjectClass" : "TCFolder",
+    "Surrogate" : "39f95f3f-4799-6794-d2a0-621a79d66871",
+    "Attributes" : {
+      "Name" : "TestCaseDesign",
+      "CheckoutWorkspace" : "",
+      "SynchronizationPolicy" : "2",
+      "Description" : "",
+      "CheckOutState" : "1",
+      "Revision" : "128934",
+      "IncludeForSynchronization" : "1",
+      "ContentPolicy" : "+-----+-------"
+    },
+    "Assocs" : {
+      "ConfigurationLinks" : [ ],
+      "Properties" : [ ],
+      "AttachedFiles" : [ ],
+      "Items" : [ "39f95f4a-2d36-92dc-28ed-49a86743054c" ],
+      "Project" : [ "39f95f3f-4567-c229-e2ac-8bf13f388c45" ],
+      "ExecutionEntryFolders" : [ ]
+    }
+  } ]
+}

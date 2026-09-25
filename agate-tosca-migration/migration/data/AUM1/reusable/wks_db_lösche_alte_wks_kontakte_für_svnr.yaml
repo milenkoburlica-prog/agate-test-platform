@@ -1,9 +1,0 @@
-steps:
-
-
-      # Execute SQL Query
-      - type: SQL
-        op: EXEC
-        command: "delete from WKS_Kontakt where SV_NUMMER= '{R[SVNR]}'"
-        response: lösche_alle_alten_wks_kontakte_für_svnr_res
-

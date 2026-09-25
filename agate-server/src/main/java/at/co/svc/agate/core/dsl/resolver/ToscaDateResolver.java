@@ -59,56 +59,105 @@ public class ToscaDateResolver {
         return sb.toString();
     }
 
-    private static String calculate(String type, String base, String offset, String format) {
+    private static String calculate(
+            String type,
+            String base,
+            String offset,
+            String format) {
+
         LocalDateTime ldt;
 
-        // 1. Parsiranje baze (startna tačka)
+        // 1. Parse base date
         if (base == null || base.isEmpty()) {
+
             ldt = LocalDateTime.now();
+
         } else {
+
             try {
-                DateTimeFormatter baseFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                ldt = java.time.LocalDate.parse(base, baseFormatter).atStartOfDay();
+
+                DateTimeFormatter baseFormatter =
+                        DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+                ldt = java.time.LocalDate
+                        .parse(base, baseFormatter)
+                        .atStartOfDay();
+
             } catch (Exception e) {
+
                 ldt = LocalDateTime.now();
             }
         }
 
-        // 2. Primena ofseta (sa fleksibilnim Regex-om)
+        // 2. Apply offset
         if (offset != null && !offset.isEmpty()) {
-            // [+-]? znači da je znak opcioni, \s* dozvoljava razmak ako ga ima
-            Pattern p = Pattern.compile("([+-]?)\\s*(\\d+)\\s*([dMyHms])");
-            Matcher m = p.matcher(offset);
+
+            Pattern p =
+                    Pattern.compile("([+-]?)\\s*(\\d+)\\s*([dMyHms])");
+
+            Matcher m =
+                    p.matcher(offset);
 
             while (m.find()) {
-                String sign = m.group(1); // Može biti "+", "-" ili "" (prazan string)
-                int val = Integer.parseInt(m.group(2));
 
-                // Logika: ako je "-", oduzmi, inače dodaj (tretira "" i "+" kao pozitivan broj)
+                String sign =
+                        m.group(1);
+
+                int val =
+                        Integer.parseInt(m.group(2));
+
                 if ("-".equals(sign)) {
                     val = -val;
                 }
 
                 switch (m.group(3)) {
-                case "d" -> ldt = ldt.plusDays(val);
-                case "M" -> ldt = ldt.plusMonths(val);
-                case "y" -> ldt = ldt.plusYears(val);
-                case "H" -> ldt = ldt.plusHours(val);
-                case "m" -> ldt = ldt.plusMinutes(val);
-                case "s" -> ldt = ldt.plusSeconds(val);
+
+                    case "d" -> ldt = ldt.plusDays(val);
+                    case "M" -> ldt = ldt.plusMonths(val);
+                    case "y" -> ldt = ldt.plusYears(val);
+                    case "H" -> ldt = ldt.plusHours(val);
+                    case "m" -> ldt = ldt.plusMinutes(val);
+                    case "s" -> ldt = ldt.plusSeconds(val);
                 }
             }
         }
 
-        // 3. Formatiranje (prilagođavanje Tosca -> Java formatu)
+        // 3. Format result
         if (format == null || format.isEmpty()) {
-            format = type.equals("DATETIME") ? "dd.MM.yyyy HH:mm:ss" : "dd.MM.yyyy";
+
+            format =
+                    type.equals("DATETIME")
+                            ? "dd.MM.yyyy HH:mm:ss"
+                            : "dd.MM.yyyy";
         }
-        String javaFormat = format.replace("f", "S").replace("T", "'T'");
 
-        return ldt.format(DateTimeFormatter.ofPattern(javaFormat));
+        String javaFormat =
+                format.replace("f", "S");
+
+        /*
+         * Tosca may use an unquoted T:
+         *
+         * yyyy-MM-ddTHH:mm:ss
+         *
+         * Java DateTimeFormatter requires literal T to be quoted:
+         *
+         * yyyy-MM-dd'T'HH:mm:ss
+         *
+         * Do not quote it again if it is already quoted.
+         */
+        if (javaFormat.contains("T")
+                && !javaFormat.contains("'T'")) {
+
+            javaFormat =
+                    javaFormat.replace(
+                            "T",
+                            "'T'");
+        }
+
+        return ldt.format(
+                DateTimeFormatter.ofPattern(javaFormat));
     }
-
+    
     private static String process3Part(String input, Pattern pattern) {
         Matcher matcher = pattern.matcher(input);
         StringBuilder sb = new StringBuilder();

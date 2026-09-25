@@ -22,7 +22,7 @@ public class ProcessWait {
             
             String actionNew = action;
             if (actionNew != null && actionNew.contains("{B[")) {
-                actionNew = SVCToscaTranslator.translateToscaValues(action);
+                actionNew = ToscaValueTranslator.translateToscaValues(action);
             }
 
             /** This is done with ProcessVariablesBlock **/
@@ -36,7 +36,7 @@ public class ProcessWait {
     }
 
     private static void printYamlStep(String type, String op, String name, String action, String expected, String condition, String ident) {
-        condition = SVCToscaTranslator.translateToscaValues(condition);
+        condition = ToscaValueTranslator.translateToscaValues(condition);
 
         ToscaToAgaPhase1.writeLine("");
         ToscaToAgaPhase1.writeLine(ident + "      - type: " + type);
@@ -45,7 +45,7 @@ public class ProcessWait {
             ToscaToAgaPhase1.writeLine(ident + "        condition: \"" + formattedCondition + "\"");
         }
         if (action != null) {
-            ToscaToAgaPhase1.writeLine(ident + "        value: \"" + SVCToscaTranslator.translateToscaValues(action) + "\"");
+            ToscaToAgaPhase1.writeLine(ident + "        value: \"" + ToscaValueTranslator.translateToscaValues(action) + "\"");
         }
     }
 } 

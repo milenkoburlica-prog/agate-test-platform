@@ -212,41 +212,125 @@ public class ToscaParserPhase1 {
 
             // 3. Build the output ArrayNode.
             for (JsonNode p : paramList) {
-                String key = p.path("ExplicitName").asText();
-                if (key.isBlank()) continue; 
 
-                ObjectNode v = mapper.createObjectNode();
-                v.put("name", key); // Preserve the parameter name in the object.
+                String toscaPath =
+                        p.path("ToscaPath")
+                                .asText("")
+                                .trim();
+
+                /*
+                 * Do not rely only on ExplicitName.
+                 *
+                 * Several standard Tosca modules (notably
+                 * "TBox Read/Create File") may carry the semantic
+                 * parameter name primarily in ToscaPath, e.g.
+                 *
+                 *   Directory
+                 *   File
+                 *   Text
+                 *
+                 * The old code silently dropped such parameters when
+                 * ExplicitName was blank. The XTestStep itself survived,
+                 * but its values array became empty; later
+                 * ProcessTBoxFileRead_Create therefore returned without
+                 * generating any FILE YAML.
+                 */
+                String key =
+                        p.path("ExplicitName")
+                                .asText("")
+                                .trim();
+
+                if (key.isBlank()) {
+                    key = extractLeafName(toscaPath);
+                }
+
+                if (key.isBlank()) {
+                    MigrationLog.info(
+                            "[Review] Parameter without ExplicitName/ToscaPath ignored"
+                                    + " | step="
+                                    + name
+                                    + " | value="
+                                    + p.path("Value").asText("")
+                    );
+                    continue;
+                }
+
+                ObjectNode v =
+                        mapper.createObjectNode();
+
+                v.put("name", key);
                 v.put("value", p.path("Value").asText());
                 v.put("actionMode", p.path("ActionMode").asText());
+
+                String operator =
+                        p.path("Operator")
+                                .asText(null);
+
+                if (operator != null
+                        && !operator.isBlank()) {
+
+                    v.put("operator", operator);
+                }
                 
-                // Optional fields.
-                String actionProperty = p.path("ActionProperty").asText(null);
-                if (actionProperty != null && !actionProperty.isBlank()) v.put("actionProperty", actionProperty);
+                
+                String actionProperty =
+                        p.path("ActionProperty")
+                                .asText(null);
 
-                String toscaPath = p.path("ToscaPath").asText(null);
-                if (toscaPath != null && !toscaPath.isBlank()) v.put("toscaPath", toscaPath);
+                if (actionProperty != null
+                        && !actionProperty.isBlank()) {
 
-                String toscaPathID = p.path("ToscaPathID").asText(null);
-                if (toscaPath != null && !toscaPath.isBlank()) v.put("toscaPathID", toscaPathID);
+                    v.put("actionProperty", actionProperty);
+                }
 
-                String xmlPath = p.path("XmlPath").asText(null);
-                if (xmlPath != null && !xmlPath.isBlank()) v.put("xmlPath", xmlPath);
+                if (!toscaPath.isBlank()) {
+                    v.put("toscaPath", toscaPath);
+                }
 
-                String jsonPath = p.path("JsonPath").asText(null);
-                if (jsonPath != null && !jsonPath.isBlank()) v.put("jsonPath", jsonPath);
+                String toscaPathID =
+                        p.path("ToscaPathID")
+                                .asText(null);
 
-                // Add XCondition when present.
-                String xCondition = p.path("XCondition").asText(null);
-                if (xCondition != null && !xCondition.isBlank()) {
+                if (toscaPathID != null
+                        && !toscaPathID.isBlank()) {
+
+                    v.put("toscaPathID", toscaPathID);
+                }
+
+                String xmlPath =
+                        p.path("XmlPath")
+                                .asText(null);
+
+                if (xmlPath != null
+                        && !xmlPath.isBlank()) {
+
+                    v.put("xmlPath", xmlPath);
+                }
+
+                String jsonPath =
+                        p.path("JsonPath")
+                                .asText(null);
+
+                if (jsonPath != null
+                        && !jsonPath.isBlank()) {
+
+                    v.put("jsonPath", jsonPath);
+                }
+
+                String xCondition =
+                        p.path("XCondition")
+                                .asText(null);
+
+                if (xCondition != null
+                        && !xCondition.isBlank()) {
+
                     v.put("xCondition", xCondition);
                 }
 
-                // Add each parameter to the output array.
                 values.add(v);
             }
         }
-        
+
         out.set("values", values);
         return out;
     }
@@ -269,12 +353,33 @@ public class ToscaParserPhase1 {
 
         // 2. Add condition to the output object.
         String condition = node.path("Attributes").path("Condition").asText(null);
+        
+        System.err.println(
+                "[PHASE1-FOLDER-REF] surrogate="
+                        + surrogate
+                        + " name=["
+                        + name
+                        + "] condition=["
+                        + condition
+                        + "]"
+        );
+        
+        
         if (condition != null && !condition.isEmpty()) {
             //out.put("condition", condition);
             out.put("condition", normalizeCondition(condition));
         } else {
             out.putNull("condition");
         }
+        
+        
+        System.err.println(
+                "[PHASE1-FOLDER-REF-AFTER] surrogate="
+                        + surrogate
+                        + " outCondition=["
+                        + out.path("condition").asText("<null>")
+                        + "]"
+        );
         
         String reusedId = node.path("Assocs").path("ReusedItem").isArray()
                 ? node.path("Assocs").path("ReusedItem").get(0).asText()
@@ -325,6 +430,36 @@ public class ToscaParserPhase1 {
 
         return out;
     }
+    private String extractLeafName(
+            String toscaPath) {
+
+        if (toscaPath == null
+                || toscaPath.isBlank()) {
+
+            return "";
+        }
+
+        String path =
+                toscaPath.trim();
+
+        int dot =
+                path.lastIndexOf('.');
+
+        String leaf =
+                dot >= 0
+                        ? path.substring(dot + 1)
+                        : path;
+
+        leaf =
+                leaf.replaceAll(
+                        "\\[\\d+\\]$",
+                        ""
+                );
+
+        return leaf.trim();
+    }
+
+
     private String normalizeCondition(String condition) {
         //if (condition == null || condition.isBlank()) 
         {

@@ -26,6 +26,7 @@ public final class SqlSchemaValidator
                     "op",
                     "condition",
                     "command",
+                    "datasource",
                     "response",
                     "constraints"
             );
@@ -212,6 +213,30 @@ public final class SqlSchemaValidator
                 "AGATE-V902",
                 "SQL/EXEC",
                 issues);
+
+        JsonNode datasourceNode =
+                node.get("datasource");
+
+        if (datasourceNode != null
+                && !datasourceNode.isNull()) {
+
+            String datasource =
+                    datasourceNode.asText();
+
+            if (datasource == null
+                    || datasource.isBlank()) {
+
+                issues.add(
+                        ValidationIssue.error(
+                                "AGATE-V909",
+                                "SQL/EXEC property 'datasource' must not be blank when specified.",
+                                c.file(),
+                                c.source()
+                                        .lineOf("datasource:")
+                        )
+                );
+            }
+        }
 
         String command =
                 ValidationUtil.text(

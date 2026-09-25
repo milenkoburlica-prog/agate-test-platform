@@ -56,7 +56,7 @@ public class ProcessVariablesBlock {
 
                 String val = (details.getValue() == null) ? "" : details.getValue();
                 val = val.replace("\r", " ").replace("\n", " ").replaceAll("\\s+", " ").trim();
-                val = SVCToscaTranslator.translateToscaValues(val);
+                val = ToscaValueTranslator.translateToscaValues(val);
 
                 ToscaToAgaPhase1.writeLine("      " + cleanKey + ": \"" + val + "\"");
                 addedVarsLow.add(cleanKey);

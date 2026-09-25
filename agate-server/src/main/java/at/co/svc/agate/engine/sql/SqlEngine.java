@@ -40,7 +40,6 @@ public class SqlEngine extends AbstractStepEngine {
 
     private static final Set<String> SUPPORTED_ASSERT_ACTIONS =
             Set.of(
-                    "ROW_COUNT",
                     "ALL_MATCH",
                     "ANY_MATCH",
                     "IS_NULL",
@@ -56,6 +55,23 @@ public class SqlEngine extends AbstractStepEngine {
                     "LESS_THAN_OR_EQUAL",
                     "BETWEEN",
                     "DATE_EQUALS"
+            );
+
+
+
+    private static final Set<String> SUPPORTED_ASSERT_SOURCES =
+            Set.of(
+                    "ROW_COUNT"
+            );
+
+    private static final Set<String> SUPPORTED_ROW_COUNT_ACTIONS =
+            Set.of(
+                    "EQUALS",
+                    "NOT_EQUALS",
+                    "GREATER_THAN",
+                    "GREATER_THAN_OR_EQUAL",
+                    "LESS_THAN",
+                    "LESS_THAN_OR_EQUAL"
             );
 
     private static final Set<String> SUPPORTED_CONSTRAINT_ACTIONS =
@@ -255,6 +271,16 @@ public class SqlEngine extends AbstractStepEngine {
 
         String sqlUpper = resolvedSql.toUpperCase();
 
+        if (Boolean.TRUE.equals(printExecution)
+                && isVerbose
+                && !isBlank(step.getDatasource())) {
+
+            logger.info(ConsoleColors.GREEN
+                    + "    >>> DATASOURCE : "
+                    + step.getDatasource().trim()
+                    + ConsoleColors.RESET);
+        }
+
         if (Boolean.TRUE.equals(printExecution) && isVerbose) {
             if (resolvedSql.contains("\n") || resolvedSql.contains("\r")) {
                 logger.info(ConsoleColors.GREEN
@@ -284,7 +310,7 @@ public class SqlEngine extends AbstractStepEngine {
             if (sqlUpper.startsWith("SELECT")) {
 
                 List<Map<String, Object>> resultTable =
-                        DatabaseManager.select(resolvedSql);
+                        DatabaseManager.select(resolvedSql, step.getDatasource());
 
                 if (step.getConstraints() != null
                         && !step.getConstraints().isEmpty()) {
@@ -326,7 +352,7 @@ public class SqlEngine extends AbstractStepEngine {
             } else {
 
                 int rowsAffected =
-                        DatabaseManager.update(resolvedSql);
+                        DatabaseManager.update(resolvedSql, step.getDatasource());
 
                 if (Boolean.TRUE.equals(printExecution)
                         && isVerbose) {
@@ -360,6 +386,7 @@ public class SqlEngine extends AbstractStepEngine {
             boolean isVerbose) {
 
         String responseKey = step.getResponse();
+        String source = normalizeUpper(step.getSource(), "");
         String action = normalizeUpper(step.getAction(), "");
         String expectedRaw = step.getExpected();
         String column = step.getColumn();
@@ -379,6 +406,16 @@ public class SqlEngine extends AbstractStepEngine {
                     .build();
         }
 
+        if (!isBlank(source)
+                && !SUPPORTED_ASSERT_SOURCES.contains(source)) {
+
+            throw AgateStepException.builder("Unsupported SQL assertion source")
+                    .actual(source)
+                    .hint("Supported SQL ASSERT sources: "
+                            + String.join(", ", SUPPORTED_ASSERT_SOURCES))
+                    .build();
+        }
+
         Integer row = parseRow(step.getRow());
 
         List<Map<String, Object>> table =
@@ -389,9 +426,19 @@ public class SqlEngine extends AbstractStepEngine {
         String actualValue;
         boolean passed;
 
-        if ("ROW_COUNT".equals(action)) {
+        if ("ROW_COUNT".equals(source)) {
+
+            if (!SUPPORTED_ROW_COUNT_ACTIONS.contains(action)) {
+                throw AgateStepException.builder("Unsupported ROW_COUNT assertion action")
+                        .actual(action)
+                        .detail("Source", source)
+                        .hint("Supported ROW_COUNT actions: "
+                                + String.join(", ", SUPPORTED_ROW_COUNT_ACTIONS))
+                        .build();
+            }
 
             requireExpected(expectedRaw, action);
+            validateRowCountExpected(expectedRaw);
 
             actualValue =
                     String.valueOf(table.size());
@@ -466,10 +513,16 @@ public class SqlEngine extends AbstractStepEngine {
                             .detail("Action", action)
                             .detail("Response", responseKey);
 
-            if (!"ROW_COUNT".equals(action)) {
+            if (!isBlank(source)) {
+                failure.detail("Source", source);
+            }
+
+            if (!"ROW_COUNT".equals(source)) {
+
                 if (row != null
                         && !"ALL_MATCH".equals(action)
                         && !"ANY_MATCH".equals(action)) {
+
                     failure.detail("Row", row);
                 }
 
@@ -485,68 +538,74 @@ public class SqlEngine extends AbstractStepEngine {
                 && isVerbose) {
 
             String msg;
-            String columnInfo =
-                    column;
 
-            if (column != null
-                    && column.trim().matches("\\d+")
-                    && !table.isEmpty()) {
+            if ("ROW_COUNT".equals(source)) {
 
-                int idx =
-                        Integer.parseInt(column.trim());
+                msg = String.format(
+                        "ROW_COUNT -> Actual: %s %s Expected: %s",
+                        actualValue,
+                        action,
+                        expectedRaw);
 
-                Object[] keys =
-                        table.get(0)
-                                .keySet()
-                                .toArray();
+            } else {
 
-                if (idx >= 0
-                        && idx < keys.length) {
+                String columnInfo =
+                        column;
 
-                    columnInfo =
-                            String.format(
-                                    "%s (%s)",
-                                    column.trim(),
-                                    keys[idx]);
+                if (column != null
+                        && column.trim().matches("\\d+")
+                        && !table.isEmpty()) {
+
+                    int idx =
+                            Integer.parseInt(column.trim());
+
+                    Object[] keys =
+                            table.get(0)
+                                    .keySet()
+                                    .toArray();
+
+                    if (idx >= 0
+                            && idx < keys.length) {
+
+                        columnInfo =
+                                String.format(
+                                        "%s (%s)",
+                                        column.trim(),
+                                        keys[idx]);
+                    }
                 }
-            }
 
-            switch (action) {
+                switch (action) {
 
-                case "ROW_COUNT" ->
-                        msg = String.format(
-                                "ROW_COUNT -> Actual: %s Expected: %s",
-                                actualValue,
-                                expectedRaw);
+                    case "ALL_MATCH",
+                         "ANY_MATCH" ->
+                            msg = String.format(
+                                    "[Col:%s] -> %s | %s (Expected: \"%s\")",
+                                    columnInfo,
+                                    action,
+                                    actualValue,
+                                    expectedRaw);
 
-                case "ALL_MATCH",
-                     "ANY_MATCH" ->
-                        msg = String.format(
-                                "[Col:%s] -> %s | %s (Expected: \"%s\")",
-                                columnInfo,
-                                action,
-                                actualValue,
-                                expectedRaw);
+                    case "IS_NULL",
+                         "IS_NOT_NULL",
+                         "IS_EMPTY",
+                         "IS_NOT_EMPTY" ->
+                            msg = String.format(
+                                    "[Row:%d, Col:%s] -> Actual: \"%s\" [%s]",
+                                    row,
+                                    columnInfo,
+                                    actualValue,
+                                    action);
 
-                case "IS_NULL",
-                     "IS_NOT_NULL",
-                     "IS_EMPTY",
-                     "IS_NOT_EMPTY" ->
-                        msg = String.format(
-                                "[Row:%d, Col:%s] -> Actual: \"%s\" [%s]",
-                                row,
-                                columnInfo,
-                                actualValue,
-                                action);
-
-                default ->
-                        msg = String.format(
-                                "[Row:%d, Col:%s] -> Actual: \"%s\" %s Expected: \"%s\"",
-                                row,
-                                columnInfo,
-                                actualValue,
-                                action,
-                                expectedRaw);
+                    default ->
+                            msg = String.format(
+                                    "[Row:%d, Col:%s] -> Actual: \"%s\" %s Expected: \"%s\"",
+                                    row,
+                                    columnInfo,
+                                    actualValue,
+                                    action,
+                                    expectedRaw);
+                }
             }
 
             logger.info(
@@ -710,8 +769,7 @@ public class SqlEngine extends AbstractStepEngine {
                             || "null".equals(actual)
                             || actual.trim().isEmpty());
 
-            case "ROW_COUNT",
-                 "EQUALS" ->
+            case "EQUALS" ->
                     actual.equals(expected);
 
             case "NOT_EQUALS" ->
@@ -805,13 +863,30 @@ public class SqlEngine extends AbstractStepEngine {
                     expected);
         }
 
-        if ("ROW_COUNT".equals(action)
-                && !isInteger(expected)) {
+    }
+
+    private void validateRowCountExpected(
+            String expected) {
+
+        if (!isInteger(expected)) {
 
             throw AgateStepException.builder("Invalid ROW_COUNT expected value")
-                    .expected("A whole number")
+                    .expected("A non-negative whole number")
                     .actual(expected)
                     .hint("Use a row count such as 0, 1, 2, ...")
+                    .build();
+        }
+
+        int value =
+                Integer.parseInt(
+                        expected.trim());
+
+        if (value < 0) {
+
+            throw AgateStepException.builder("Invalid ROW_COUNT expected value")
+                    .expected("A non-negative whole number")
+                    .actual(expected)
+                    .hint("ROW_COUNT cannot be compared with a negative expected row count.")
                     .build();
         }
     }

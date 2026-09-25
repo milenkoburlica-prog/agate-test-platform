@@ -401,15 +401,30 @@ public class RestEngine implements TestStepEngine {
                 new YamlPlaceholderResolver();
 
         if (!expected.isEmpty()) {
-            expected = resolver.resolve(
-                    tc,
-                    expected,
-                    tc.getVariables(),
-                    yamlFile,
-                    stepIndex,
-                    "expected");
-        }
 
+            expected =
+                    resolver.resolve(
+                            tc,
+                            expected,
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "expected",
+                            step
+                    );
+
+            expected =
+                    resolver.resolve(
+                            tc,
+                            expected,
+                            tc.getVariables(),
+                            yamlFile,
+                            stepIndex,
+                            "expected",
+                            step
+                    );
+        }
+        
         if (valueField != null && !valueField.isBlank()) {
             valueField = resolver.resolve(
                     tc,

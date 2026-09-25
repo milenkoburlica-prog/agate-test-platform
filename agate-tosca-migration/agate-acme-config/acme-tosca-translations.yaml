@@ -1,0 +1,49 @@
+customer: demos
+
+# ============================================================
+# Tosca BUFFER -> AGATE environment / user configuration
+#
+# Example:
+#
+#   {B[G_EC_OpenShift_Namespace]}
+#
+# becomes:
+#
+#   {E[env.openShift.namespace]}
+# ============================================================
+
+bufferMappings:
+
+  ACME_DB_USER: env.database.user
+  ACME_DB_PASSWORD: env.database.password
+
+  ACME_OpenShift_Namespace: env.openShift.namespace
+  G_ACME_OpenShift_Namespace: env.openShift.namespace
+  
+  MATH_URL: env.math.url 
+# ============================================================
+# Tosca SETTINGS -> AGATE environment
+#
+# Example:
+#
+#   {S[SVC.Projekt root path]}
+#
+# becomes:
+#
+#   {E[env.SVC_Projekt_root_path]}
+# ============================================================
+
+settingMappings:
+
+  "SVC.Projekt root path": env.SVC_Projekt_root_path
+
+
+# ============================================================
+# Customer-specific literal replacements
+# ============================================================
+
+literalMappings:
+
+  '%logcheckcloud%\\%LogCheckCloud%': '{E[env.openshift_logcheck_dir]}'
+  '%logcheckcloud%\%LogCheckCloud%': '{E[env.openshift_logcheck_dir]}'
+  '%logcheckcloud%': '{E[env.openshift_logcheck_dir]}'

@@ -1,7 +1,0 @@
-name: prüfung_versionsnummer_vdas
-steps:
-
-      - type: BUFFER
-        op: EXEC
-        name: VDAS_Version
-        value: "{B[Version_VDAS]}Z"

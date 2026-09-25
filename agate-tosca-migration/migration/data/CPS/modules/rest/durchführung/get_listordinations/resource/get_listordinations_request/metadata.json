@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/{XL[Durchführung.GET listOrdinations.Resource]}",
-  "method" : "GET",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

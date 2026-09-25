@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/simulatord/insert_card",
-  "method" : "POST",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

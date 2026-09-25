@@ -31,7 +31,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import at.co.svc.aga.transformator.ToscaLibraryMigrator;
 import at.co.svc.aga.transformator.ToscaToAgaPhase1;
-import at.co.svc.aga.transformator.utils.SVCToscaTranslator;
+import at.co.svc.aga.transformator.utils.MigrationReport;
+import at.co.svc.aga.transformator.utils.ToscaValueTranslator;
 import at.co.svc.tosca.testcases.FolderPropagationEngine;
 import at.co.svc.tosca.testcases.IfPropagationEngine;
 import at.co.svc.tosca.testcases.XTestStepExtend;
@@ -99,7 +100,20 @@ public class MainMigrationApp {
     
     public static void start(String appID, String jsonDir, String baseFileName, String migrationDir)
             throws Exception, IOException {
-        System.out.println("appID = " + appID);
+
+        MigrationArtifactAudit.Session artifactAudit =
+                MigrationArtifactAudit.begin(
+                        appID,
+                        baseFileName,
+                        migrationDir
+                );
+
+        boolean migrationSucceeded = false;
+
+        try {
+
+        MigrationReport.reset();
+        
         String outputDir = System.getProperty("user.dir") + "\\" + jsonDir ;
         
         String tsuPath = System.getProperty("user.dir") + "\\tsu\\" + baseFileName + ".tsu";
@@ -142,14 +156,32 @@ public class MainMigrationApp {
         List<String> unusedReusable = new ArrayList<String>();
         List<String> nueReusable = new ArrayList<String>();
         processReusableModules(migrationDir,appID, baseFileName, migModules, usedReusable, unusedReusable, nueReusable);
+        
         modifyYamlFile(migrationDir, appID, baseFileName);
-        for(String item:templeteFile) {
-            Path path = Paths.get(item);            
+        
+        for (String item : templeteFile) {
+            Path path = Paths.get(item);
             String fileName = path.getFileName().toString();
-            String baseName = fileName.endsWith(".yaml") 
-                              ? fileName.substring(0, fileName.length() - 5) 
-                              : fileName;
-           modifyYamlFile(migrationDir, appID + "/template", baseName);
+            String baseName = fileName.endsWith(".yaml")
+                    ? fileName.substring(0, fileName.length() - 5)
+                    : fileName;
+
+            modifyYamlFile(
+                    migrationDir,
+                    appID + "/template",
+                    baseName
+            );
+        }
+
+        MigrationReport.printSummary();
+
+        migrationSucceeded = true;
+
+        } finally {
+
+            artifactAudit.finish(
+                    migrationSucceeded
+            );
         }
     }
     // =====================================================
@@ -763,45 +795,59 @@ public class MainMigrationApp {
 
         System.out.println();
 
-        System.out.println(
-                "INFO: Started deleting unused modules..."
-        );
+        if (MigrationArtifactAudit.isManagedCleanupEnabled()) {
 
-        for (String path : unusedReusable) {
+            System.out.println(
+                    "INFO: Legacy unused-reusable deletion is disabled because "
+                            + "the migration artifact audit/cleanup workflow is active."
+            );
 
-            try {
+            System.out.println(
+                    "INFO: Unused reusable candidates will be evaluated after the complete migration."
+            );
 
-                Path deletePath =
-                        Paths.get(userDir, path);
+        } else {
 
-                System.out.println(
-                        "[DELETE-DEBUG] path   = "
-                                + deletePath.toAbsolutePath()
-                );
+            System.out.println(
+                    "INFO: Started deleting unused modules..."
+            );
 
-                System.out.println(
-                        "[DELETE-DEBUG] exists = "
-                                + Files.exists(deletePath)
-                );
+            for (String path : unusedReusable) {
 
-                boolean deleted =
-                        Files.deleteIfExists(deletePath);
+                try {
 
-                if (deleted) {
+                    Path deletePath =
+                            Paths.get(userDir, path);
 
                     System.out.println(
-                            "DELETED: " + path
+                            "[DELETE-DEBUG] path   = "
+                                    + deletePath.toAbsolutePath()
+                    );
+
+                    System.out.println(
+                            "[DELETE-DEBUG] exists = "
+                                    + Files.exists(deletePath)
+                    );
+
+                    boolean deleted =
+                            Files.deleteIfExists(deletePath);
+
+                    if (deleted) {
+
+                        System.out.println(
+                                "DELETED: " + path
+                        );
+                    }
+
+                } catch (IOException e) {
+
+                    System.err.println(
+                            "ERROR: Failed to delete "
+                                    + path
+                                    + ": "
+                                    + e.getMessage()
                     );
                 }
-
-            } catch (IOException e) {
-
-                System.err.println(
-                        "ERROR: Failed to delete "
-                                + path
-                                + ": "
-                                + e.getMessage()
-                );
             }
         }
 
@@ -839,6 +885,22 @@ public class MainMigrationApp {
                 sourceFolder,
                 userDir,
                 "REFRESHED"
+        );
+
+        // ---------------------------------------------------------
+        // 8. Synchronize reference API modules used by reference reusables
+        // ---------------------------------------------------------
+
+        System.out.println();
+        System.out.println(">>> REFRESHING REFERENCE API MODULES");
+
+        synchronizeReferenceModules(
+                usedReusable,
+                neueReusable,
+                sourceFolder,
+                userDir,
+                migrationDir,
+                appID
         );
     }
     
@@ -1002,122 +1064,780 @@ public class MainMigrationApp {
     }
     
         
-    public static void modifyYamlFile(String migrationDir, String appID, String baseFileName) {
-        String filePath = Paths.get(System.getProperty("user.dir"), migrationDir, appID, baseFileName + ".yaml")
-                               .toString().replace("\\", "/");
-        
+
+    /**
+     * Synchronizes REST/SOAP module folders referenced by reusable YAML files
+     * that come from migration/ref/reusable.
+     *
+     * Reference reusable + reference modules are treated as one unit.
+     * Only modules actually referenced by those reference reusable YAMLs are
+     * copied. Unrelated reference modules are ignored.
+     */
+    private static void synchronizeReferenceModules(
+            List<String> usedReusable,
+            List<String> neueReusable,
+            String sourceReusableFolder,
+            String userDir,
+            String migrationDir,
+            String appID) {
+
+        Set<Path> referenceReusableFiles = new HashSet<>();
+
+        collectReferenceReusableFiles(
+                usedReusable,
+                sourceReusableFolder,
+                referenceReusableFiles
+        );
+
+        collectReferenceReusableFiles(
+                neueReusable,
+                sourceReusableFolder,
+                referenceReusableFiles
+        );
+
+        if (referenceReusableFiles.isEmpty()) {
+            System.out.println(
+                    "INFO: No reference reusable YAML files are active. "
+                            + "Reference module synchronization skipped."
+            );
+            return;
+        }
+
+        Path referenceModulesRoot =
+                Paths.get(
+                        userDir,
+                        "migration",
+                        "ref",
+                        "modules"
+                )
+                .toAbsolutePath()
+                .normalize();
+
+        Path targetModulesRoot =
+                Paths.get(
+                        userDir,
+                        migrationDir,
+                        appID,
+                        "modules"
+                )
+                .toAbsolutePath()
+                .normalize();
+
+        System.out.println(
+                "[REF-MODULE-DEBUG] reference root = "
+                        + referenceModulesRoot
+        );
+
+        System.out.println(
+                "[REF-MODULE-DEBUG] target root    = "
+                        + targetModulesRoot
+        );
+
+        Set<String> apiCommands = new HashSet<>();
+
+        for (Path referenceReusable : referenceReusableFiles) {
+
+            System.out.println(
+                    "[REF-MODULE-DEBUG] scanning reusable = "
+                            + referenceReusable
+            );
+
+            apiCommands.addAll(
+                    findApiCommands(
+                            referenceReusable.toFile()
+                    )
+            );
+        }
+
+        if (apiCommands.isEmpty()) {
+            System.out.println(
+                    "INFO: No REST/SOAP commands found in reference reusable YAML files."
+            );
+            return;
+        }
+
+        List<String> sortedCommands = new ArrayList<>(apiCommands);
+        Collections.sort(sortedCommands);
+
+        for (String command : sortedCommands) {
+
+            Path relativeModulePath =
+                    apiCommandToRelativeModulePath(command);
+
+            if (relativeModulePath == null) {
+                System.out.println(
+                        "[REF-MODULE-DEBUG] unsupported command ignored = "
+                                + command
+                );
+                continue;
+            }
+
+            Path sourceModuleDir =
+                    referenceModulesRoot
+                            .resolve(relativeModulePath)
+                            .normalize();
+
+            Path targetModuleDir =
+                    targetModulesRoot
+                            .resolve(relativeModulePath)
+                            .normalize();
+
+            if (!sourceModuleDir.startsWith(referenceModulesRoot)
+                    || !targetModuleDir.startsWith(targetModulesRoot)) {
+
+                System.err.println(
+                        "WARNING: Unsafe reference module path ignored: "
+                                + command
+                );
+                continue;
+            }
+
+            System.out.println();
+            System.out.println(
+                    "[REF-MODULE-DEBUG] command = " + command
+            );
+            System.out.println(
+                    "[REF-MODULE-DEBUG] source  = " + sourceModuleDir
+            );
+            System.out.println(
+                    "[REF-MODULE-DEBUG] target  = " + targetModuleDir
+            );
+
+            if (!Files.isDirectory(sourceModuleDir)) {
+                System.out.println(
+                        "[REF-MODULE-DEBUG] no reference module found; "
+                                + "migrated module remains unchanged."
+                );
+                continue;
+            }
+
+            try {
+                copyDirectoryRecursively(
+                        sourceModuleDir,
+                        targetModuleDir
+                );
+
+                System.out.println(
+                        "REFRESHED REFERENCE MODULE: "
+                                + relativeModulePath
+                );
+
+            } catch (IOException e) {
+                System.err.println(
+                        "ERROR: Failed to synchronize reference module "
+                                + command
+                                + " -> "
+                                + e.getMessage()
+                );
+            }
+        }
+    }
+
+
+    private static void collectReferenceReusableFiles(
+            List<String> reusablePaths,
+            String sourceReusableFolder,
+            Set<Path> result) {
+
+        if (reusablePaths == null || reusablePaths.isEmpty()) {
+            return;
+        }
+
+        for (String relativePath : reusablePaths) {
+
+            if (relativePath == null || relativePath.isBlank()) {
+                continue;
+            }
+
+            Path targetPath = Paths.get(relativePath);
+            Path fileName = targetPath.getFileName();
+
+            if (fileName == null) {
+                continue;
+            }
+
+            Path referenceFile =
+                    Paths.get(
+                            sourceReusableFolder,
+                            fileName.toString()
+                    )
+                    .toAbsolutePath()
+                    .normalize();
+
+            if (Files.isRegularFile(referenceFile)) {
+                result.add(referenceFile);
+            }
+        }
+    }
+
+
+    private static List<String> findApiCommands(
+            File yamlFile) {
+
+        List<String> commands = new ArrayList<>();
+
+        if (yamlFile == null || !yamlFile.isFile()) {
+            return commands;
+        }
+
+        try (BufferedReader br =
+                     new BufferedReader(
+                             new FileReader(yamlFile)
+                     )) {
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                String trimmed = line.trim();
+
+                if (!trimmed.startsWith("command:")) {
+                    continue;
+                }
+
+                String command =
+                        trimmed
+                                .substring(trimmed.indexOf(":") + 1)
+                                .trim()
+                                .replace("\"", "")
+                                .replace("'", "");
+
+                if (command.startsWith("rest.")
+                        || command.startsWith("soap.")) {
+
+                    commands.add(command);
+                }
+            }
+
+        } catch (IOException e) {
+            System.err.println(
+                    "ERROR reading reference reusable "
+                            + yamlFile.getPath()
+                            + " -> "
+                            + e.getMessage()
+            );
+        }
+
+        return commands;
+    }
+
+
+    private static Path apiCommandToRelativeModulePath(
+            String command) {
+
+        if (command == null || command.isBlank()) {
+            return null;
+        }
+
+        String normalized = command.trim();
+
+        if (!(normalized.startsWith("rest.")
+                || normalized.startsWith("soap."))) {
+            return null;
+        }
+
+        String[] parts = normalized.split("\\.");
+
+        if (parts.length < 2) {
+            return null;
+        }
+
+        Path result = Paths.get(parts[0]);
+
+        for (int i = 1; i < parts.length; i++) {
+
+            if (parts[i] == null || parts[i].isBlank()) {
+                return null;
+            }
+
+            if (".".equals(parts[i])
+                    || "..".equals(parts[i])
+                    || parts[i].contains("/")
+                    || parts[i].contains("\\")) {
+                return null;
+            }
+
+            result = result.resolve(parts[i]);
+        }
+
+        return result.normalize();
+    }
+
+
+    private static void copyDirectoryRecursively(
+            Path sourceDir,
+            Path targetDir)
+            throws IOException {
+
+        Path normalizedSource =
+                sourceDir.toAbsolutePath().normalize();
+
+        Path normalizedTarget =
+                targetDir.toAbsolutePath().normalize();
+
+        if (!Files.isDirectory(normalizedSource)) {
+            throw new IOException(
+                    "Reference module directory does not exist: "
+                            + normalizedSource
+            );
+        }
+
+        try (java.util.stream.Stream<Path> stream =
+                     Files.walk(normalizedSource)) {
+
+            for (Path sourcePath : stream.toList()) {
+
+                Path relativePath =
+                        normalizedSource.relativize(sourcePath);
+
+                Path targetPath =
+                        normalizedTarget.resolve(relativePath);
+
+                if (Files.isDirectory(sourcePath)) {
+                    Files.createDirectories(targetPath);
+                    continue;
+                }
+
+                if (targetPath.getParent() != null) {
+                    Files.createDirectories(targetPath.getParent());
+                }
+
+                Files.copy(
+                        sourcePath,
+                        targetPath,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+            }
+        }
+    }
+
+
+    public static void modifyYamlFile(
+            String migrationDir,
+            String appID,
+            String baseFileName) {
+
+        String filePath =
+                Paths.get(
+                                System.getProperty("user.dir"),
+                                migrationDir,
+                                appID,
+                                baseFileName + ".yaml"
+                        )
+                        .toString()
+                        .replace("\\", "/");
+
         File file = new File(filePath);
+
         if (!file.exists()) {
-            System.err.println("File does not exist: " + filePath);
+            System.err.println(
+                    "File does not exist: " + filePath
+            );
             return;
         }
 
         List<String> outputLines = new ArrayList<>();
+
         List<String> cardSlotCommands = Arrays.asList(
-            "reusable.create_cardtoken_svsig_e_card",
-            "reusable.create_cardtoken_svsig_o_card",
-            "reusable.create_cardtoken_vpsig_o_card",
-            "reusable.ru_dialog_aufbau_mit_ordid"
+                "reusable.create_cardtoken_svsig_e_card",
+                "reusable.create_cardtoken_svsig_o_card",
+                "reusable.create_cardtoken_vpsig_o_card",
+                "reusable.ru_dialog_aufbau_mit_ordid"
         );
 
-        boolean skipDialogcloseParams = false;
+        /*
+         * dialogClose handling:
+         *
+         * After detecting:
+         *
+         *   command: 'reusable.dialogclose_auth1'
+         *
+         * we wait until the original "parameters:" line appears.
+         *
+         * IMPORTANT:
+         * Lines between command and parameters, especially "condition:",
+         * must be preserved.
+         */
+        boolean waitingForDialogcloseParams = false;
+
+        /*
+         * After replacing the parameters block, skip only the OLD parameter
+         * children, not arbitrary indented lines.
+         */
+        boolean skipDialogcloseParamChildren = false;
+        int dialogcloseParametersIndent = -1;
+
         boolean trackingCardSlotParams = false;
         int cardSlotInsertIndex = -1;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br =
+                     new BufferedReader(
+                             new FileReader(file)
+                     )) {
+
             String line;
+
             while ((line = br.readLine()) != null) {
+
                 String trimmed = line.trim();
-                // Sačuvaj originalnu indentaciju
-                String leadingSpaces = line.substring(0, line.indexOf(trimmed.isEmpty() ? line : trimmed));
 
+                int leadingSpaceCount =
+                        line.length()
+                                - line.stripLeading().length();
 
-             // Pronalazimo indeks gde pocinje "- id:"
-                int idIndex = line.indexOf("- id:");
+                String leadingSpaces =
+                        line.substring(
+                                0,
+                                leadingSpaceCount
+                        );
 
-                if (idIndex != -1 && !line.contains("\"")) {
-                    // Uzimamo sve karaktere pre "- id:" (ovo cuva broj i vrstu razmaka)
-                    String prefix = line.substring(0, idIndex);
-                    
-                    // Uzimamo vrednost koja dolazi nakon ":", uklanjamo samo visak razmaka oko te vrednosti
-                    int colonIndex = line.indexOf(":", idIndex);
-                    String idValue = line.substring(colonIndex + 1).trim();
-                    
-                    // Sastavljamo liniju koristeci originalni prefix
-                    line = prefix + "- id: \"" + idValue + "\"";
-                    
-                    // Ukoliko ti je 'trimmed' potreban za ostatak koda, 
-                    // sada ga dobijamo iz modifikovane linije bez uticaja na originalni format
-                    trimmed = line; 
-                }             
-                
-                // Skip old parameters
-                if (skipDialogcloseParams) {
-                    if (!trimmed.isEmpty() && !trimmed.startsWith("#") && !trimmed.startsWith("- type:") && !trimmed.startsWith("- id:") && line.startsWith(" ")) {
-                        continue; 
-                    }
-                    skipDialogcloseParams = false; 
+                // -------------------------------------------------
+                // Normalize "- id:"
+                // -------------------------------------------------
+
+                int idIndex =
+                        line.indexOf("- id:");
+
+                if (idIndex != -1
+                        && !line.contains("\"")) {
+
+                    String prefix =
+                            line.substring(
+                                    0,
+                                    idIndex
+                            );
+
+                    int colonIndex =
+                            line.indexOf(
+                                    ":",
+                                    idIndex
+                            );
+
+                    String idValue =
+                            line.substring(
+                                            colonIndex + 1
+                                    )
+                                    .trim();
+
+                    line =
+                            prefix
+                                    + "- id: \""
+                                    + idValue
+                                    + "\"";
+
+                    trimmed =
+                            line.trim();
                 }
 
-                // 2. Track parameters for cardSlot
-                if (trackingCardSlotParams) {
-                    if (!trimmed.isEmpty() && trimmed.contains(":") && !trimmed.startsWith("#") && !trimmed.startsWith("- type:") && !trimmed.startsWith("- id:")) {
-                        String[] parts = line.split(":", 2);
-                        line = parts[0] + ": " + SVCToscaTranslator.translateToscaValues(parts[1].trim());
-                        outputLines.add(line);
-                        cardSlotInsertIndex = outputLines.size(); 
+                // -------------------------------------------------
+                // dialogClose:
+                // skip only OLD parameter children
+                // -------------------------------------------------
+
+                if (skipDialogcloseParamChildren) {
+
+                    int currentIndent =
+                            line.length()
+                                    - line.stripLeading().length();
+
+                    /*
+                     * Old parameter children are deeper indented
+                     * than the "parameters:" line.
+                     *
+                     * Example:
+                     *
+                     *   parameters:               <- indent 8
+                     *     VpNummer: ...           <- indent 10
+                     *     OrdinationsId: ...      <- indent 10
+                     *
+                     * The next condition / command / step must NOT
+                     * be removed.
+                     */
+                    if (!trimmed.isEmpty()
+                            && currentIndent
+                            > dialogcloseParametersIndent) {
+
                         continue;
+                    }
+
+                    skipDialogcloseParamChildren = false;
+                    dialogcloseParametersIndent = -1;
+                }
+
+                // -------------------------------------------------
+                // dialogClose:
+                // wait for original parameters block
+                // -------------------------------------------------
+
+                if (waitingForDialogcloseParams) {
+
+                    /*
+                     * CONDITION MUST SURVIVE.
+                     *
+                     * Example:
+                     *
+                     * command: 'reusable.dialogclose_auth1'
+                     * condition: "'searchAnfragenBasisdaten.SvNummer' != NULL"
+                     * parameters:
+                     */
+                    if (trimmed.startsWith("condition:")) {
+
+                        outputLines.add(line);
+
+                        continue;
+                    }
+
+                    /*
+                     * Replace existing parameters block.
+                     */
+                    if ("parameters:".equals(trimmed)) {
+
+                        outputLines.add(line);
+
+                        outputLines.add(
+                                leadingSpaces
+                                        + "  dialogId: '{B[dialogId]}'"
+                        );
+
+                        waitingForDialogcloseParams = false;
+
+                        skipDialogcloseParamChildren = true;
+
+                        dialogcloseParametersIndent =
+                                leadingSpaceCount;
+
+                        continue;
+                    }
+
+                    /*
+                     * Normally dialogClose has a parameters block.
+                     *
+                     * If for some reason the next YAML step starts
+                     * before parameters are found, create the block
+                     * before that step so the YAML remains valid.
+                     */
+                    if (trimmed.startsWith("- type:")
+                            || trimmed.startsWith("- id:")) {
+
+                        outputLines.add(
+                                leadingSpaces
+                                        + "parameters:"
+                        );
+
+                        outputLines.add(
+                                leadingSpaces
+                                        + "  dialogId: '{B[dialogId]}'"
+                        );
+
+                        waitingForDialogcloseParams = false;
+                    }
+                }
+
+                // -------------------------------------------------
+                // Track parameters for cardSlot commands
+                // -------------------------------------------------
+
+                if (trackingCardSlotParams) {
+
+                    if (!trimmed.isEmpty()
+                            && trimmed.contains(":")
+                            && !trimmed.startsWith("#")
+                            && !trimmed.startsWith("- type:")
+                            && !trimmed.startsWith("- id:")) {
+
+                        String[] parts =
+                                line.split(
+                                        ":",
+                                        2
+                                );
+
+                        line =
+                                parts[0]
+                                        + ": "
+                                        + ToscaValueTranslator
+                                        .translateToscaValues(
+                                                parts[1].trim()
+                                        );
+
+                        outputLines.add(line);
+
+                        cardSlotInsertIndex =
+                                outputLines.size();
+
+                        continue;
+
                     } else {
+
                         if (cardSlotInsertIndex != -1) {
-                            // Dodajemo istu indentaciju kao što imaju parametri
-                            //outputLines.add(cardSlotInsertIndex, "          cardSlot: \"baseContact\"");
+
+                            /*
+                             * cardSlot is currently generated elsewhere.
+                             *
+                             * If needed:
+                             *
+                             * outputLines.add(
+                             *     cardSlotInsertIndex,
+                             *     "          cardSlot: \"baseContact\""
+                             * );
+                             */
                         }
+
                         trackingCardSlotParams = false;
                         cardSlotInsertIndex = -1;
                     }
                 }
 
-                // 3. Detect key commands
+                // -------------------------------------------------
+                // Detect commands
+                // -------------------------------------------------
+
                 if (trimmed.startsWith("command:")) {
-                    String cmdValue = trimmed.substring(trimmed.indexOf(":") + 1).trim().replace("\"", "").replace("'", "");
-                    if ("reusable.dialogclose_auth1".equals(cmdValue)) {
+
+                    String cmdValue =
+                            trimmed
+                                    .substring(
+                                            trimmed.indexOf(":")
+                                                    + 1
+                                    )
+                                    .trim()
+                                    .replace("\"", "")
+                                    .replace("'", "");
+
+                    // ---------------------------------------------
+                    // dialogClose
+                    // ---------------------------------------------
+
+                    if ("reusable.dialogclose_auth1"
+                            .equals(cmdValue)) {
+
+                        /*
+                         * Keep the command exactly as generated.
+                         */
                         outputLines.add(line);
-                        outputLines.add(leadingSpaces + "parameters:");
-                        outputLines.add(leadingSpaces + "  dialogId: '{B[dialogId]}'"); 
-                        skipDialogcloseParams = true;
+
+                        /*
+                         * DO NOT write parameters yet.
+                         *
+                         * There may be:
+                         *
+                         *   condition: ...
+                         *
+                         * directly after command.
+                         */
+                        waitingForDialogcloseParams = true;
+
                         continue;
                     }
-                    if (cardSlotCommands.contains(cmdValue)) {
+
+                    // ---------------------------------------------
+                    // cardSlot commands
+                    // ---------------------------------------------
+
+                    if (cardSlotCommands.contains(
+                            cmdValue
+                    )) {
+
                         outputLines.add(line);
+
                         trackingCardSlotParams = true;
-                        cardSlotInsertIndex = outputLines.size();
+
+                        cardSlotInsertIndex =
+                                outputLines.size();
+
                         continue;
                     }
                 }
 
-                // 4. Transform normal parameters (samo ako nije struktura/lista)
-                if (trimmed.contains(":") && !trimmed.startsWith("-") && !trimmed.startsWith("command:") && !trimmed.startsWith("#")) {
-                    int colonIndex = line.indexOf(":");
-                    String key = line.substring(0, colonIndex);
-                    String value = line.substring(colonIndex + 1).trim();
-                    line = key + ": " + SVCToscaTranslator.translateToscaValues(value);
+                // -------------------------------------------------
+                // Transform normal parameters
+                // -------------------------------------------------
+
+                if (trimmed.contains(":")
+                        && !trimmed.startsWith("-")
+                        && !trimmed.startsWith("command:")
+                        && !trimmed.startsWith("#")) {
+
+                    int colonIndex =
+                            line.indexOf(":");
+
+                    String key =
+                            line.substring(
+                                    0,
+                                    colonIndex
+                            );
+
+                    String value =
+                            line.substring(
+                                            colonIndex + 1
+                                    )
+                                    .trim();
+
+                    line =
+                            key
+                                    + ": "
+                                    + ToscaValueTranslator
+                                    .translateToscaValues(
+                                            value
+                                    );
                 }
 
                 outputLines.add(line);
             }
+
+            /*
+             * Edge case:
+             *
+             * File ended directly after dialogClose command without
+             * an original parameters block.
+             */
+            if (waitingForDialogcloseParams) {
+
+                outputLines.add(
+                        "        parameters:"
+                );
+
+                outputLines.add(
+                        "          dialogId: '{B[dialogId]}'"
+                );
+            }
+
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+
+            System.err.println(
+                    "Error: "
+                            + e.getMessage()
+            );
+
             return;
         }
 
-        try (PrintWriter pw = new PrintWriter(file)) {
-            for (String outputLine : outputLines) pw.println(outputLine);
-            System.out.println("USPEH: Fajl " + baseFileName + ".yaml modifikovan.");
+        // -------------------------------------------------
+        // Write modified YAML
+        // -------------------------------------------------
+
+        try (PrintWriter pw =
+                     new PrintWriter(file)) {
+
+            for (String outputLine : outputLines) {
+                pw.println(outputLine);
+            }
+
+            System.out.println(
+                    "[SUCCESS] YAML file updated: "
+                            + baseFileName
+                            + ".yaml"
+            );
+
         } catch (Exception e) {
-            System.err.println("Greška: " + e.getMessage());
+
+            System.err.println(
+                    "[ERROR] Failed to update YAML file "
+                            + baseFileName
+                            + ".yaml: "
+                            + e.getMessage()
+            );
         }
-    }
-    
+    }    
     
         
     private static void exportCategoryTestSheet(

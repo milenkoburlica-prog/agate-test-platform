@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/cps/v1/cards/{B[cin]}/",
-  "method" : "GET",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

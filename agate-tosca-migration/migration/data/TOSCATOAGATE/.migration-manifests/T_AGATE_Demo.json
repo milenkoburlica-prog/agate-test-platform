@@ -1,0 +1,78 @@
+{
+  "application" : "TOSCATOAGATE",
+  "baseFileName" : "T_AGATE_Demo",
+  "startedAt" : "2026-09-25T21:37:15.477792100Z",
+  "finishedAt" : "2026-09-25T21:37:16.030161600Z",
+  "mode" : "CLEANUP",
+  "migrationSucceeded" : true,
+  "appRoot" : "C:\\work\\projects\\agate-test-platform\\agate-tosca-migration\\migration\\data\\TOSCATOAGATE",
+  "rootFiles" : [ "T_AGATE_Demo.yaml", "template/AGATE_Demo.yaml" ],
+  "requiredFiles" : [ "T_AGATE_Demo.yaml", "template/AGATE_Demo.yaml", "template/T_AGATE_Demo.csv", "modules/rest/v4/math_request/metadata.json", "modules/rest/v4/math_request/request.json" ],
+  "files" : [ {
+    "path" : "modules/rest/v4/math_request/metadata.json",
+    "category" : "MODULE",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : true,
+    "reachableCurrent" : true,
+    "protectedByPreviousManifest" : true,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  }, {
+    "path" : "modules/rest/v4/math_request/request.json",
+    "category" : "MODULE",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : true,
+    "reachableCurrent" : true,
+    "protectedByPreviousManifest" : true,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  }, {
+    "path" : "T_AGATE_Demo.yaml",
+    "category" : "ROOT_OR_OTHER",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : true,
+    "reachableCurrent" : true,
+    "protectedByPreviousManifest" : true,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  }, {
+    "path" : "template/AGATE_Demo.yaml",
+    "category" : "TEMPLATE",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : true,
+    "reachableCurrent" : true,
+    "protectedByPreviousManifest" : true,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  }, {
+    "path" : "template/T_AGATE_Demo.csv",
+    "category" : "TEMPLATE",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : true,
+    "reachableCurrent" : true,
+    "protectedByPreviousManifest" : true,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  }, {
+    "path" : "template/TCD_AGATE_Demo.csv",
+    "category" : "TEMPLATE",
+    "existedBeforeRun" : true,
+    "existsAfterRun" : true,
+    "createdThisRun" : false,
+    "modifiedThisRun" : false,
+    "reachableCurrent" : false,
+    "protectedByPreviousManifest" : false,
+    "cleanupCandidate" : false,
+    "deletedByCleanup" : false
+  } ]
+}

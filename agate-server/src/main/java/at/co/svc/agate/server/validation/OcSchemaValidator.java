@@ -31,6 +31,7 @@ public final class OcSchemaValidator
                     "response",
                     "expectedExitCode",
                     "checkExitCode",
+                    "ignoreExitCode",
                     "timeout",
                     "outputFile"
             );
@@ -353,9 +354,43 @@ public final class OcSchemaValidator
             );
         }
 
-        /*
-         * timeout
-         */
+        JsonNode ignoreExitCode =
+                node.get("ignoreExitCode");
+
+        if (ignoreExitCode != null
+                && !ignoreExitCode.isNull()
+                && !ignoreExitCode.isBoolean()) {
+
+            issues.add(
+                    ValidationIssue.error(
+                            "AGATE-V1024",
+                            contextName
+                                    + " property 'ignoreExitCode' must be boolean. "
+                                    + "Actual: '"
+                                    + ignoreExitCode.asText()
+                                    + "'. Allowed values: true | false.",
+                            c.file(),
+                            c.source().lineOf("ignoreExitCode:")
+                    )
+            );
+        }
+
+        if (checkExitCode != null
+                && !checkExitCode.isNull()
+                && ignoreExitCode != null
+                && !ignoreExitCode.isNull()) {
+
+            issues.add(
+                    ValidationIssue.error(
+                            "AGATE-V1025",
+                            contextName
+                                    + " cannot use both 'checkExitCode' and 'ignoreExitCode'.",
+                            c.file(),
+                            lineOfStep(c, node)
+                    )
+            );
+        }
+
         JsonNode timeout =
                 node.get("timeout");
 
@@ -368,7 +403,7 @@ public final class OcSchemaValidator
                         ValidationIssue.error(
                                 "AGATE-V1022",
                                 contextName
-                                        + " property 'timeout' must be an integer greater than 0. "
+                                        + " property 'timeout' must be an integer greater than 0 milliseconds. "
                                         + "Actual: '"
                                         + timeout.asText()
                                         + "'.",
@@ -384,7 +419,7 @@ public final class OcSchemaValidator
                         ValidationIssue.error(
                                 "AGATE-V1023",
                                 contextName
-                                        + " property 'timeout' must be greater than 0. "
+                                        + " property 'timeout' must be greater than 0 milliseconds. "
                                         + "Actual: "
                                         + timeout.asLong()
                                         + ".",

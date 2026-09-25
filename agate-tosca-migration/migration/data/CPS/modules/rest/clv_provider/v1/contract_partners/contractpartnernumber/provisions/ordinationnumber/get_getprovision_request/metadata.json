@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/clv-provider/v1/contract-partners/{B[contractPartnerNumber]}/provisions/{B[ordinationNumber]}",
-  "method" : "GET",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

@@ -863,6 +863,7 @@ AGATE Test Platform is released under the MIT License.
 
 ```bat
 startTests.bat validate data\demo\variables_demo.yaml
+startTests.bat clean data\demo\variables_demo.yaml
 ```
 
 ## 2026-XX-XX

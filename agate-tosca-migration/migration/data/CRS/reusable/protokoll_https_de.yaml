@@ -1,7 +1,0 @@
-name: protokoll_https_de
-steps:
-
-      - type: BUFFER
-        op: EXEC
-        name: Protokoll
-        value: "Am e-card Produktiv(s)ystem anmelden (verschlüsselt)"

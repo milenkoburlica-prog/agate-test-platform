@@ -840,26 +840,35 @@ public class SoapEngine extends AbstractStepEngine {
 
         if (expected != null) {
 
-            YamlPlaceholderResolver resolver = new YamlPlaceholderResolver();
+            YamlPlaceholderResolver resolver =
+                    new YamlPlaceholderResolver();
 
-            String resolvedStr = resolver.resolve(
+            String resolvedStr =
+                    resolver.resolve(
+                            tc,
+                            expected.toString(),
+                            step.getParameters(),
+                            yamlFile,
+                            stepIndex,
+                            "expected",
+                            step
+                    );
 
-                    tc,
-
-                    expected.toString(),
-
-                    tc.getVariables(),
-
-                    yamlFile,
-
-                    stepIndex,
-
-                    "expected");
+            resolvedStr =
+                    resolver.resolve(
+                            tc,
+                            resolvedStr,
+                            tc.getVariables(),
+                            yamlFile,
+                            stepIndex,
+                            "expected",
+                            step
+                    );
 
             expected = resolvedStr;
-
         }
-
+        
+        
         boolean passed;
 
         String actual;

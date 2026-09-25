@@ -43,7 +43,7 @@ public class ProcessEvaluationStep {
                     ToscaToAgaPhase1.writeLine(ident + "        op: ASSERT");
                     if ((step.getCondition() != null) && (!step.getCondition().equals(""))) {
                         String condition = step.getCondition();
-                        String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
+                        String cleanCondition = ToscaValueTranslator.translateToscaValues(condition);
 
                         String formattedCondition = cleanCondition.replace("\"", "'");
                         ToscaToAgaPhase1.writeLine(ident + "        condition: \"" + formattedCondition + "\"");

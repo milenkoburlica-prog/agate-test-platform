@@ -46,13 +46,18 @@ import at.co.svc.aga.transformator.dto.CleanStep;
 import at.co.svc.aga.transformator.dto.CleanTestCase;
 import at.co.svc.aga.transformator.dto.Module;
 import at.co.svc.aga.transformator.dto.StepValueDetails;
+import at.co.svc.aga.transformator.utils.MigrationLog;
+import at.co.svc.aga.transformator.utils.MigrationReport;
 import at.co.svc.aga.transformator.utils.ProcessBuffer;
 import at.co.svc.aga.transformator.utils.ProcessDbStep;
 import at.co.svc.aga.transformator.utils.ProcessJsonAssert;
+import at.co.svc.aga.transformator.utils.ProcessAPILogic;
 import at.co.svc.aga.transformator.utils.ProcessReusableCall;
 import at.co.svc.aga.transformator.utils.ProcessStartProgram;
+import at.co.svc.aga.transformator.utils.ProcessTBoxFileRead_Create;
+import at.co.svc.aga.transformator.utils.ProcessTBoxEvaluationRuntime;
 import at.co.svc.aga.transformator.utils.ProcessWait;
-import at.co.svc.aga.transformator.utils.SVCToscaTranslator;
+import at.co.svc.aga.transformator.utils.ToscaValueTranslator;
 import at.co.svc.tosca.util.FileNameSanitizer;
 
 public class ToscaLibraryMigrator {
@@ -106,7 +111,7 @@ public class ToscaLibraryMigrator {
         try {
             File jsonFile = new File(libsJsonPath);
             if (!jsonFile.exists()) {
-                System.err.println("Greška: Fajl biblioteke ne postoji: " + libsJsonPath);
+                System.err.println("[ERROR] Library file does not exist: " + libsJsonPath);
                 return migModules;
             }
 
@@ -117,7 +122,7 @@ public class ToscaLibraryMigrator {
                     jsonFile,
                     new TypeReference<List<CleanTestCase>>() {});
             
-            Map<String, List<CleanStep>> libsMap = new HashMap<>();
+            Map<String, List<CleanStep>> libsMap = new LinkedHashMap<>();
             for (CleanTestCase tc : libs) {
                 libsMap.put(tc.getName(), tc.getSteps());
             }
@@ -128,7 +133,7 @@ public class ToscaLibraryMigrator {
 
             return migModules;
         } catch (Exception e) {
-            System.err.println("Greška pri migraciji biblioteka: " + e.getMessage());
+            System.err.println("[ERROR] Error during reusable library migration: " + e.getMessage());
             e.printStackTrace();
         }
         return migModules;
@@ -182,13 +187,22 @@ public class ToscaLibraryMigrator {
                         + outputFile.exists()
         );
 
-        for (CleanStep step : steps) {
+        for (int i = 0; i < steps.size(); i++) {
+
+            CleanStep step = steps.get(i);
+
+            CleanStep nextStep =
+                    i + 1 < steps.size()
+                            ? steps.get(i + 1)
+                            : null;
 
             yaml.append(
                     captureOutput(
                             step,
+                            nextStep,
                             this.moduleMap,
-                            appId
+                            appId,
+                            outputPath
                     )
             );
         }
@@ -213,7 +227,7 @@ public class ToscaLibraryMigrator {
         );
 
         System.out.println(
-                "Migriren Reusable Block: "
+                "Migrated reusable block: "
                         + outputPath
         );
 
@@ -225,12 +239,18 @@ public class ToscaLibraryMigrator {
     
     /**
      * Captures output from the existing utility classes without changing their code
+     * @throws Exception 
      */
-    private String captureOutput(CleanStep step, Map<String, Module> moduleMap, String appId) {
+    private String captureOutput(
+            CleanStep step,
+            CleanStep nextStep,
+            Map<String, Module> moduleMap,
+            String appId,
+            String yamlOutputPath) throws Exception {
         PrintStream oldOut = System.out;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         
-        try (PrintStream newOut = new PrintStream(baos)) {
+        try (PrintStream newOut = new PrintStream(baos, true, StandardCharsets.UTF_8)) {
             System.setOut(newOut);
             
          // 1. Prepare basic strings
@@ -238,6 +258,34 @@ public class ToscaLibraryMigrator {
             String moduleClass = step.getModuleClass() != null ? step.getModuleClass() : "";
             String type = step.getType() != null ? step.getType() : "";
             String stepName = step.getName() != null ? step.getName() : "";
+
+            // LOOP / BREAK are AGATE control-flow steps and do not have a Tosca module.
+            // Handle them before the legacy module dispatch so the old behaviour stays unchanged.
+            if (type.equalsIgnoreCase("LOOP")) {
+                processLoop(step, moduleMap, appId, yamlOutputPath);
+                System.out.flush();
+                return baos.toString();
+            }
+
+            if (type.equalsIgnoreCase("BREAK")) {
+                processBreak(step);
+                System.out.flush();
+                return baos.toString();
+            }
+
+            // API modules use the same processor as normal testcase migration.
+            // This must happen before the legacy default-op logic so Verify-only
+            // response steps are not forced to EXEC.
+            if (moduleClass.equalsIgnoreCase("ApiModule")) {
+                ProcessAPILogic.processAPILogic(
+                        moduleMap,
+                        step,
+                        nextStep,
+                        appId
+                );
+                System.out.flush();
+                return baos.toString();
+            }
 
             // 2. Set "OP" if it has not already been set
             if (step.getOp() == null || step.getOp().isEmpty()) {
@@ -256,21 +304,12 @@ public class ToscaLibraryMigrator {
                 }
             }
             
-            
-            if (stepName.toLowerCase().contains("response")) {
-                System.out.println("\n      # [Merged] " + stepName + " is handled by the Request step");
-                System.out.flush();
-                return baos.toString();
-            }
 
-            // 1. API modules (REST and SOAP)
-            if (moduleClass.equalsIgnoreCase("ApiModule")) {
-                // Pass the module map
-                processRestStepWithTranslation(step, moduleMap, appId);
-            }
-            // 2. DB modules
-            else if (moduleName.equalsIgnoreCase("TBox DB Expert module") || 
-                     moduleName.equalsIgnoreCase("TBox DB Run SQL Statement")) {
+            // 1. DB modules
+            if (moduleName != null
+                    && (moduleName.startsWith("TBox DB Expert module")
+                    || moduleName.startsWith("TBox DB Run SQL Statement"))) {
+                
                 ProcessDbStep.processDbStep(step, "");
             }
             // 3. Reusable Call
@@ -286,9 +325,44 @@ public class ToscaLibraryMigrator {
             }
             else if (moduleName.equalsIgnoreCase("TBox Start Program")) {
                 ProcessStartProgram.processStartProgram(step, "");
+            } else if (moduleName.equalsIgnoreCase("TBox Evaluation Tool")) {
+
+                /*
+                 * IF-condition Evaluation Tool steps should already have been
+                 * consumed by IfPropagationEngine.
+                 *
+                 * If one reaches this point it is an executable evaluation
+                 * inside a THEN/ELSE branch and must be migrated as an ASSERT.
+                 */
+                boolean migrated =
+                        ProcessTBoxEvaluationRuntime.processEvaluation(
+                                step,
+                                ""
+                        );
+
+                if (!migrated) {
+                    registerUnsupportedStep(
+                            moduleName,
+                            stepName,
+                            yamlOutputPath
+                    );
+                }
+
+            } else if (moduleName.equalsIgnoreCase("TBox Delete Buffer")) {
+
+                System.err.println(
+                        "[INFO] Tosca module TBox Delete Buffer will not be migrated "
+                        + "because AGATE buffers are cleared automatically after test execution."
+                );
+                
+
             } else if (moduleName.equalsIgnoreCase("TBox Delete Resource")) {
-            } else if (moduleName.equalsIgnoreCase("TBox Delete Buffer")) {            
-            } else if (moduleName.equalsIgnoreCase("TBox Evaluation Tool")) {            
+
+                registerUnsupportedStep(
+                        moduleName,
+                        stepName,
+                        yamlOutputPath
+                );
             } else {
                 if ("LogCheckCloud_Test01 Request".equals(moduleName) ||
                 "LogCheckCloud _Test02 Request".equals(moduleName) ||
@@ -298,8 +372,21 @@ public class ToscaLibraryMigrator {
                     ProcessJsonAssert.processJsonAssert(step);
                 } else if ("Open/Create JSON file".equals(moduleName)) {
                     ProcessJsonAssert.processJsonOpenFile(step);
+                } else if (moduleName.equalsIgnoreCase("TBox Read/Create File")) {
+
+                    ProcessTBoxFileRead_Create.processReadCreate(step, "");
+
                 } else {
-                     System.out.println("Unprocessed moduleName="+moduleName);
+                     System.out.println("      ");
+                     System.out.println("      # ERROR");
+                     System.out.println("        Unprocessed moduleName=" + moduleName);
+                     System.out.println("      ");
+
+                     MigrationReport.registerUnprocessedModule(
+                             moduleName,
+                             stepName,
+                             yamlOutputPath
+                     );
                 }
                 //Open/Create JSON file
                 //LogCheckCloud _Test02 Request
@@ -318,98 +405,425 @@ public class ToscaLibraryMigrator {
     }
     
     
+    /**
+     * Writes an AGATE LOOP and reuses the existing reusable-step dispatcher
+     * for every nested step. The nested YAML is indented by four additional
+     * spaces, so the existing processors do not need to be changed.
+     * @throws Exception 
+     */
+    private void processLoop(
+            CleanStep step,
+            Map<String, Module> moduleMap,
+            String appId,
+            String yamlOutputPath) throws Exception {
+
+        System.out.println();
+        System.out.println("      - type: LOOP");
+
+        if (step.getMaxIterations() != null) {
+            System.out.println("        maxIterations: " + step.getMaxIterations());
+        }
+
+        System.out.println("        steps:");
+
+        List<CleanStep> nestedSteps = step.getSteps();
+
+        if (nestedSteps == null || nestedSteps.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < nestedSteps.size(); i++) {
+
+            CleanStep nestedStep = nestedSteps.get(i);
+
+            CleanStep nextNestedStep =
+                    i + 1 < nestedSteps.size()
+                            ? nestedSteps.get(i + 1)
+                            : null;
+
+            String nestedYaml =
+                    captureOutput(
+                            nestedStep,
+                            nextNestedStep,
+                            moduleMap,
+                            appId,
+                            yamlOutputPath
+                    );
+
+            System.out.print(
+                    indentCapturedYaml(
+                            nestedYaml,
+                            "    "
+                    )
+            );
+        }
+    }
+
+
+    /**
+     * Writes an AGATE BREAK control-flow step.
+     */
+    private void processBreak(CleanStep step) {
+
+        System.out.println();
+        System.out.println("      - type: BREAK");
+
+        String condition = step.getCondition();
+
+        if (condition != null && !condition.isBlank()) {
+
+            System.out.println(
+                    "        condition: \""
+                            + escapeYamlDoubleQuoted(condition)
+                            + "\""
+            );
+        }
+    }
+
+
+    /**
+     * Existing processors write reusable steps with their normal top-level
+     * indentation. A LOOP only has to shift that generated YAML one level
+     * deeper. Blank lines stay blank.
+     */
+    private String indentCapturedYaml(
+            String yaml,
+            String indent) {
+
+        if (yaml == null || yaml.isEmpty()) {
+            return "";
+        }
+
+        String normalized =
+                yaml.replace("\r\n", "\n")
+                    .replace("\r", "\n");
+
+        String[] lines =
+                normalized.split("\n", -1);
+
+        StringBuilder result =
+                new StringBuilder();
+
+        for (int i = 0; i < lines.length; i++) {
+
+            String line = lines[i];
+
+            if (!line.isEmpty()) {
+                result.append(indent);
+            }
+
+            result.append(line);
+
+            if (i < lines.length - 1) {
+                result.append(System.lineSeparator());
+            }
+        }
+
+        return result.toString();
+    }
+
+
+    private String escapeYamlDoubleQuoted(String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"");
+    }
+
+
+    private void registerUnsupportedStep(String moduleName, String stepName, String yamlOutputPath) {
+        System.out.println();
+        System.out.println("      # WARNING: Unsupported Tosca module - step was NOT silently discarded");
+        System.out.println("      # module: " + moduleName);
+        System.out.println("      # step: " + stepName);
+
+        MigrationReport.registerUnprocessedModule(
+                moduleName,
+                stepName,
+                yamlOutputPath
+        );
+    }
+
     private void saveToFile(String path, String content) throws Exception {
         System.out.println("createDirectories6="+path);
         Files.createDirectories(Paths.get(path).getParent());
-        Files.write(Paths.get(path), content.getBytes());
+        Files.write(Paths.get(path), content.getBytes(StandardCharsets.UTF_8));
     }
-    private void processRestStepWithTranslation(CleanStep step, Map<String, Module> moduleMap, String appId) {
-        Module myModule = moduleMap.get(step.getModuleSurrogate());
+    private void processRestStepWithTranslation(
+            CleanStep step,
+            Map<String, Module> moduleMap,
+            String appId) {
 
-     // --- Extract endpointValue ---
+        Module myModule =
+                moduleMap.get(
+                        step.getModuleSurrogate());
+
+        // --- Extract endpointValue ---
+
         String endpointValue = "";
 
         // 1. First check whether it is defined directly in the step values
-        if (step.getValues() != null && step.getValuesAsMap().containsKey("Endpoint")) {
-            endpointValue = step.getValuesAsMap().get("Endpoint").getValue();
+        if (step.getValues() != null
+                && step.getValuesAsMap()
+                        .containsKey("Endpoint")) {
+
+            endpointValue =
+                    step.getValuesAsMap()
+                            .get("Endpoint")
+                            .getValue();
         }
 
-        // 2. If it is not defined in the step, read it from the module attributes
-        if ((endpointValue == null || endpointValue.isEmpty()) && myModule != null) {
-            endpointValue = myModule.getAttributes().getOrDefault("Endpoint", "");
+        // 2. If it is not defined in the step,
+        //    read it from the module attributes
+        if ((endpointValue == null
+                || endpointValue.isEmpty())
+                && myModule != null) {
+
+            endpointValue =
+                    myModule.getAttributes()
+                            .getOrDefault(
+                                    "Endpoint",
+                                    "");
         }
 
-        // 3. Optionally convert Tosca variables to the Agate {{var}} format
-        if (endpointValue != null && endpointValue.contains("{CP[")) {
-            endpointValue = endpointValue.replace("{CP[", "{{").replace("]}", "}}");
+        // 3. Optionally convert Tosca variables
+        //    to the Agate {{var}} format
+        if (endpointValue != null
+                && endpointValue.contains("{CP[")) {
+
+            endpointValue =
+                    endpointValue
+                            .replace(
+                                    "{CP[",
+                                    "{{")
+                            .replace(
+                                    "]}",
+                                    "}}");
         }
+
         // --------------------------------------
-        
+
         // 1. Determine the protocol
-        String protocol = "rest"; 
-        String decodedPayload = decodeBase64(myModule.getAttributes().get("Payload"));
+
+        String protocol =
+                "rest";
+
+        String decodedPayload = null;
+
         if (myModule != null) {
-            if (decodedPayload != null && decodedPayload.contains("Envelope")) {
-                protocol = "soap";
+
+            decodedPayload =
+                    decodeBase64(
+                            myModule.getAttributes()
+                                    .get("Payload"));
+
+            if (decodedPayload != null
+                    && decodedPayload.contains("Envelope")) {
+
+                protocol =
+                        "soap";
             }
         }
 
         // 2. Determine the context (simulatord.insert_card)
-        String contextPrefix = "";
-        if (myModule != null) {
-            // First try to extract the path from TCProperties (GZIP)
-            String tcProps = myModule.getAttributes().get("TCProperties");
-            String resource = extractResourceFromTCProperties(tcProps); 
-            
-            if (resource != null && !resource.isEmpty()) {
-                contextPrefix = resource.replace("/", ".");
-            } else {
-                // If TCProperties does not contain it, use the existing fallback logic
-                String res = myModule.getAttributes().get("Resource");
-                String path = myModule.getAttributes().get("Path");
-                String explicit = myModule.getAttributes().get("ExplicitConnection");
 
-                if (res != null && !res.isEmpty()) contextPrefix = res.replace("/", ".");
-                else if (path != null && !path.isEmpty()) contextPrefix = path.replace("/", ".");
-                else if (explicit != null && !explicit.startsWith("IFt7")) contextPrefix = explicit;
+        String contextPrefix = "";
+
+        if (myModule != null) {
+
+            // First try to extract the path
+            // from TCProperties (GZIP)
+            String tcProps =
+                    myModule.getAttributes()
+                            .get("TCProperties");
+
+            String resource =
+                    extractResourceFromTCProperties(
+                            tcProps);
+
+            if (resource != null
+                    && !resource.isEmpty()) {
+
+                contextPrefix =
+                        resource.replace(
+                                "/",
+                                ".");
+
+            } else {
+
+                // If TCProperties does not contain it,
+                // use the existing fallback logic
+
+                String res =
+                        myModule.getAttributes()
+                                .get("Resource");
+
+                String path =
+                        myModule.getAttributes()
+                                .get("Path");
+
+                String explicit =
+                        myModule.getAttributes()
+                                .get("ExplicitConnection");
+
+                if (res != null
+                        && !res.isEmpty()) {
+
+                    contextPrefix =
+                            res.replace(
+                                    "/",
+                                    ".");
+
+                } else if (path != null
+                        && !path.isEmpty()) {
+
+                    contextPrefix =
+                            path.replace(
+                                    "/",
+                                    ".");
+
+                } else if (explicit != null
+                        && !explicit.startsWith("IFt7")) {
+
+                    contextPrefix =
+                            explicit;
+                }
             }
         }
-        
+
         // Normalize the prefix
-        contextPrefix = contextPrefix.replaceAll("^\\.+|\\.+$", "").toLowerCase().trim();
 
+        contextPrefix =
+                contextPrefix
+                        .replaceAll(
+                                "^\\.+|\\.+$",
+                                "")
+                        .toLowerCase()
+                        .trim();
+
+        // -------------------------------------------------------
+        // 3. Build ONE canonical module name
         //
-        // 3. Build the final action
-        String moduleNameSnippet = step.getModule().replace(" ", "_").toLowerCase();
-        String fullAction = protocol + (contextPrefix.isEmpty() ? "" : "." + contextPrefix) + "." + moduleNameSnippet;
+        // IMPORTANT:
+        // The YAML command and the filesystem folder MUST use
+        // exactly the same normalized module name.
+        //
+        // Example:
+        // Math-Request -> math_request
+        // -------------------------------------------------------
 
-        // 3. Dynamically extract the resource
-        String rawName = myModule.getAttributes().get("Name");
-        String cleanModuleName = rawName.toLowerCase().trim().replaceAll("\\s+", "_");
+        String rawName =
+                myModule != null
+                        ? myModule.getAttributes()
+                                .get("Name")
+                        : step.getModule();
 
-        String dotPrefix = getDotPrefixFormat(step, myModule, cleanModuleName);
-        String fullDotAction = protocol + "." + dotPrefix + cleanModuleName;
-        
+        String cleanModuleName =
+                normalizeApiModuleName(
+                        rawName);
+
+        // Determine the dot prefix, e.g. "v4."
+        String dotPrefix =
+                getDotPrefixFormat(
+                        step,
+                        myModule,
+                        cleanModuleName);
+
+        // Final AGATE command:
+        // rest.v4.math_request
+        String fullDotAction =
+                protocol
+                        + "."
+                        + dotPrefix
+                        + cleanModuleName;
 
         // 5. Build the filesystem path
-        String folderStructure = dotPrefix.replace(".", "/");
-//        String finalFolderPath = "migration/data/" + System.getProperty("APPLICATION") + "/modules/" 
-        String finalFolderPath = "migration/data/" + appId + "/modules/" 
-                                 + protocol + "/" + folderStructure + cleanModuleName;
-        finalFolderPath = finalFolderPath.replace("//", "/");
-        //System.out.println("finalFolderPath1="+finalFolderPath);
-        //
-        
-        step.setAction(fullAction);
 
-        // 4. Create files on disk (metadata and request)
-        createMetadataJson(step, protocol, myModule, contextPrefix, finalFolderPath, appId);
-        createRequestFile(step, protocol, contextPrefix, decodedPayload, finalFolderPath, appId);
+        String folderStructure =
+                dotPrefix.replace(
+                        ".",
+                        "/");
 
-        // 5. Generate YAML output (buffers and step)
-        endpointValue = SVCToscaTranslator.translateToscaValues(endpointValue);
-        printYamlStep(step, protocol, endpointValue);
+        String finalFolderPath =
+                "migration/data/"
+                        + appId
+                        + "/modules/"
+                        + protocol
+                        + "/"
+                        + folderStructure
+                        + cleanModuleName;
+
+        finalFolderPath =
+                finalFolderPath.replace(
+                        "//",
+                        "/");
+
+        finalFolderPath =
+                sanitizePathSegments(
+                        finalFolderPath);
+
+        /*
+         * IMPORTANT:
+         *
+         * Previously:
+         *
+         *   step.setAction(fullAction);
+         *
+         * could produce:
+         *
+         *   rest.v4.mathrequest
+         *
+         * while the generated folder was:
+         *
+         *   modules/rest/v4/math_request
+         *
+         * Now both use the same canonical name:
+         *
+         *   rest.v4.math_request
+         *   modules/rest/v4/math_request
+         */
+        step.setAction(
+                fullDotAction);
+
+        // 4. Create files on disk
+        //    (metadata and request)
+
+        createMetadataJson(
+                step,
+                protocol,
+                myModule,
+                contextPrefix,
+                finalFolderPath,
+                appId);
+
+        createRequestFile(
+                step,
+                protocol,
+                contextPrefix,
+                decodedPayload,
+                finalFolderPath,
+                appId);
+
+        // 5. Generate YAML output
+        //    (buffers and step)
+
+        endpointValue =
+                ToscaValueTranslator
+                        .translateToscaValues(
+                                endpointValue);
+
+        printYamlStep(
+                step,
+                protocol,
+                endpointValue);
     }
+    
+    
+    
     private void createRequestFile(CleanStep step, String protocol, String contextPrefix, String decodedPayload, String finalFolderPath, String appId) {
         if ("SOAP".equalsIgnoreCase(protocol)) {
             createRequestXml(step, protocol, contextPrefix, decodedPayload, finalFolderPath, appId);
@@ -543,7 +957,7 @@ public class ToscaLibraryMigrator {
                 moduleMap.put(surrogate, m);
             }
         }
-        System.out.println("Ucitano " + moduleMap.size() + " entiteta iz Entities liste.");
+        System.out.println("Loaded " + moduleMap.size() + " entities from the Entities array.");
         return moduleMap;
     }
     
@@ -626,7 +1040,7 @@ public class ToscaLibraryMigrator {
                     finalBody = mapper.readValue(decodedPayload, LinkedHashMap.class);
                 } catch (Exception jsonEx) {
                     // Handle the case where the module payload is not valid JSON
-                    System.err.println("Upozorenje: decodedPayload nije validan JSON: " + jsonEx.getMessage());
+                    System.err.println("[WARNING] Decoded payload is not valid JSON: " + jsonEx.getMessage());
                 }
             }
 
@@ -644,7 +1058,7 @@ public class ToscaLibraryMigrator {
                             processedValue = "{B[card_slot]}";
                         } else {
                             // Standard translation from Tosca syntax to Agate syntax
-                            processedValue = SVCToscaTranslator.translateToscaValues(rawValue);
+                            processedValue = ToscaValueTranslator.translateToscaValues(rawValue);
                         }
                         
                         // Write or override the value in the map. 
@@ -666,7 +1080,7 @@ public class ToscaLibraryMigrator {
             }
 
         } catch (Exception e) {
-            System.err.println("Greška prilikom kreiranja request.json za korak: " + step.getName());
+            System.err.println("[ERROR] Failed to create request.json for step: " + step.getName());
             e.printStackTrace();
         }
     }
@@ -689,7 +1103,7 @@ public class ToscaLibraryMigrator {
                             String rawValue = valObj.getValue();
                             String processedValue = key.equalsIgnoreCase("card_slot") && !rawValue.startsWith("{") 
                                     ? "{B[card_slot]}" 
-                                    : SVCToscaTranslator.translateToscaValues(rawValue);
+                                    : ToscaValueTranslator.translateToscaValues(rawValue);
 
                             NodeList nodes = doc.getElementsByTagName(key);
                             if (nodes.getLength() == 0) {
@@ -734,21 +1148,59 @@ public class ToscaLibraryMigrator {
                 System.out.println("⚠️ request.xml nije kreiran jer je payload prazan za korak: " + step.getName());
             }
         } catch (Exception e) {
-            System.err.println("Greška prilikom kreiranja request.xml za korak: " + step.getName());
+            System.err.println("[ERROR] Failed to create request.xml for step: " + step.getName());
             e.printStackTrace();
         }
     }
     
-    private void saveApiFile(CleanStep step, String protocol, String contextPrefix, String fileName, Object content, String finalFolderPath, String appId) throws Exception {
-        String cleanContext = contextPrefix.replace(".", "/");
-        String moduleFolder = step.getModule().replace(" ", "_").toLowerCase();
-        Path path = Paths.get("migration", "data", appId, "modules", protocol, cleanContext, moduleFolder);
-        path = Paths.get(finalFolderPath);
+    private void saveApiFile(
+            CleanStep step,
+            String protocol,
+            String contextPrefix,
+            String fileName,
+            Object content,
+            String finalFolderPath,
+            String appId) throws Exception {
+
+        System.err.println(
+                "[SAVE-API-TRACE-1]"
+                + " step='" + step.getName() + "'"
+                + " file='" + fileName + "'"
+                + " receivedPath=[" + finalFolderPath + "]"
+        );
+
+        String resolvedPath =
+                ToscaValueTranslator.translateToscaValues(finalFolderPath);
+
+        System.err.println(
+                "[SAVE-API-TRACE-2]"
+                + " resolvedPath=[" + resolvedPath + "]"
+        );
+
+        String sanitizedPath =
+                sanitizePathSegments(resolvedPath);
+
+        System.err.println(
+                "[SAVE-API-TRACE-3]"
+                + " sanitizedPath=[" + sanitizedPath + "]"
+        );
+
+        Path path = Paths.get(sanitizedPath);
+
         Files.createDirectories(path);
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(content);
-        Files.write(path.resolve(fileName), json.getBytes(StandardCharsets.UTF_8));
+
+        String json =
+                mapper.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(content);
+
+        Files.write(
+                path.resolve(fileName),
+                json.getBytes(StandardCharsets.UTF_8)
+        );
     }
- // String-based variant used for XML content
+    
+    
+    // String-based variant used for XML content
     private void saveApiXMLFileString(CleanStep step, String protocol, String contextPrefix, String fileName, String content, String finalFolderPath, String appId) {
         try {
             // 1. Build the path in the same way as for metadata.json
@@ -791,10 +1243,11 @@ public class ToscaLibraryMigrator {
         System.out.println("      - type: " + type);
         System.out.println("        op: " + (step.getOp() != null ? step.getOp().toUpperCase() : "EXEC"));
         
-        String formattedCondition = step.getCondition().replace("\"", "'");
-
-        if ((step.getCondition() != null)&& (!step.getCondition().equals("")))
-           System.out.println("        condition: \"" + (formattedCondition != null ? formattedCondition : "") + "\"");
+        String rawCondition = step.getCondition();
+        if (rawCondition != null && !rawCondition.isBlank()) {
+            String formattedCondition = rawCondition.replace("\"", "'");
+            System.out.println("        condition: \"" + formattedCondition + "\"");
+        }
 
         // For REST/SOAP, group applicable values under parameters
         if (type.equals("REST") || type.equals("SOAP")) {
@@ -852,7 +1305,7 @@ public class ToscaLibraryMigrator {
                 return xml.split("<Resource>")[1].split("</Resource>")[0];
             }
         } catch (Exception e) {
-            System.err.println("Greška pri čitanju TCProperties: " + e.getMessage());
+            System.err.println("[ERROR] Failed to read TCProperties: " + e.getMessage());
         }
         return "";
     }
@@ -909,10 +1362,58 @@ public class ToscaLibraryMigrator {
                 return xmlContent.toString();
             }
         } catch (Exception e) {
-            System.err.println("Greška pri dekompresiji TCProperties: " + e.getMessage());
+            System.err.println("[ERROR] Failed to decompress TCProperties: " + e.getMessage());
             return "";
         }
     }
+    private static String sanitizePathSegments(String path) {
 
-    
+        if (path == null || path.isBlank()) {
+            return path;
+        }
+
+        String normalized = path.replace("\\", "/");
+
+        String[] parts = normalized.split("/");
+
+        StringBuilder result = new StringBuilder();
+
+        for (String part : parts) {
+
+            if (part.isBlank()) {
+                continue;
+            }
+
+            String cleanPart = part
+                    .replaceAll("[<>:\"|?*]", "_")
+                    .trim();
+
+            if (!result.isEmpty()) {
+                result.append("/");
+            }
+
+            result.append(cleanPart);
+        }
+
+        return result.toString();
+    }
+    private static String normalizeApiModuleName(
+            String name) {
+
+        if (name == null
+                || name.isBlank()) {
+
+            return "";
+        }
+
+        return name
+                .trim()
+                .toLowerCase()
+                .replaceAll(
+                        "[^a-z0-9]+",
+                        "_")
+                .replaceAll(
+                        "^_+|_+$",
+                        "");
+    }   
 }

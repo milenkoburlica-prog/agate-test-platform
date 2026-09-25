@@ -17,7 +17,7 @@ import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class CmdEngine extends AbstractStepEngine {
 
-    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int DEFAULT_TIMEOUT_MS = 30_000;
 
     @Override
     public boolean canExecute(StepType stepType) {
@@ -174,20 +174,23 @@ public class CmdEngine extends AbstractStepEngine {
         int timeout =
                 step.getTimeout() != null
                         ? step.getTimeout()
-                        : DEFAULT_TIMEOUT_SECONDS;
+                        : DEFAULT_TIMEOUT_MS;
 
         int expectedExitCode =
                 step.getExpectedExitCode() != null
                         ? step.getExpectedExitCode()
                         : 0;
 
-        boolean checkExitCode =
-                step.getCheckExitCode() == null
-                        || step.getCheckExitCode();
+        boolean ignoreExitCode =
+                step.getIgnoreExitCode() != null
+                        ? step.getIgnoreExitCode()
+                        : step.getCheckExitCode() != null
+                                ? !step.getCheckExitCode()
+                                : false;
 
         if (timeout <= 0) {
             throw AgateStepException.builder("Invalid CMD timeout")
-                    .expected("greater than 0 seconds")
+                    .expected("greater than 0 milliseconds")
                     .actual(timeout)
                     .field("timeout")
                     .build();
@@ -243,10 +246,11 @@ public class CmdEngine extends AbstractStepEngine {
                     logger);
 
             String statusColor =
-                    result.getExitCode() == expectedExitCode
-                            && !result.isTimedOut()
-                                    ? ConsoleColors.GREEN
-                                    : ConsoleColors.RED;
+                    !result.isTimedOut()
+                            && (ignoreExitCode
+                                    || result.getExitCode() == expectedExitCode)
+                            ? ConsoleColors.GREEN
+                            : ConsoleColors.RED;
 
             logger.info(
                     String.format(
@@ -260,14 +264,14 @@ public class CmdEngine extends AbstractStepEngine {
 
         if (result.isTimedOut()) {
             throw AgateStepException.builder("Command timed out")
-                    .expected("completion within " + timeout + " seconds")
+                    .expected("completion within " + timeout + " ms")
                     .actual("timeout")
                     .command(resolvedCommand)
                     .hint("Check the command or increase timeout if the longer runtime is expected.")
                     .build();
         }
 
-        if (checkExitCode
+        if (!ignoreExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
@@ -280,7 +284,7 @@ public class CmdEngine extends AbstractStepEngine {
                     .expected(expectedDisplay)
                     .actual(result.getExitCode())
                     .command(resolvedCommand)
-                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .hint("Set ignoreExitCode: true to accept any exit code.")
                     .build();
         }
     }

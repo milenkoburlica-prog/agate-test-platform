@@ -66,6 +66,7 @@ public class FileEngine extends AbstractStepEngine {
 
         case "BUFFER":
             handleBuffer(
+                    tc,
                     step,
                     context,
                     printExecution,
@@ -604,6 +605,7 @@ public class FileEngine extends AbstractStepEngine {
     }
 
     private void handleBuffer(
+            TestCase tc,
             TestStep step,
             ExecutionContext context,
             Boolean printExecution,
@@ -621,8 +623,15 @@ public class FileEngine extends AbstractStepEngine {
                             + step.getResponse());
         }
 
+        /*
+         * PowerShell 5.x Out-File -Encoding UTF8 may create a UTF-8 BOM.
+         * String.trim() does not remove U+FEFF, so normalize it here before
+         * LINE/TEXT processing. Without this, values can appear as "?1"
+         * in condition logs although the visible file content is "1".
+         */
         String text =
-                raw.toString();
+                stripLeadingBom(
+                        raw.toString());
 
         String action =
                 step.getAction() != null
@@ -660,16 +669,20 @@ public class FileEngine extends AbstractStepEngine {
 
         case "LINE":
             result =
-                    getLine(
-                            text,
-                            Integer.parseInt(value));
+                    stripLeadingBom(
+                            getLine(
+                                    text,
+                                    Integer.parseInt(value)))
+                            .trim();
             break;
 
         case "LAST_LINE":
             result =
-                    getLastLine(
-                            text,
-                            Integer.parseInt(value));
+                    stripLeadingBom(
+                            getLastLine(
+                                    text,
+                                    Integer.parseInt(value)))
+                            .trim();
             break;
 
         case "COUNT":
@@ -688,15 +701,36 @@ public class FileEngine extends AbstractStepEngine {
                             + action);
         }
 
-        if (step.getName() == null
-                || step.getName().isBlank()) {
+        String name =
+                step.getName();
+
+        if (name == null
+                || name.isBlank()) {
 
             throw new RuntimeException(
                     "FILE BUFFER requires 'name'.");
         }
 
+        /*
+         * A FILE BUFFER creates an AGATE variable.
+         *
+         * Keep all runtime stores synchronized:
+         *
+         * - TestCase variables are used by {B[...]} placeholder resolution.
+         * - ExecutionContext vars are used by runtime engines.
+         * - Buffer map keeps backward compatibility with engines that consume
+         *   response/buffer entries directly from ExecutionContext.
+         */
+        tc.addVariable(
+                name,
+                result);
+
+        context.setVar(
+                name,
+                result);
+
         context.storeBuffer(
-                step.getName(),
+                name,
                 result);
 
         if (Boolean.TRUE.equals(printExecution)
@@ -704,11 +738,54 @@ public class FileEngine extends AbstractStepEngine {
 
             logger.info(
                     String.format(
-                            "    %s>>> RESULT    %s: SUCCESS (Buffered)",
+                            "    %s>>> FILE BUFFER%s : Response [%s] -> [%s] | Store value [%s]",
                             ConsoleColors.GREEN,
-                            ConsoleColors.RESET));
+                            ConsoleColors.RESET,
+                            step.getResponse(),
+                            name,
+                            displayValue(result)));
         }
     }
+
+    private String stripLeadingBom(
+            String value) {
+
+        if (value == null
+                || value.isEmpty()) {
+
+            return value;
+        }
+
+        String result =
+                value;
+
+        while (!result.isEmpty()
+                && result.charAt(0) == '\uFEFF') {
+
+            result =
+                    result.substring(1);
+        }
+
+        return result;
+    }
+
+    private String displayValue(
+            String value) {
+
+        if (value == null) {
+            return "null";
+        }
+
+        String normalized =
+                value
+                        .replace("\r", "\\r")
+                        .replace("\n", "\\n");
+
+        return abbreviate(
+                normalized,
+                300);
+    }
+
 
     private void handleAssertion(
             TestCase tc,

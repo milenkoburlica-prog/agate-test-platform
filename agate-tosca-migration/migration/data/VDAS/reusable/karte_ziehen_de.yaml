@@ -1,5 +1,0 @@
-name: karte_ziehen_de
-steps:
-      - type: CALL
-        command: "reusable.am_simulator_karte_ziehen_de"
-        parameters: {}

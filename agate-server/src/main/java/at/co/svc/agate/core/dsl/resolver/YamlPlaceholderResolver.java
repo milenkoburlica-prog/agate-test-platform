@@ -113,6 +113,7 @@ public class YamlPlaceholderResolver {
             validateMalformedKnownPlaceholders(
                     result,
                     tc,
+                    yamlPath,
                     stepIndex,
                     originalAction);
 
@@ -176,6 +177,7 @@ public class YamlPlaceholderResolver {
             result = resolveToscaDate(
                     result,
                     tc,
+                    yamlPath,
                     stepIndex,
                     originalAction);
 
@@ -362,6 +364,7 @@ public class YamlPlaceholderResolver {
     private String resolveToscaDate(
             String value,
             TestCase tc,
+            String yamlPath,
             int stepIndex,
             String originalAction) {
 
@@ -379,6 +382,7 @@ public class YamlPlaceholderResolver {
         validateToscaDateExpressions(
                 value,
                 tc,
+                yamlPath,
                 stepIndex,
                 originalAction);
 
@@ -851,6 +855,7 @@ public class YamlPlaceholderResolver {
     private void validateMalformedKnownPlaceholders(
             String value,
             TestCase tc,
+            String yamlPath,
             int stepIndex,
             String originalAction) {
 
@@ -899,6 +904,7 @@ public class YamlPlaceholderResolver {
             validateToscaDateExpressions(
                     value,
                     tc,
+                    yamlPath,
                     stepIndex,
                     originalAction);
         }
@@ -958,6 +964,7 @@ public class YamlPlaceholderResolver {
     private void validateToscaDateExpressions(
             String value,
             TestCase tc,
+            String yamlPath,
             int stepIndex,
             String originalAction) {
 
@@ -1015,9 +1022,10 @@ public class YamlPlaceholderResolver {
             validateDateFormat(
                     fullExpression,
                     format,
+                    yamlPath,
                     originalAction,
                     stepIndex);
-
+            
             searchFrom =
                     expressionMatcher.end();
         }
@@ -1107,6 +1115,7 @@ public class YamlPlaceholderResolver {
     private void validateDateFormat(
             String expression,
             String format,
+            String yamlPath,
             String originalAction,
             int stepIndex) {
 
@@ -1118,17 +1127,45 @@ public class YamlPlaceholderResolver {
             DateTimeFormatter.ofPattern(format);
 
         } catch (IllegalArgumentException e) {
-            throw AgateStepException.builder("Invalid DATE/DATETIME format")
-                    .actual(format)
-                    .detail("Expression", expression)
-                    .detail("Action", originalAction)
-                    .detail("Step", stepIndex > 0 ? stepIndex : null)
-                    .hint("Use a valid Java date/time pattern, for example dd.MM.yyyy or dd-MM-yyyy HH:mm:ss.")
+
+            AgateStepException.Builder builder =
+                    AgateStepException.builder("Invalid DATE/DATETIME format")
+                            .detail("Source", yamlPath)
+                            .actual(format)
+                            .detail("Expression", expression)
+                            .detail("Action", originalAction)
+                            .detail("Step", stepIndex > 0 ? stepIndex : null);
+
+            if (format.contains("T") && !format.contains("'T'")) {
+
+                String expected =
+                        format.replace("T", "'T'");
+
+                builder
+                        .detail(
+                                "Problem",
+                                "Literal 'T' must be quoted in a Java date/time pattern")
+                        .detail(
+                                "Expected",
+                                expected)
+                        .hint(
+                                "Use '" + expected
+                                        + "' instead of '" + format + "'.");
+
+            } else {
+
+                builder.hint(
+                        "Use a valid Java date/time pattern, "
+                                + "for example dd.MM.yyyy, "
+                                + "dd-MM-yyyy HH:mm:ss or "
+                                + "yyyy-MM-dd'T'HH:mm:ss.");
+            }
+
+            throw builder
                     .cause(e)
                     .build();
         }
-    }
-
+    }    
     private void validateNoUnresolvedKnownPlaceholders(
             String value,
             TestCase tc,

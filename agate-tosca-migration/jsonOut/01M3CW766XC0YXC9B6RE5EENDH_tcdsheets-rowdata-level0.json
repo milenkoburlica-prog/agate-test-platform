@@ -1,0 +1,28 @@
+[ {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW8WTHF7KCCN00AP0K3WDY",
+  "Attributes" : {
+    "Name" : "x"
+  },
+  "Assocs" : {
+    "Values" : [ ]
+  }
+}, {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW93ENF6F6FMYX1JK1BZC3",
+  "Attributes" : {
+    "Name" : "y"
+  },
+  "Assocs" : {
+    "Values" : [ ]
+  }
+}, {
+  "ObjectClass" : "TDAttribute",
+  "Surrogate" : "01M3CW974W2QWK9N5W4V8P5RZM",
+  "Attributes" : {
+    "Name" : "z"
+  },
+  "Assocs" : {
+    "Values" : [ ]
+  }
+} ]

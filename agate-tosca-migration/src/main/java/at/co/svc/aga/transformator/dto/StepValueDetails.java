@@ -15,6 +15,18 @@ public class StepValueDetails {
 
     private String actionProperty;
 
+    /**
+     * Original Tosca operator code.
+     *
+     * Known values:
+     * 1 = ==
+     * 2 = !=
+     *
+     * The original Tosca value is preserved here.
+     * Translation to the AGATE operator is performed later.
+     */
+    private String operator;
+
     private String toscaPath;
 
     private String xmlPath;
@@ -62,6 +74,14 @@ public class StepValueDetails {
 
     public void setActionProperty(String actionProperty) {
         this.actionProperty = actionProperty;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public String getValue() {
@@ -118,6 +138,16 @@ public class StepValueDetails {
     public String toString() {
         return "StepValueDetails{name='"
                 + name
+                + "', value='"
+                + value
+                + "', actionMode='"
+                + actionMode
+                + "', actionProperty='"
+                + actionProperty
+                + "', operator='"
+                + operator
+                + "', toscaPath='"
+                + toscaPath
                 + "', xCondition='"
                 + xCondition
                 + "'}";

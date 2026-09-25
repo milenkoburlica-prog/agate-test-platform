@@ -1,7 +1,0 @@
-steps:
-
-      # Execute CMD Command: TBox Start Program _SS40/SS43 Simulator Quittung erzeugen
-      - type: CMD
-        op: EXEC
-        command: "{s[svc.projekt root path]}\tosca\tools\{b[simulator]}\testsuite\ss40testsuite\.\\emulator.cmd"
-        response: cmd_response

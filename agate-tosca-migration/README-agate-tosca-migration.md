@@ -1,3 +1,21 @@
+TOSCA Condition
+
+/TestCases/Systemtest/FACH/Regression/DMP/SS12/DMP V11/[10] searchBetreuungsverhaeltnisseForPatient/DMP SS12 V11
+
+cardToken 1 Condition
+'CardTokenDMP.SVNR-Karte' != NULL OR 'CardTokenDMP.VPNR-Karte' != NULL AND 'CardTokenDMP.TokenWert' == NULL
+
+cardToken 2 Condition
+'CardTokenDMP.SVNR-Karte' == NULL AND 'CardTokenDMP.VPNR-Karte' == NULL AND 'CardTokenDMP.TokenWert' == NULL  AND 'CardTokenDMP.TokenWert' =="{NULL}"
+
+cardToken 3 Condition
+'CardTokenDMP.TokenWert' != NULL
+
+Korekt ist
+cardToken 1 Condition
+('CardTokenDMP.SVNR-Karte' != NULL OR 'CardTokenDMP.VPNR-Karte' != NULL) AND 'CardTokenDMP.TokenWert' == NULL
+
+
 # AGATE Tosca Migration
 
 TOSCA Module die nicht unterstützt sind aber in SVC TOSCA genutzt

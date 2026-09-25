@@ -1,8 +1,0 @@
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <isDMPPatient xmlns="http://soap.dmp.client.chipkarte.at">
-      <dialogId>{B[dialogId]}</dialogId>
-      <svNummer>{B[svNummer]}</svNummer>
-    </isDMPPatient>
-  </s:Body>
-</s:Envelope>

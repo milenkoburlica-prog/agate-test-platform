@@ -14,419 +14,2063 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import at.co.svc.aga.transformator.utils.MigrationLog;
+import at.co.svc.tosca.transformation.ToscaLoopSupport;
 
 public class IfPropagationEngine {
 
     private final Map<String, JsonNode> index;
- // Tracks condition-step IDs that must be removed during cleanup
-    private static final Set<String> conditionItemIdsToRemove = new HashSet<>();
-    
-    public IfPropagationEngine(Map<String, JsonNode> index) {
-        this.index = index;
+
+    /*
+     * Condition steps that were successfully converted into AGATE
+     * IF conditions.
+     *
+     * IMPORTANT:
+     * LOOP condition steps are never added here.
+     */
+    private static final Set<String> conditionItemIdsToRemove =
+            new HashSet<>();
+
+
+    public IfPropagationEngine(
+            Map<String, JsonNode> index) {
+
+        this.index =
+                index;
     }
 
-    // =========================
+
+    // =========================================================
     // STATIC ENTRY
-    // =========================
-    public static String processFile(String input) throws Exception {
+    // =========================================================
 
-        File inputFile = new File(input);
+    public static String processFile(
+            String input) throws Exception {
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(inputFile);
+        File inputFile =
+                new File(
+                        input
+                );
 
-        Map<String, JsonNode> index = new HashMap<>();
+        ObjectMapper mapper =
+                new ObjectMapper();
 
-        for (JsonNode node : root) {
+        JsonNode root =
+                mapper.readTree(
+                        inputFile
+                );
 
-            String s = node.path("Surrogate").asText(null);
+        Map<String, JsonNode> index =
+                new HashMap<>();
 
-            if (s != null) {
-                index.put(s, node);
+        for (JsonNode node :
+                root) {
+
+            String surrogate =
+                    getNodeId(
+                            node
+                    );
+
+            if (surrogate != null
+                    && !surrogate.isBlank()) {
+
+                index.put(
+                        surrogate,
+                        node
+                );
             }
         }
 
-        IfPropagationEngine engine = new IfPropagationEngine(index);
+        /*
+         * processFile can be called several times in the same JVM.
+         */
+        conditionItemIdsToRemove.clear();
 
-        List<JsonNode> ifItems = new ArrayList<>();
+        IfPropagationEngine engine =
+                new IfPropagationEngine(
+                        index
+                );
 
-        for (JsonNode node : root) {
-            if ("TestCaseControlFlowItem".equals(node.path("ObjectClass").asText())) {
-                
-                // Resolve the parent of this IF through the index
-                String parentId = node.path("Assocs").path("ParentFolder").path(0).asText(null);
-                JsonNode parentNode = index.get(parentId);
-                
-                // If the parent does not exist or is not a TestCaseControlFlowFolder, 
-                // this is a top-level IF
-                if (parentNode == null || !"TestCaseControlFlowFolder".equals(parentNode.path("ObjectClass").asText())) {
-                    ifItems.add(node);
-                }
+        List<JsonNode> topLevelIfItems =
+                new ArrayList<>();
+
+
+        for (JsonNode node :
+                root) {
+
+            if (!"TestCaseControlFlowItem".equals(
+                    node.path("ObjectClass")
+                            .asText())) {
+
+                continue;
+            }
+
+
+            /*
+             * LOOP must stay structurally intact.
+             *
+             * Both:
+             *
+             *   StatementType 2 = WHILE_DO
+             *   StatementType 3 = DO_WHILE
+             *
+             * are deliberately ignored by the IF propagation engine.
+             */
+            if (ToscaLoopSupport.isLoopControlFlow(
+                    node)) {
+
+                MigrationLog.debug(
+                        "[IF] LOOP preserved: "
+                                + getNodeId(node)
+                                + " mode="
+                                + ToscaLoopSupport.getLoopMode(node)
+                );
+
+                continue;
+            }
+
+
+            if (isDisabled(node)) {
+
+                MigrationLog.debug(
+                        "[IF] Disabled control-flow ignored: "
+                                + getNodeId(node)
+                                + " name="
+                                + node.path("Attributes")
+                                .path("Name")
+                                .asText("")
+                );
+
+                continue;
+            }
+
+            if (!hasControlFlowAncestor(
+                    node,
+                    index)) {
+
+                topLevelIfItems.add(
+                        node
+                );
             }
         }
 
-        // Start processing only top-level IF items; 
-        // nested IF items receive the correct parent context through recursion.
-        engine.process(ifItems);
-        
-        
 
-        String outPath = input.replace(".json", "_step3.json");
+        engine.process(
+                topLevelIfItems
+        );
 
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(outPath), root);
+
+        String outPath =
+                input.replace(
+                        ".json",
+                        "_step3.json"
+                );
+
+
+        String outPathB =
+                input.replace(
+                        ".json",
+                        "_step3B.json"
+                );
+
+
+        cleanupControlFlowFolders(
+                root,
+                outPathB,
+                mapper,
+                index
+        );
+
+
+        JsonNode cleanedRoot =
+                mapper.readTree(
+                        new File(
+                                outPathB
+                        )
+                );
+
+
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(
+                        new File(outPath),
+                        cleanedRoot
+                );
+
 
         MigrationLog.success(
                 "IF propagation output: "
                         + outPath
         );
 
-//        outPath =
-//                input.replace(".json", "_step3.json");
-//
-//        mapper.writerWithDefaultPrettyPrinter()
-//                .writeValue(new File(outPath), root);
 
-        // 👉 SECOND PASS CLEANUP
-        String outPathB =
-                input.replace(".json", "_step3B.json");
+        conditionItemIdsToRemove.clear();
 
-        cleanupControlFlowFolders(root, outPathB, mapper);
-        
-        mapper.writerWithDefaultPrettyPrinter()
-        .writeValue(new File(outPath), mapper.readTree(new File(outPathB)));
-        
         return outPath;
     }
 
-    // =========================
+
+    // =========================================================
     // MAIN
-    // =========================
-    public static void main(String[] args) throws Exception {
+    // =========================================================
 
-        String input = "C:\\work\\projects\\playwright\\agate-studio\\agate-tosca-migration-f\\jsonOut\\01KRAYCQDX6FQZZY5B4FFZQJ4S_templates-extended-compressed_step2.json";
-        input = "C:\\work\\projects\\playwright\\agate-studio\\agate-tosca-migration-f\\jsonOut\\3a13c917-0a3b-dce6-9baf-9e89b2c959ac_reusables-extended-compressed-temp-compressed_step2.json";
+    public static void main(
+            String[] args) throws Exception {
 
-        processFile(input);
+        String input =
+                "C:\\work\\projects\\agate-studio\\agate-tosca-migration-svc\\jsonOut\\test_step2.json";
+
+        processFile(
+                input
+        );
     }
 
-    // =========================
+
+    // =========================================================
     // ENTRY
-    // =========================
-    public void process(List<JsonNode> ifItems) {
+    // =========================================================
+
+    public void process(
+            List<JsonNode> ifItems) {
 
         MigrationLog.debugSection(
                 "IF PROPAGATION ENGINE"
         );
 
-        for (JsonNode ifItem : ifItems) {
-            processIf(ifItem, "true", 0);
+        for (JsonNode ifItem :
+                ifItems) {
+
+            /*
+             * Safety guard in case process() is called directly.
+             */
+            if (ToscaLoopSupport.isLoopControlFlow(
+                    ifItem)
+                    || isDisabled(ifItem)) {
+
+                continue;
+            }
+
+            processIf(
+                    ifItem,
+                    "",
+                    0
+            );
         }
     }
 
-    // =========================
+
+    // =========================================================
     // CORE IF LOGIC
-    // =========================
-    private void processIf(JsonNode ifNode, String parent, int level) {
+    // =========================================================
 
-        MigrationLog.debug("▶ IF: " + ifNode.path("Surrogate").asText());
+    private void processIf(
+            JsonNode ifNode,
+            String parentContext,
+            int level) {
 
-        MigrationLog.debug("   PARENT: " + parent);
+        /*
+         * LOOP is explicitly not an IF.
+         */
+        if (ToscaLoopSupport.isLoopControlFlow(
+                ifNode)
+                || isDisabled(ifNode)) {
 
-        List<String> folderIds = new ArrayList<>();
-
-        for (JsonNode n : ifNode.path("Assocs").path("ControlFlowFolders")) {
-
-            folderIds.add(n.asText());
+            return;
         }
 
-        String local = buildCondition(folderIds);
 
-        MigrationLog.debug("   LOCAL: " + local);
+        String ifId =
+                getNodeId(
+                        ifNode
+                );
 
-        String thenCtx = combine(parent, local);
 
-        String elseCtx = combine(parent, "NOT (" + local + ")");
+        MigrationLog.debug(
+                indent(level)
+                        + "▶ IF: "
+                        + ifId
+        );
 
-        MigrationLog.debug("   THEN: " + thenCtx);
 
-        MigrationLog.debug("   ELSE: " + elseCtx);
+        MigrationLog.debug(
+                indent(level)
+                        + "  PARENT: "
+                        + parentContext
+        );
 
-        for (String id : folderIds) {
 
-            JsonNode folder = index.get(id);
+        List<String> folderIds =
+                getControlFlowFolderIds(
+                        ifNode
+                );
+
+
+        String localCondition =
+                buildCondition(
+                        folderIds
+                );
+
+
+        MigrationLog.debug(
+                indent(level)
+                        + "  LOCAL: "
+                        + localCondition
+        );
+
+
+        if (isBlank(
+                localCondition)) {
+
+            MigrationLog.info(
+                    "[Review] IF condition could not be migrated"
+                            + " - IF="
+                            + ifId
+                            + ". Control-flow branch was not flattened."
+            );
+
+            return;
+        }
+
+
+        String thenContext =
+                combine(
+                        parentContext,
+                        localCondition
+                );
+
+
+        String elseContext =
+                combine(
+                        parentContext,
+                        negate(
+                                localCondition
+                        )
+                );
+
+
+        MigrationLog.debug(
+                indent(level)
+                        + "  THEN: "
+                        + thenContext
+        );
+
+
+        MigrationLog.debug(
+                indent(level)
+                        + "  ELSE: "
+                        + elseContext
+        );
+
+
+        for (String folderId :
+                folderIds) {
+
+            JsonNode folder =
+                    index.get(
+                            folderId
+                    );
 
             if (folder == null) {
                 continue;
             }
 
-            String type = folder.path("Attributes").path("StatementType").asText();
 
-            MigrationLog.debug("  ├─ Folder: " + folder.path("Surrogate").asText() + " TYPE=" + type);
+            String statementType =
+                    folder.path("Attributes")
+                            .path("StatementType")
+                            .asText();
 
-            if ("1".equals(type)) {
 
-                MigrationLog.debug("  → THEN APPLY");
+            MigrationLog.debug(
+                    indent(level)
+                            + "  Folder: "
+                            + folderId
+                            + " TYPE="
+                            + statementType
+            );
 
-                propagate(folder, thenCtx, level + 1);
 
-                processNestedIf(folder, thenCtx, level + 1);
-            }
+            if ("1".equals(
+                    statementType)) {
 
-            if ("2".equals(type)) {
+                propagateBranch(
+                        folder,
+                        thenContext,
+                        level + 1
+                );
 
-                MigrationLog.debug("  → ELSE APPLY");
+                processNestedIfs(
+                        folder,
+                        thenContext,
+                        level + 1
+                );
 
-                propagate(folder, elseCtx, level + 1);
+            } else if ("2".equals(
+                    statementType)) {
 
-                processNestedIf(folder, elseCtx, level + 1);
+                propagateBranch(
+                        folder,
+                        elseContext,
+                        level + 1
+                );
+
+                processNestedIfs(
+                        folder,
+                        elseContext,
+                        level + 1
+                );
             }
         }
     }
 
-    // =========================
+
+    // =========================================================
     // PROPAGATION
-    // =========================
-    private void propagate(JsonNode folder, String ctx, int level) {
+    // =========================================================
 
-        for (JsonNode idNode : folder.path("Assocs").path("Items")) {
+    private void propagateBranch(
+            JsonNode container,
+            String context,
+            int level) {
 
-            JsonNode item = index.get(idNode.asText());
+        JsonNode items =
+                container.path("Assocs")
+                        .path("Items");
+
+        if (!items.isArray()) {
+            return;
+        }
+
+
+        for (JsonNode idNode :
+                items) {
+
+            JsonNode item =
+                    index.get(
+                            idNode.asText()
+                    );
 
             if (item == null) {
                 continue;
             }
 
-            String type = item.path("ObjectClass").asText();
 
-            if ("XTestStep".equals(type)) {
+            String objectClass =
+                    item.path("ObjectClass")
+                            .asText();
 
-                ObjectNode attrs = (ObjectNode) item.get("Attributes");
 
-                String old = attrs.path("Condition").asText("");
+            /*
+             * Nested control flow is handled separately.
+             */
+            if ("TestCaseControlFlowItem".equals(
+                    objectClass)) {
 
-                String merged = merge(old, ctx);
-
-                MigrationLog.debug("     STEP: " + item.path("Surrogate").asText());
-
-                MigrationLog.debug("       OLD: " + old);
-
-                MigrationLog.debug("       INC: " + ctx);
-
-                MigrationLog.debug("       NEW: " + merged);
-
-                attrs.put("Condition", merged);
+                continue;
             }
 
-            if ("TestStepFolder".equals(type)) {
 
-                propagate(item, ctx, level + 1);
-            } else if (item.has("Assocs") && item.path("Assocs").has("Items")) {
-                // If the object has child items, treat it as a folder regardless of its class name
-                propagate(item, ctx, level + 1);
+            if ("TestCaseControlFlowFolder".equals(
+                    objectClass)) {
+
+                continue;
+            }
+
+
+            if ("XTestStep".equals(
+                    objectClass)) {
+
+                ObjectNode attrs =
+                        ensureAttributesObject(
+                                item
+                        );
+
+                String oldCondition =
+                        attrs.path("Condition")
+                                .asText("");
+
+                String merged =
+                        merge(
+                                oldCondition,
+                                context
+                        );
+
+
+                MigrationLog.debug(
+                        indent(level)
+                                + "STEP "
+                                + getNodeId(item)
+                                + " | OLD="
+                                + oldCondition
+                                + " | ADD="
+                                + context
+                                + " | NEW="
+                                + merged
+                );
+
+
+                if (!isBlank(
+                        merged)) {
+
+                    attrs.put(
+                            "Condition",
+                            merged
+                    );
+                }
+
+                continue;
+            }
+
+
+            if ("TestStepFolder".equals(
+                    objectClass)) {
+
+                propagateBranch(
+                        item,
+                        context,
+                        level + 1
+                );
+
+                continue;
+            }
+
+
+            if (item.has("Assocs")
+                    && item.path("Assocs")
+                    .path("Items")
+                    .isArray()) {
+
+                propagateBranch(
+                        item,
+                        context,
+                        level + 1
+                );
             }
         }
     }
 
 
-    // =========================
+    // =========================================================
     // NESTED IF
-    // =========================
-    private void processNestedIf(JsonNode folder, String ctx, int level) {
-        for (JsonNode idNode : folder.path("Assocs").path("Items")) {
-            JsonNode node = index.get(idNode.asText());
+    // =========================================================
+
+    private void processNestedIfs(
+            JsonNode container,
+            String parentContext,
+            int level) {
+
+        JsonNode items =
+                container.path("Assocs")
+                        .path("Items");
+
+        if (!items.isArray()) {
+            return;
+        }
+
+
+        for (JsonNode idNode :
+                items) {
+
+            JsonNode node =
+                    index.get(
+                            idNode.asText()
+                    );
+
             if (node == null) {
                 continue;
             }
 
-            String type = node.path("ObjectClass").asText();
 
-            // 1. If this is a nested IF, process it with the current context
-            if ("TestCaseControlFlowItem".equals(type)) {
-                processIf(node, ctx, level + 1);
+            String objectClass =
+                    node.path("ObjectClass")
+                            .asText();
+
+
+            if ("TestCaseControlFlowItem".equals(
+                    objectClass)) {
+
+                if (ToscaLoopSupport.isLoopControlFlow(
+                        node)
+                        || isDisabled(node)) {
+
+                    continue;
+                }
+
+                processIf(
+                        node,
+                        parentContext,
+                        level + 1
+                );
+
+                continue;
             }
-            
-            // 2. If this is a regular folder, recurse into it and search for nested IF items using the same context
-            if ("TestStepFolder".equals(type)) {
-                processNestedIf(node, ctx, level + 1);
+
+
+            if ("TestStepFolder".equals(
+                    objectClass)) {
+
+                processNestedIfs(
+                        node,
+                        parentContext,
+                        level + 1
+                );
+
+                continue;
+            }
+
+
+            if (!"TestCaseControlFlowFolder".equals(
+                    objectClass)
+                    && node.has("Assocs")
+                    && node.path("Assocs")
+                    .path("Items")
+                    .isArray()) {
+
+                processNestedIfs(
+                        node,
+                        parentContext,
+                        level + 1
+                );
             }
         }
     }
-    private boolean isIf(JsonNode node) {
 
-        return node != null && "TestCaseControlFlowItem".equals(node.path("ObjectClass").asText());
-    }
 
-    // =========================
+    // =========================================================
     // BUILD CONDITION
-    // =========================
-    private String buildCondition(List<String> folderIds) {
-        List<String> conditions = new ArrayList<>();
+    // =========================================================
 
-        for (String folderId : folderIds) {
-            JsonNode folder = index.get(folderId);
+    private String buildCondition(
+            List<String> folderIds) {
+
+        List<String> conditions =
+                new ArrayList<>();
+
+
+        for (String folderId :
+                folderIds) {
+
+            JsonNode folder =
+                    index.get(
+                            folderId
+                    );
+
             if (folder == null) {
                 continue;
             }
 
-            if ("0".equals(folder.path("Attributes").path("StatementType").asText())) {
-                for (JsonNode itemId : folder.path("Assocs").path("Items")) {
-                    
-                    // 👉 Record the condition-step ID so it can be removed during cleanup
-                    conditionItemIdsToRemove.add(itemId.asText());
 
-                    JsonNode item = index.get(itemId.asText());
-                    if (item == null) {
-                        continue;
-                    }
+            String statementType =
+                    folder.path("Attributes")
+                            .path("StatementType")
+                            .asText();
 
-                    String c = extractCondition(item);
-                    if (c != null) {
-                        conditions.add("(" + c + ")");
-                    }
+
+            if (!"0".equals(
+                    statementType)) {
+
+                continue;
+            }
+
+
+            for (JsonNode itemId :
+                    folder.path("Assocs")
+                            .path("Items")) {
+
+                JsonNode item =
+                        index.get(
+                                itemId.asText()
+                        );
+
+                if (item == null) {
+                    continue;
+                }
+
+
+                String condition =
+                        extractCondition(
+                                item
+                        );
+
+
+                if (!isBlank(
+                        condition)) {
+
+                    conditionItemIdsToRemove.add(
+                            itemId.asText()
+                    );
+
+                    addUniqueCondition(
+                            conditions,
+                            condition
+                    );
+
+                } else {
+
+                    MigrationLog.info(
+                            "[Review] Could not extract IF condition from step "
+                                    + itemId.asText()
+                    );
                 }
             }
         }
 
-        return conditions.isEmpty() ? "true" : String.join(" AND ", conditions);
-    }
-    
-    
-    private String extractCondition(JsonNode node) {
 
-        if (!"XTestStep".equals(node.path("ObjectClass").asText())) {
+        return joinConditions(
+                conditions
+        );
+    }
+
+
+    // =========================================================
+    // CONDITION EXTRACTION
+    // =========================================================
+
+    private String extractCondition(
+            JsonNode node) {
+
+        if (!"XTestStep".equals(
+                node.path("ObjectClass")
+                        .asText())) {
 
             return null;
         }
 
-        for (JsonNode p : node.path("Parameters")) {
 
-            String mode = p.path("ActionMode").asText();
+        for (JsonNode parameter :
+                node.path("Parameters")) {
 
-            String value = p.path("Value").asText();
+            String mode =
+                    parameter.path("ActionMode")
+                            .asText("");
 
-            String name = p.path("ExplicitName").asText();
+            if (!"Verify".equalsIgnoreCase(
+                    mode)) {
 
-            if (!"Verify".equalsIgnoreCase(mode)) {
                 continue;
             }
 
-            if (value.contains("==")) {
-                return value;
+
+            String value =
+                    parameter.path("Value")
+                            .asText("")
+                            .trim();
+
+            String explicitName =
+                    parameter.path("ExplicitName")
+                            .asText("")
+                            .trim();
+
+
+            if (value.isEmpty()) {
+                continue;
             }
 
-            if (!value.isEmpty() && !name.isEmpty()) {
 
-                return "'{B[" + name + "]}'=='" + value + "'";
+            if (looksLikeConditionExpression(
+                    value)) {
+
+                return normalizeCondition(
+                        value
+                );
+            }
+
+
+            if (!explicitName.isEmpty()) {
+
+                return "'{B["
+                        + explicitName
+                        + "]}' == '"
+                        + escapeSingleQuotes(
+                        value
+                )
+                        + "'";
             }
         }
+
 
         return null;
     }
 
-    // =========================
-    // HELPERS
-    // =========================
-    private String merge(String oldCond, String newCond) {
-        if (oldCond == null || oldCond.isEmpty() || "true".equals(oldCond)) {
+
+    private boolean looksLikeConditionExpression(
+            String value) {
+
+        String v =
+                value == null
+                        ? ""
+                        : value.trim();
+
+        if (v.isEmpty()) {
+            return false;
+        }
+
+
+        return v.contains("==")
+                || v.contains("!=")
+                || v.contains(">=")
+                || v.contains("<=")
+                || containsStandaloneGreaterThan(v)
+                || containsStandaloneLessThan(v)
+                || v.contains("&&")
+                || v.contains("||")
+                || containsWordIgnoreCase(v, "AND")
+                || containsWordIgnoreCase(v, "OR")
+                || startsWithIgnoreCase(v, "NOT ");
+    }
+
+
+    // =========================================================
+    // CONDITION MERGING
+    // =========================================================
+
+    private String merge(
+            String oldCondition,
+            String newCondition) {
+
+        String oldCond =
+                normalizeCondition(
+                        oldCondition
+                );
+
+        String newCond =
+                normalizeCondition(
+                        newCondition
+                );
+
+
+        if (isTrueOrBlank(
+                oldCond)) {
+
             return newCond;
         }
 
-        if (newCond == null || newCond.isEmpty() || "true".equals(newCond)) {
+
+        if (isTrueOrBlank(
+                newCond)) {
+
             return oldCond;
         }
 
-        if (oldCond.equals(newCond)) {
+
+        if (equivalent(
+                oldCond,
+                newCond)) {
+
             return oldCond;
         }
-        
-        // Do not duplicate the new condition if it is already contained in the old condition
-        if (oldCond.contains(newCond)) {
+
+
+        if (containsConjunct(
+                oldCond,
+                newCond)) {
+
             return oldCond;
         }
-        if (newCond.contains(oldCond)) {
+
+
+        if (containsConjunct(
+                newCond,
+                oldCond)) {
+
             return newCond;
         }
 
-        // --- Condition grouping ---
-        // Ensure OR expressions are grouped before appending AND
-        String safeOld = (oldCond.contains(" OR ") && !oldCond.startsWith("(")) 
-                         ? "(" + oldCond + ")" 
-                         : oldCond;
-        
-        String safeNew = (newCond.contains(" OR ") && !newCond.startsWith("(")) 
-                         ? "(" + newCond + ")" 
-                         : newCond;
 
-        return safeOld + " AND " + safeNew;
-    }
-    private String combine(String parent, String local) {
-        if (parent == null || parent.equals("true") || parent.isEmpty()) {
-            // Ensure the local condition is wrapped in parentheses
-            if (local != null && !local.startsWith("(")) {
-                return "(" + local + ")";
-            }
-            return local;
-        }
-
-        if (local == null || local.equals("true") || local.isEmpty()) {
-            if (parent != null && !parent.startsWith("(")) {
-                return "(" + parent + ")";
-            }
-            return parent;
-        }
-
-        // Do not append the local condition if the parent already contains it
-        if (parent.contains(local)) {
-            return parent;
-        }
-
-        // Format the result as (PARENT) AND (LOCAL) without unnecessary nested parentheses
-        String cleanParent = parent.startsWith("(") && parent.endsWith(")") ? parent : "(" + parent + ")";
-        String cleanLocal = local.startsWith("(") && local.endsWith(")") ? local : "(" + local + ")";
-
-        return cleanParent + " AND " + cleanLocal;
-    }
-    
-    
-    private String indent(int level) {
-
-        return "   ".repeat(
-                Math.max(0, level)
+        return wrapForAnd(
+                oldCond
+        )
+                + " AND "
+                + wrapForAnd(
+                newCond
         );
     }
 
-    private static void cleanupControlFlowFolders(JsonNode root, String outPathB, ObjectMapper mapper) throws Exception {
-        Set<String> toRemove = new HashSet<>();
 
-        for (JsonNode node : root) {
-            String objectClass = node.path("ObjectClass").asText("");
-            
-            if ("TestCaseControlFlowItem".equals(objectClass) || 
-                "TestCaseControlFlowFolder".equals(objectClass)) {
-                
-                toRemove.add(node.path("Surrogate").asText());
-            }
-        }
+    private String combine(
+            String parent,
+            String local) {
 
-        // 👉 Add collected condition-step IDs to the removal set
-        toRemove.addAll(conditionItemIdsToRemove);
-
-        // Create a new root array without control-flow objects and their condition steps
-        ArrayNode newRoot = mapper.createArrayNode();
-        for (JsonNode node : root) {
-            String id = node.path("Surrogate").asText();
-            if (!toRemove.contains(id)) {
-                newRoot.add(node);
-            }
-        }
-
-        // Write the cleaned file
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(outPathB), newRoot);
-        MigrationLog.debug("Cleaned control-flow output: " + outPathB);
-        
-        // Clear the set in case processFile is called multiple times in the same JVM
-        conditionItemIdsToRemove.clear();
+        return merge(
+                parent,
+                local
+        );
     }
-    
-    
+
+
+    private String negate(
+            String condition) {
+
+        String c =
+                normalizeCondition(
+                        condition
+                );
+
+        if (isBlank(
+                c)) {
+
+            return "";
+        }
+
+
+        if (startsWithIgnoreCase(
+                c,
+                "NOT (")
+                && c.endsWith(")")) {
+
+            return c.substring(
+                    5,
+                    c.length() - 1
+            ).trim();
+        }
+
+
+        return "NOT ("
+                + c
+                + ")";
+    }
+
+
+    // =========================================================
+    // CLEANUP
+    // =========================================================
+
+    private static void cleanupControlFlowFolders(
+            JsonNode root,
+            String outPathB,
+            ObjectMapper mapper,
+            Map<String, JsonNode> index) throws Exception {
+
+        Set<String> idsToPreserve =
+                collectLoopOwnedIds(
+                        root,
+                        index
+                );
+
+        Set<String> controlFlowIds =
+                new HashSet<>();
+
+        for (JsonNode node :
+                root) {
+
+            String objectClass =
+                    node.path("ObjectClass")
+                            .asText("");
+
+            String id =
+                    getNodeId(
+                            node
+                    );
+
+            if (id == null
+                    || id.isBlank()) {
+
+                continue;
+            }
+
+            if (("TestCaseControlFlowItem".equals(
+                    objectClass)
+                    || "TestCaseControlFlowFolder".equals(
+                    objectClass))
+                    && !idsToPreserve.contains(id)) {
+
+                controlFlowIds.add(
+                        id
+                );
+            }
+        }
+
+        Set<String> toRemove =
+                new HashSet<>(
+                        controlFlowIds
+                );
+
+        toRemove.addAll(
+                conditionItemIdsToRemove
+        );
+
+        toRemove.removeAll(
+                idsToPreserve
+        );
+
+        ArrayNode newRoot =
+                mapper.createArrayNode();
+
+        Set<String> emitted =
+                new HashSet<>();
+
+        boolean foundExecutionRoot =
+                false;
+
+        for (JsonNode node :
+                root) {
+
+            if (!isExecutionRoot(
+                    node)) {
+
+                continue;
+            }
+
+            foundExecutionRoot =
+                    true;
+
+            emitOrdered(
+                    node,
+                    newRoot,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+        }
+
+        if (!foundExecutionRoot) {
+
+            for (JsonNode node :
+                    root) {
+
+                String id =
+                        getNodeId(
+                                node
+                        );
+
+                if (id == null
+                        || !toRemove.contains(id)) {
+
+                    newRoot.add(
+                            node
+                    );
+                }
+            }
+        }
+
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(
+                        new File(outPathB),
+                        newRoot
+                );
+
+        MigrationLog.debug(
+                "Cleaned and reordered control-flow output: "
+                        + outPathB
+        );
+    }
+
+
+    private static boolean isExecutionRoot(
+            JsonNode node) {
+
+        String objectClass =
+                node.path("ObjectClass")
+                        .asText("");
+
+        return "TestCase".equals(
+                objectClass)
+                || "ReuseableTestStepBlock".equals(
+                objectClass);
+    }
+
+
+    private static void emitOrdered(
+            JsonNode node,
+            ArrayNode out,
+            Set<String> emitted,
+            Set<String> toRemove,
+            Set<String> idsToPreserve,
+            Map<String, JsonNode> index) {
+
+        if (node == null) {
+            return;
+        }
+
+        String id =
+                getNodeId(
+                        node
+                );
+
+        String objectClass =
+                node.path("ObjectClass")
+                        .asText("");
+
+        if (isDisabled(
+                node)) {
+
+            MigrationLog.debug(
+                    "[IF] Disabled node ignored during ordering: "
+                            + id
+                            + " name="
+                            + node.path("Attributes")
+                            .path("Name")
+                            .asText("")
+            );
+
+            return;
+        }
+
+        if ("TestCaseControlFlowItem".equals(
+                objectClass)
+                && !idsToPreserve.contains(id)) {
+
+            emitFlattenedControlFlowItem(
+                    node,
+                    out,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+
+            return;
+        }
+
+        if ("TestCaseControlFlowFolder".equals(
+                objectClass)
+                && !idsToPreserve.contains(id)) {
+
+            emitFlattenedControlFlowFolder(
+                    node,
+                    out,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+
+            return;
+        }
+
+        if (id != null
+                && !id.isBlank()) {
+
+            if (toRemove.contains(id)) {
+                return;
+            }
+
+            if (!emitted.add(id)) {
+                return;
+            }
+        }
+
+        out.add(
+                node
+        );
+
+        if ("TestCaseControlFlowItem".equals(
+                objectClass)) {
+
+            JsonNode controlFlowFolders =
+                    node.path("Assocs")
+                            .path("ControlFlowFolders");
+
+            if (controlFlowFolders.isArray()) {
+
+                for (JsonNode folderId :
+                        controlFlowFolders) {
+
+                    emitOrdered(
+                            index.get(
+                                    folderId.asText()
+                            ),
+                            out,
+                            emitted,
+                            toRemove,
+                            idsToPreserve,
+                            index
+                    );
+                }
+            }
+
+            return;
+        }
+
+        JsonNode items =
+                node.path("Assocs")
+                        .path("Items");
+
+        if (!items.isArray()) {
+            return;
+        }
+
+        for (JsonNode childId :
+                items) {
+
+            JsonNode child =
+                    index.get(
+                            childId.asText()
+                    );
+
+            if (child == null) {
+
+                MigrationLog.debug(
+                        "[IF] Missing referenced node ignored during ordering: "
+                                + childId.asText()
+                );
+
+                continue;
+            }
+
+            emitOrdered(
+                    child,
+                    out,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+        }
+    }
+
+
+    private static void emitFlattenedControlFlowItem(
+            JsonNode controlFlowItem,
+            ArrayNode out,
+            Set<String> emitted,
+            Set<String> toRemove,
+            Set<String> idsToPreserve,
+            Map<String, JsonNode> index) {
+
+        if (isDisabled(
+                controlFlowItem)) {
+
+            return;
+        }
+
+        JsonNode folders =
+                controlFlowItem.path("Assocs")
+                        .path("ControlFlowFolders");
+
+        if (!folders.isArray()) {
+            return;
+        }
+
+        for (JsonNode folderId :
+                folders) {
+
+            JsonNode folder =
+                    index.get(
+                            folderId.asText()
+                    );
+
+            if (folder == null) {
+                continue;
+            }
+
+            String statementType =
+                    folder.path("Attributes")
+                            .path("StatementType")
+                            .asText("");
+
+            if ("0".equals(
+                    statementType)) {
+
+                continue;
+            }
+
+            emitFlattenedControlFlowFolder(
+                    folder,
+                    out,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+        }
+    }
+
+
+    private static void emitFlattenedControlFlowFolder(
+            JsonNode folder,
+            ArrayNode out,
+            Set<String> emitted,
+            Set<String> toRemove,
+            Set<String> idsToPreserve,
+            Map<String, JsonNode> index) {
+
+        String statementType =
+                folder.path("Attributes")
+                        .path("StatementType")
+                        .asText("");
+
+        if ("0".equals(
+                statementType)) {
+
+            return;
+        }
+
+        JsonNode items =
+                folder.path("Assocs")
+                        .path("Items");
+
+        if (!items.isArray()) {
+            return;
+        }
+
+        for (JsonNode childId :
+                items) {
+
+            JsonNode child =
+                    index.get(
+                            childId.asText()
+                    );
+
+            if (child == null) {
+                continue;
+            }
+
+            emitOrdered(
+                    child,
+                    out,
+                    emitted,
+                    toRemove,
+                    idsToPreserve,
+                    index
+            );
+        }
+    }
+
+
+
+    /*
+     * Collect:
+     *
+     * LOOP item
+     *   -> ControlFlowFolders
+     *      -> Items
+     *
+     * recursively.
+     *
+     * Everything belonging to this subtree must survive IF cleanup.
+     */
+    private static Set<String> collectLoopOwnedIds(
+            JsonNode root,
+            Map<String, JsonNode> index) {
+
+        Set<String> result =
+                new HashSet<>();
+
+
+        for (JsonNode node :
+                root) {
+
+            if (!ToscaLoopSupport.isLoopControlFlow(
+                    node)) {
+
+                continue;
+            }
+
+
+            collectLoopOwnedIdsRecursive(
+                    node,
+                    index,
+                    result
+            );
+        }
+
+
+        return result;
+    }
+
+
+    private static void collectLoopOwnedIdsRecursive(
+            JsonNode node,
+            Map<String, JsonNode> index,
+            Set<String> result) {
+
+        if (node == null) {
+            return;
+        }
+
+
+        String id =
+                getNodeId(
+                        node
+                );
+
+
+        if (id != null
+                && !id.isBlank()) {
+
+            if (!result.add(id)) {
+                return;
+            }
+        }
+
+
+        JsonNode controlFlowFolders =
+                node.path("Assocs")
+                        .path("ControlFlowFolders");
+
+
+        if (controlFlowFolders.isArray()) {
+
+            for (JsonNode folderId :
+                    controlFlowFolders) {
+
+                JsonNode folder =
+                        index.get(
+                                folderId.asText()
+                        );
+
+                collectLoopOwnedIdsRecursive(
+                        folder,
+                        index,
+                        result
+                );
+            }
+        }
+
+
+        JsonNode items =
+                node.path("Assocs")
+                        .path("Items");
+
+
+        if (items.isArray()) {
+
+            for (JsonNode itemId :
+                    items) {
+
+                JsonNode child =
+                        index.get(
+                                itemId.asText()
+                        );
+
+                collectLoopOwnedIdsRecursive(
+                        child,
+                        index,
+                        result
+                );
+            }
+        }
+    }
+
+
+    // =========================================================
+    // STRUCTURE HELPERS
+    // =========================================================
+
+    private List<String> getControlFlowFolderIds(
+            JsonNode ifNode) {
+
+        List<String> result =
+                new ArrayList<>();
+
+
+        for (JsonNode node :
+                ifNode.path("Assocs")
+                        .path("ControlFlowFolders")) {
+
+            result.add(
+                    node.asText()
+            );
+        }
+
+
+        return result;
+    }
+
+
+    private ObjectNode ensureAttributesObject(
+            JsonNode node) {
+
+        JsonNode attrs =
+                node.get(
+                        "Attributes"
+                );
+
+
+        if (attrs instanceof ObjectNode) {
+
+            return (ObjectNode) attrs;
+        }
+
+
+        ObjectNode objectNode =
+                new ObjectMapper()
+                        .createObjectNode();
+
+
+        ((ObjectNode) node).set(
+                "Attributes",
+                objectNode
+        );
+
+
+        return objectNode;
+    }
+
+
+    private static boolean hasControlFlowAncestor(
+            JsonNode node,
+            Map<String, JsonNode> index) {
+
+        if (node == null) {
+            return false;
+        }
+
+        String parentId =
+                node.path("Assocs")
+                        .path("ParentFolder")
+                        .path(0)
+                        .asText(null);
+
+        Set<String> visited =
+                new HashSet<>();
+
+        while (parentId != null
+                && !parentId.isBlank()
+                && visited.add(parentId)) {
+
+            JsonNode parent =
+                    index.get(parentId);
+
+            if (parent == null) {
+                return false;
+            }
+
+            String objectClass =
+                    parent.path("ObjectClass")
+                            .asText("");
+
+            if ("TestCaseControlFlowFolder".equals(
+                    objectClass)) {
+
+                return true;
+            }
+
+            parentId =
+                    parent.path("Assocs")
+                            .path("ParentFolder")
+                            .path(0)
+                            .asText(null);
+        }
+
+        return false;
+    }
+
+
+    private static boolean isDisabled(
+            JsonNode node) {
+
+        if (node == null) {
+            return false;
+        }
+
+        return !node.path("Attributes")
+                .path("DisabledDescription")
+                .asText("")
+                .isBlank();
+    }
+
+
+    private static String getNodeId(
+            JsonNode node) {
+
+        if (node == null) {
+            return null;
+        }
+
+
+        String id =
+                node.path("Surrogate")
+                        .asText("");
+
+
+        if (id.isBlank()) {
+
+            id =
+                    node.path("surrogate")
+                            .asText("");
+        }
+
+
+        return id;
+    }
+
+
+    // =========================================================
+    // STRING / CONDITION HELPERS
+    // =========================================================
+
+    private void addUniqueCondition(
+            List<String> conditions,
+            String condition) {
+
+        String normalized =
+                normalizeCondition(
+                        condition
+                );
+
+
+        if (normalized.isEmpty()) {
+            return;
+        }
+
+
+        for (String existing :
+                conditions) {
+
+            if (equivalent(
+                    existing,
+                    normalized)) {
+
+                return;
+            }
+        }
+
+
+        conditions.add(
+                normalized
+        );
+    }
+
+
+    private String joinConditions(
+            List<String> conditions) {
+
+        if (conditions == null
+                || conditions.isEmpty()) {
+
+            return "";
+        }
+
+
+        String result =
+                "";
+
+
+        for (String condition :
+                conditions) {
+
+            result =
+                    merge(
+                            result,
+                            condition
+                    );
+        }
+
+
+        return result;
+    }
+
+
+    private boolean containsConjunct(
+            String expression,
+            String candidate) {
+
+        String normalizedExpression =
+                removeRedundantOuterParentheses(
+                        normalizeWhitespace(
+                                expression
+                        )
+                );
+
+
+        String normalizedCandidate =
+                removeRedundantOuterParentheses(
+                        normalizeWhitespace(
+                                candidate
+                        )
+                );
+
+
+        if (normalizedExpression.equals(
+                normalizedCandidate)) {
+
+            return true;
+        }
+
+
+        for (String part :
+                splitTopLevelAnd(
+                        normalizedExpression
+                )) {
+
+            if (removeRedundantOuterParentheses(
+                    normalizeWhitespace(
+                            part
+                    ))
+                    .equals(
+                            normalizedCandidate
+                    )) {
+
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+
+
+    private List<String> splitTopLevelAnd(
+            String expression) {
+
+        List<String> result =
+                new ArrayList<>();
+
+
+        if (expression == null
+                || expression.isBlank()) {
+
+            return result;
+        }
+
+
+        int depth =
+                0;
+
+        int start =
+                0;
+
+        String upper =
+                expression.toUpperCase(
+                        java.util.Locale.ROOT
+                );
+
+
+        for (int i = 0;
+             i < expression.length();
+             i++) {
+
+            char c =
+                    expression.charAt(i);
+
+
+            if (c == '(') {
+
+                depth++;
+                continue;
+            }
+
+
+            if (c == ')') {
+
+                depth =
+                        Math.max(
+                                0,
+                                depth - 1
+                        );
+
+                continue;
+            }
+
+
+            if (depth == 0
+                    && upper.startsWith(
+                    " AND ",
+                    i)) {
+
+                result.add(
+                        expression.substring(
+                                start,
+                                i
+                        ).trim()
+                );
+
+
+                i +=
+                        " AND ".length()
+                                - 1;
+
+                start =
+                        i + 1;
+            }
+        }
+
+
+        result.add(
+                expression.substring(
+                        start
+                ).trim()
+        );
+
+
+        return result;
+    }
+
+
+    private String wrapForAnd(
+            String condition) {
+
+        String c =
+                normalizeCondition(
+                        condition
+                );
+
+
+        if (c.isEmpty()) {
+            return "";
+        }
+
+
+        if (isFullyWrapped(
+                c)) {
+
+            return c;
+        }
+
+
+        return "("
+                + c
+                + ")";
+    }
+
+
+    private boolean equivalent(
+            String a,
+            String b) {
+
+        return removeRedundantOuterParentheses(
+                normalizeWhitespace(
+                        a
+                ))
+                .equals(
+                        removeRedundantOuterParentheses(
+                                normalizeWhitespace(
+                                        b
+                                )
+                        )
+                );
+    }
+
+
+    private String normalizeCondition(
+            String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+
+        String result =
+                normalizeWhitespace(
+                        value.trim()
+                );
+
+
+        return removeRedundantOuterParentheses(
+                result
+        );
+    }
+
+
+    private String normalizeWhitespace(
+            String value) {
+
+        return value == null
+                ? ""
+                : value.trim()
+                .replaceAll(
+                        "\\s+",
+                        " "
+                );
+    }
+
+
+    private String removeRedundantOuterParentheses(
+            String value) {
+
+        String result =
+                value == null
+                        ? ""
+                        : value.trim();
+
+
+        while (isFullyWrapped(
+                result)) {
+
+            result =
+                    result.substring(
+                            1,
+                            result.length() - 1
+                    ).trim();
+        }
+
+
+        return result;
+    }
+
+
+    private boolean isFullyWrapped(
+            String value) {
+
+        if (value == null
+                || value.length() < 2
+                || value.charAt(0) != '('
+                || value.charAt(
+                value.length() - 1
+        ) != ')') {
+
+            return false;
+        }
+
+
+        int depth =
+                0;
+
+
+        for (int i = 0;
+             i < value.length();
+             i++) {
+
+            char c =
+                    value.charAt(i);
+
+
+            if (c == '(') {
+
+                depth++;
+
+            } else if (c == ')') {
+
+                depth--;
+
+
+                if (depth == 0
+                        && i < value.length()
+                        - 1) {
+
+                    return false;
+                }
+            }
+
+
+            if (depth < 0) {
+                return false;
+            }
+        }
+
+
+        return depth == 0;
+    }
+
+
+    private boolean isTrueOrBlank(
+            String value) {
+
+        return isBlank(
+                value)
+                || "true".equalsIgnoreCase(
+                value.trim()
+        );
+    }
+
+
+    private boolean isBlank(
+            String value) {
+
+        return value == null
+                || value.isBlank();
+    }
+
+
+    private boolean containsStandaloneGreaterThan(
+            String value) {
+
+        for (int i = 0;
+             i < value.length();
+             i++) {
+
+            if (value.charAt(i) == '>') {
+
+                if (i == 0
+                        || value.charAt(
+                        i - 1
+                ) != '=') {
+
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+
+    private boolean containsStandaloneLessThan(
+            String value) {
+
+        for (int i = 0;
+             i < value.length();
+             i++) {
+
+            if (value.charAt(i) == '<') {
+
+                if (i == 0
+                        || value.charAt(
+                        i - 1
+                ) != '=') {
+
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+
+    private boolean containsWordIgnoreCase(
+            String value,
+            String word) {
+
+        String upper =
+                " "
+                        + value.toUpperCase(
+                        java.util.Locale.ROOT
+                )
+                        + " ";
+
+
+        return upper.contains(
+                " "
+                        + word.toUpperCase(
+                        java.util.Locale.ROOT
+                )
+                        + " "
+        );
+    }
+
+
+    private boolean startsWithIgnoreCase(
+            String value,
+            String prefix) {
+
+        return value != null
+                && prefix != null
+                && value.length()
+                >= prefix.length()
+                && value.regionMatches(
+                true,
+                0,
+                prefix,
+                0,
+                prefix.length()
+        );
+    }
+
+
+    private String escapeSingleQuotes(
+            String value) {
+
+        return value == null
+                ? ""
+                : value.replace(
+                        "'",
+                        "''"
+                );
+    }
+
+
+    private String indent(
+            int level) {
+
+        return "   ".repeat(
+                Math.max(
+                        0,
+                        level
+                )
+        );
+    }
 }

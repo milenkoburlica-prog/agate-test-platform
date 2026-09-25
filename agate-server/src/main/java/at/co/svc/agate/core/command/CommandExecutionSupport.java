@@ -16,7 +16,15 @@ public final class CommandExecutionSupport {
     public static CommandResult executeWindowsShell(
             String command,
             File workingDirectory,
-            int timeoutSeconds) throws Exception {
+            int timeoutMs) throws Exception {
+
+        if (command == null || command.isBlank()) {
+            throw new IllegalArgumentException("Command must not be empty.");
+        }
+
+        if (timeoutMs <= 0) {
+            throw new IllegalArgumentException("Timeout must be greater than 0 ms.");
+        }
 
         long start = System.nanoTime();
 
@@ -30,7 +38,6 @@ public final class CommandExecutionSupport {
         }
 
         Process process = processBuilder.start();
-
         StringBuilder output = new StringBuilder();
 
         Thread outputReader = new Thread(() -> {
@@ -44,7 +51,8 @@ public final class CommandExecutionSupport {
 
                 while ((line = reader.readLine()) != null) {
                     synchronized (output) {
-                        output.append(line).append(System.lineSeparator());
+                        output.append(line)
+                                .append(System.lineSeparator());
                     }
                 }
             } catch (Exception e) {
@@ -59,7 +67,8 @@ public final class CommandExecutionSupport {
         outputReader.setDaemon(true);
         outputReader.start();
 
-        boolean finished = process.waitFor(timeoutSeconds, TimeUnit.SECONDS);
+        boolean finished =
+                process.waitFor(timeoutMs, TimeUnit.MILLISECONDS);
 
         boolean timedOut = !finished;
         int exitCode;
@@ -114,7 +123,6 @@ public final class CommandExecutionSupport {
         }
 
         outputPath = outputPath.normalize();
-
         Path parent = outputPath.getParent();
 
         if (parent != null) {

@@ -122,7 +122,7 @@ public class ProcessJsonAssert {
                     step.getCondition();
 
             cleanCondition =
-                    SVCToscaTranslator
+                    ToscaValueTranslator
                             .translateToscaValues(
                                     condition
                             );

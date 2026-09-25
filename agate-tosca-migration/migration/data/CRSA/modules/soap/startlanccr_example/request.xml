@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <startLanccr xmlns="urn:lanccr_soap">
-      <ipAddresses xmlns="">{B[KartenleserIP]}</ipAddresses>
-      <logLevel xmlns="">3</logLevel>
-    </startLanccr>
-  </s:Body>
-</s:Envelope>

@@ -1,262 +1,421 @@
 @echo off
-setlocal EnableExtensions EnableDelayedExpansion
+setlocal EnableExtensions
+chcp 65001 >nul
 
 rem ============================================================
 rem AGATE Tosca Migration
 rem
 rem Usage:
-rem   startToscaMigration.bat migrate <appID> <baseFileName>
-rem   startToscaMigration.bat clean   <appID> <template.yaml> <template.csv>
+rem   startToscaMigration.bat migrate <appID> <baseFileName> [--cleanup-dry-run|--cleanup]
+rem
+rem   startToscaMigration.bat clean <appID> <testsuite.yaml>
+rem       Cleans a generated testcase YAML and all reusable YAML
+rem       files under:
+rem         data\<appID>\<testsuite.yaml>
+rem         data\<appID>\reusable\*.yaml
+rem
+rem   startToscaMigration.bat clean <appID> <template.yaml> <template.csv>
+rem       Runs the existing template cleanup under:
+rem         migration\data\<appID>\template\
 rem
 rem Examples:
+rem   startToscaMigration.bat migrate PST PST-004_Report
 rem   startToscaMigration.bat migrate DMP11 dmp_11_getAdminPatientenInformationen
-rem   startToscaMigration.bat migrate DMP11 tcd_dmp_11_getAdminPatientenInformationen
-rem   startToscaMigration.bat clean DMP11 dmp_11_getAdminPatientenInformationen.yaml tcd_dmp_11_getAdminPatientenInformationen.csv
+rem
+rem   startToscaMigration.bat clean PST PST-004_Report.yaml
+rem
+rem   startToscaMigration.bat clean DMP11 ^
+rem       dmp_11_getAdminPatientenInformationen.yaml ^
+rem       tcd_dmp_11_getAdminPatientenInformationen.csv
+rem ============================================================
+
+
+rem ============================================================
+rem BASE PATHS
 rem ============================================================
 
 set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%"
 
-set "MAIN_CLASS=at.co.svc.tosca.main.Main"
+set "JAR_FILE=target\agate-tosca-migration-svc-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+
+
+rem ============================================================
+rem TOSCA TRANSLATION CONFIG
+rem
+rem Default:
+rem   <project>\agate-acme-config\acme-tosca-translations.yaml
+rem
+rem Can be overridden externally with:
+rem
+rem   set AGATE_TOSCA_TRANSLATION_CONFIG=C:\path\customer.yaml
+rem ============================================================
+
+if defined AGATE_TOSCA_TRANSLATION_CONFIG (
+    set "TOSCA_TRANSLATION_CONFIG=%AGATE_TOSCA_TRANSLATION_CONFIG%"
+    set "TOSCA_TRANSLATION_CONFIG_SOURCE=environment"
+) else (
+    set "TOSCA_TRANSLATION_CONFIG=%SCRIPT_DIR%agate-acme-config\acme-tosca-translations.yaml"
+    set "TOSCA_TRANSLATION_CONFIG_SOURCE=default"
+)
+
+
+rem ============================================================
+rem PRE-CHECKS
+rem ============================================================
 
 rem ------------------------------------------------------------
-rem Resolve Java
+rem Check Java
 rem ------------------------------------------------------------
+
 where java >nul 2>&1
+
 if errorlevel 1 (
+    echo.
+    echo ============================================================
     echo [ERROR] Java was not found in PATH.
-    echo         Please install/configure Java before running the migration.
+    echo ============================================================
+    echo.
     exit /b 1
 )
 
-rem ------------------------------------------------------------
-rem Resolve application classpath
-rem
-rem Preferred:
-rem   target\classes + target\dependency\*
-rem
-rem Fallback:
-rem   target\quarkus-app\quarkus-run.jar
-rem
-rem If your project uses another packaging layout, adjust CLASSPATH.
-rem ------------------------------------------------------------
-set "CLASSPATH="
 
-if exist "target\classes" (
-    set "CLASSPATH=target\classes"
-    if exist "target\dependency" (
-        set "CLASSPATH=!CLASSPATH!;target\dependency\*"
-    )
+rem ------------------------------------------------------------
+rem Check JAR
+rem ------------------------------------------------------------
+
+if not exist "%JAR_FILE%" (
+    echo.
+    echo ============================================================
+    echo [ERROR] AGATE Tosca Migration JAR was not found.
+    echo ============================================================
+    echo.
+    echo Expected:
+    echo   %SCRIPT_DIR%%JAR_FILE%
+    echo.
+    echo Run:
+    echo   mvn clean package
+    echo.
+    exit /b 1
 )
 
-if not defined CLASSPATH (
-    if exist "target\quarkus-app\quarkus-run.jar" (
-        set "QUARKUS_RUNNER=target\quarkus-app\quarkus-run.jar"
-    )
-)
 
-rem ------------------------------------------------------------
-rem Validate command
-rem ------------------------------------------------------------
+rem ============================================================
+rem COMMAND ROUTING
+rem ============================================================
+
 if "%~1"=="" goto :usage
 
-set "COMMAND=%~1"
+if /I "%~1"=="migrate" goto :migrate
+if /I "%~1"=="clean"   goto :clean
+if /I "%~1"=="help"    goto :usage
+if /I "%~1"=="-h"      goto :usage
+if /I "%~1"=="--help"  goto :usage
 
-if /I "%COMMAND%"=="migrate" goto :migrate
-if /I "%COMMAND%"=="clean"   goto :clean
-if /I "%COMMAND%"=="help"    goto :usage
-if /I "%COMMAND%"=="-h"      goto :usage
-if /I "%COMMAND%"=="--help"  goto :usage
-
-echo [ERROR] Unknown command: %COMMAND%
 echo.
+echo [ERROR] Unknown command: %~1
 goto :usage_error
 
 
+rem ============================================================
+rem MIGRATE
+rem ============================================================
+
 :migrate
-rem ------------------------------------------------------------
-rem migrate <appID> <baseFileName>
-rem ------------------------------------------------------------
+
 if "%~2"=="" (
-    echo [ERROR] Missing appID.
     echo.
+    echo [ERROR] Missing appID.
     goto :usage_error
 )
 
 if "%~3"=="" (
-    echo [ERROR] Missing baseFileName.
     echo.
+    echo [ERROR] Missing baseFileName.
     goto :usage_error
 )
 
-set "APP_ID=%~2"
-set "BASE_FILE=%~3"
-set "TSU_FILE=tsu\%BASE_FILE%.tsu"
+
+rem ------------------------------------------------------------
+rem Optional migration cleanup mode
+rem ------------------------------------------------------------
+
+set "MIGRATION_CLEANUP_MODE="
+set "MIGRATION_CLEANUP_JAVA_OPT="
+
+if not "%~5"=="" (
+    echo.
+    echo [ERROR] Too many arguments for 'migrate'.
+    goto :usage_error
+)
+
+if not "%~4"=="" (
+    if /I "%~4"=="--cleanup-dry-run" (
+        set "MIGRATION_CLEANUP_MODE=DRY_RUN"
+        set "MIGRATION_CLEANUP_JAVA_OPT=-Dagate.migration.cleanup=dry-run"
+    ) else if /I "%~4"=="--cleanup" (
+        set "MIGRATION_CLEANUP_MODE=CLEANUP"
+        set "MIGRATION_CLEANUP_JAVA_OPT=-Dagate.migration.cleanup=cleanup"
+    ) else (
+        echo.
+        echo [ERROR] Unknown migrate option: %~4
+        echo         Supported:
+        echo           --cleanup-dry-run
+        echo           --cleanup
+        exit /b 1
+    )
+)
+
+
+rem ------------------------------------------------------------
+rem Check Tosca translation configuration
+rem ------------------------------------------------------------
+
+if not exist "%TOSCA_TRANSLATION_CONFIG%" (
+    echo.
+    echo ============================================================
+    echo [ERROR] Tosca translation configuration was not found.
+    echo ============================================================
+    echo.
+    echo Config:
+    echo   %TOSCA_TRANSLATION_CONFIG%
+    echo.
+    echo Default:
+    echo   %SCRIPT_DIR%agate-acme-config\acme-tosca-translations.yaml
+    echo.
+    echo Override example:
+    echo.
+    echo   set AGATE_TOSCA_TRANSLATION_CONFIG=C:\path\customer.yaml
+    echo.
+    exit /b 1
+)
+
 
 echo.
 echo ============================================================
 echo AGATE TOSCA MIGRATION
 echo ============================================================
 echo Command       : migrate
-echo Application   : %APP_ID%
-echo Base file     : %BASE_FILE%
-echo TSU file      : %TSU_FILE%
+echo Application   : %~2
+echo Base file     : %~3
+echo.
+echo JAR           : %JAR_FILE%
+echo Config        : %TOSCA_TRANSLATION_CONFIG%
+echo Config source : %TOSCA_TRANSLATION_CONFIG_SOURCE%
+if defined MIGRATION_CLEANUP_MODE echo Cleanup mode  : %~4
 echo ============================================================
 echo.
 
-if not exist "%TSU_FILE%" (
-    echo [ERROR] TSU file does not exist:
-    echo         %CD%\%TSU_FILE%
-    echo.
-    echo Copy the exported Tosca TSU file into:
-    echo         %CD%\tsu
-    exit /b 1
-)
+goto :execute
 
-call :runJava migrate "%APP_ID%" "%BASE_FILE%"
-set "RC=%ERRORLEVEL%"
 
-if not "%RC%"=="0" (
-    echo.
-    echo [ERROR] Migration failed with exit code %RC%.
-    exit /b %RC%
-)
-
-echo.
-echo [SUCCESS] Migration completed.
-echo.
-exit /b 0
-
+rem ============================================================
+rem CLEAN
+rem
+rem Two variants are supported:
+rem
+rem 1) Testcase cleanup:
+rem      clean <appID> <testsuite.yaml>
+rem
+rem    Processes:
+rem      data\<appID>\<testsuite.yaml>
+rem      data\<appID>\reusable\*.yaml
+rem
+rem 2) Template cleanup:
+rem      clean <appID> <template.yaml> <template.csv>
+rem
+rem    Runs the existing template cleanup.
+rem ============================================================
 
 :clean
-rem ------------------------------------------------------------
-rem clean <appID> <template.yaml> <template.csv>
-rem ------------------------------------------------------------
+
 if "%~2"=="" (
-    echo [ERROR] Missing appID.
     echo.
+    echo [ERROR] Missing appID.
     goto :usage_error
 )
 
 if "%~3"=="" (
-    echo [ERROR] Missing template YAML file name.
     echo.
+    echo [ERROR] Missing YAML file.
     goto :usage_error
 )
 
-if "%~4"=="" (
-    echo [ERROR] Missing template CSV file name.
+
+rem ------------------------------------------------------------
+rem Testcase cleanup
+rem
+rem Exactly:
+rem   clean <appID> <testsuite.yaml>
+rem ------------------------------------------------------------
+
+if "%~4"=="" goto :clean_testcase
+
+
+rem ------------------------------------------------------------
+rem Template cleanup
+rem
+rem Exactly:
+rem   clean <appID> <template.yaml> <template.csv>
+rem ------------------------------------------------------------
+
+if not "%~5"=="" (
     echo.
+    echo [ERROR] Too many arguments for 'clean'.
     goto :usage_error
 )
 
-set "APP_ID=%~2"
-set "YAML_FILE=%~3"
-set "CSV_FILE=%~4"
-set "TEMPLATE_DIR=migration\data\%APP_ID%\template"
-set "YAML_PATH=%TEMPLATE_DIR%\%YAML_FILE%"
-set "CSV_PATH=%TEMPLATE_DIR%\%CSV_FILE%"
+goto :clean_template
+
+
+rem ============================================================
+rem CLEAN TESTCASE
+rem ============================================================
+
+:clean_testcase
 
 echo.
 echo ============================================================
-echo AGATE TOSCA CLEANUP
+echo AGATE TOSCA TESTCASE CLEANUP
 echo ============================================================
 echo Command       : clean
-echo Application   : %APP_ID%
-echo Template YAML : %YAML_FILE%
-echo Template CSV  : %CSV_FILE%
-echo Template dir  : %TEMPLATE_DIR%
+echo Mode          : testcase
+echo Application   : %~2
+echo Test Suite    : %~3
+echo.
+echo Test File     : data\%~2\%~3
+echo Reusable      : data\%~2\reusable\*.yaml
+echo.
+echo JAR           : %JAR_FILE%
 echo ============================================================
 echo.
 
-if not exist "%TEMPLATE_DIR%" (
-    echo [ERROR] Template directory does not exist:
-    echo         %CD%\%TEMPLATE_DIR%
-    exit /b 1
+goto :execute
+
+
+rem ============================================================
+rem CLEAN TEMPLATE
+rem ============================================================
+
+:clean_template
+
+echo.
+echo ============================================================
+echo AGATE TOSCA TEMPLATE CLEANUP
+echo ============================================================
+echo Command       : clean
+echo Mode          : template
+echo Application   : %~2
+echo Template YAML : %~3
+echo Template CSV  : %~4
+echo.
+echo JAR           : %JAR_FILE%
+echo ============================================================
+echo.
+
+goto :execute
+
+
+rem ============================================================
+rem EXECUTE
+rem ============================================================
+
+:execute
+
+if /I "%~1"=="migrate" (
+    java ^
+        "-Dagate.tosca.translation.config=%TOSCA_TRANSLATION_CONFIG%" ^
+        %MIGRATION_CLEANUP_JAVA_OPT% ^
+        -jar "%JAR_FILE%" ^
+        migrate "%~2" "%~3"
+) else (
+    java ^
+        "-Dagate.tosca.translation.config=%TOSCA_TRANSLATION_CONFIG%" ^
+        -jar "%JAR_FILE%" ^
+        %*
 )
 
-if not exist "%YAML_PATH%" (
-    echo [ERROR] Template YAML does not exist:
-    echo         %CD%\%YAML_PATH%
-    exit /b 1
-)
-
-if not exist "%CSV_PATH%" (
-    echo [ERROR] Template CSV does not exist:
-    echo         %CD%\%CSV_PATH%
-    exit /b 1
-)
-
-call :runJava clean "%APP_ID%" "%YAML_FILE%" "%CSV_FILE%"
 set "RC=%ERRORLEVEL%"
 
+echo.
+
 if not "%RC%"=="0" (
-    echo.
-    echo [ERROR] Cleanup failed with exit code %RC%.
+    echo ============================================================
+    echo [ERROR] AGATE Tosca Migration failed.
+    echo Exit code: %RC%
+    echo ============================================================
     exit /b %RC%
 )
 
-echo.
-echo [SUCCESS] Cleanup completed.
-echo.
+echo ============================================================
+echo [SUCCESS] AGATE Tosca Migration completed.
+echo ============================================================
+
 exit /b 0
 
 
-:runJava
-rem ------------------------------------------------------------
-rem Run at.co.svc.tosca.main.Main
-rem ------------------------------------------------------------
-if defined CLASSPATH (
-    java -cp "%CLASSPATH%" %MAIN_CLASS% %*
-    exit /b %ERRORLEVEL%
-)
-
-if defined QUARKUS_RUNNER (
-    rem Quarkus runner fallback.
-    rem This works only if the configured Main class is packaged as the app entry point.
-    java -jar "%QUARKUS_RUNNER%" %*
-    exit /b %ERRORLEVEL%
-)
-
-echo [ERROR] Compiled application was not found.
-echo.
-echo Expected one of:
-echo   target\classes
-echo   target\quarkus-app\quarkus-run.jar
-echo.
-echo Build the project first.
-echo For Maven, for example:
-echo   mvn clean package
-echo.
-echo If dependencies are not copied to target\dependency, use:
-echo   mvn dependency:copy-dependencies -DoutputDirectory=target\dependency
-exit /b 1
-
+rem ============================================================
+rem USAGE
+rem ============================================================
 
 :usage
+
 echo.
+echo ============================================================
 echo AGATE Tosca Migration
+echo ============================================================
 echo.
 echo Usage:
-echo   startToscaMigration.bat migrate ^<appID^> ^<baseFileName^>
-echo   startToscaMigration.bat clean   ^<appID^> ^<template.yaml^> ^<template.csv^>
+echo.
+echo   startToscaMigration.bat migrate ^<appID^> ^<baseFileName^> [--cleanup-dry-run^|--cleanup]
+echo.
+echo   startToscaMigration.bat clean ^<appID^> ^<testsuite.yaml^>
+echo.
+echo       Cleans:
+echo         data\^<appID^>\^<testsuite.yaml^>
+echo         data\^<appID^>\reusable\*.yaml
+echo.
+echo   startToscaMigration.bat clean ^<appID^> ^<template.yaml^> ^<template.csv^>
+echo.
+echo       Runs the existing template cleanup under:
+echo         migration\data\^<appID^>\template\
 echo.
 echo Examples:
+echo.
+echo   startToscaMigration.bat migrate PST PST-004_Report
+echo.
 echo   startToscaMigration.bat migrate DMP11 dmp_11_getAdminPatientenInformationen
-echo   startToscaMigration.bat migrate DMP11 tcd_dmp_11_getAdminPatientenInformationen
 echo.
-echo   startToscaMigration.bat clean DMP11 dmp_11_getAdminPatientenInformationen.yaml tcd_dmp_11_getAdminPatientenInformationen.csv
+echo   startToscaMigration.bat migrate DMP31 "T_DMP SS12 V11 getBetreutePatienten" --cleanup-dry-run
 echo.
-echo Expected input:
-echo   tsu\^<baseFileName^>.tsu
+echo   startToscaMigration.bat migrate DMP31 "T_DMP SS12 V11 getBetreutePatienten" --cleanup
 echo.
-echo Clean expects:
-echo   migration\data\^<appID^>\template\^<template.yaml^>
-echo   migration\data\^<appID^>\template\^<template.csv^>
+echo   startToscaMigration.bat clean PST PST-004_Report.yaml
 echo.
+echo   startToscaMigration.bat clean DMP11 template.yaml template.csv
+echo.
+echo Tosca translation config:
+echo.
+echo   Default:
+echo     %SCRIPT_DIR%agate-acme-config\acme-tosca-translations.yaml
+echo.
+echo   Override:
+echo     set AGATE_TOSCA_TRANSLATION_CONFIG=C:\path\customer.yaml
+echo.
+echo Current config:
+echo     %TOSCA_TRANSLATION_CONFIG%
+echo.
+echo JAR:
+echo.
+echo   %JAR_FILE%
+echo.
+echo ============================================================
+
 exit /b 0
 
 
 :usage_error
+
+echo.
 call :usage
 exit /b 1

@@ -1,0 +1,15 @@
+{
+  "application" : "toscatoagate",
+  "environment" : "ACME",
+  "tests" : [ {
+    "id" : "Demo_Test_01",
+    "status" : "PASSED",
+    "runtimeMs" : 1190,
+    "failures" : [ ]
+  }, {
+    "id" : "Demo_Test_02",
+    "status" : "PASSED",
+    "runtimeMs" : 131,
+    "failures" : [ ]
+  } ]
+}

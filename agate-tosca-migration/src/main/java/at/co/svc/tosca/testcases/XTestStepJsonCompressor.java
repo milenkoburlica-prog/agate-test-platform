@@ -138,7 +138,8 @@ public class XTestStepJsonCompressor {
                 List<Map<String, Object>> parameters =
                         buildReusableParameters(
                                 copy,
-                                bySurrogate
+                                bySurrogate,
+                                tsuIndex
                         );
 
                 copy.put("Parameters", parameters);
@@ -203,6 +204,8 @@ public class XTestStepJsonCompressor {
             collectTestStepValues(valueId, bySurrogate, visitedValues);
         }
 
+        traceApiParameterDiscovery(step, isApiModule, testStepValues, visitedValues, bySurrogate, tsuIndex);
+
         for (String valueId : visitedValues) {
 
             Map<String, Object> xValue = bySurrogate.get(valueId);
@@ -231,6 +234,7 @@ public class XTestStepJsonCompressor {
             String value = asText(attrs.get("Value"));
             String actionMode = mapActionMode(asText(attrs.get("ActionMode")));
             String actionProperty = asText(attrs.get("ActionProperty"));
+            String operator = asText(attrs.get("Operator"));
             
             String explicitName = "";
             if (isApiModule) {
@@ -270,6 +274,7 @@ public class XTestStepJsonCompressor {
             
             param.put("ActionMode", actionMode);
             param.put("ActionProperty", actionProperty);
+            param.put("Operator", operator);
             
             if (toscaInfo.path != null) {
                 if (toscaInfo.path.contains("Result Table")) 
@@ -575,6 +580,105 @@ public class XTestStepJsonCompressor {
         }
     }
     
+
+    private static void traceApiParameterDiscovery(
+            Map<String, Object> step,
+            boolean isApiModule,
+            List<String> testStepValues,
+            Set<String> visitedValues,
+            Map<String, Map<String, Object>> bySurrogate,
+            Map<String, Map<String, Object>> tsuIndex
+    ) {
+
+        if (!isApiModule) {
+            return;
+        }
+
+        Map<String, Object> stepAttrs = asMap(step.get("Attributes"));
+        String stepName = asText(stepAttrs.get("Name"));
+
+        if (!"doEingabe Request V11".equals(stepName)) {
+            return;
+        }
+
+        System.err.println();
+        System.err.println("========== API PARAM DISCOVERY TRACE ==========");
+        System.err.println("[API-PARAM-TRACE] step=" + stepName);
+        System.err.println("[API-PARAM-TRACE] topLevel TestStepValues=" + testStepValues);
+        System.err.println("[API-PARAM-TRACE] recursively visited XTestStepValues=" + visitedValues.size());
+
+        Set<String> referencedModuleAttributeIds = new LinkedHashSet<>();
+
+        for (String valueId : visitedValues) {
+            Map<String, Object> xValue = bySurrogate.get(valueId);
+            if (xValue == null) {
+                System.err.println("[API-XVALUE] id=" + valueId + " <missing in bySurrogate>");
+                continue;
+            }
+
+            Map<String, Object> attrs = asMap(xValue.get("Attributes"));
+            Map<String, Object> assocs = asMap(xValue.get("Assocs"));
+            List<String> moduleAttributeIds = asStringList(assocs.get("ModuleAttribute"));
+            List<String> subValues = asStringList(assocs.get("SubValues"));
+
+            String moduleAttributeId = moduleAttributeIds.isEmpty() ? "" : moduleAttributeIds.get(0);
+            String moduleAttributeName = "";
+
+            if (!moduleAttributeId.isEmpty()) {
+                referencedModuleAttributeIds.add(moduleAttributeId);
+                Map<String, Object> moduleAttribute = tsuIndex.get(moduleAttributeId);
+                if (moduleAttribute != null) {
+                    moduleAttributeName = asText(asMap(moduleAttribute.get("Attributes")).get("Name"));
+                }
+            }
+
+            System.err.println(
+                    "[API-XVALUE]"
+                            + " id=" + valueId
+                            + " moduleAttrId=" + moduleAttributeId
+                            + " moduleAttrName='" + moduleAttributeName + "'"
+                            + " rawActionMode='" + asText(attrs.get("ActionMode")) + "'"
+                            + " mappedActionMode='" + mapActionMode(asText(attrs.get("ActionMode"))) + "'"
+                            + " value='" + asText(attrs.get("Value")) + "'"
+                            + " subValues=" + subValues
+            );
+        }
+
+        System.err.println("---------- TARGET MODULE ATTRIBUTES ----------");
+
+        for (Map.Entry<String, Map<String, Object>> entry : tsuIndex.entrySet()) {
+            String moduleAttributeId = entry.getKey();
+            Map<String, Object> node = entry.getValue();
+
+            if (!"XModuleAttribute".equals(asText(node.get("ObjectClass")))) {
+                continue;
+            }
+
+            Map<String, Object> attrs = asMap(node.get("Attributes"));
+            String name = asText(attrs.get("Name"));
+
+            if (!"cardToken".equalsIgnoreCase(name)
+                    && !"stockTuerNummer".equalsIgnoreCase(name)) {
+                continue;
+            }
+
+            Map<String, Object> assocs = asMap(node.get("Assocs"));
+
+            System.err.println(
+                    "[API-MODULE-ATTR]"
+                            + " id=" + moduleAttributeId
+                            + " name='" + name + "'"
+                            + " referencedByVisitedXTestStepValue="
+                            + referencedModuleAttributeIds.contains(moduleAttributeId)
+                            + " attrs=" + attrs
+                            + " assocs=" + assocs
+            );
+        }
+
+        System.err.println("===============================================");
+        System.err.println();
+    }
+
     // =========================================================
     // ACTION MODE MAPPING
     // =========================================================
@@ -608,7 +712,8 @@ public class XTestStepJsonCompressor {
 
     private static List<Map<String, Object>> buildReusableParameters(
             Map<String, Object> reusable,
-            Map<String, Map<String, Object>> bySurrogate
+            Map<String, Map<String, Object>> bySurrogate,
+            Map<String, Map<String, Object>> tsuIndex
     ) {
 
         List<Map<String, Object>> result =
@@ -625,7 +730,11 @@ public class XTestStepJsonCompressor {
         for (String layerRefId : layerRefs) {
 
             Map<String, Object> layerRef =
-                    bySurrogate.get(layerRefId);
+                    findNode(
+                            layerRefId,
+                            bySurrogate,
+                            tsuIndex
+                    );
 
             if (layerRef == null) {
                 continue;
@@ -642,7 +751,11 @@ public class XTestStepJsonCompressor {
             for (String paramRefId : allParamRefs) {
 
                 Map<String, Object> paramRef =
-                        bySurrogate.get(paramRefId);
+                        findNode(
+                                paramRefId,
+                                bySurrogate,
+                                tsuIndex
+                        );
 
                 if (paramRef == null) {
                     continue;
@@ -660,23 +773,51 @@ public class XTestStepJsonCompressor {
                         );
 
                 String explicitName = "";
+                Map<String, Object> parameter = null;
 
                 if (!parameterIds.isEmpty()) {
 
                     String parameterId =
                             parameterIds.get(0);
 
-                    Map<String, Object> parameter =
-                            bySurrogate.get(parameterId);
+                    parameter =
+                            findNode(
+                                    parameterId,
+                                    bySurrogate,
+                                    tsuIndex
+                            );
 
                     if (parameter != null) {
-
-                        Map<String, Object> parameterAttrs =
-                                asMap(parameter.get("Attributes"));
-
                         explicitName =
-                                asText(parameterAttrs.get("Name"));
+                                buildParameterPath(
+                                        parameterId,
+                                        bySurrogate,
+                                        tsuIndex
+                                );
                     }
+                }
+
+                /*
+                 * A Tosca business parameter may be a structural container,
+                 * for example:
+                 *
+                 *   Request
+                 *     SVNR
+                 *     DMPCode
+                 *
+                 * or:
+                 *
+                 *   Response
+                 *     SVTCode
+                 *
+                 * The container itself is not an executable AGATE parameter.
+                 * Its name is preserved as part of the child parameter path
+                 * (Request.SVNR, Response.SVTCode, ...), but the empty
+                 * container entry itself must not be emitted.
+                 */
+                if (isStructuralParameterContainer(parameter)
+                        && asText(paramRefAttrs.get("Value")).isBlank()) {
+                    continue;
                 }
 
                 Map<String, Object> compactParam =
@@ -697,6 +838,140 @@ public class XTestStepJsonCompressor {
         }
 
         return result;
+    }
+
+    /**
+     * Builds the complete Tosca business-parameter path.
+     *
+     * Examples:
+     *   VSNR                 -> VSNR
+     *   Request -> SVNR      -> Request.SVNR
+     *   Response -> SVTCode  -> Response.SVTCode
+     *
+     * The method follows Assocs.ParentParameter recursively and therefore
+     * also supports more than one nesting level. A visited set prevents
+     * malformed/cyclic Tosca data from causing endless recursion.
+     */
+    private static String buildParameterPath(
+            String parameterId,
+            Map<String, Map<String, Object>> bySurrogate,
+            Map<String, Map<String, Object>> tsuIndex
+    ) {
+        return buildParameterPath(
+                parameterId,
+                bySurrogate,
+                tsuIndex,
+                new HashSet<>()
+        );
+    }
+
+    private static String buildParameterPath(
+            String parameterId,
+            Map<String, Map<String, Object>> bySurrogate,
+            Map<String, Map<String, Object>> tsuIndex,
+            Set<String> visited
+    ) {
+
+        if (parameterId == null
+                || parameterId.isBlank()
+                || !visited.add(parameterId)) {
+            return "";
+        }
+
+        Map<String, Object> parameter =
+                findNode(
+                        parameterId,
+                        bySurrogate,
+                        tsuIndex
+                );
+
+        if (parameter == null) {
+            return "";
+        }
+
+        Map<String, Object> parameterAttrs =
+                asMap(parameter.get("Attributes"));
+
+        String name =
+                asText(parameterAttrs.get("Name"));
+
+        Map<String, Object> parameterAssocs =
+                asMap(parameter.get("Assocs"));
+
+        List<String> parentParameterIds =
+                asStringList(
+                        parameterAssocs.get("ParentParameter")
+                );
+
+        if (parentParameterIds.isEmpty()) {
+            return name;
+        }
+
+        String parentPath =
+                buildParameterPath(
+                        parentParameterIds.get(0),
+                        bySurrogate,
+                        tsuIndex,
+                        visited
+                );
+
+        if (parentPath == null || parentPath.isBlank()) {
+            return name;
+        }
+
+        if (name == null || name.isBlank()) {
+            return parentPath;
+        }
+
+        return parentPath + "." + name;
+    }
+
+    /**
+     * Resolves a Tosca node from the current intermediate JSON first and
+     * falls back to the complete TSU index when helper nodes have already
+     * been removed by an earlier compression phase.
+     */
+    private static Map<String, Object> findNode(
+            String surrogate,
+            Map<String, Map<String, Object>> localIndex,
+            Map<String, Map<String, Object>> tsuIndex
+    ) {
+
+        if (surrogate == null || surrogate.isBlank()) {
+            return null;
+        }
+
+        Map<String, Object> node =
+                localIndex.get(surrogate);
+
+        if (node != null) {
+            return node;
+        }
+
+        return tsuIndex.get(surrogate);
+    }
+
+    /**
+     * Returns true for a Tosca Parameter that acts only as a parent/container
+     * for nested business parameters.
+     */
+    private static boolean isStructuralParameterContainer(
+            Map<String, Object> parameter
+    ) {
+
+        if (parameter == null) {
+            return false;
+        }
+
+        Map<String, Object> parameterAssocs =
+                asMap(parameter.get("Assocs"));
+
+        List<String> childParameterIds =
+                asStringList(
+                        parameterAssocs.get("Parameters")
+                );
+
+        return !childParameterIds.isEmpty();
     }
 
     // =========================================================

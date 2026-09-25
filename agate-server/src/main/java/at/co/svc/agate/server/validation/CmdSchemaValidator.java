@@ -20,6 +20,7 @@ public final class CmdSchemaValidator
                     "response",
                     "expectedExitCode",
                     "checkExitCode",
+                    "ignoreExitCode",
                     "timeout",
                     "outputFile"
             );
@@ -239,6 +240,41 @@ public final class CmdSchemaValidator
             );
         }
 
+        JsonNode ignoreExitCode =
+                node.get("ignoreExitCode");
+
+        if (ignoreExitCode != null
+                && !ignoreExitCode.isNull()
+                && !ignoreExitCode.isBoolean()) {
+
+            issues.add(
+                    ValidationIssue.error(
+                            "AGATE-V707",
+                            "CMD/EXEC property 'ignoreExitCode' must be boolean. "
+                                    + "Actual: '"
+                                    + ignoreExitCode.asText()
+                                    + "'. Allowed values: true | false.",
+                            c.file(),
+                            c.source().lineOf("ignoreExitCode:")
+                    )
+            );
+        }
+
+        if (checkExitCode != null
+                && !checkExitCode.isNull()
+                && ignoreExitCode != null
+                && !ignoreExitCode.isNull()) {
+
+            issues.add(
+                    ValidationIssue.error(
+                            "AGATE-V708",
+                            "CMD/EXEC cannot use both 'checkExitCode' and 'ignoreExitCode'.",
+                            c.file(),
+                            lineOfStep(c, node)
+                    )
+            );
+        }
+
         JsonNode timeout =
                 node.get("timeout");
 
@@ -250,7 +286,7 @@ public final class CmdSchemaValidator
                 issues.add(
                         ValidationIssue.error(
                                 "AGATE-V705",
-                                "CMD/EXEC property 'timeout' must be an integer greater than 0. "
+                                "CMD/EXEC property 'timeout' must be an integer greater than 0 milliseconds. "
                                         + "Actual: '"
                                         + timeout.asText()
                                         + "'.",
@@ -265,7 +301,7 @@ public final class CmdSchemaValidator
                 issues.add(
                         ValidationIssue.error(
                                 "AGATE-V706",
-                                "CMD/EXEC property 'timeout' must be greater than 0. "
+                                "CMD/EXEC property 'timeout' must be greater than 0 milliseconds. "
                                         + "Actual: "
                                         + timeout.asLong()
                                         + ".",

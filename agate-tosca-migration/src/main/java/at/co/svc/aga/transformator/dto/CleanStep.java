@@ -1,9 +1,9 @@
 package at.co.svc.aga.transformator.dto;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CleanStep {
+
     private int index;
     private String name;
     private String type;
@@ -18,143 +19,482 @@ public class CleanStep {
     private String surrogate;
     private String module;
     private String moduleSurrogate;
-    private String reusableName; // Ime bloka iz biblioteke
-    private String reusableSurrogate; // Ključ za libs.json
+    private String reusableName;
+    private String reusableSurrogate;
     private String condition;
-    // 1. DODAJ OVO POLJE
-    private String moduleClass; 
-//    private String xCondition;
-
+    private String moduleClass;
     private List<StepValueDetails> values;
     private String action;
-
- // Dodaj u klasu koja ti predstavlja Assert korak
     private List<Constraint> constraints;
 
-    public List<Constraint> getConstraints() { return constraints; }
-    public void setConstraints(List<Constraint> constraints) { this.constraints = constraints; }
-    
-    
- // 4. Ako TI u kodu treba mapa za pretragu, napravi metodu koja je pravi "u letu"
+    /*
+     * =========================================================
+     * CONTROL FLOW
+     * =========================================================
+     *
+     * These fields are optional and are used only by structured
+     * AGATE control-flow steps such as LOOP.
+     *
+     * Normal existing steps:
+     *
+     *   SQL
+     *   REST
+     *   SOAP
+     *   WAIT
+     *   CMD
+     *   CALL
+     *   ...
+     *
+     * do not use these fields and therefore continue to behave
+     * exactly as before.
+     */
+
+    private Integer maxIterations;
+
+    private List<CleanStep> steps;
+
+
+    // =========================================================
+    // CONTROL FLOW
+    // =========================================================
+
+    public Integer getMaxIterations() {
+        return maxIterations;
+    }
+
+    public void setMaxIterations(
+            Integer maxIterations) {
+
+        this.maxIterations =
+                maxIterations;
+    }
+
+    public List<CleanStep> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(
+            List<CleanStep> steps) {
+
+        this.steps =
+                steps;
+    }
+
+    /**
+     * Convenience helper for structured steps such as LOOP.
+     *
+     * This intentionally does not affect existing step processing.
+     */
+    @JsonIgnore
+    public boolean hasNestedSteps() {
+
+        return steps != null
+                && !steps.isEmpty();
+    }
+
+
+    // =========================================================
+    // CONSTRAINTS
+    // =========================================================
+
+    public List<Constraint> getConstraints() {
+        return constraints;
+    }
+
+    public void setConstraints(
+            List<Constraint> constraints) {
+
+        this.constraints =
+                constraints;
+    }
+
+
+    // =========================================================
+    // VALUES
+    // =========================================================
+
+    /**
+     * Convenience lookup map.
+     *
+     * IMPORTANT:
+     * Tosca may contain the same ExplicitName more than once in one step.
+     * The raw list in {@link #values} is therefore the source of truth.
+     *
+     * For lookup-only use cases this map intentionally keeps the LAST
+     * occurrence, because later Tosca assignments override earlier ones.
+     *
+     * Example:
+     *
+     *   L_Verify = not-set
+     *   L_Verify = {PL[Verify]}
+     *
+     * Lookup must return {PL[Verify]}, not not-set.
+     */
     @JsonIgnore
     public Map<String, StepValueDetails> getValuesAsMap() {
-        if (values == null) return new LinkedHashMap<>();
-        
-        // Ovde praviš mapu samo kada ti zatreba
-        return values.stream().collect(Collectors.toMap(
-            StepValueDetails::getName, 
-            v -> v,
-            (existing, replacement) -> existing, // Čuva prvo pojavljivanje
-            java.util.LinkedHashMap::new
-        ));
+
+        Map<String, StepValueDetails> result =
+                new LinkedHashMap<>();
+
+        if (values == null) {
+            return result;
+        }
+
+        for (StepValueDetails value : values) {
+
+            if (value == null
+                    || value.getName() == null) {
+
+                continue;
+            }
+
+            result.put(
+                    value.getName(),
+                    value
+            );
+        }
+
+        return result;
     }
-    
-    
-    // 2. DODAJ GETTER I SETTER ZA moduleClass
+
+    /**
+     * Returns all values with the requested name, preserving Tosca order.
+     * Use this for modules where duplicate attributes are meaningful,
+     * e.g. TBox Set Buffer and repeated Start Program arguments.
+     */
+    @JsonIgnore
+    public List<StepValueDetails> getValuesByNameIgnoreCase(
+            String requestedName) {
+
+        List<StepValueDetails> result =
+                new ArrayList<>();
+
+        if (values == null
+                || requestedName == null) {
+
+            return result;
+        }
+
+        for (StepValueDetails value : values) {
+
+            if (value != null
+                    && value.getName() != null
+                    && value.getName()
+                    .equalsIgnoreCase(
+                            requestedName
+                    )) {
+
+                result.add(
+                        value
+                );
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns all values whose name ends with the requested suffix.
+     *
+     * Useful for flattened Tosca attributes such as:
+     *
+     *   WaitForExit.StandardOutputFile
+     *   Arguments.Argument
+     */
+    @JsonIgnore
+    public List<StepValueDetails> getValuesByNameSuffixIgnoreCase(
+            String suffix) {
+
+        List<StepValueDetails> result =
+                new ArrayList<>();
+
+        if (values == null
+                || suffix == null) {
+
+            return result;
+        }
+
+        String normalizedSuffix =
+                suffix.toLowerCase();
+
+        for (StepValueDetails value : values) {
+
+            if (value == null
+                    || value.getName() == null) {
+
+                continue;
+            }
+
+            String name =
+                    value.getName()
+                            .toLowerCase();
+
+            if (name.equals(
+                    normalizedSuffix)
+                    || name.endsWith(
+                    "." + normalizedSuffix)) {
+
+                result.add(
+                        value
+                );
+            }
+        }
+
+        return result;
+    }
+
+
+    // =========================================================
+    // MODULE
+    // =========================================================
+
     public String getModuleClass() {
         return moduleClass;
     }
+
+    public void setModuleClass(
+            String moduleClass) {
+
+        this.moduleClass =
+                moduleClass;
+    }
+
+
+    // =========================================================
+    // ACTION
+    // =========================================================
 
     public String getAction() {
         return action;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setAction(
+            String action) {
+
+        this.action =
+                action;
     }
 
-    public void setModuleClass(String moduleClass) {
-        this.moduleClass = moduleClass;
+
+    // =========================================================
+    // INDEX
+    // =========================================================
+
+    public int getIndex() {
+        return index;
     }
 
-    // Proveri da li imaš i ostale settere koji ti trebaju u ToscaParser-u
-    public int getIndex() { return index; }
-    public void setIndex(int index) { this.index = index; }
+    public void setIndex(
+            int index) {
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+        this.index =
+                index;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
 
-    public String getSurrogate() { return surrogate; }
-    public void setSurrogate(String surrogate) { this.surrogate = surrogate; }
+    // =========================================================
+    // NAME
+    // =========================================================
 
-    public String getModule() { return module; }
-    public void setModule(String module) { this.module = module; }
+    public String getName() {
+        return name;
+    }
 
-    public String getModuleSurrogate() { return moduleSurrogate; }
-    public void setModuleSurrogate(String moduleSurrogate) { this.moduleSurrogate = moduleSurrogate; }
+    public void setName(
+            String name) {
 
-//    public Map<String, StepValueDetails> getValues() { return values; }
-//    public void setValues(Map<String, StepValueDetails> values) { this.values = values; }
+        this.name =
+                name;
+    }
+
+
+    // =========================================================
+    // TYPE
+    // =========================================================
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(
+            String type) {
+
+        this.type =
+                type;
+    }
+
+
+    // =========================================================
+    // SURROGATE
+    // =========================================================
+
+    public String getSurrogate() {
+        return surrogate;
+    }
+
+    public void setSurrogate(
+            String surrogate) {
+
+        this.surrogate =
+                surrogate;
+    }
+
+
+    // =========================================================
+    // MODULE
+    // =========================================================
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(
+            String module) {
+
+        this.module =
+                module;
+    }
+
+    public String getModuleSurrogate() {
+        return moduleSurrogate;
+    }
+
+    public void setModuleSurrogate(
+            String moduleSurrogate) {
+
+        this.moduleSurrogate =
+                moduleSurrogate;
+    }
+
+
+    // =========================================================
+    // REUSABLE
+    // =========================================================
 
     public String getReusableName() {
         return reusableName;
     }
 
-    public void setReusableName(String reusableName) {
-        this.reusableName = reusableName;
+    public void setReusableName(
+            String reusableName) {
+
+        this.reusableName =
+                reusableName;
     }
 
     public String getReusableSurrogate() {
         return reusableSurrogate;
     }
 
-    public void setReusableSurrogate(String reusableSurrogate) {
-        this.reusableSurrogate = reusableSurrogate;
+    public void setReusableSurrogate(
+            String reusableSurrogate) {
+
+        this.reusableSurrogate =
+                reusableSurrogate;
     }
+
+
+    // =========================================================
+    // CONDITION
+    // =========================================================
 
     public String getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setCondition(
+            String condition) {
+
+        this.condition =
+                condition;
     }
+
+
+    // =========================================================
+    // OP
+    // =========================================================
 
     public String getOp() {
         return op;
     }
 
-    public void setOp(String op) {
-        this.op = op;
+    public void setOp(
+            String op) {
+
+        this.op =
+                op;
     }
 
-// public String getxCondition() {
-//        return xCondition;
-//    }
-//
-//    public void setxCondition(String xCondition) {
-//        this.xCondition = xCondition;
-//    }
 
-    // U klasi CleanStep
-    public String getCombinedCondition(String xCondition, String condition) {
-        if (xCondition == null || xCondition.isEmpty()) {
-            return condition;
+    // =========================================================
+    // CONDITION COMBINATION
+    // =========================================================
+
+    /**
+     * Combines a propagated condition with a local condition.
+     * Avoids "(null)" and avoids adding the same propagated condition twice.
+     */
+    public String getCombinedCondition(
+            String xCondition,
+            String condition) {
+
+        String x =
+                normalizeCondition(
+                        xCondition
+                );
+
+        String c =
+                normalizeCondition(
+                        condition
+                );
+
+        if (x.isEmpty()) {
+            return c;
         }
-        
-        String xCondWrapped = "(" + xCondition + ")";
-        
-        if (condition == null || condition.isEmpty()) {
-            return "(" + condition + ")";
+
+        if (c.isEmpty()) {
+            return x;
         }
-        
-        // Spreči da se stalno dodaje isti uslov ako se metoda pozove više puta
-        if (condition.contains(xCondWrapped)) {
-            return condition;
+
+        String wrappedX =
+                "(" + x + ")";
+
+        if (c.contains(
+                wrappedX)
+                || c.equals(x)) {
+
+            return c;
         }
-        
-        return "((" + condition + ") AND (" + xCondWrapped + "))";
+
+        return "("
+                + c
+                + ") AND ("
+                + x
+                + ")";
     }
- // 3. Dodaj novi getter i setter koji vraćaju Listu
+
+    private static String normalizeCondition(
+            String value) {
+
+        return value == null
+                ? ""
+                : value.trim();
+    }
+
+
+    // =========================================================
+    // RAW VALUES
+    // =========================================================
+
     @JsonProperty("values")
-    public void setValues(List<StepValueDetails> values) {
-        this.values = values;
+    public void setValues(
+            List<StepValueDetails> values) {
+
+        this.values =
+                values;
     }
 
     public List<StepValueDetails> getValues() {
-        return this.values;
+        return values;
     }
 }

@@ -724,227 +724,331 @@ public class YamlTestInstantiator {
 
 //    }    
 
-    private boolean isConditionSatisfied(String condition, TCObject tc, Map<String, Object> step,
+    private boolean isConditionSatisfied(
+            String condition,
+            TCObject tc,
+            Map<String, Object> step,
             Boolean CONSOLE_PRINT) {
 
-        if (condition == null || condition.trim().isEmpty())
+        if (condition == null || condition.trim().isEmpty()) {
             return true;
-
-        // 1. Strip external block quotes if they exist
+        }
 
         condition = condition.trim();
 
-        if (condition.startsWith("'''") && condition.endsWith("'''") && condition.length() > 3) {
+        /*
+         * Remove only outer quoting introduced by YAML/Tosca conversion.
+         */
+        if (condition.startsWith("'''")
+                && condition.endsWith("'''")
+                && condition.length() > 6) {
 
-            condition = condition.substring(3, condition.length() - 3);
+            condition =
+                    condition.substring(
+                            3,
+                            condition.length() - 3
+                    );
 
-        } else if (condition.startsWith("'") && condition.endsWith("'") && condition.length() > 1) {
+        } else if (condition.startsWith("'")
+                && condition.endsWith("'")
+                && condition.length() > 2) {
 
-            condition = condition.substring(1, condition.length() - 1);
+            condition =
+                    condition.substring(
+                            1,
+                            condition.length() - 1
+                    );
 
-        } else if (condition.startsWith("\"") && condition.endsWith("\"") && condition.length() > 1) {
+        } else if (condition.startsWith("\"")
+                && condition.endsWith("\"")
+                && condition.length() > 2) {
 
-            condition = condition.substring(1, condition.length() - 1);
-
+            condition =
+                    condition.substring(
+                            1,
+                            condition.length() - 1
+                    );
         }
 
-        // 1. Popravi deformisane ili nezatvorene {NULL oznake iz šablona (npr. '{NULL )
+        /*
+         * Tosca sometimes puts CSV parameter names into single quotes:
+         *
+         *   'CardTokenDMP.TokenWert' != NULL
+         *
+         * These quotes do NOT mean that the parameter name is a string
+         * literal. Remove them before mapping the CSV variables.
+         */
+        condition =
+                condition.replaceAll(
+                        "'([a-zA-Z0-9_.-]+)'",
+                        "$1"
+                );
 
-        condition = condition.replaceAll("(?i)'\\{NULL\\b", "null");
+        /*
+         * Normalize Tosca operators/constants to JEXL.
+         *
+         * Important:
+         * Quoted string constants such as:
+         *
+         *   "SVSV"
+         *   "VPSV"
+         *
+         * are intentionally left untouched.
+         */
+        String processedCondition =
+                condition
+                        .replaceAll(
+                                "(?i)'\\{NULL\\}'",
+                                "null"
+                        )
+                        .replaceAll(
+                                "(?i)\"\\{NULL\\}\"",
+                                "null"
+                        )
+                        .replaceAll(
+                                "(?i)\\{NULL\\}",
+                                "null"
+                        )
+                        .replaceAll(
+                                "(?i)\\bNULL\\b",
+                                "null"
+                        )
+                        .replaceAll(
+                                "(?i)\\bTRUE\\b",
+                                "true"
+                        )
+                        .replaceAll(
+                                "(?i)\\bFALSE\\b",
+                                "false"
+                        )
+                        .replaceAll(
+                                "(?i)\\s+AND\\s+",
+                                " && "
+                        )
+                        .replaceAll(
+                                "(?i)\\s+OR\\s+",
+                                " || "
+                        )
+                        .trim();
 
-        condition = condition.replaceAll("(?i)\\{NULL\\b", "null");
+        JexlContext context =
+                new MapContext();
 
-        // 2. Očisti sve zalutale jednostruke navodnike oko naziva promenljivih
+        context.set(
+                "null",
+                null
+        );
 
-        condition = condition.replaceAll("'([a-zA-Z0-9_.-]+)'", "$1");
+        context.set(
+                "true",
+                Boolean.TRUE
+        );
 
-        condition = condition.replaceAll("([a-zA-Z0-9_.-]+)'", "$1"); // Zaostali desni navodnici
+        context.set(
+                "false",
+                Boolean.FALSE
+        );
 
-        condition = condition.replaceAll("'([a-zA-Z0-9_.-]+)", "$1"); // Zaostali levi navodnici
+        /*
+         * Replace known CSV keys only.
+         *
+         * Sort longest first so that similar names such as:
+         *
+         *   DialogException
+         *   DialogException.InfoCode
+         *
+         * cannot interfere with each other.
+         */
+        List<String> keys =
+                new ArrayList<>(
+                        tc.getVariables().keySet()
+                );
 
-        String command = (String) step.get("command");
+        keys.sort(
+                (a, b) ->
+                        Integer.compare(
+                                b.length(),
+                                a.length()
+                        )
+        );
 
-        boolean debugThisStep = true;
-
-        // 3. Unifikacija svih mogućih varijacija NULL-a i operatora u čist JEXL format
-
-        String processedCondition = condition
-
-                .replaceAll("(?i)'\\{NULL\\}'", "null")
-
-                .replaceAll("(?i)\"\\{NULL\\}\"", "null")
-
-                .replaceAll("(?i)\\{NULL\\}", "null")
-
-                .replaceAll("(?i)\\bNULL\\b", "null")
-
-                .replaceAll("(?i)\\bTRUE\\b", "true")
-
-                .replaceAll("(?i)\\bFALSE\\b", "false")
-
-                .replaceAll("(?i)\\s+AND\\s+", " && ")
-
-                .replaceAll("(?i)\\s+OR\\s+", " || ");
-
-        // 4. UKLANJANJE ZALUTALIH ZAGRADA I NAVODNIKA SA KRAJA IZRAZA
-
-        processedCondition = processedCondition.trim();
-
-        // Ako se izraz završava sa }, a to nije deo regularne promenljive, obriši je
-
-        if (processedCondition.endsWith("}")) {
-
-            processedCondition = processedCondition.substring(0, processedCondition.length() - 1).trim();
-
-        }
-
-        // Ako je na kraju ostao usamljeni navodnik, obriši i njega
-
-        if (processedCondition.endsWith("'") && !processedCondition.startsWith("'")) {
-
-            processedCondition = processedCondition.substring(0, processedCondition.length() - 1).trim();
-
-        }
-
-        JexlContext context = new MapContext();
-
-        context.set("null", null);
-
-        context.set("true", Boolean.TRUE);
-
-        context.set("false", Boolean.FALSE);
-
-        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("[a-zA-Z0-9_.-]+")
-                .matcher(processedCondition);
-
-        StringBuilder finalJexlExpression = new StringBuilder();
-
-        int lastEnd = 0;
+        Map<String, Object> mappedVariablesForLog =
+                new LinkedHashMap<>();
 
         int varCounter = 0;
 
-        Map<String, Object> mappedVariablesForLog = new HashMap<>();
+        for (String originalKey : keys) {
 
-        Set<String> csvKeys = tc.getVariables().keySet();
+            Pattern keyPattern =
+                    Pattern.compile(
+                            "(?<![a-zA-Z0-9_.-])"
+                                    + Pattern.quote(originalKey)
+                                    + "(?![a-zA-Z0-9_.-])"
+                    );
 
-        while (matcher.find()) {
+            java.util.regex.Matcher matcher =
+                    keyPattern.matcher(
+                            processedCondition
+                    );
 
-            finalJexlExpression.append(processedCondition, lastEnd, matcher.start());
-
-            String token = matcher.group();
-
-            if (token.equals("null") || token.equals("true") || token.equals("false") || token.matches("\\d+")) {
-
-                finalJexlExpression.append(token);
-
+            if (!matcher.find()) {
+                continue;
             }
 
-            else if (csvKeys.contains(token)) {
+            String safeJexlVar =
+                    "VAR_" + varCounter++;
 
-                String safeJexlVar = "VAR_" + varCounter++;
+            String val =
+                    tc.getVariables()
+                            .get(originalKey);
 
-                String val = tc.getVariables().get(token);
+            Object contextValue;
 
-                Object contextValue;
+            if (val == null
+                    || val.trim().isEmpty()
+                    || val.equalsIgnoreCase("NULL")
+                    || val.equalsIgnoreCase("{NULL}")) {
 
-                if (val == null || val.trim().isEmpty() || val.equalsIgnoreCase("NULL")
-                        || val.equalsIgnoreCase("{NULL}")) {
+                contextValue =
+                        null;
 
-                    contextValue = null;
+            } else if (val.equalsIgnoreCase("{EMPTY}")) {
 
-                } else if (val.equalsIgnoreCase("{EMPTY}")) {
+                contextValue =
+                        "";
 
-                    contextValue = "";
+            } else {
 
-                } else {
-
-                    contextValue = val;
-
-                }
-
-                context.set(safeJexlVar, contextValue);
-
-                finalJexlExpression.append(safeJexlVar);
-
-                mappedVariablesForLog.put(token + " (" + safeJexlVar + ")", contextValue);
-
+                contextValue =
+                        val;
             }
 
-            else {
+            context.set(
+                    safeJexlVar,
+                    contextValue
+            );
 
-                // Safely encapsulate explicit text constants as strings for JEXL
+            /*
+             * quoteReplacement is important because replacement values
+             * must not be interpreted as regex replacement syntax.
+             */
+            processedCondition =
+                    matcher.replaceAll(
+                            java.util.regex.Matcher.quoteReplacement(
+                                    safeJexlVar
+                            )
+                    );
 
-                finalJexlExpression.append("'").append(token).append("'");
-
-            }
-
-            lastEnd = matcher.end();
-
+            mappedVariablesForLog.put(
+                    originalKey + " (" + safeJexlVar + ")",
+                    contextValue
+            );
         }
 
-        finalJexlExpression.append(processedCondition.substring(lastEnd));
+        if (Boolean.TRUE.equals(CONSOLE_PRINT)) {
 
-        String finalExpressionStr = finalJexlExpression.toString();
+            System.out.println(
+                    "\n--- [CONDITION EVALUATION DETAIL] ---"
+            );
 
-        if (debugThisStep) {
+            System.out.println(
+                    "  [RAW TEMPLATE COND] : "
+                            + condition
+            );
 
-            if (CONSOLE_PRINT) {
+            System.out.println(
+                    "  [JEXL ENGINE EXEC]  : "
+                            + processedCondition
+            );
 
-                System.out.println("\n--- [CONDITION EVALUATION DETAIL] ---");
+            if (!mappedVariablesForLog.isEmpty()) {
 
-                System.out.println("  [RAW TEMPLATE COND] : " + condition);
+                System.out.println(
+                        "  [CSV VARIABLES]"
+                );
 
-                System.out.println("  [JEXL ENGINE EXEC]  : " + finalExpressionStr);
+                for (Map.Entry<String, Object> entry
+                        : mappedVariablesForLog.entrySet()) {
 
+                    System.out.println(
+                            "    "
+                                    + entry.getKey()
+                                    + " = "
+                                    + (
+                                    entry.getValue() == null
+                                            ? "null"
+                                            : "'"
+                                            + entry.getValue()
+                                            + "'"
+                            )
+                    );
+                }
             }
-
         }
 
         try {
 
-            JexlEngine jexl = new JexlBuilder().silent(true).strict(false).create();
+            JexlEngine jexl =
+                    new JexlBuilder()
+                            .silent(false)
+                            .strict(false)
+                            .create();
 
-            JexlExpression expression = jexl.createExpression(finalExpressionStr);
+            JexlExpression expression =
+                    jexl.createExpression(
+                            processedCondition
+                    );
 
-            Object result = expression.evaluate(context);
+            Object result =
+                    expression.evaluate(
+                            context
+                    );
 
-            boolean finalResult = (result instanceof Boolean) ? (Boolean) result : (result != null);
+            boolean finalResult =
+                    result instanceof Boolean
+                            ? (Boolean) result
+                            : result != null;
 
-            if (debugThisStep) {
+            if (Boolean.TRUE.equals(CONSOLE_PRINT)) {
 
-                if (CONSOLE_PRINT) {
+                System.out.println(
+                        "  [EVALUATION RESULT] : "
+                                + (
+                                finalResult
+                                        ? "TRUE (Step will be KEPT)"
+                                        : "FALSE (Step will be REMOVED)"
+                        )
+                );
 
-                    System.out.println("  [EVALUATION RESULT] : "
-                            + (finalResult ? "TRUE (Step will be KEPT)" : "FALSE (Step will be REMOVED)"));
-
-                    System.out.println("-------------------------------------\n");
-
-                }
-
+                System.out.println(
+                        "-------------------------------------\n"
+                );
             }
 
             return finalResult;
 
         } catch (Exception e) {
 
-            if (debugThisStep) {
+            if (Boolean.TRUE.equals(CONSOLE_PRINT)) {
 
-                if (CONSOLE_PRINT) {
+                System.err.println(
+                        "  [EVALUATION ERROR]  : "
+                                + e.getMessage()
+                );
 
-                    System.err.println("  [EVALUATION ERROR]  : " + e.getMessage());
+                System.err.println(
+                        "  [EXPRESSION]        : "
+                                + processedCondition
+                );
 
-                    System.err.println("-------------------------------------\n");
-
-                }
-
+                System.err.println(
+                        "-------------------------------------\n"
+                );
             }
 
             return false;
-
         }
-
     }
-
     private void replaceXLBuffer(
             Object obj,
             TCObject tc,

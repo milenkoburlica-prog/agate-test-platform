@@ -1,9 +1,0 @@
-name: kopfdatencheck_mit_auspraegung_de
-steps:
-      - type: CALL
-        command: "reusable.prüfung_kopfzeile_mit_auspraegung_de"
-        parameters: {}
-
-      - type: CALL
-        command: "reusable.prüfung_versionsnummer_im_header_de"
-        parameters: {}

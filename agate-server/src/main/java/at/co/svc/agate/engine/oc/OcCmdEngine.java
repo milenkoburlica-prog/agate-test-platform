@@ -19,7 +19,7 @@ import at.co.svc.agate.core.interfaces.TestLogger;
 
 public class OcCmdEngine extends AbstractStepEngine {
 
-    private static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    private static final int DEFAULT_TIMEOUT_MS = 30_000;
 
     @Override
     public boolean canExecute(StepType stepType) {
@@ -208,16 +208,19 @@ public class OcCmdEngine extends AbstractStepEngine {
         int timeout =
                 step.getTimeout() != null
                         ? step.getTimeout()
-                        : DEFAULT_TIMEOUT_SECONDS;
+                        : DEFAULT_TIMEOUT_MS;
 
         int expectedExitCode =
                 step.getExpectedExitCode() != null
                         ? step.getExpectedExitCode()
                         : 0;
 
-        boolean checkExitCode =
-                step.getCheckExitCode() == null
-                        || step.getCheckExitCode();
+        boolean ignoreExitCode =
+                step.getIgnoreExitCode() != null
+                        ? step.getIgnoreExitCode()
+                        : step.getCheckExitCode() != null
+                                ? !step.getCheckExitCode()
+                                : false;
 
         String activePod =
                 getActivePodName(
@@ -320,8 +323,9 @@ public class OcCmdEngine extends AbstractStepEngine {
             logger.info(
                     String.format(
                             "    %s>>> RESULT    %s: Exit=%d, Timeout=%s, Duration=%d ms",
-                            result.getExitCode() == expectedExitCode
-                                            && !result.isTimedOut()
+                            !result.isTimedOut()
+                                            && (ignoreExitCode
+                                                    || result.getExitCode() == expectedExitCode)
                                     ? ConsoleColors.GREEN
                                     : ConsoleColors.RED,
                             ConsoleColors.RESET,
@@ -332,14 +336,14 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         if (result.isTimedOut()) {
             throw AgateStepException.builder("OC command timed out")
-                    .expected("completion within " + timeout + " seconds")
+                    .expected("completion within " + timeout + " ms")
                     .actual("timeout")
                     .command(resolvedCommand)
                     .hint("Check the pod/command or increase timeout if the longer runtime is expected.")
                     .build();
         }
 
-        if (checkExitCode
+        if (!ignoreExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
@@ -352,7 +356,7 @@ public class OcCmdEngine extends AbstractStepEngine {
                     .expected(expectedDisplay)
                     .actual(result.getExitCode())
                     .command(resolvedCommand)
-                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .hint("Set ignoreExitCode: true to accept any exit code.")
                     .build();
         }
     }
@@ -496,16 +500,19 @@ public class OcCmdEngine extends AbstractStepEngine {
         int timeout =
                 step.getTimeout() != null
                         ? step.getTimeout()
-                        : DEFAULT_TIMEOUT_SECONDS;
+                        : DEFAULT_TIMEOUT_MS;
 
         int expectedExitCode =
                 step.getExpectedExitCode() != null
                         ? step.getExpectedExitCode()
                         : 0;
 
-        boolean checkExitCode =
-                step.getCheckExitCode() == null
-                        || step.getCheckExitCode();
+        boolean ignoreExitCode =
+                step.getIgnoreExitCode() != null
+                        ? step.getIgnoreExitCode()
+                        : step.getCheckExitCode() != null
+                                ? !step.getCheckExitCode()
+                                : false;
 
         String podName =
                 getActivePodName(
@@ -585,8 +592,9 @@ public class OcCmdEngine extends AbstractStepEngine {
                 && isVerbose) {
 
             String resultColor =
-                    result.getExitCode() == expectedExitCode
-                                    && !result.isTimedOut()
+                    !result.isTimedOut()
+                                    && (ignoreExitCode
+                                            || result.getExitCode() == expectedExitCode)
                             ? ConsoleColors.GREEN
                             : ConsoleColors.RED;
 
@@ -607,14 +615,14 @@ public class OcCmdEngine extends AbstractStepEngine {
 
         if (result.isTimedOut()) {
             throw AgateStepException.builder("OC " + op + " timed out")
-                    .expected("completion within " + timeout + " seconds")
+                    .expected("completion within " + timeout + " ms")
                     .actual("timeout")
                     .command(fullCommand)
                     .hint("Check the transfer paths/pod or increase timeout if the longer runtime is expected.")
                     .build();
         }
 
-        if (checkExitCode
+        if (!ignoreExitCode
                 && result.getExitCode()
                         != expectedExitCode) {
 
@@ -627,7 +635,7 @@ public class OcCmdEngine extends AbstractStepEngine {
                     .expected(expectedDisplay)
                     .actual(result.getExitCode())
                     .command(fullCommand)
-                    .hint("Set checkExitCode: false to accept any exit code.")
+                    .hint("Set ignoreExitCode: true to accept any exit code.")
                     .build();
         }
     }

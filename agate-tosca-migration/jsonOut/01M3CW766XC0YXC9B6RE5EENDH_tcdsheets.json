@@ -1,0 +1,108 @@
+[
+  {
+    "ObjectClass": "TestSheet",
+    "Surrogate": "01M3CW766XC0YXC9B6RE5EENDH",
+    "Attributes": {
+      "IncludeForSynchronization": "1",
+      "CheckoutWorkspace": "",
+      "Description": "",
+      "SynchronizationPolicy": "2",
+      "Revision": "138659",
+      "CheckOutState": "1",
+      "Name": "TestSheet-Agate-Demo"
+    },
+    "Assocs": {
+      "Instances": [
+        "01M3CW7KFGA5DV1JK9C0PTFXWJ"
+      ],
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "ConfigurationLinks": [],
+      "Relations": [],
+      "Items": [
+        "01M3CW8WTHF7KCCN00AP0K3WDY",
+        "01M3CW93ENF6F6FMYX1JK1BZC3",
+        "01M3CW974W2QWK9N5W4V8P5RZM"
+      ],
+      "Properties": [],
+      "AttachedFiles": [],
+      "ParentFolder": [
+        "01M3CW6KSD2NKKKBNG0VPXXRS5"
+      ]
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01M3CW8WTHF7KCCN00AP0K3WDY",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "x"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01M3CW766XC0YXC9B6RE5EENDH"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01M3CW9Y7D8N4T218GTY08HV3X",
+        "01M3CWAWE6A5E0J7276B12CH24"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01M3CW93ENF6F6FMYX1JK1BZC3",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "y"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01M3CW766XC0YXC9B6RE5EENDH"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01M3CWA16HEXFSVAPPM96ANRJC",
+        "01M3CWB3H9CP4Y9PWCRVT3TVHS"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  },
+  {
+    "ObjectClass": "TDAttribute",
+    "Surrogate": "01M3CW974W2QWK9N5W4V8P5RZM",
+    "Attributes": {
+      "Description": "",
+      "BusinessRelevant": "1",
+      "TDM": "0",
+      "Weight": "0",
+      "Name": "z"
+    },
+    "Assocs": {
+      "AsNotTDMFilteringRelevantDefinedAttributes": [],
+      "TestSheet": [
+        "01M3CW766XC0YXC9B6RE5EENDH"
+      ],
+      "ConfigurationLinks": [],
+      "Values": [
+        "01M3CWA4972YRTF0PSE7W6YQ46",
+        "01M3CWB6Z82JG66429E1525E85"
+      ],
+      "Items": [],
+      "AsNotRelevantDefinedAttributes": [],
+      "ReferencingRelationItems": []
+    }
+  }
+]

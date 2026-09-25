@@ -5,11 +5,24 @@ import java.util.Map;
 import at.co.svc.aga.transformator.ToscaToAgaPhase1;
 import at.co.svc.aga.transformator.dto.CleanStep;
 import at.co.svc.aga.transformator.dto.StepValueDetails;
+import at.co.svc.tosca.util.FileNameSanitizer;
 
 
 
 public class ProcessReusableCall {
     public static void processReusableCall(CleanStep step) {
+        
+        System.err.println(
+                "[REUSABLE-CALL-TRACE] name=["
+                        + step.getName()
+                        + "] reusable=["
+                        + step.getReusableName()
+                        + "] condition=["
+                        + step.getCondition()
+                        + "]"
+        );
+        
+        
         // First try to apply a special-case handler
         if (izuzetakZaSSHNOVerify(step)) {
             return; // If it was applied, stop processing this step
@@ -34,28 +47,12 @@ public class ProcessReusableCall {
                         + "'"
         );
 
-        String agatePath = "reusable." + libName.toLowerCase()
-                                                     .replace(" ", "_")
-                                                     .replace("-", "_")
-                                                     .replace("(", "_")
-                                                     .replace(")", "_")
-                                                     .replace(":", "_")
-                                                     .replace("#", "_")
-                                                     .replace("/", "_")
-                                                     .replace("\\", "_")
-                                                     .replace("__", "_")
-                                                     .replace("__", "_")
-                                                     .replace("#", "_")
-                                                     .replace("=", "_")
-                                                     .replace("<", "_")
-                                                     .replace(">", "_")
-                                                     .replace("{b", "")
-                                                     .replace("{xl", "")
-                                                     .replace("{", "")
-                                                     .replace("}", "")
-                                                     .replace("[", "")
-                                                     .replace("]", "")
-                                                     .replace("___", "_");
+        String cleanName =
+                FileNameSanitizer.sanitize(libName);
+
+        String agatePath =
+                "reusable." + cleanName;
+        
         if (agatePath.endsWith("_")) {
             agatePath = agatePath.substring(0, agatePath.length()-1);
         }
@@ -77,14 +74,18 @@ public class ProcessReusableCall {
         ToscaToAgaPhase1.writeLine("      - type: CALL");
         ToscaToAgaPhase1.writeLine("        command: '" + agatePath + "'");
         
-        if (!((step.getCondition() == null) || (step.getCondition().isEmpty()))) {
-            String condition = step.getCondition();
-            String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-            String formattedCondition = cleanCondition.replace("\"", "'");
-            ToscaToAgaPhase1.writeLine("        condition: '" + formattedCondition + "'");
-        }
-
+        System.err.println(
+                "[CALL-CONDITION-TRACE] reusable=["
+                        + step.getReusableName()
+                        + "] name=["
+                        + step.getName()
+                        + "] rawCondition=["
+                        + step.getCondition()
+                        + "]"
+        );
+        
+        writeCondition(step);
+        
 
      // 1. Read the parameter map once
         Map<String, StepValueDetails> params = step.getValuesAsMap();
@@ -104,7 +105,7 @@ public class ProcessReusableCall {
             // 4. Iterate over the normalized params map instead of calling step.getValuesAsMap() again
             params.forEach((k, v) -> {
                 String vValue = v.getValue();
-                vValue = SVCToscaTranslator.translateToscaValues(vValue);
+                vValue = ToscaValueTranslator.translateToscaValues(vValue);
                 ToscaToAgaPhase1.writeLine("          " + k + ": '" + vValue + "'");
             });
         }
@@ -120,6 +121,54 @@ public class ProcessReusableCall {
         }
 
     }
+
+    private static void writeCondition(CleanStep step) {
+
+        if (step == null
+                || step.getCondition() == null
+                || step.getCondition().isBlank()) {
+            return;
+        }
+
+        String condition =
+                ToscaValueTranslator.translateToscaValues(
+                        step.getCondition()
+                );
+
+        String yamlCondition;
+
+        if (condition.contains("\"")
+                && !condition.contains("'")) {
+
+            // Condition contains double quotes only.
+            // Use YAML single quotes outside.
+            yamlCondition =
+                    "'"
+                            + condition
+                            + "'";
+
+        } else {
+
+            // Use YAML double quotes outside.
+            // Escape only embedded double quotes.
+            yamlCondition =
+                    "\""
+                            + condition.replace(
+                                    "\\",
+                                    "\\\\"
+                            ).replace(
+                                    "\"",
+                                    "\\\""
+                            )
+                            + "\"";
+        }
+
+        ToscaToAgaPhase1.writeLine(
+                "        condition: "
+                        + yamlCondition
+        );
+    }
+    
 
     public static void normalizeDialogaufbau(CleanStep step) {
         if (step != null && step.getValues() != null) {
@@ -164,13 +213,7 @@ public class ProcessReusableCall {
                 ToscaToAgaPhase1.writeLine("      # " + (step.getName() != null ? step.getName() : "SSH Command (No Verify)"));
                 ToscaToAgaPhase1.writeLine("      - type: OC");
                 ToscaToAgaPhase1.writeLine("        op: EXEC");
-                if ((step.getCondition() != null) && (!step.getCondition().equals(""))) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
-                }
+                writeCondition(step);
                 ToscaToAgaPhase1.writeLine("        pod: \"{B[chartname]}\"");
                 ToscaToAgaPhase1.writeLine("        command: \"" + command + "\"");
                 ToscaToAgaPhase1.writeLine("        response: response_no_verify");
@@ -198,13 +241,7 @@ public class ProcessReusableCall {
                 ToscaToAgaPhase1.writeLine("      # [Action] " + stepName);
                 ToscaToAgaPhase1.writeLine("      - type: OC");
                 ToscaToAgaPhase1.writeLine("        op: EXEC");
-                if ((step.getCondition() != null) && (!step.getCondition().equals(""))) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
-                }
+                writeCondition(step);
                 ToscaToAgaPhase1.writeLine("        pod: \"{B[chartname]}\"");
                 ToscaToAgaPhase1.writeLine("        command: \"" + command + "\"");
                 ToscaToAgaPhase1.writeLine("        response: oc_buffer");
@@ -215,13 +252,7 @@ public class ProcessReusableCall {
                 ToscaToAgaPhase1.writeLine("      # [Extract] " + stepName);
                 ToscaToAgaPhase1.writeLine("      - type: OC");
                 ToscaToAgaPhase1.writeLine("        op: BUFFER");
-                if ((step.getCondition() != null) && (!step.getCondition().equals(""))) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
-                }
+                writeCondition(step);
                 ToscaToAgaPhase1.writeLine("        response: oc_buffer");
                 ToscaToAgaPhase1.writeLine("        action: TEXT");
                 ToscaToAgaPhase1.writeLine("        name: \"" + bufferName + "\"");
@@ -253,13 +284,7 @@ public class ProcessReusableCall {
                 ToscaToAgaPhase1.writeLine("      # [SCP-PUT] " + stepName);
                 ToscaToAgaPhase1.writeLine("      - type: OC");
                 ToscaToAgaPhase1.writeLine("        op: PUT");
-                if ((step.getCondition() != null)&& (!step.getCondition().equals(""))) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
-                }
+                writeCondition(step);
                 ToscaToAgaPhase1.writeLine("        pod: \"{B[chartname]}\"");
                 ToscaToAgaPhase1.writeLine("        from: \"" + winPath + "\"");
                 ToscaToAgaPhase1.writeLine("        to: \"" + unixPath + "\"");
@@ -270,13 +295,7 @@ public class ProcessReusableCall {
                 ToscaToAgaPhase1.writeLine("      # [SCP-GET] " + stepName);
                 ToscaToAgaPhase1.writeLine("      - type: OC");
                 ToscaToAgaPhase1.writeLine("        op: GET");
-                if ((step.getCondition() != null)&& (!step.getCondition().equals(""))) {
-                    String condition = step.getCondition();
-                    String cleanCondition = SVCToscaTranslator.translateToscaValues(condition);
-
-                    String formattedCondition = cleanCondition.replace("\"", "'");
-                    ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
-                }
+                writeCondition(step);
                 ToscaToAgaPhase1.writeLine("        pod: \"{B[chartname]}\"");
                 ToscaToAgaPhase1.writeLine("        from: \"" + unixPath + "\"");
                 ToscaToAgaPhase1.writeLine("        to: \"" + winPath + "\"");

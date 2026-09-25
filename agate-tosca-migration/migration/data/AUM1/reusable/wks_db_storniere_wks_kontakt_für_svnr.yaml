@@ -1,9 +1,0 @@
-steps:
-
-
-      # Execute SQL Query
-      - type: SQL
-        op: EXEC
-        command: "Update WKS_Kontakt Set stornierungsgrund = '01', stornierungszeitpunkt = SYSTIMESTAMP, loesch_kz=1 where SV_NUMMER = '{R[SVNR]}'"
-        response: storniere_wks_kontakt_für_svnr_res
-
