@@ -18,7 +18,8 @@ Tests describe **what should be tested**, while AGATE handles **how the required
 
 AGATE is not intended to replace developer-focused unit testing frameworks such as JUnit. It complements them by providing a higher-level automation layer for integration, system, and business-process testing.
 
-At the same time, AGATE offers a lightweight, Git- and CI-friendly alternative for test scenarios that would otherwise require large model-based enterprise testing platforms.
+> **AGATE = “orchestrate a real enterprise business test across heterogeneous technologies and existing environments.”**
+
 
 The goal is simple:
 
