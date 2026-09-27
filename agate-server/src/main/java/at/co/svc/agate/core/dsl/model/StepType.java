@@ -16,6 +16,8 @@ public enum StepType {
     BUFFER,
     JSON,
     PDF,
-    FILE
+    FILE,
+    LOOP
+
     // STRING
 }

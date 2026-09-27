@@ -7,6 +7,7 @@ import at.co.svc.agate.core.dsl.model.StepType;
 import at.co.svc.agate.core.dsl.model.TestStep;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.interfaces.TestLogger;
+import at.co.svc.agate.core.reference.UnorderedRule;
 
 public class PrintDslStepContext {
 
@@ -41,6 +42,39 @@ public class PrintDslStepContext {
                                     + line
                     );
                 }
+            }
+
+            /*
+             * -----------------------------------------------------
+             * Ergänzende Felder
+             * -----------------------------------------------------
+             *
+             * textYaml kann aus einem ursprünglich extrahierten
+             * YAML-Fragment stammen, das neuere Felder wie
+             * 'ignore' oder 'unordered' noch nicht enthält.
+             *
+             * Die Werte sind aber bereits korrekt im TestStep
+             * vorhanden.
+             *
+             * Deshalb ergänzen wir diese Felder hier, falls sie
+             * im Originalfragment fehlen.
+             */
+            if (!containsYamlKey(
+                    originalYaml,
+                    "ignore")) {
+
+                logIgnore(
+                        logger,
+                        step);
+            }
+
+            if (!containsYamlKey(
+                    originalYaml,
+                    "unordered")) {
+
+                logUnordered(
+                        logger,
+                        step);
             }
 
             return;
@@ -234,6 +268,24 @@ public class PrintDslStepContext {
 
             /*
              * -----------------------------------------------------
+             * MATCH_REFERENCE ignore
+             * -----------------------------------------------------
+             */
+            logIgnore(
+                    logger,
+                    step);
+
+            /*
+             * -----------------------------------------------------
+             * MATCH_REFERENCE unordered
+             * -----------------------------------------------------
+             */
+            logUnordered(
+                    logger,
+                    step);
+
+            /*
+             * -----------------------------------------------------
              * Constraints
              * -----------------------------------------------------
              */
@@ -283,6 +335,122 @@ public class PrintDslStepContext {
         }
     }
 
+    /*
+     * =========================================================
+     * MATCH_REFERENCE IGNORE
+     * =========================================================
+     */
+    private static void logIgnore(
+            TestLogger logger,
+            TestStep step) {
+
+        if (step.getIgnore() == null
+                || step.getIgnore().isEmpty()) {
+
+            return;
+        }
+
+        logLine(
+                logger,
+                "  ignore:"
+        );
+
+        for (String ignore :
+                step.getIgnore()) {
+
+            if (!notBlank(ignore)) {
+                continue;
+            }
+
+            logLine(
+                    logger,
+                    "    - "
+                            + quote(ignore)
+            );
+        }
+    }
+
+    /*
+     * =========================================================
+     * MATCH_REFERENCE UNORDERED
+     * =========================================================
+     */
+    private static void logUnordered(
+            TestLogger logger,
+            TestStep step) {
+
+        if (step.getUnordered() == null
+                || step.getUnordered().isEmpty()) {
+
+            return;
+        }
+
+        logLine(
+                logger,
+                "  unordered:"
+        );
+
+        for (UnorderedRule rule :
+                step.getUnordered()) {
+
+            if (rule == null
+                    || !notBlank(rule.getPath())) {
+
+                continue;
+            }
+
+            logLine(
+                    logger,
+                    "    - path: "
+                            + quote(rule.getPath())
+            );
+
+            if (notBlank(rule.getMatchBy())) {
+
+                logLine(
+                        logger,
+                        "      matchBy: "
+                                + quote(rule.getMatchBy())
+                );
+            }
+        }
+    }
+
+    /*
+     * =========================================================
+     * CHECK WHETHER ORIGINAL YAML ALREADY CONTAINS A KEY
+     * =========================================================
+     */
+    private static boolean containsYamlKey(
+            String yaml,
+            String key) {
+
+        if (yaml == null
+                || yaml.isBlank()
+                || key == null
+                || key.isBlank()) {
+
+            return false;
+        }
+
+        String[] lines =
+                yaml.split("\\R");
+
+        for (String line : lines) {
+
+            String trimmed =
+                    line.trim();
+
+            if (trimmed.equals(
+                    key + ":")) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static boolean isValidOriginalYaml(
             String yaml) {
 
@@ -299,9 +467,12 @@ public class PrintDslStepContext {
          * Internal extraction errors must trigger fallback.
          */
         return !normalized.startsWith("# Error:")
-                && !normalized.startsWith("Error extracting YAML")
-                && !normalized.startsWith("# Greška:")
-                && !normalized.startsWith("Greška:");
+                && !normalized.startsWith(
+                        "Error extracting YAML")
+                && !normalized.startsWith(
+                        "# Greška:")
+                && !normalized.startsWith(
+                        "Greška:");
     }
 
     private static void logParameters(

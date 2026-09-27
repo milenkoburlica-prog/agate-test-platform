@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import at.co.svc.agate.core.dsl.model.TestCase;
+import at.co.svc.agate.core.dsl.model.TestStep;
 
 public class ReferenceResponseService {
 
@@ -38,7 +39,7 @@ public class ReferenceResponseService {
     public ReferenceAssertionResult assertResponse(
             ResponseFormat format,
             TestCase testCase,
-            String stepId,
+            TestStep step,
             String yamlFile,
             String actualResponse,
             ReferenceCompareConfig config)
@@ -47,6 +48,18 @@ public class ReferenceResponseService {
         if (format == null) {
             throw new IllegalArgumentException(
                     "Response format must not be null");
+        }
+
+        if (step == null) {
+            throw new IllegalArgumentException(
+                    "Test step must not be null");
+        }
+
+        if (step.getId() == null
+                || step.getId().isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "MATCH_REFERENCE requires an explicit step id");
         }
 
         if (actualResponse == null) {
@@ -72,7 +85,7 @@ public class ReferenceResponseService {
                 pathResolver.resolve(
                         yamlFile,
                         testCase,
-                        stepId,
+                        step,
                         format);
 
         /*

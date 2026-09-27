@@ -18,22 +18,30 @@ public class CallEngine extends AbstractStepEngine {
 
     @FunctionalInterface
     public interface StepExecutor {
+
         void execute(
                 TestCase tc,
                 TestStep step,
                 ExecutionContext context,
                 String yamlFile,
                 int idx,
-                boolean verbose) throws Exception;
+                boolean verbose)
+                throws Exception;
     }
 
-    public CallEngine(StepExecutor executor) {
-        this.executor = executor;
+    public CallEngine(
+            StepExecutor executor) {
+
+        this.executor =
+                executor;
     }
 
     @Override
-    public boolean canExecute(StepType type) {
-        return type == StepType.CALL;
+    public boolean canExecute(
+            StepType type) {
+
+        return type
+                == StepType.CALL;
     }
 
     @Override
@@ -45,60 +53,131 @@ public class CallEngine extends AbstractStepEngine {
             int currentStepNumber,
             Boolean printExecution,
             TestLogger logger,
-            boolean isVerbose) throws Exception {
+            boolean isVerbose)
+            throws Exception {
 
         try {
 
             /*
-             * Keep the original CALL DSL output.
+             * =====================================================
+             * CURRENT CALL VISIBILITY
+             * =====================================================
              *
-             * Important:
-             * Do not hide this behind isVerbose here,
-             * because CALL DSL was previously always printed
-             * and the central execution flow already controls
-             * whether the step should be shown.
+             * isVerbose here means:
+             *
+             * true:
+             *   this CALL itself is visible
+             *
+             * false:
+             *   this CALL is an internal reusable step and should
+             *   remain silent
+             *
+             * Top-level CALLs arrive here with true.
+             *
+             * Nested CALLs arrive with true only when their parent
+             * reusable has verbose=true.
+             * =====================================================
              */
-            PrintDslStepContext.logDslStepContext(
-                    logger,
-                    step
-            );
+            if (isVerbose) {
+
+                PrintDslStepContext
+                        .logDslStepContext(
+                                logger,
+                                step);
+
+                printResolvedCallParameters(
+                        tc,
+                        step,
+                        yamlFile,
+                        currentStepNumber,
+                        logger
+                );
+            }
 
             /*
-             * Print resolved CALL parameters.
+             * =====================================================
+             * CHILD VERBOSE
+             * =====================================================
              *
-             * This is logging only.
-             * step.getParameters() is NOT modified.
+             * Child reusable steps are silent by default.
+             *
+             * Only:
+             *
+             * parameters:
+             *   verbose: true
+             *
+             * enables detailed child-step logging.
+             *
+             * IMPORTANT:
+             *
+             * The current CALL remains visible independently from
+             * this setting.
+             * =====================================================
              */
-            printResolvedCallParameters(
-                    tc,
-                    step,
-                    yamlFile,
-                    currentStepNumber,
-                    logger
-            );
+            boolean childVerbose =
+                    false;
+
+            if (isVerbose
+                    && step.getParameters()
+                    != null
+                    && step.getParameters()
+                    .containsKey(
+                            "verbose")) {
+
+                Object verboseValue =
+                        step.getParameters()
+                                .get(
+                                        "verbose");
+
+                if (verboseValue != null) {
+
+                    childVerbose =
+                            Boolean.parseBoolean(
+                                    verboseValue
+                                            .toString());
+                }
+            }
 
             String bInstance =
-                    System.getProperty("INSTANCE");
+                    System.getProperty(
+                            "INSTANCE");
 
             String bOrdid =
                     tc.getVariables() != null
-                            && tc.getVariables().get("B_OrdinationsId") != null
+                            && tc.getVariables()
+                            .get(
+                                    "B_OrdinationsId")
+                            != null
+
                             ? tc.getVariables()
-                                    .get("B_OrdinationsId")
-                                    .toString()
+                            .get(
+                                    "B_OrdinationsId")
+                            .toString()
+
                             : "";
 
             String bVpNummer =
                     tc.getVariables() != null
-                            && tc.getVariables().get("B_Karte") != null
+                            && tc.getVariables()
+                            .get(
+                                    "B_Karte")
+                            != null
+
                             ? tc.getVariables()
-                                    .get("B_Karte")
-                                    .toString()
+                            .get(
+                                    "B_Karte")
+                            .toString()
+
                             : "";
 
             Object slot =
-                    step.getParameters() != null
-                            ? step.getParameters().get("cardSlot")
+                    step.getParameters()
+                    != null
+
+                            ? step.getParameters()
+                            .get(
+                                    "cardSlot")
+
                             : null;
 
             String bCardSlot =
@@ -106,17 +185,22 @@ public class CallEngine extends AbstractStepEngine {
                             ? slot.toString()
                             : "baseContact";
 
-            String existingDialogId = null;
+            String existingDialogId =
+                    null;
 
             /*
-             * Special handling for dialog setup reusable.
+             * =====================================================
+             * SPECIAL DIALOG SETUP HANDLING
+             * =====================================================
              */
             if (step.getCommand() != null
                     && step.getCommand()
-                            .startsWith("reusable.ru_dialog_aufbau")) {
+                    .startsWith(
+                            "reusable.ru_dialog_aufbau")) {
 
                 existingDialogId =
-                        DialogManager.getInstance()
+                        DialogManager
+                                .getInstance()
                                 .getDialogId(
                                         bInstance,
                                         bOrdid,
@@ -136,22 +220,34 @@ public class CallEngine extends AbstractStepEngine {
             }
 
             /*
-             * Execute reusable child steps.
+             * =====================================================
+             * EXECUTE REUSABLE CHILD STEPS
+             * =====================================================
              */
             if (step.getSubSteps() != null
-                    && !step.getSubSteps().isEmpty()) {
+                    && !step.getSubSteps()
+                    .isEmpty()) {
 
-                int subIndex = 1;
+                int subIndex =
+                        1;
 
-                for (TestStep subStep : step.getSubSteps()) {
+                for (TestStep subStep :
+                        step.getSubSteps()) {
 
+                    /*
+                     * Child steps are visible only when this CALL
+                     * explicitly has:
+                     *
+                     * parameters:
+                     *   verbose: true
+                     */
                     executor.execute(
                             tc,
                             subStep,
                             context,
                             yamlFile,
                             subIndex,
-                            isVerbose
+                            childVerbose
                     );
 
                     subIndex++;
@@ -162,9 +258,11 @@ public class CallEngine extends AbstractStepEngine {
                  */
                 if (step.getCommand() != null
                         && step.getCommand()
-                                .startsWith("reusable.ru_dialog_aufbau")) {
+                        .startsWith(
+                                "reusable.ru_dialog_aufbau")) {
 
-                    DialogManager.getInstance()
+                    DialogManager
+                            .getInstance()
                             .saveDialogId(
                                     bInstance,
                                     bOrdid,
@@ -174,7 +272,8 @@ public class CallEngine extends AbstractStepEngine {
                             );
                 }
 
-            } else if (existingDialogId != null) {
+            } else if (existingDialogId
+                    != null) {
 
                 /*
                  * Existing dialog found and reusable has no child
@@ -199,6 +298,7 @@ public class CallEngine extends AbstractStepEngine {
             }
 
         } catch (Exception e) {
+
             throw e;
         }
     }
@@ -213,9 +313,8 @@ public class CallEngine extends AbstractStepEngine {
      *     >>> PARAM      : vpNummer         = 645031
      *     >>> PARAM      : cardSlot         = baseContact
      *
-     * Important:
-     *
      * Resolution here is only for display.
+     *
      * The original step parameters remain unchanged.
      */
     private void printResolvedCallParameters(
@@ -225,12 +324,11 @@ public class CallEngine extends AbstractStepEngine {
             int stepIndex,
             TestLogger logger) {
 
-        /*
-         * Always print the CALL command.
-         */
         String command =
                 step.getCommand() != null
+
                         ? step.getCommand()
+
                         : "<not defined>";
 
         logger.info(
@@ -243,10 +341,11 @@ public class CallEngine extends AbstractStepEngine {
         );
 
         /*
-         * CALL without parameters is perfectly valid.
+         * CALL without parameters is valid.
          */
         if (step.getParameters() == null
-                || step.getParameters().isEmpty()) {
+                || step.getParameters()
+                .isEmpty()) {
 
             return;
         }
@@ -255,32 +354,39 @@ public class CallEngine extends AbstractStepEngine {
                 new YamlPlaceholderResolver();
 
         for (Map.Entry<String, Object> entry :
-                step.getParameters().entrySet()) {
+                step.getParameters()
+                        .entrySet()) {
 
             String parameterName =
                     entry.getKey();
+
+            /*
+             * verbose is a CALL control parameter.
+             *
+             * It is not a reusable business parameter and therefore
+             * does not need to be printed as:
+             *
+             * >>> PARAM : verbose = true
+             */
+            if ("verbose".equalsIgnoreCase(
+                    parameterName)) {
+
+                continue;
+            }
 
             Object rawValue =
                     entry.getValue();
 
             String resolvedValue =
                     rawValue == null
+
                             ? "null"
-                            : rawValue.toString();
+
+                            : rawValue
+                            .toString();
 
             try {
 
-                /*
-                 * Resolve runtime placeholders only for logging.
-                 *
-                 * Example:
-                 *
-                 *   {B[B_OrdinationsId]}
-                 *
-                 * becomes:
-                 *
-                 *   15682076
-                 */
                 resolvedValue =
                         resolver.resolve(
                                 tc,
@@ -288,17 +394,15 @@ public class CallEngine extends AbstractStepEngine {
                                 tc.getVariables(),
                                 yamlFile,
                                 stepIndex,
-                                "call-param-" + parameterName,
+                                "call-param-"
+                                        + parameterName,
                                 step
                         );
 
             } catch (Exception ignored) {
 
                 /*
-                 * Logging must never break test execution.
-                 *
-                 * If a value cannot be resolved at this point,
-                 * the original value is displayed.
+                 * Logging must never break execution.
                  */
             }
 

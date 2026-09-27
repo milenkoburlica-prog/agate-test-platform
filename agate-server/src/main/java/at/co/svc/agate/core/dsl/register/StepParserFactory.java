@@ -54,6 +54,14 @@ public class StepParserFactory {
         step.setOutputFile(
                 asString(stepMap.get("outputFile")));
 
+        // LOOP
+        step.setLoopMode(
+                asString(stepMap.get("mode")));
+        step.setMaxIterations(
+                asInteger(stepMap.get("maxIterations")));
+        step.setTimeoutMs(
+                asLong(stepMap.get("timeoutMs")));
+
         step.setExpected(asString(stepMap.get("expected")));
         step.setValue(asString(stepMap.get("value")));
         step.setAction(asString(stepMap.get("action")));
@@ -345,6 +353,20 @@ public class StepParserFactory {
         }
 
         return Integer.valueOf(
+                obj.toString());
+    }
+
+    private static Long asLong(Object obj) {
+
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof Number number) {
+            return number.longValue();
+        }
+
+        return Long.valueOf(
                 obj.toString());
     }
 

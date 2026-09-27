@@ -21,62 +21,96 @@ public final class DatabaseManager {
     private static final Map<String, Connection> CONNECTIONS =
             new HashMap<>();
 
-    private static final String DEFAULT_DATASOURCE = "default";
-    private static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
-    private static final int MAX_FETCH_ROWS = 10000;
+    private static final String DEFAULT_DATASOURCE =
+            "default";
+
+    private static final String DATE_FORMAT =
+            "dd.MM.yyyy HH:mm:ss";
+
+    private static final int MAX_FETCH_ROWS =
+            10000;
 
     private DatabaseManager() {
     }
 
     /**
-     * Backward-compatible initialization of the default datasource.
+     * Backward-compatible initialization
+     * of the default datasource.
      */
-    public static synchronized void init() throws Exception {
+    public static synchronized void init()
+            throws Exception {
+
         getConnection(null);
     }
 
     /**
-     * Initializes the requested datasource if necessary.
+     * Initializes the requested datasource
+     * if necessary.
      */
-    public static synchronized void init(String datasource) throws Exception {
+    public static synchronized void init(
+            String datasource)
+            throws Exception {
+
         getConnection(datasource);
     }
 
     /**
-     * Backward-compatible reinitialization of the default datasource.
+     * Backward-compatible reinitialization
+     * of the default datasource.
      */
-    public static synchronized void reinit() throws Exception {
+    public static synchronized void reinit()
+            throws Exception {
+
+        closeConnection(null);
         getConnection(null);
     }
 
     /**
-     * Reinitializes the requested datasource if necessary.
+     * Reinitializes the requested datasource.
      */
-    public static synchronized void reinit(String datasource) throws Exception {
+    public static synchronized void reinit(
+            String datasource)
+            throws Exception {
+
+        closeConnection(datasource);
         getConnection(datasource);
     }
 
     /**
-     * Returns one cached JDBC connection per logical datasource.
+     * Returns one cached JDBC connection
+     * per logical datasource.
      *
-     * datasource == null / blank:
+     * Default datasource:
+     *
      *   database.connectionString
      *   database.user
      *   database.password
      *
-     * datasource == "ks":
+     * Named datasource "ks":
+     *
      *   ks.database.connectionString
      *   ks.database.user
      *   ks.database.password
+     *
+     * The JDBC URL determines which JDBC driver
+     * is loaded.
+     *
+     * Examples:
+     *
+     *   jdbc:oracle:thin:@...
+     *   jdbc:postgresql://...
      */
     private static synchronized Connection getConnection(
-            String datasource) throws Exception {
+            String datasource)
+            throws Exception {
 
         String connectionKey =
-                normalizeDatasource(datasource);
+                normalizeDatasource(
+                        datasource);
 
         Connection connection =
-                CONNECTIONS.get(connectionKey);
+                CONNECTIONS.get(
+                        connectionKey);
 
         if (connection != null
                 && !connection.isClosed()) {
@@ -85,7 +119,8 @@ public final class DatabaseManager {
         }
 
         String configPrefix =
-                buildConfigPrefix(datasource);
+                buildConfigPrefix(
+                        datasource);
 
         String url =
                 EnvironmentManager.getEnvValue(
@@ -102,6 +137,26 @@ public final class DatabaseManager {
                         configPrefix
                                 + "database.password");
 
+        validateConnectionConfiguration(
+                datasource,
+                url,
+                user,
+                pass);
+
+        /*
+         * Explicitly load the JDBC driver.
+         *
+         * Normally JDBC 4 drivers register themselves
+         * automatically through ServiceLoader.
+         *
+         * Explicit loading is useful here because AGATE
+         * can be started in different runtime/package modes.
+         * It also gives a much clearer error when a driver
+         * is missing from the classpath.
+         */
+        ensureDriverLoaded(
+                url);
+
         connection =
                 DriverManager.getConnection(
                         url,
@@ -115,6 +170,95 @@ public final class DatabaseManager {
         return connection;
     }
 
+    /**
+     * Loads the JDBC driver matching the JDBC URL.
+     *
+     * Both drivers may exist in the classpath
+     * at the same time.
+     */
+    private static void ensureDriverLoaded(
+            String url)
+            throws ClassNotFoundException {
+
+        if (url == null
+                || url.isBlank()) {
+
+            return;
+        }
+
+        String normalizedUrl =
+                url.trim()
+                        .toLowerCase();
+
+        if (normalizedUrl.startsWith(
+                "jdbc:oracle:")) {
+
+            Class.forName(
+                    "oracle.jdbc.OracleDriver");
+
+            return;
+        }
+
+        if (normalizedUrl.startsWith(
+                "jdbc:postgresql:")) {
+
+            Class.forName(
+                    "org.postgresql.Driver");
+
+            return;
+        }
+
+        throw new IllegalArgumentException(
+                "Unsupported JDBC URL: "
+                        + url);
+    }
+
+    /**
+     * Validates the required database configuration
+     * before DriverManager is called.
+     */
+    private static void validateConnectionConfiguration(
+            String datasource,
+            String url,
+            String user,
+            String pass) {
+
+        String datasourceName =
+                datasource == null
+                        || datasource.isBlank()
+                        ? DEFAULT_DATASOURCE
+                        : datasource.trim();
+
+        if (url == null
+                || url.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Database connectionString is missing "
+                            + "for datasource '"
+                            + datasourceName
+                            + "'.");
+        }
+
+        if (user == null
+                || user.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Database user is missing "
+                            + "for datasource '"
+                            + datasourceName
+                            + "'.");
+        }
+
+        if (pass == null) {
+
+            throw new IllegalArgumentException(
+                    "Database password is missing "
+                            + "for datasource '"
+                            + datasourceName
+                            + "'.");
+        }
+    }
+
     private static String normalizeDatasource(
             String datasource) {
 
@@ -124,7 +268,9 @@ public final class DatabaseManager {
             return DEFAULT_DATASOURCE;
         }
 
-        return datasource.trim().toLowerCase();
+        return datasource
+                .trim()
+                .toLowerCase();
     }
 
     private static String buildConfigPrefix(
@@ -136,14 +282,17 @@ public final class DatabaseManager {
             return "";
         }
 
-        return datasource.trim() + ".";
+        return datasource.trim()
+                + ".";
     }
 
     /**
-     * Backward-compatible SELECT using the default datasource.
+     * Backward-compatible SELECT
+     * using the default datasource.
      */
     public static List<Map<String, Object>> select(
-            String sql) throws Exception {
+            String sql)
+            throws Exception {
 
         return select(
                 sql,
@@ -151,17 +300,22 @@ public final class DatabaseManager {
     }
 
     /**
-     * SELECT using an optional named datasource.
+     * SELECT using an optional
+     * named datasource.
      */
     public static List<Map<String, Object>> select(
             String sql,
-            String datasource) throws Exception {
+            String datasource)
+            throws Exception {
 
         Connection dbConn =
-                getConnection(datasource);
+                getConnection(
+                        datasource);
 
-        try (Statement stmt = dbConn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Statement stmt =
+                     dbConn.createStatement();
+             ResultSet rs =
+                     stmt.executeQuery(sql)) {
 
             ResultSetMetaData meta =
                     rs.getMetaData();
@@ -172,7 +326,8 @@ public final class DatabaseManager {
             List<Map<String, Object>> results =
                     new ArrayList<>();
 
-            int rowCount = 0;
+            int rowCount =
+                    0;
 
             while (rs.next()
                     && rowCount < MAX_FETCH_ROWS) {
@@ -194,7 +349,9 @@ public final class DatabaseManager {
                                     c));
                 }
 
-                results.add(row);
+                results.add(
+                        row);
+
                 rowCount++;
             }
 
@@ -203,10 +360,12 @@ public final class DatabaseManager {
     }
 
     /**
-     * Backward-compatible UPDATE/INSERT/DELETE using the default datasource.
+     * Backward-compatible UPDATE / INSERT / DELETE
+     * using the default datasource.
      */
     public static int update(
-            String sql) throws Exception {
+            String sql)
+            throws Exception {
 
         return update(
                 sql,
@@ -214,29 +373,38 @@ public final class DatabaseManager {
     }
 
     /**
-     * UPDATE/INSERT/DELETE using an optional named datasource.
+     * UPDATE / INSERT / DELETE
+     * using an optional named datasource.
      */
     public static int update(
             String sql,
-            String datasource) throws Exception {
+            String datasource)
+            throws Exception {
 
         Connection dbConn =
-                getConnection(datasource);
+                getConnection(
+                        datasource);
 
-        try (Statement stmt = dbConn.createStatement()) {
-            return stmt.executeUpdate(sql);
+        try (Statement stmt =
+                     dbConn.createStatement()) {
+
+            return stmt.executeUpdate(
+                    sql);
         }
     }
 
     /**
-     * Central data type conversion used for SQL result tables.
+     * Central data type conversion
+     * used for SQL result tables.
      */
     private static Object extractValue(
             ResultSet rs,
-            int index) throws Exception {
+            int index)
+            throws Exception {
 
         Object value =
-                rs.getObject(index);
+                rs.getObject(
+                        index);
 
         if (rs.wasNull()
                 || value == null) {
@@ -249,38 +417,90 @@ public final class DatabaseManager {
 
             return new SimpleDateFormat(
                     DATE_FORMAT)
-                    .format(value);
+                    .format(
+                            value);
         }
 
         if (value instanceof Clob clob) {
-            long len = clob.length();
-            return "[CLOB: " + len + " chars]";
+
+            long len =
+                    clob.length();
+
+            return "[CLOB: "
+                    + len
+                    + " chars]";
         }
 
         if (value instanceof Blob blob) {
-            long len = blob.length();
-            return "[BLOB: " + len + " bytes]";
+
+            long len =
+                    blob.length();
+
+            return "[BLOB: "
+                    + len
+                    + " bytes]";
         }
 
         return value;
     }
 
     /**
-     * Optional cleanup hook for tests / shutdown handling.
+     * Closes one logical datasource connection.
+     */
+    private static synchronized void closeConnection(
+            String datasource) {
+
+        String connectionKey =
+                normalizeDatasource(
+                        datasource);
+
+        Connection connection =
+                CONNECTIONS.remove(
+                        connectionKey);
+
+        if (connection == null) {
+            return;
+        }
+
+        try {
+
+            if (!connection.isClosed()) {
+                connection.close();
+            }
+
+        } catch (Exception ignored) {
+
+            /*
+             * Cleanup must not hide
+             * the original test result.
+             */
+        }
+    }
+
+    /**
+     * Cleanup hook for tests / shutdown handling.
      */
     public static synchronized void closeAll() {
 
-        for (Connection connection : CONNECTIONS.values()) {
+        for (Connection connection :
+                CONNECTIONS.values()) {
+
             if (connection == null) {
                 continue;
             }
 
             try {
+
                 if (!connection.isClosed()) {
                     connection.close();
                 }
+
             } catch (Exception ignored) {
-                // Cleanup must not hide the original test result.
+
+                /*
+                 * Cleanup must not hide
+                 * the original test result.
+                 */
             }
         }
 

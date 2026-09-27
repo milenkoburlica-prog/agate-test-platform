@@ -33,6 +33,7 @@ public final class ValidationService {
                         new FileSchemaValidator(),
                         new CmdSchemaValidator(),
                         new WaitSchemaValidator(),
+                        new LoopSchemaValidator(),
                         new SqlSchemaValidator(),
                         new OcSchemaValidator(),
 
@@ -48,6 +49,7 @@ public final class ValidationService {
                 )
         );
     }
+
     public ValidationResult validate(
             Path file) {
 
