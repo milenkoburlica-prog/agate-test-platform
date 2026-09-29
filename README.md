@@ -877,7 +877,7 @@ startTests.bat clean data\demo\variables_demo.yaml
 * Planned support for pausing before individual steps and continuing execution manually.
 * Planned inspection of current variables, buffers, responses and reusable parameters during debugging.
 
-## 2026-XX-XX
+## 2026-09-29
 
 ### Project-Based Test Organization
 
