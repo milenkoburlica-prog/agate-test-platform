@@ -1,0 +1,1 @@
+AGATE CMD outputFile test

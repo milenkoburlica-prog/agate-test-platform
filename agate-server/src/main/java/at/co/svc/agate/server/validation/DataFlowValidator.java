@@ -434,186 +434,14 @@ public final class DataFlowValidator
                 return false;
             }
 
-            int stepIndex =
-                    0;
-
-            for (JsonNode step :
-                    steps) {
-
-                stepIndex++;
-
-                if (step == null
-                        || !step.isObject()) {
-
-                    continue;
-                }
-
-                String type =
-                        ValidationUtil.type(step);
-
-                String op =
-                        ValidationUtil.op(step);
-
-                /*
-                 * =====================================================
-                 * 1. Validate {B[...]} references BEFORE producers.
-                 * =====================================================
-                 *
-                 * Example:
-                 *
-                 * - type: BUFFER
-                 *   op: EXEC
-                 *   name: L_LogDir
-                 *   value: "{B[G_EC_OpenShift_LogDir]}"
-                 *
-                 * G_EC_OpenShift_LogDir must already exist.
-                 * L_LogDir becomes available only after this step.
-                 */
-                for (String ref :
-                        ValidationUtil.bufferRefs(step)) {
-
-                    usedVariables.add(ref);
-
-                    if (!variables.contains(ref)) {
-
-                        issues.add(
-                                ValidationIssue.error(
-                                        "AGATE-V401",
-                                        "Variable/buffer '"
-                                                + ref
-                                                + "' is referenced before initialization "
-                                                + "in reusable step "
-                                                + stepIndex
-                                                + ".",
-                                        normalized,
-                                        lineOfBufferReference(
-                                                normalized,
-                                                ref)
-                                )
-                        );
-                    }
-                }
-
-                /*
-                 * =====================================================
-                 * 2. BUFFER / ASSERT
-                 * =====================================================
-                 */
-                if ("BUFFER".equals(type)
-                        && "ASSERT".equals(op)) {
-
-                    String name =
-                            ValidationUtil.text(
-                                    step,
-                                    "name");
-
-                    String action =
-                            ValidationUtil.action(step);
-
-                    if (name != null
-                            && !name.isBlank()) {
-
-                        usedVariables.add(name);
-
-                        if (!"IS_NULL".equals(action)
-                                && !variables.contains(name)) {
-
-                            issues.add(
-                                    ValidationIssue.error(
-                                            "AGATE-V403",
-                                            "Buffer variable '"
-                                                    + name
-                                                    + "' is used before it is initialized "
-                                                    + "in reusable step "
-                                                    + stepIndex
-                                                    + ".",
-                                            normalized,
-                                            lineOfProperty(
-                                                    normalized,
-                                                    "name",
-                                                    name)
-                                    )
-                            );
-                        }
-                    }
-                }
-
-                /*
-                 * =====================================================
-                 * 3. Nested CALL
-                 * =====================================================
-                 */
-                if ("CALL".equals(type)) {
-
-                    String nestedCommand =
-                            ValidationUtil.text(
-                                    step,
-                                    "command");
-
-                    if (nestedCommand == null
-                            || !nestedCommand.startsWith("reusable.")) {
-
-                        return false;
-                    }
-
-                    boolean nestedComplete =
-                            validateReusableFlow(
-                                    testSuiteFile,
-                                    nestedCommand,
-                                    variables,
-                                    usedVariables,
-                                    callStack,
-                                    issues);
-
-                    if (!nestedComplete) {
-
-                        return false;
-                    }
-                }
-
-                /*
-                 * =====================================================
-                 * 4. Engine BUFFER creates variable
-                 * =====================================================
-                 */
-                if (createsBufferVariable(
-                        type,
-                        op)) {
-
-                    String name =
-                            ValidationUtil.text(
-                                    step,
-                                    "name");
-
-                    if (name != null
-                            && !name.isBlank()) {
-
-                        variables.add(name);
-                    }
-                }
-
-                /*
-                 * =====================================================
-                 * 5. Native BUFFER / EXEC creates variable
-                 * =====================================================
-                 */
-                if ("BUFFER".equals(type)
-                        && "EXEC".equals(op)) {
-
-                    String name =
-                            ValidationUtil.text(
-                                    step,
-                                    "name");
-
-                    if (name != null
-                            && !name.isBlank()) {
-
-                        variables.add(name);
-                    }
-                }
-            }
-
-            return true;
+            return validateReusableSteps(
+                    testSuiteFile,
+                    normalized,
+                    steps,
+                    variables,
+                    usedVariables,
+                    callStack,
+                    issues);
 
         } finally {
 
@@ -621,6 +449,314 @@ public final class DataFlowValidator
              * callStack describes only the current recursion path.
              */
             callStack.remove(normalized);
+        }
+    }
+
+    /*
+     * =============================================================
+     * Reusable step sequence / LOOP analysis
+     * =============================================================
+     *
+     * Important execution-order rule:
+     *
+     * WHILE:
+     *   condition -> body
+     *
+     * DO_WHILE:
+     *   body -> condition
+     *
+     * This matters for buffers created inside the loop body.
+     */
+    private boolean validateReusableSteps(
+            Path testSuiteFile,
+            Path reusableFile,
+            JsonNode steps,
+            Set<String> variables,
+            Set<String> usedVariables,
+            Set<Path> callStack,
+            List<ValidationIssue> issues) {
+
+        if (steps == null
+                || !steps.isArray()) {
+
+            return false;
+        }
+
+        int stepIndex =
+                0;
+
+        for (JsonNode step :
+                steps) {
+
+            stepIndex++;
+
+            if (step == null
+                    || !step.isObject()) {
+
+                continue;
+            }
+
+            String type =
+                    ValidationUtil.type(step);
+
+            String op =
+                    ValidationUtil.op(step);
+
+            /*
+             * =====================================================
+             * LOOP
+             * =====================================================
+             *
+             * ValidationUtil.bufferRefs(step) is recursive.
+             * Therefore it must NOT be called for the complete LOOP
+             * node because that would inspect condition and body at
+             * the same time and lose execution order.
+             */
+            if ("LOOP".equals(type)) {
+
+                String mode =
+                        ValidationUtil.text(
+                                step,
+                                "mode");
+
+                JsonNode condition =
+                        step.get("condition");
+
+                JsonNode loopSteps =
+                        step.get("steps");
+
+                if (loopSteps == null
+                        || !loopSteps.isArray()) {
+
+                    return false;
+                }
+
+                boolean doWhile =
+                        mode != null
+                                && "DO_WHILE".equalsIgnoreCase(
+                                        mode);
+
+                if (!doWhile) {
+
+                    validateBufferReferences(
+                            condition,
+                            reusableFile,
+                            stepIndex,
+                            variables,
+                            usedVariables,
+                            issues);
+                }
+
+                boolean loopComplete =
+                        validateReusableSteps(
+                                testSuiteFile,
+                                reusableFile,
+                                loopSteps,
+                                variables,
+                                usedVariables,
+                                callStack,
+                                issues);
+
+                if (!loopComplete) {
+
+                    return false;
+                }
+
+                if (doWhile) {
+
+                    validateBufferReferences(
+                            condition,
+                            reusableFile,
+                            stepIndex,
+                            variables,
+                            usedVariables,
+                            issues);
+                }
+
+                continue;
+            }
+
+            /*
+             * =====================================================
+             * 1. Validate {B[...]} references BEFORE producers.
+             * =====================================================
+             *
+             * Example:
+             *
+             * - type: BUFFER
+             *   op: EXEC
+             *   name: L_LogDir
+             *   value: "{B[G_EC_OpenShift_LogDir]}"
+             *
+             * G_EC_OpenShift_LogDir must already exist.
+             * L_LogDir becomes available only after this step.
+             */
+            validateBufferReferences(
+                    step,
+                    reusableFile,
+                    stepIndex,
+                    variables,
+                    usedVariables,
+                    issues);
+
+            /*
+             * =====================================================
+             * 2. BUFFER / ASSERT
+             * =====================================================
+             */
+            if ("BUFFER".equals(type)
+                    && "ASSERT".equals(op)) {
+
+                String name =
+                        ValidationUtil.text(
+                                step,
+                                "name");
+
+                String action =
+                        ValidationUtil.action(step);
+
+                if (name != null
+                        && !name.isBlank()) {
+
+                    usedVariables.add(name);
+
+                    if (!"IS_NULL".equals(action)
+                            && !variables.contains(name)) {
+
+                        issues.add(
+                                ValidationIssue.error(
+                                        "AGATE-V403",
+                                        "Buffer variable '"
+                                                + name
+                                                + "' is used before it is initialized "
+                                                + "in reusable step "
+                                                + stepIndex
+                                                + ".",
+                                        reusableFile,
+                                        lineOfProperty(
+                                                reusableFile,
+                                                "name",
+                                                name)
+                                )
+                        );
+                    }
+                }
+            }
+
+            /*
+             * =====================================================
+             * 3. Nested CALL
+             * =====================================================
+             */
+            if ("CALL".equals(type)) {
+
+                String nestedCommand =
+                        ValidationUtil.text(
+                                step,
+                                "command");
+
+                if (nestedCommand == null
+                        || !nestedCommand.startsWith("reusable.")) {
+
+                    return false;
+                }
+
+                boolean nestedComplete =
+                        validateReusableFlow(
+                                testSuiteFile,
+                                nestedCommand,
+                                variables,
+                                usedVariables,
+                                callStack,
+                                issues);
+
+                if (!nestedComplete) {
+
+                    return false;
+                }
+            }
+
+            /*
+             * =====================================================
+             * 4. Engine BUFFER creates variable
+             * =====================================================
+             */
+            if (createsBufferVariable(
+                    type,
+                    op)) {
+
+                String name =
+                        ValidationUtil.text(
+                                step,
+                                "name");
+
+                if (name != null
+                        && !name.isBlank()) {
+
+                    variables.add(name);
+                }
+            }
+
+            /*
+             * =====================================================
+             * 5. Native BUFFER / EXEC creates variable
+             * =====================================================
+             */
+            if ("BUFFER".equals(type)
+                    && "EXEC".equals(op)) {
+
+                String name =
+                        ValidationUtil.text(
+                                step,
+                                "name");
+
+                if (name != null
+                        && !name.isBlank()) {
+
+                    variables.add(name);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private void validateBufferReferences(
+            JsonNode node,
+            Path reusableFile,
+            int stepIndex,
+            Set<String> variables,
+            Set<String> usedVariables,
+            List<ValidationIssue> issues) {
+
+        if (node == null) {
+
+            return;
+        }
+
+        for (String ref :
+                ValidationUtil.bufferRefs(node)) {
+
+            usedVariables.add(ref);
+
+            if (!variables.contains(ref)) {
+
+                issues.add(
+                        ValidationIssue.error(
+                                "AGATE-V401",
+                                "Variable/buffer '"
+                                        + ref
+                                        + "' is referenced before initialization "
+                                        + "in reusable step "
+                                        + stepIndex
+                                        + ".",
+                                reusableFile,
+                                lineOfBufferReference(
+                                        reusableFile,
+                                        ref)
+                        )
+                );
+            }
         }
     }
 

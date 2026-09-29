@@ -10,13 +10,17 @@ import java.util.stream.Collectors;
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.register.TestExecutor;
 import at.co.svc.agate.core.dsl.register.YamlTestCaseLoader;
+import at.co.svc.agate.core.dsl.resolver.ReusablePathResolver;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.env.EnvironmentManager;
 import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.report.JsonReportEngine;
 import at.co.svc.agate.core.report.ReportEngine;
-import at.co.svc.agate.core.validation.StartupValidator;
+import at.co.svc.agate.core.project.ProjectContext;
+import at.co.svc.agate.core.project.ProjectRuntime;
+import at.co.svc.agate.core.reference.ReferencePathResolver;
+import at.co.svc.agate.server.validation.StartupValidator;
 import at.co.svc.agate.engine.gui.GuiEngine;
 
 public class MainTestCaseExecute {
@@ -474,6 +478,7 @@ public class MainTestCaseExecute {
     // =========================================================================
 
     public static void start2(
+            ProjectContext projectContext,
             String user,
             String instance,
             String apps,
@@ -485,10 +490,23 @@ public class MainTestCaseExecute {
         // Validate the complete startup context before EnvironmentManager,
         // YAML loading or any test execution is started.
         StartupValidator.validateOrThrow(
+                projectContext,
                 user,
                 instance,
                 apps,
                 file
+        );
+
+        ProjectRuntime.initialize(
+                projectContext
+        );
+
+        ReusablePathResolver.setProjectContext(
+                projectContext
+        );
+
+        ReferencePathResolver.setProjectContext(
+                projectContext
         );
 
         System.setProperty(
@@ -541,10 +559,10 @@ public class MainTestCaseExecute {
                 || file.trim().isEmpty()) {
 
             Path appFolder =
-                    Paths.get(
-                            "data",
-                            sanitizedApps
-                    );
+                    projectContext
+                            .getTestsRoot()
+                            .resolve(sanitizedApps)
+                            .normalize();
 
             yamlFilesToExecute =
                     Files.walk(
@@ -588,11 +606,11 @@ public class MainTestCaseExecute {
             }
 
             Path singlePath =
-                    Paths.get(
-                            "data",
-                            sanitizedApps,
-                            targetFile
-                    );
+                    projectContext
+                            .getTestsRoot()
+                            .resolve(sanitizedApps)
+                            .resolve(targetFile)
+                            .normalize();
 
             yamlFilesToExecute.add(
                     singlePath.toString()
@@ -1105,10 +1123,11 @@ public class MainTestCaseExecute {
                                 .trim();
 
                 String baseFolder =
-                        "reports/"
-                                + currentInstance
-                                + "/"
-                                + sanitizedApps;
+                        projectContext
+                                .getReportsRoot()
+                                .resolve(currentInstance)
+                                .resolve(sanitizedApps)
+                                .toString();
 
                 String reportName;
 

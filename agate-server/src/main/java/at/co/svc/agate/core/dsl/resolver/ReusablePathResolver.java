@@ -1,78 +1,56 @@
 package at.co.svc.agate.core.dsl.resolver;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
+
+import at.co.svc.agate.core.project.ProjectContext;
 
 public final class ReusablePathResolver {
+
+    private static volatile ProjectContext projectContext;
 
     private ReusablePathResolver() {
     }
 
-    public static String resolve(
-            String command,
-            String application) {
-
-        Path base =
-                Paths.get(
-                        "data",
-                        application
-                );
-
-        String normalizedCommand =
-                toRelativePath(command);
-
-        Path resolved =
-                base.resolve(
-                        normalizedCommand + ".yaml"
-                ).normalize();
-
-        return resolved.toString();
+    public static void setProjectContext(ProjectContext context) {
+        projectContext = context;
     }
 
-    private static String toRelativePath(
-            String command) {
+    public static String resolve(
+            String action,
+            String application) {
 
-        StringBuilder result =
-                new StringBuilder();
-
-        int i = 0;
-
-        while (i < command.length()) {
-
-            if (i + 1 < command.length()
-                    && command.charAt(i) == '.'
-                    && command.charAt(i + 1) == '.') {
-
-                if (result.length() > 0
-                        && result.charAt(result.length() - 1)
-                                != '/') {
-
-                    result.append('/');
-                }
-
-                result.append("..");
-                result.append('/');
-
-                i += 2;
-
-            } else if (command.charAt(i) == '.') {
-
-                if (result.length() == 0) {
-                    // leading single dot = current base
-                    i++;
-                    continue;
-                }
-
-                result.append('/');
-                i++;
-
-            } else {
-
-                result.append(command.charAt(i));
-                i++;
-            }
+        if (action == null || action.isBlank()) {
+            throw new IllegalArgumentException("Reusable action must not be empty");
         }
 
-        return result.toString();
+        if (application == null || application.isBlank()) {
+            throw new IllegalArgumentException("Application must not be empty");
+        }
+
+        String normalizedApplication =
+                application.trim().toLowerCase(Locale.ROOT);
+
+        Path applicationRoot;
+
+        ProjectContext context = projectContext;
+        if (context != null) {
+            applicationRoot =
+                    context.getTestsRoot()
+                            .resolve(normalizedApplication)
+                            .normalize();
+        } else {
+            // Legacy fallback for direct executions without ProjectContext.
+            applicationRoot =
+                    Paths.get("data", normalizedApplication)
+                            .normalize();
+        }
+
+        return applicationRoot
+                .resolve(action.replace(".", File.separator) + ".yaml")
+                .normalize()
+                .toString();
     }
 }

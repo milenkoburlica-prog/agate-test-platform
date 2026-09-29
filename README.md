@@ -6,7 +6,7 @@
 
 A single AGATE test can combine:
 
-**REST · SOAP · SQL · CMD · FILE · OpenShift · CALL · JSON · PDF · WAIT**
+**REST · SOAP · SQL · CMD · FILE · OpenShift · CALL · JSON · PDF · WAIT · LOOP**
 
 within one execution flow, using a human-readable YAML DSL.
 
@@ -33,7 +33,7 @@ The goal is simple:
 
 * ✅ Human-readable YAML test definitions
 * ✅ Cross-technology test execution
-* ✅ REST, SOAP, SQL, CMD, FILE, OpenShift, JSON, PDF and WAIT test steps and CALL reusable test steps.
+* ✅ REST, SOAP, SQL, CMD, FILE, OpenShift, JSON, PDF, WAIT and WAIT test steps and CALL reusable test steps.
 * ✅ YAML templates and CSV-based test data
 * ✅ Assertions and reference-based response validation
 * ✅ Detailed execution logging and HTML reports
@@ -72,7 +72,7 @@ Its primary goal is to orchestrate complete enterprise business tests across het
                                     │
  ┌────────┬───────┬──────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
  ▼        ▼       ▼      ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
-REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   GUI
+REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   LOOP
                                     │
                                     ▼
                               Unified Report
@@ -337,7 +337,7 @@ AGATE separates deterministic test execution, deterministic API contract process
                                      │
  ┌────────┬───────┬──────┬──────┬──────┬───────────┬──────┬──────┬──────┬──────┬──────┐
  ▼        ▼       ▼      ▼      ▼      ▼           ▼      ▼      ▼      ▼      ▼
-REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   GUI
+REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   LOOP
                                      │
                                      ▼
                                Unified Report
@@ -402,6 +402,7 @@ It loads AGATE YAML test suites, resolves configuration and test data, executes 
 | 📁 FILE      | Local file operations, content extraction and validation | **Native**            |
 | ☸️ OpenShift | OpenShift CLI operations and validation    | **Native**            |
 | ⏳ WAIT       | Synchronization and asynchronous workflows | **Native**            |
+| ⏳ LOOP       | Synchronization and asynchronous workflows | **Native**            |
 | 📑 JSON      | JSON processing and validation             | **Native**            |
 | 📄 PDF       | PDF validation                             | **Native**            |
 | 📦 BUFFER    | Shared runtime data / value handling       | **Native**            |
@@ -885,7 +886,7 @@ startTests.bat clean data\demo\variables_demo.yaml
 * Planned project-specific configuration and environment handling.
 * Planned clearer separation of independent applications and test projects.
 
-## 2026-XX-XX
+## 2026-09-27
 
 ### Reusable Module Organization
 

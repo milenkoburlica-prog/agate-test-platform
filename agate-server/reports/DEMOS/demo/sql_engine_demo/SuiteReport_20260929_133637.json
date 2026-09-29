@@ -1,0 +1,18 @@
+{
+  "application" : "demo",
+  "environment" : "DEMOS",
+  "tests" : [ {
+    "id" : "TC_01_Demo_SQL",
+    "status" : "FAILED",
+    "runtimeMs" : 2516,
+    "failures" : [ {
+      "stepType" : "SQL",
+      "reason" : "SQL execution failed",
+      "field" : null,
+      "action" : null,
+      "source" : null,
+      "reusableStep" : null,
+      "hint" : "Check the SQL syntax, database objects, permissions and environment configuration."
+    } ]
+  } ]
+}

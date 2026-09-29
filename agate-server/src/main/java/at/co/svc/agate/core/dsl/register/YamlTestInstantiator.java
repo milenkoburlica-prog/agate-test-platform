@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -19,6 +18,7 @@ import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import at.co.svc.agate.core.project.ProjectRuntime;
 public class YamlTestInstantiator {
  private static final boolean CONSOLE_PRINT = true;
  private static class TCObject {
@@ -49,19 +49,22 @@ public class YamlTestInstantiator {
             String templateFileName,
             String csvFileName)
  throws Exception {
-        String appPath =
-                "data/"
-                        + appName;
-        String templatePath =
+        Path appPath =
+                ProjectRuntime
+                        .applicationRoot(appName)
+                        .normalize();
+
+        Path templatePath =
                 appPath
-                        + "/template/"
-                        + templateFileName;
-        String csvPath =
-                System.getProperty("user.dir")
-                        + "/"
-                        + appPath
-                        + "/template/"
-                        + csvFileName;
+                        .resolve("template")
+                        .resolve(templateFileName)
+                        .normalize();
+
+        Path csvPath =
+                appPath
+                        .resolve("template")
+                        .resolve(csvFileName)
+                        .normalize();
         /*
          * ==============================================================
          * Load CSV
@@ -73,7 +76,7 @@ public class YamlTestInstantiator {
                 -1;
  try (BufferedReader br =
                      Files.newBufferedReader(
-                             Paths.get(csvPath),
+                             csvPath,
                              StandardCharsets.UTF_8)) {
             String line;
  while ((line = br.readLine()) != null) {
@@ -224,7 +227,7 @@ public class YamlTestInstantiator {
         Object loaded;
  try (var inputStream =
                      Files.newInputStream(
-                             Paths.get(templatePath))) {
+                             templatePath)) {
             loaded =
                     yaml.load(
                             inputStream);
@@ -432,9 +435,9 @@ public class YamlTestInstantiator {
                         + templateNameOnly
                         + ".yaml";
         Path outputPath =
-                Paths.get(
-                        appPath,
-                        newFileName);
+                appPath
+                        .resolve(newFileName)
+                        .normalize();
         Files.writeString(
                 outputPath,
                 formattedYaml,

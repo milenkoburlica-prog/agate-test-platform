@@ -1,0 +1,68 @@
+{
+  "application" : "demo",
+  "environment" : "DEMOS",
+  "totalTests" : 26,
+  "failedTests" : 4,
+  "passedTests" : 22,
+  "failureClusters" : [ {
+    "signature" : {
+      "stepType" : "",
+      "reason" : "Command timed out | Expected: completion within 5 ms | Actual: timeout",
+      "field" : "",
+      "action" : "",
+      "source" : ""
+    },
+    "occurrences" : 1,
+    "affectedTests" : 1,
+    "testCases" : [ "TC_CMD_Engine_Demo" ],
+    "reusableStep" : null,
+    "hint" : null,
+    "assessment" : "This failure currently appears to be isolated to one test case.",
+    "suggestedFocus" : "Inspect the failing step and its input values for this testcase."
+  }, {
+    "signature" : {
+      "stepType" : "",
+      "reason" : "Command timed out | Expected: completion within 1 ms | Actual: timeout",
+      "field" : "",
+      "action" : "",
+      "source" : ""
+    },
+    "occurrences" : 1,
+    "affectedTests" : 1,
+    "testCases" : [ "TC_CMD_Timeout" ],
+    "reusableStep" : null,
+    "hint" : null,
+    "assessment" : "This failure currently appears to be isolated to one test case.",
+    "suggestedFocus" : "Inspect the failing step and its input values for this testcase."
+  }, {
+    "signature" : {
+      "stepType" : "SQL",
+      "reason" : "SQL execution failed",
+      "field" : "",
+      "action" : "",
+      "source" : ""
+    },
+    "occurrences" : 1,
+    "affectedTests" : 1,
+    "testCases" : [ "TC_01_Demo_SQL" ],
+    "reusableStep" : null,
+    "hint" : "Check the SQL syntax, database objects, permissions and environment configuration.",
+    "assessment" : "This failure currently appears to be isolated to one test case.",
+    "suggestedFocus" : "Inspect the failing step and its input values for this testcase."
+  }, {
+    "signature" : {
+      "stepType" : "",
+      "reason" : "Environment value was not found",
+      "field" : "",
+      "action" : "",
+      "source" : ""
+    },
+    "occurrences" : 1,
+    "affectedTests" : 1,
+    "testCases" : [ "TC Hello World 1" ],
+    "reusableStep" : null,
+    "hint" : null,
+    "assessment" : "This failure currently appears to be isolated to one test case.",
+    "suggestedFocus" : "Inspect the failing step and its input values for this testcase."
+  } ]
+}

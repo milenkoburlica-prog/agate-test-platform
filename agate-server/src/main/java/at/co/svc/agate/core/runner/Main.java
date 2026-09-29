@@ -4,9 +4,20 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import at.co.svc.agate.core.dsl.register.YamlTestInstantiator;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
+import at.co.svc.agate.core.project.ProjectConfig;
+import at.co.svc.agate.core.project.ProjectConfigLoader;
+import at.co.svc.agate.core.project.ProjectConfigValidator;
+import at.co.svc.agate.core.project.ProjectContext;
+import at.co.svc.agate.core.project.ProjectLocator;
+import at.co.svc.agate.core.project.ProjectRuntime;
+import at.co.svc.agate.core.report.analysis.AnalysisReportWriter;
+import at.co.svc.agate.core.report.analysis.AnalysisResult;
+import at.co.svc.agate.core.report.analysis.JsonReportAnalyzer;
 import at.co.svc.agate.server.validation.ValidationIssue;
 import at.co.svc.agate.server.validation.ValidationOptions;
 import at.co.svc.agate.server.validation.ValidationResult;
@@ -30,6 +41,11 @@ public class Main {
 
         try {
 
+            ProjectArguments projectArguments =
+                    parseProjectArguments(args);
+
+            args = projectArguments.remainingArgs();
+
             // ================================================================
             // MODE 1: TEST CASE INSTANTIATION
             // ================================================================
@@ -46,6 +62,29 @@ public class Main {
                     System.exit(1);
                 }
 
+                ProjectLocator.LocatedProject locatedProject =
+                        ProjectLocator.locate(
+                                projectArguments.projectPath());
+
+                ProjectConfig projectConfig =
+                        ProjectConfigLoader.load(
+                                locatedProject.projectFile());
+
+                ProjectContext projectContext =
+                        new ProjectContext(
+                                locatedProject.projectRoot(),
+                                locatedProject.projectFile(),
+                                projectConfig);
+
+                ProjectConfigValidator.validateOrThrow(
+                        projectContext);
+
+                ProjectRuntime.initialize(
+                        projectContext);
+
+                printProject(
+                        projectContext);
+
                 startInstantiator(
                         args[1],
                         args[2],
@@ -61,24 +100,79 @@ public class Main {
             if (args.length > 0
                     && "validate".equalsIgnoreCase(args[0])) {
 
-                if (args.length < 2) {
+                if (args.length < 3) {
                     System.err.println(
                             "Usage for validation: "
-                                    + "java Main validate <yamlFile>");
+                                    + "java Main validate "
+                                    + "<appName> <yamlFile>");
 
                     System.exit(1);
                 }
 
-                startValidation(args[1]);
+                ProjectLocator.LocatedProject locatedProject =
+                        ProjectLocator.locate(
+                                projectArguments.projectPath());
+
+                ProjectConfig projectConfig =
+                        ProjectConfigLoader.load(
+                                locatedProject.projectFile());
+
+                ProjectContext projectContext =
+                        new ProjectContext(
+                                locatedProject.projectRoot(),
+                                locatedProject.projectFile(),
+                                projectConfig);
+
+                ProjectConfigValidator.validateOrThrow(
+                        projectContext);
+
+                ProjectRuntime.initialize(
+                        projectContext);
+
+                String application =
+                        args[1]
+                                .trim()
+                                .toLowerCase();
+
+                Path yamlFile =
+                        projectContext
+                                .getTestsRoot()
+                                .resolve(application)
+                                .resolve(args[2])
+                                .normalize();
+
+                startValidation(
+                        yamlFile.toString());
 
                 return;
             }
-         // ================================================================
-         // MODE 3: DSL DESCRIPTION
-         // ================================================================
+            // ================================================================
+            // MODE 3: REPORT ANALYSIS
+            // ================================================================
 
-         if (args.length > 0
-                 && "describe".equalsIgnoreCase(args[0])) {
+            if (args.length > 0
+                    && "analyze".equalsIgnoreCase(args[0])) {
+
+                if (args.length < 2) {
+                    System.err.println(
+                            "Usage for report analysis: "
+                                    + "java Main analyze <jsonReport>");
+
+                    System.exit(1);
+                }
+
+                startReportAnalysis(
+                        args[1]);
+
+                return;
+            }
+
+            // ================================================================
+            // MODE 4: DSL DESCRIPTION
+            // ================================================================
+
+            if (args.length > 0
+                    && "describe".equalsIgnoreCase(args[0])) {
 
              if (args.length < 2) {
                  AgateDescribe.describe(null);
@@ -89,7 +183,7 @@ public class Main {
              return;
          }
             // ================================================================
-            // MODE 4: NORMAL TEST EXECUTION
+            // MODE 5: NORMAL TEST EXECUTION
             // ================================================================
 
             if (args.length < 3) {
@@ -101,6 +195,7 @@ public class Main {
                 System.err.println("Usage:");
                 System.err.println(
                         "  java Main "
+                                + "[--project <path>] "
                                 + "<user> <instance> <app> "
                                 + "[testSuite] [testCase] [priority]");
 
@@ -111,10 +206,33 @@ public class Main {
                 System.err.println(
                         "  java Main describe <type>");
                 System.err.println(
-                        "  java Main validate <yamlFile>");
+                        "  java Main validate "
+                                + "<appName> <yamlFile>");
+
+                System.err.println(
+                        "  java Main analyze <jsonReport>");
 
                 System.exit(1);
             }
+
+            ProjectLocator.LocatedProject locatedProject =
+                    ProjectLocator.locate(
+                            projectArguments.projectPath());
+
+            ProjectConfig projectConfig =
+                    ProjectConfigLoader.load(
+                            locatedProject.projectFile());
+
+            ProjectContext projectContext =
+                    new ProjectContext(
+                            locatedProject.projectRoot(),
+                            locatedProject.projectFile(),
+                            projectConfig);
+
+            ProjectConfigValidator.validateOrThrow(
+                    projectContext);
+
+            printProject(projectContext);
 
             String user = args[0];
             String instance = args[1];
@@ -136,6 +254,7 @@ public class Main {
                             : null;
 
             MainTestCaseExecute.start2(
+                    projectContext,
                     user,
                     instance,
                     apps,
@@ -145,12 +264,28 @@ public class Main {
 
         } catch (Exception e) {
 
-            /*
-             * Lower layers should print structured errors.
-             *
-             * Do not print the stack trace here for expected
-             * YAML / DSL / validation errors.
-             */
+            System.err.println();
+            System.err.println(
+                    "============================================================");
+
+            System.err.println(
+                    "[ERROR] AGATE startup failed");
+
+            System.err.println(
+                    "============================================================");
+
+            System.err.println(
+                    e.getMessage() != null
+                            ? e.getMessage()
+                            : e.getClass().getName());
+
+            if (Boolean.getBoolean("agate.debug")) {
+                e.printStackTrace();
+            }
+
+            System.err.println(
+                    "============================================================");
+
             System.exit(1);
         }
     }
@@ -294,6 +429,74 @@ public class Main {
     }
 
     // ========================================================================
+    // REPORT ANALYSIS
+    // ========================================================================
+
+    private static void startReportAnalysis(
+            String reportFile) {
+
+        try {
+
+            JsonReportAnalyzer analyzer =
+                    new JsonReportAnalyzer();
+
+            AnalysisResult result =
+                    analyzer.analyze(
+                            reportFile);
+
+            AnalysisReportWriter writer =
+                    new AnalysisReportWriter();
+
+            writer.printConsole(
+                    result);
+
+            String analysisFile =
+                    buildAnalysisFileName(
+                            reportFile);
+
+            writer.writeJson(
+                    result,
+                    analysisFile);
+
+            System.out.println();
+
+            System.out.println(
+                    ">>> Analysis JSON generated at: "
+                            + analysisFile);
+
+        } catch (Exception e) {
+
+            System.err.println(
+                    "Report analysis failed: "
+                            + e.getMessage());
+
+            if (Boolean.getBoolean(
+                    "agate.debug")) {
+
+                e.printStackTrace();
+            }
+
+            System.exit(1);
+        }
+    }
+
+    private static String buildAnalysisFileName(
+            String reportFile) {
+
+        if (reportFile.endsWith(
+                ".json")) {
+
+            return reportFile.substring(
+                    0,
+                    reportFile.length() - 5)
+                    + "_analysis.json";
+        }
+
+        return reportFile
+                + "_analysis.json";
+    }
+
+    // ========================================================================
     // TEST CASE INSTANTIATOR
     // ========================================================================
 
@@ -377,4 +580,76 @@ public class Main {
         System.out.println(
                 "[INFO] Cleanup finished.");
     }
+
+    // ========================================================================
+    // PROJECT ARGUMENTS
+    // ========================================================================
+
+    private static ProjectArguments parseProjectArguments(
+            String[] args) {
+
+        if (args == null
+                || args.length == 0) {
+
+            return new ProjectArguments(
+                    null,
+                    new String[0]);
+        }
+
+        List<String> remaining =
+                new ArrayList<>();
+
+        String projectPath =
+                null;
+
+        for (int i = 0; i < args.length; i++) {
+
+            String arg =
+                    args[i];
+
+            if ("--project".equalsIgnoreCase(arg)) {
+
+                if (i + 1 >= args.length) {
+
+                    throw new IllegalArgumentException(
+                            "--project requires a path");
+                }
+
+                projectPath =
+                        args[++i];
+
+                continue;
+            }
+
+            remaining.add(arg);
+        }
+
+        return new ProjectArguments(
+                projectPath,
+                remaining.toArray(String[]::new));
+    }
+
+    private static void printProject(
+            ProjectContext project) {
+
+        System.out.println();
+        System.out.println("=".repeat(80));
+        System.out.println("                         AGATE PROJECT");
+        System.out.println("=".repeat(80));
+        System.out.println("  Name       : " + project.getProjectName());
+        System.out.println("  Root       : " + project.getProjectRoot());
+        System.out.println("  Tests      : " + project.getTestsRoot());
+        System.out.println("  Responses  : " + project.getResponsesRoot());
+        System.out.println("  Reports    : " + project.getReportsRoot());
+        System.out.println("  Env        : " + project.getEnvironmentConfig());
+        System.out.println("  Users      : " + project.getUsersConfig());
+        System.out.println("=".repeat(80));
+        System.out.println();
+    }
+
+    private record ProjectArguments(
+            String projectPath,
+            String[] remainingArgs) {
+    }
+
 }

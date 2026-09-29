@@ -1,0 +1,13 @@
+version: 1
+
+project:
+  name: fach
+
+paths:
+  tests: 'data'
+  responses: 'data\responses'
+  reports: 'reports'
+
+config:
+  environments: 'env\env.conf'
+  users: 'env\users.conf'

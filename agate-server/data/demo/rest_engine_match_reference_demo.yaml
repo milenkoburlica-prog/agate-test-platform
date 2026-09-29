@@ -46,7 +46,6 @@ testCases:
         name: "title"
         action: EQUALS
         expected: "delectus aut autem"
-        response: res_verify
       
       # 6
       - type: REST

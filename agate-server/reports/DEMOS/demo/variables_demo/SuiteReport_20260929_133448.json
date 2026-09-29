@@ -1,0 +1,48 @@
+{
+  "application" : "demo",
+  "environment" : "DEMOS",
+  "tests" : [ {
+    "id" : "TC Variables 1",
+    "status" : "PASSED",
+    "runtimeMs" : 330,
+    "failures" : [ ]
+  }, {
+    "id" : "TC Variables 2",
+    "status" : "PASSED",
+    "runtimeMs" : 57,
+    "failures" : [ ]
+  }, {
+    "id" : "TC Variables 3 - timestamp difference",
+    "status" : "PASSED",
+    "runtimeMs" : 1135,
+    "failures" : [ ]
+  }, {
+    "id" : "TC Tosca Date Defaults",
+    "status" : "PASSED",
+    "runtimeMs" : 331,
+    "failures" : [ ]
+  }, {
+    "id" : "TC Hello World 1",
+    "status" : "FAILED",
+    "runtimeMs" : 41,
+    "failures" : [ {
+      "stepType" : null,
+      "reason" : "Environment value was not found",
+      "field" : null,
+      "action" : null,
+      "source" : null,
+      "reusableStep" : null,
+      "hint" : null
+    } ]
+  }, {
+    "id" : "TC Hello World 2",
+    "status" : "PASSED",
+    "runtimeMs" : 34,
+    "failures" : [ ]
+  }, {
+    "id" : "TC Hello World 3",
+    "status" : "PASSED",
+    "runtimeMs" : 246,
+    "failures" : [ ]
+  } ]
+}

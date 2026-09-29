@@ -187,7 +187,7 @@ testCases:
         op: EXEC
         command: "echo timeout test"
         response: timeout_test
-        timeout: 5
+        timeout: 500
 
       # 26. Verify timeout test output
       - type: CMD

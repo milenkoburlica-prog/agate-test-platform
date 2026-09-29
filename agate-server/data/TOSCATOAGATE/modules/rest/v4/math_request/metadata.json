@@ -1,7 +1,0 @@
-{
-  "url" : "{{endpoint}}/v4/?expr={B[x]}*({B[y]}-{B[z]})",
-  "method" : "GET",
-  "headers" : {
-    "Content-Type" : "application/json;charset=UTF-8"
-  }
-}

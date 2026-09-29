@@ -7,11 +7,15 @@ import java.security.NoSuchAlgorithmException;
 
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.model.TestStep;
+import at.co.svc.agate.core.project.ProjectContext;
 
 public class ReferencePathResolver {
 
-    private static final String REFERENCES_DIRECTORY =
-            "references";
+    private static volatile ProjectContext projectContext;
+
+    public static void setProjectContext(ProjectContext context) {
+        projectContext = context;
+    }
 
     /*
      * Leave some safety margin below the traditional
@@ -116,13 +120,31 @@ public class ReferencePathResolver {
         String extension =
                 format.getFileExtension();
 
-        Path referenceDirectory =
-                yamlDirectory
-                        .resolve(
-                                REFERENCES_DIRECTORY)
-                        .resolve(
-                                safeYamlName)
-                        .normalize();
+        Path referenceDirectory;
+
+        ProjectContext context = projectContext;
+
+        if (context != null) {
+            String application =
+                    System.getProperty(
+                                    "APPLICATION",
+                                    "unknown")
+                            .trim()
+                            .toLowerCase();
+
+            referenceDirectory =
+                    context.getResponsesRoot()
+                            .resolve(application)
+                            .resolve(safeYamlName)
+                            .normalize();
+        } else {
+            // Legacy fallback for direct executions without ProjectContext.
+            referenceDirectory =
+                    yamlDirectory
+                            .resolve("references")
+                            .resolve(safeYamlName)
+                            .normalize();
+        }
 
         String readableBaseName =
                 safeTestCaseName
