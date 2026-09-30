@@ -4,14 +4,14 @@ testCases:
     stage: '*'
     priority: HIGH  
     variables:
-      jsonplaceholder.endpont: "https://jsonplaceholder.typicode.com"
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
 
     steps:
       # 1
       - type: REST
         op: EXEC
         command: rest.jsonplaceholder.typicode.todos.1
-        endpoint: "{B[jsonplaceholder.endpont]}"
+        endpoint: "{B[jsonplaceholder.endpoint]}"
         response: response_rest1
       
       # 2
@@ -54,14 +54,14 @@ testCases:
     stage: '*'
     priority: HIGH  
     variables:
-      jsonplaceholder.endpont: "https://jsonplaceholder.typicode.com"
+      jsonplaceholder.endpoint: "https://jsonplaceholder.typicode.com"
 
     steps:
       # 1
       - type: REST
         op: EXEC
         command: rest.jsonplaceholder.posts
-        endpoint: "{B[jsonplaceholder.endpont]}"
+        endpoint: "{B[jsonplaceholder.endpoint]}"
         response: response_rest2
 
       # 2
