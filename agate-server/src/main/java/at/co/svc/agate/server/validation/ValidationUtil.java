@@ -2,6 +2,7 @@ package at.co.svc.agate.server.validation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -352,12 +353,23 @@ final class ValidationUtil {
             String field) {
 
         if (c == null
-                || c.source() == null
+                || c.file() == null
                 || node == null
                 || field == null
                 || field.isBlank()) {
 
             return -1;
+        }
+
+        int contextualLine =
+                lineOfPropertyInMatchingStep(
+                        c,
+                        node,
+                        field);
+
+        if (contextualLine > 0) {
+
+            return contextualLine;
         }
 
         JsonNode valueNode =
@@ -372,68 +384,432 @@ final class ValidationUtil {
 
             if (value != null) {
 
-                /*
-                 * Unquoted form:
-                 *
-                 * response: res_demo
-                 * value: 1000
-                 */
                 int line =
-                        c.source()
-                                .lineOf(
-                                        field
-                                                + ": "
-                                                + value);
+                        findScalarLine(
+                                c,
+                                field,
+                                value);
 
                 if (line > 0) {
-                    return line;
-                }
 
-                /*
-                 * Double quoted form:
-                 *
-                 * name: "amount"
-                 */
-                line =
-                        c.source()
-                                .lineOf(
-                                        field
-                                                + ": \""
-                                                + value
-                                                + "\"");
-
-                if (line > 0) {
-                    return line;
-                }
-
-                /*
-                 * Single quoted form:
-                 *
-                 * column: '4'
-                 */
-                line =
-                        c.source()
-                                .lineOf(
-                                        field
-                                                + ": '"
-                                                + value
-                                                + "'");
-
-                if (line > 0) {
                     return line;
                 }
             }
         }
 
-        /*
-         * Do NOT fall back to field + ":" here.
-         *
-         * That was exactly the reason why response from another
-         * step could be reported.
-         */
         return lineOfStep(
                 c,
                 node);
+    }
+
+    private static int lineOfPropertyInMatchingStep(
+            ValidationContext c,
+            JsonNode node,
+            String field) {
+
+        try {
+
+            List<String> lines =
+                    Files.readAllLines(
+                            c.file());
+
+            int bestStart =
+                    -1;
+
+            int bestEnd =
+                    -1;
+
+            int bestScore =
+                    0;
+
+            for (int i = 0;
+                 i < lines.size();
+                 i++) {
+
+                String raw =
+                        lines.get(i);
+
+                String trimmed =
+                        raw.trim();
+
+                if (!trimmed.startsWith("- ")) {
+
+                    continue;
+                }
+
+                int indent =
+                        leadingSpaces(raw);
+
+                if (!isStepCandidate(
+                        lines,
+                        i,
+                        indent)) {
+
+                    continue;
+                }
+
+                int end =
+                        findListItemEnd(
+                                lines,
+                                i,
+                                indent);
+
+                int score =
+                        scoreNodeAgainstBlock(
+                                node,
+                                lines,
+                                i,
+                                end,
+                                indent);
+
+                if (score > bestScore) {
+
+                    bestScore =
+                            score;
+
+                    bestStart =
+                            i;
+
+                    bestEnd =
+                            end;
+                }
+            }
+
+            if (bestStart < 0
+                    || bestScore < 2) {
+
+                return -1;
+            }
+
+            int itemIndent =
+                    leadingSpaces(
+                            lines.get(bestStart));
+
+            for (int i = bestStart;
+                 i < bestEnd;
+                 i++) {
+
+                String direct =
+                        directPropertyText(
+                                lines.get(i),
+                                i == bestStart,
+                                itemIndent);
+
+                if (direct == null) {
+
+                    continue;
+                }
+
+                if (propertyName(direct)
+                        .equals(field)) {
+
+                    return i + 1;
+                }
+            }
+
+        } catch (Exception ignored) {
+
+            /*
+             * Line lookup is diagnostic only.
+             * Validation itself must still continue.
+             */
+        }
+
+        return -1;
+    }
+
+    private static boolean isStepCandidate(
+            List<String> lines,
+            int start,
+            int indent) {
+
+        String first =
+                lines.get(start)
+                        .trim()
+                        .substring(2)
+                        .trim();
+
+        if (first.startsWith("type:")) {
+
+            return true;
+        }
+
+        if (!first.startsWith("id:")) {
+
+            return false;
+        }
+
+        int end =
+                findListItemEnd(
+                        lines,
+                        start,
+                        indent);
+
+        for (int i = start + 1;
+             i < end;
+             i++) {
+
+            String raw =
+                    lines.get(i);
+
+            if (raw.isBlank()) {
+
+                continue;
+            }
+
+            if (leadingSpaces(raw)
+                    != indent + 2) {
+
+                continue;
+            }
+
+            if (raw.trim()
+                    .startsWith("type:")) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static int findListItemEnd(
+            List<String> lines,
+            int start,
+            int indent) {
+
+        for (int i = start + 1;
+             i < lines.size();
+             i++) {
+
+            String raw =
+                    lines.get(i);
+
+            if (raw.isBlank()) {
+
+                continue;
+            }
+
+            int currentIndent =
+                    leadingSpaces(raw);
+
+            String trimmed =
+                    raw.trim();
+
+            if (currentIndent < indent) {
+
+                return i;
+            }
+
+            if (currentIndent == indent
+                    && trimmed.startsWith("- ")) {
+
+                return i;
+            }
+        }
+
+        return lines.size();
+    }
+
+    private static int scoreNodeAgainstBlock(
+            JsonNode node,
+            List<String> lines,
+            int start,
+            int end,
+            int indent) {
+
+        int score =
+                0;
+
+        var fields =
+                node.fields();
+
+        while (fields.hasNext()) {
+
+            var entry =
+                    fields.next();
+
+            JsonNode value =
+                    entry.getValue();
+
+            if (value == null
+                    || value.isNull()
+                    || !value.isValueNode()) {
+
+                continue;
+            }
+
+            String expectedField =
+                    entry.getKey();
+
+            String expectedValue =
+                    value.asText();
+
+            if (expectedValue == null) {
+
+                continue;
+            }
+
+            for (int i = start;
+                 i < end;
+                 i++) {
+
+                String direct =
+                        directPropertyText(
+                                lines.get(i),
+                                i == start,
+                                indent);
+
+                if (direct == null) {
+
+                    continue;
+                }
+
+                if (scalarPropertyMatches(
+                        direct,
+                        expectedField,
+                        expectedValue)) {
+
+                    score++;
+
+                    break;
+                }
+            }
+        }
+
+        return score;
+    }
+
+    private static String directPropertyText(
+            String raw,
+            boolean firstLine,
+            int itemIndent) {
+
+        if (raw == null
+                || raw.isBlank()) {
+
+            return null;
+        }
+
+        int indent =
+                leadingSpaces(raw);
+
+        String trimmed =
+                raw.trim();
+
+        if (firstLine) {
+
+            if (indent != itemIndent
+                    || !trimmed.startsWith("- ")) {
+
+                return null;
+            }
+
+            return trimmed.substring(2)
+                    .trim();
+        }
+
+        if (indent != itemIndent + 2) {
+
+            return null;
+        }
+
+        if (trimmed.startsWith("- ")) {
+
+            return null;
+        }
+
+        return trimmed;
+    }
+
+    private static boolean scalarPropertyMatches(
+            String propertyText,
+            String field,
+            String expectedValue) {
+
+        if (!propertyName(propertyText)
+                .equals(field)) {
+
+            return false;
+        }
+
+        int colon =
+                propertyText.indexOf(':');
+
+        if (colon < 0) {
+
+            return false;
+        }
+
+        String actual =
+                propertyText.substring(
+                                colon + 1)
+                        .trim();
+
+        actual =
+                unquote(actual);
+
+        return actual.equals(
+                expectedValue);
+    }
+
+    private static String propertyName(
+            String propertyText) {
+
+        if (propertyText == null) {
+
+            return "";
+        }
+
+        int colon =
+                propertyText.indexOf(':');
+
+        if (colon < 0) {
+
+            return "";
+        }
+
+        return propertyText.substring(
+                        0,
+                        colon)
+                .trim();
+    }
+
+    private static String unquote(
+            String value) {
+
+        if (value == null) {
+
+            return "";
+        }
+
+        if (value.length() >= 2
+                && ((value.startsWith("\"")
+                && value.endsWith("\""))
+                || (value.startsWith("'")
+                && value.endsWith("'")))) {
+
+            return value.substring(
+                    1,
+                    value.length() - 1);
+        }
+
+        return value;
+    }
+
+    private static int leadingSpaces(
+            String line) {
+
+        int count =
+                0;
+
+        while (count < line.length()
+                && line.charAt(count) == ' ') {
+
+            count++;
+        }
+
+        return count;
     }
 
     /**

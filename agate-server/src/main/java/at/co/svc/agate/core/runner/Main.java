@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.co.svc.agate.core.debug.DebugController;
+import at.co.svc.agate.core.debug.DebugQuitException;
 import at.co.svc.agate.core.dsl.register.YamlTestInstantiator;
 import at.co.svc.agate.core.dsl.utils.ConsoleColors;
 import at.co.svc.agate.core.project.ProjectConfig;
@@ -261,6 +263,17 @@ public class Main {
                     file,
                     testCase,
                     testPriority);
+
+        } catch (DebugQuitException e) {
+
+            System.out.println();
+            System.out.println(
+                    "============================================================");
+            System.out.println(
+                    "DEBUG SESSION TERMINATED BY USER");
+            System.out.println(
+                    "============================================================");
+            System.exit(0);
 
         } catch (Exception e) {
 
@@ -617,6 +630,15 @@ public class Main {
 
                 projectPath =
                         args[++i];
+
+                continue;
+            }
+
+            if ("--debug".equalsIgnoreCase(arg)) {
+
+                System.setProperty(
+                        DebugController.PROPERTY,
+                        "true");
 
                 continue;
             }

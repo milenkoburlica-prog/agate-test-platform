@@ -868,7 +868,7 @@ startTests.bat validate data\demo\variables_demo.yaml
 startTests.bat clean data\demo\variables_demo.yaml
 ```
 
-## 2026-XX-XX
+## 2026-09-30
 
 ### Step-by-Step Debugging
 
@@ -876,6 +876,7 @@ startTests.bat clean data\demo\variables_demo.yaml
 * Planned step-by-step execution of test cases and reusable modules.
 * Planned support for pausing before individual steps and continuing execution manually.
 * Planned inspection of current variables, buffers, responses and reusable parameters during debugging.
+* Example: startTests.bat Tester1 Demos Demo "soap_engine_demo.yaml" --debug
 
 ## 2026-09-29
 

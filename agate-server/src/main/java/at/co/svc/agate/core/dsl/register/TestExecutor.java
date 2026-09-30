@@ -14,6 +14,10 @@ import java.util.UUID;
 
 
 
+import at.co.svc.agate.core.debug.DebugAction;
+import at.co.svc.agate.core.debug.DebugController;
+import at.co.svc.agate.core.debug.DebugQuitException;
+
 import at.co.svc.agate.core.dsl.model.StepType;
 
 import at.co.svc.agate.core.dsl.model.TestCase;
@@ -86,6 +90,11 @@ public class TestExecutor {
     private final YamlPlaceholderResolver resolver =
 
             new YamlPlaceholderResolver();
+
+
+    private final DebugController debugController =
+
+            new DebugController();
 
 
 
@@ -446,9 +455,18 @@ public class TestExecutor {
 
 
 
+        } catch (DebugQuitException e) {
+
+            Allure.getLifecycle()
+                    .updateTestCase(
+                            uuid,
+                            result ->
+                                    result.setStatus(
+                                            Status.SKIPPED));
+
+            throw e;
+
         } catch (Exception e) {
-
-
 
             String errorMsg =
 
@@ -584,7 +602,37 @@ public class TestExecutor {
 
 
 
-        long startTime =
+        
+        DebugAction debugAction =
+                debugController.beforeStep(
+                        testCase,
+                        step,
+                        context,
+                        yamlFile,
+                        currentStepNumber);
+
+        if (debugAction == DebugAction.QUIT) {
+            throw new DebugQuitException();
+        }
+
+        if (debugAction == DebugAction.SKIP) {
+            return;
+        }
+
+        /*
+         * If the debugger actually stopped on this step, show the real
+         * engine execution even when CALL/LOOP originally passed
+         * isVerbose=false for reusable children.
+         *
+         * This is local to the current invocation. Step Over children
+         * remain silent because they never receive a debugger prompt.
+         */
+        boolean effectiveVerbose =
+                debugController.shouldForceVerboseCurrentStep()
+                        ? true
+                        : isVerbose;
+
+long startTime =
 
                 System.currentTimeMillis();
 
@@ -822,9 +870,14 @@ public class TestExecutor {
 
                     this.logger,
 
-                    isVerbose
+                    effectiveVerbose
 
             );
+
+            debugController.observeSuccessfulStep(
+                    step,
+                    context);
+
 
 
 
@@ -924,7 +977,7 @@ public class TestExecutor {
 
                  */
 
-                if (!isVerbose
+                if (!effectiveVerbose
 
                         && step.getType()
 
@@ -1026,7 +1079,7 @@ public class TestExecutor {
 
 
 
-            } else if (isVerbose) {
+            } else if (effectiveVerbose) {
 
 
 

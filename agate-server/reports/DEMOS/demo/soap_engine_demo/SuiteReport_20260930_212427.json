@@ -1,0 +1,15 @@
+{
+  "application" : "demo",
+  "environment" : "Demos",
+  "tests" : [ {
+    "id" : "TC_SOAP_Calculator",
+    "status" : "PASSED",
+    "runtimeMs" : 12154,
+    "failures" : [ ]
+  }, {
+    "id" : "TC_SOAP_ListOfCountryNamesGroupedByContinent",
+    "status" : "PASSED",
+    "runtimeMs" : 3067,
+    "failures" : [ ]
+  } ]
+}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import at.co.svc.agate.core.debug.DebugQuitException;
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.register.TestExecutor;
 import at.co.svc.agate.core.dsl.register.YamlTestCaseLoader;
@@ -369,6 +370,10 @@ public class MainTestCaseExecute {
 
                     passedCount++;
 
+                } catch (DebugQuitException e) {
+
+                    throw e;
+
                 } catch (Exception e) {
 
                     passed =
@@ -377,7 +382,13 @@ public class MainTestCaseExecute {
                     failedCount++;
 
                     failedTestNames.add(
-                            tc.getName()
+                            (tc.getName() != null
+                                    ? tc.getName()
+                                    : "Unnamed Test Case")
+                                    + " ["
+                                    + Paths.get(yamlFile)
+                                    .getFileName()
+                                    + "]"
                     );
 
                     errorMessage =
@@ -966,7 +977,11 @@ public class MainTestCaseExecute {
 
                         passedCount++;
 
-                    } catch (Exception e) {
+                    } catch (DebugQuitException e) {
+
+                    throw e;
+
+                } catch (Exception e) {
 
                         passed =
                                 false;
@@ -974,9 +989,13 @@ public class MainTestCaseExecute {
                         failedCount++;
 
                         failedTestNames.add(
-                                tc.getName() != null
+                                (tc.getName() != null
                                         ? tc.getName()
-                                        : "Unnamed Test Case"
+                                        : "Unnamed Test Case")
+                                        + " ["
+                                        + Paths.get(formattedYamlPath)
+                                        .getFileName()
+                                        + "]"
                         );
 
                         errorMessage =

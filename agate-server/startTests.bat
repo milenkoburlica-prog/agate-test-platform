@@ -33,7 +33,26 @@ set "APP_NAME=%~3"
 set "TEST_SUITE=%~4"
 set "TEST_CASE=%~5"
 set "TEST_PRIORITY=%~6"
+set "DEBUG_MODE="
 
+for %%A in (%*) do (
+    if /I "%%~A"=="--debug" set "DEBUG_MODE=--debug"
+)
+
+REM
+REM Debug execution:
+REM
+REM startTests.bat Tester1 DEMOS demo test.yaml --debug
+REM
+REM The --debug flag enables interactive Step-by-Step Debugging Phase 1.
+REM
+REM Debug commands:
+REM   [Enter] continue
+REM   s       skip current step
+REM   v       variables
+REM   b       buffers
+REM   r       responses
+REM   q       quit
 REM
 REM Examples:
 REM
@@ -69,6 +88,7 @@ echo             Starting Agate Test Suite via Windows CMD
 echo ======================================================================
 echo  Current Dir: %CD%
 echo  Agate JAR  : %AGATE_JAR%
+if defined DEBUG_MODE echo  Debug Mode : ENABLED
 echo ======================================================================
 echo.
 
