@@ -502,13 +502,13 @@ Run a specific demo test suite:
 
 ```cmd
 cd agate-server
-startTests.bat DEMOS DEMOS DEMO rest_engine_demo.yaml
+startTests.bat Tester1 DEMOS DEMO rest_engine_demo.yaml
 ```
 
 Or execute all suites for the selected application and stage:
 
 ```cmd
-startTests.bat DEMOS DEMOS DEMO
+startTests.bat Tester1 DEMOS DEMO
 ```
 
 ## Explore the Demo Application
@@ -762,7 +762,7 @@ agate-server
 
 ```cmd
 cd agate-server
-startTests.bat DEMOS DEMOS DEMO rest_engine_match_reference_demo.yaml
+startTests.bat Tester1 DEMOS DEMO rest_engine_match_reference_demo.yaml
 ```
 
 See the module documentation and demo suites for execution examples.
@@ -864,8 +864,7 @@ AGATE Test Platform is released under the MIT License.
 * Example:
 
 ```bat
-startTests.bat validate data\demo\variables_demo.yaml
-startTests.bat clean data\demo\variables_demo.yaml
+startTests.bat validate demo variables_demo.yam
 ```
 
 ## 2026-09-30

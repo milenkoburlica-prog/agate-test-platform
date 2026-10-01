@@ -1,0 +1,15 @@
+{
+  "application" : "demo",
+  "environment" : "DEMOS",
+  "tests" : [ {
+    "id" : "TC_01",
+    "status" : "PASSED",
+    "runtimeMs" : 530,
+    "failures" : [ ]
+  }, {
+    "id" : "TC_02",
+    "status" : "PASSED",
+    "runtimeMs" : 39,
+    "failures" : [ ]
+  } ]
+}

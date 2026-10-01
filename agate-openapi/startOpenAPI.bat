@@ -1,55 +1,199 @@
 @echo off
-setlocal
+setlocal EnableExtensions
 
 rem ============================================================
-rem AGATE OpenAPI
+rem AGATE OpenAPI - CLI Dispatcher
 rem ============================================================
 
-set "JAR=target\agate-openapi-2.0.0-SNAPSHOT-jar-with-dependencies.jar"
-
+set "SCRIPT_DIR=%~dp0"
+pushd "%SCRIPT_DIR%" >nul
 
 rem ------------------------------------------------------------
-rem Check JAR
+rem Runtime
 rem ------------------------------------------------------------
 
-if not exist "%JAR%" (
+set "RUNNER_JAR=target\agate-openapi-2.0.0-SNAPSHOT-runner.jar"
+
+rem ------------------------------------------------------------
+rem Main classes
+rem ------------------------------------------------------------
+
+set "CLI_MODEL=at.co.svc.agate.openapi.cli.AgateOpenApiCli"
+set "CLI_PHASE1=at.co.svc.agate.openapi.phase1.cli.AgatePhase1Cli"
+set "CLI_PHASE2=at.co.svc.agate.openapi.phase2.cli.AgatePhase2Cli"
+set "CLI_PHASE3=at.co.svc.agate.openapi.phase3.cli.AgatePhase3Cli"
+set "CLI_CHANGES=at.co.svc.agate.openapi.change.cli.AgateOpenApiChangeCli"
+set "CLI_IMPACT=at.co.svc.agate.openapi.impact.cli.AgateOpenApiImpactCli"
+
+rem ------------------------------------------------------------
+rem Check build
+rem ------------------------------------------------------------
+
+if not exist "%RUNNER_JAR%" (
     echo.
     echo ============================================================
-    echo ERROR: AGATE OpenAPI JAR not found
+    echo ERROR: AGATE OpenAPI runner JAR not found
     echo ============================================================
     echo.
     echo Expected:
-    echo   %JAR%
+    echo   %RUNNER_JAR%
     echo.
-    echo Build the project first:
-    echo   mvn clean package
+    echo Build first:
+    echo   mvn clean package -DskipTests
     echo.
+    popd >nul
     exit /b 1
 )
-
 
 rem ------------------------------------------------------------
 rem Help
 rem ------------------------------------------------------------
 
 if "%~1"=="" goto HELP
-
 if /I "%~1"=="help" goto HELP
 if /I "%~1"=="--help" goto HELP
 if /I "%~1"=="-h" goto HELP
 
-
 rem ------------------------------------------------------------
-rem Execute AGATE OpenAPI
+rem Route command
 rem ------------------------------------------------------------
 
-java -jar -Djava.util.logging.manager=org.jboss.logmanager.LogManager "%JAR%" %*
+set "COMMAND=%~1"
+set "MAIN="
+set "PREFIX="
 
-exit /b %ERRORLEVEL%
+if /I "%COMMAND%"=="model" (
+    set "MAIN=%CLI_MODEL%"
+    goto PREPARE_ARGS
+)
 
+if /I "%COMMAND%"=="model-json" (
+    set "MAIN=%CLI_MODEL%"
+    set "PREFIX=--json"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="phase1" (
+    set "MAIN=%CLI_PHASE1%"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="phase2" (
+    set "MAIN=%CLI_PHASE2%"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="phase3" (
+    set "MAIN=%CLI_PHASE3%"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="list" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--list"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="test" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--test"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="dsl" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--dsl"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="csv" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--csv"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="yaml" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--yaml"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="generate" (
+    set "MAIN=%CLI_PHASE3%"
+    set "PREFIX=--generate"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="changes" (
+    set "MAIN=%CLI_CHANGES%"
+    set "PREFIX=--changes"
+    goto PREPARE_ARGS
+)
+
+if /I "%COMMAND%"=="impact" (
+    set "MAIN=%CLI_IMPACT%"
+    set "PREFIX=--impact"
+    goto PREPARE_ARGS
+)
+
+echo.
+echo ERROR: Unknown command: %COMMAND%
+echo.
+goto HELP_ERROR
 
 rem ============================================================
-rem HELP
+rem Prepare remaining arguments
+rem ============================================================
+
+:PREPARE_ARGS
+shift
+set "ARGS="
+
+:COLLECT_ARGS
+if "%~1"=="" goto EXECUTE
+set "ARGS=%ARGS% "%~1""
+shift
+goto COLLECT_ARGS
+
+rem ============================================================
+rem Execute
+rem ============================================================
+
+:EXECUTE
+
+echo.
+echo ============================================================
+echo AGATE OpenAPI
+echo ============================================================
+echo Command : %COMMAND%
+echo Main    : %MAIN%
+echo JAR     : %RUNNER_JAR%
+echo ============================================================
+echo.
+
+if defined PREFIX (
+    java -Djava.util.logging.manager=org.jboss.logmanager.LogManager ^
+         -cp "%RUNNER_JAR%" ^
+         %MAIN% %PREFIX% %ARGS%
+) else (
+    java -Djava.util.logging.manager=org.jboss.logmanager.LogManager ^
+         -cp "%RUNNER_JAR%" ^
+         %MAIN% %ARGS%
+)
+
+set "RC=%ERRORLEVEL%"
+
+echo.
+echo ============================================================
+echo AGATE OpenAPI finished
+echo Exit Code: %RC%
+echo ============================================================
+
+popd >nul
+exit /b %RC%
+
+rem ============================================================
+rem Help
 rem ============================================================
 
 :HELP
@@ -63,123 +207,56 @@ echo Usage:
 echo.
 echo   startOpenAPI.bat COMMAND [arguments]
 echo.
-echo.
 echo ------------------------------------------------------------
-echo 1. OPENAPI CONTRACT MODEL
+echo OPENAPI MODEL
 echo ------------------------------------------------------------
-echo.
 echo   model ^<OPENAPI_SOURCE^>
-echo.
-echo       Parse an OpenAPI specification and display
-echo       the AGATE OpenAPI contract model.
-echo.
 echo   model-json ^<OPENAPI_SOURCE^>
 echo.
-echo       Parse an OpenAPI specification and output
-echo       the AGATE contract model as JSON.
-echo.
-echo.
-echo Examples:
-echo.
-echo   startOpenAPI.bat model ^
-echo     src/test/resources/test-openapi-v1.yaml
-echo   startOpenAPI.bat model-json ^
-echo     src/test/resources/test-openapi-v1.yaml
-echo   startOpenAPI.bat model ^
-echo     https://petstore3.swagger.io/api/v3/openapi.yaml
-echo.
+echo ------------------------------------------------------------
+echo PHASE 1
+echo ------------------------------------------------------------
+echo   phase1 ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^> [status] [mediaType] [options]
 echo.
 echo ------------------------------------------------------------
-echo 2. DETERMINISTIC TEST GENERATION
+echo PHASE 2
 echo ------------------------------------------------------------
+echo   phase2 ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^> [options]
 echo.
-echo   phase1 ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Build the deterministic operation model.
-echo.
-echo   phase2 ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Generate deterministic technical test cases.
-echo.
+echo ------------------------------------------------------------
+echo PHASE 3
+echo ------------------------------------------------------------
+echo   phase3 ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
 echo   list ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       List generated test cases.
-echo.
-echo   test ^<TEST_ID^> ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Display one generated test case.
-echo.
-echo   dsl ^<TEST_ID^> ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Generate AGATE DSL for one test case.
-echo.
+echo   test ^<TECHNICAL_NAME^> ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
+echo   dsl ^<TECHNICAL_NAME^> ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
 echo   csv ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Generate CSV test data.
-echo.
 echo   yaml ^<OPENAPI_SOURCE^> ^<METHOD^> ^<PATH^>
-echo.
-echo       Generate AGATE YAML.
-echo.
 echo   generate ^<APP_ID^> ^<OPENAPI_SOURCE^>
 echo.
-echo       Generate AGATE artifacts for the complete
-echo       OpenAPI specification.
-echo.
-echo.
-echo Examples:
-echo.
-echo   startOpenAPI.bat phase1 ^
-echo     src/test/resources/test-openapi-v1.yaml ^
-echo     GET "/users/{id}"
-echo.
-echo   startOpenAPI.bat phase2 ^
-echo     src/test/resources/test-openapi-v13-phase2-final.yaml ^
-echo     POST /validation-demo
-echo.
-echo   startOpenAPI.bat list ^
-echo     src/test/resources/test-openapi-v1.yaml ^
-echo     GET "/users/{id}"
-echo.
-echo   startOpenAPI.bat csv ^
-echo     src/test/resources/test-openapi-v2.yaml ^
-echo     POST /users
-echo.
-echo   startOpenAPI.bat generate ^
-echo     petstore ^
-echo     https://petstore3.swagger.io/api/v3/openapi.json
-echo.
+echo Example:
+echo   startOpenAPI.bat generate petstore3 resources\petstore3\openapi.yaml
 echo.
 echo ------------------------------------------------------------
-echo 3. CONTRACT CHANGE / IMPACT ANALYSIS
+echo CONTRACT CHANGES
 echo ------------------------------------------------------------
-echo.
 echo   changes ^<OLD_OPENAPI^> ^<NEW_OPENAPI^>
 echo.
-echo       Compare two OpenAPI contracts.
-echo.
+echo ------------------------------------------------------------
+echo IMPACT ANALYSIS
+echo ------------------------------------------------------------
 echo   impact ^<OLD_OPENAPI^> ^<NEW_OPENAPI^> ^<APP_DIRECTORY^>
 echo.
-echo       Analyze contract changes and their impact
-echo       on existing AGATE test artifacts.
-echo.
-echo.
-echo Example:
-echo.
-echo   startOpenAPI.bat impact ^
-echo     src/test/resources/change/test-constraints-v1.yaml ^
-echo     src/test/resources/change/test-constraints-v2.yaml ^
-echo     data/demo
-echo.
-echo.
 echo ------------------------------------------------------------
-echo GENERAL
+echo BUILD
 echo ------------------------------------------------------------
-echo.
-echo   help
-echo   --help
-echo   -h
+echo   mvn clean package -DskipTests
 echo.
 echo ============================================================
 
+popd >nul
 exit /b 0
+
+:HELP_ERROR
+call :HELP
+exit /b 1
