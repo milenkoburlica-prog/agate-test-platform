@@ -425,7 +425,7 @@ It loads AGATE YAML test suites, resolves configuration and test data, executes 
 | 📁 FILE      | Local file operations, content extraction and validation | **Native**            |
 | ☸️ OpenShift | OpenShift CLI operations and validation    | **Native**            |
 | ⏳ WAIT       | Synchronization and asynchronous workflows | **Native**            |
-| ⏳ LOOP       | Synchronization and asynchronous workflows | **Native**            |
+| ⏳ LOOP       | Repeating test steps with loop conditions | **Native**            |
 | 📑 JSON      | JSON processing and validation             | **Native**            |
 | 📄 PDF       | PDF validation                             | **Native**            |
 | 📦 BUFFER    | Shared runtime data / value handling       | **Native**            |
