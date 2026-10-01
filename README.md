@@ -50,37 +50,6 @@ The goal is simple:
 
 ---
 
-# ✨ Key Features
-
-### Available Today
-
-* ✅ Human-readable YAML test definitions
-* ✅ Cross-technology test execution
-* ✅ REST, SOAP, SQL, CMD, FILE, OpenShift, JSON, PDF, WAIT and WAIT test steps and CALL reusable test steps.
-* ✅ YAML templates and CSV-based test data
-* ✅ Assertions and reference-based response validation
-* ✅ Detailed execution logging and HTML reports
-* ✅ Deterministic test generation from OpenAPI specifications
-* ✅ OpenAPI contract change and breaking-change detection 
-* ✅ OpenAPI test impact Analysis
-* 🔄 Migration from Tricentis Tosca to AGATE
-
-### Under Development
-
-* 🚧 GUI automation
-* 🚧 AI-assisted test generation and maintenance
-* 🚧 Local LLM / Ollama integration
-* 🚧 AGATE web client
-
-
-> **Status legend:**
-> ✅ Available / implemented
-> 🚧 Under active development
-> 💡 Planned concept — not implemented yet
-> 🔄 Available as a migration approach/service
-
----
-
 # 🚀 What Makes AGATE Different?
 
 AGATE is **not intended to be just another REST or YAML test framework**.
@@ -326,6 +295,37 @@ This is the important part of the example:
 The tester describes the scenario.
 Reusable modules encapsulate the technical requests.
 AGATE resolves the data and orchestrates the execution.
+
+---
+
+# ✨ Key Features
+
+### Available Today
+
+* ✅ Human-readable YAML test definitions
+* ✅ Cross-technology test execution
+* ✅ REST, SOAP, SQL, CMD, FILE, OpenShift, JSON, PDF, WAIT and WAIT test steps and CALL reusable test steps.
+* ✅ YAML templates and CSV-based test data
+* ✅ Assertions and reference-based response validation
+* ✅ Detailed execution logging and HTML reports
+* ✅ Deterministic test generation from OpenAPI specifications
+* ✅ OpenAPI contract change and breaking-change detection 
+* ✅ OpenAPI test impact Analysis
+* 🔄 Migration from Tricentis Tosca to AGATE
+
+### Under Development
+
+* 🚧 GUI automation
+* 🚧 AI-assisted test generation and maintenance
+* 🚧 Local LLM / Ollama integration
+* 🚧 AGATE web client
+
+
+> **Status legend:**
+> ✅ Available / implemented
+> 🚧 Under active development
+> 💡 Planned concept — not implemented yet
+> 🔄 Available as a migration approach/service
 
 ---
 
