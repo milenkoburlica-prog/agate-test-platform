@@ -34,13 +34,10 @@ AI can support the tester throughout the complete test lifecycle, for example by
 
 - generating test cases from OpenAPI specifications or existing requirements,
 - creating and extending YAML test definitions,
-- generating test data and reusable test components,
 - explaining existing tests,
 - analyzing failed test executions,
 - assisting with troubleshooting,
 - interpreting execution reports,
-- identifying likely causes of failures,
-- suggesting additional validations or missing test scenarios,
 - and helping maintain tests when APIs or system behavior change.
 
 This makes AI assistance useful not only during **test creation**, but also during **execution, analysis, maintenance, and troubleshooting**.
