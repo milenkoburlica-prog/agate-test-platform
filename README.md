@@ -2,49 +2,37 @@
 
 > **One test. Multiple technologies. One execution flow.**
 
-**AGATE** is an open-source test automation and orchestration platform designed for complex integration and system tests across multiple technical layers and existing environments.
+**AGATE** is an open-source test automation and orchestration platform for complex integration and system tests across multiple technologies and existing environments.
 
 A single AGATE test can combine:
 
 **REST · SOAP · SQL · CMD · FILE · OpenShift · CALL · JSON · PDF · WAIT · LOOP**
 
-within one execution flow, using a human-readable YAML DSL.
-
-Instead of writing technology-specific test code, maintaining custom helper libraries, or combining multiple proprietary tools, AGATE provides a **unified execution model** in which supported technologies are first-class test steps.
-
-Tests describe **what should be tested**, while AGATE handles **how the required technologies are executed and coordinated**.
+within one human-readable YAML workflow.
 
 > **The tester describes the business test. AGATE orchestrates the technologies.**
 
-AGATE is designed for testing against **existing environments and real system landscapes**. This is especially important in integration and system testing, where databases, backend systems, external services, simulators, OpenShift deployments, or production-like test data may already exist and cannot simply be recreated inside a local test container.
+### Why AGATE?
 
-Developer-focused frameworks such as JUnit are extremely useful for unit and component testing, especially when the required test environment can be created and controlled directly by the test. AGATE addresses a different problem: coordinating tests across systems that already exist and that often span multiple technologies, infrastructure components, and organizational boundaries.
+AGATE keeps the tester focused on **business behavior, test design, and software quality** instead of framework code, helper classes, mocks, and technical plumbing.
 
-A central goal of AGATE is to keep the tester focused on **business behavior, test design, and software quality**, instead of gradually turning the test itself into a programming project.
+> **More focus on testing. Less focus on programming the test framework.**
 
-When a large part of the effort goes into framework code, helper classes, environment setup, mocks, container orchestration, and technical plumbing, it is easy to reach a point where the tester spends more time programming the test infrastructure than actually testing the software.
+### Why not just JUnit?
 
-AGATE tries to reverse that balance:
+JUnit is excellent for unit and component testing, especially when the test environment can be created and controlled directly by the test.
 
-> **More focus on business logic and software quality. Less focus on test-framework programming.**
+AGATE addresses a different problem: **integration and system testing across existing environments** where databases, backend systems, OpenShift deployments, external services, or production-like test data may already exist and cannot simply be recreated inside a local container.
 
-Because AGATE is **largely based on human-readable text artifacts** such as YAML, CSV, JSON, configuration files, and textual execution results, it is also well suited for AI-assisted workflows.
+### AI-assisted testing
 
-AI can support the tester throughout the complete test lifecycle, for example by:
+AGATE is largely based on human-readable text artifacts such as **YAML, CSV, JSON, configuration files, and textual execution results**.
 
-- generating test cases from OpenAPI specifications or existing requirements,
-- creating and extending YAML test definitions,
-- explaining existing tests,
-- analyzing failed test executions,
-- assisting with troubleshooting,
-- interpreting execution reports,
-- and helping maintain tests when APIs or system behavior change.
+This makes it well suited for AI-assisted workflows across the test LifeCycle.
 
-This makes AI assistance useful not only during **test creation**, but also during **execution, analysis, maintenance, and troubleshooting**.
+> **Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.**
 
-> **Text-based test artifacts make the test suite understandable not only to humans, but also to AI-assisted tooling.**
-
-The goal is simple:
+### The goal
 
 > **Readable tests. Reusable execution engines. Existing environments. AI-assisted testing. Minimal framework code. No vendor lock-in.**
 
