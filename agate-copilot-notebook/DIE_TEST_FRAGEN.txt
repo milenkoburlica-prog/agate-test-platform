@@ -1,0 +1,22 @@
+Erstelle einen AGATE-Test, der folgende Schritte ausführt:
+
+Führe eine SQL-Abfrage aus, die einen Benutzer aus der Datenbank ermittelt, und speichere dessen ID und STATUS in Buffern.
+Validiere, dass das SQL-Ergebnis nicht leer ist (ROW_COUNT >= 1) und dass STATUS = ACTIVE ist.
+Erzeuge eine lokale Textdatei output/user-<ID>.txt mit folgendem Inhalt:
+User-ID
+Status
+Prüfe, dass die Datei existiert.
+
+Lies die Datei ein und validiere, dass sie den Wert ACTIVE enthält.
+Lies den Inhalt der Datei zusätzlich mit der CMD Engine und speichere den Output in einem response.
+Prüfe mit einem CMD ASSERT, dass der Output dieselbe User-ID enthält.
+Kopiere die lokale Datei mit der OC Engine nach /tmp/user-<ID>.txt in den Pod my-service.
+Führe anschließend mit OC EXEC den Befehl cat /tmp/user-<ID>.txt aus.
+Prüfe mit OC ASSERT, dass der Remote-Inhalt ACTIVE enthält.
+Speichere mit OC BUFFER den vollständigen Remote-Output im Buffer remote_file_content.
+Lösche zum Abschluss die Remote-Datei mit OC EXEC und die lokale Datei mit FILE DELETE.
+Verwende ausschließlich die Syntax und die Felder, die in der bereitgestellten AGATE-Dokumentation beschrieben sind.
+Erfinde keine nicht dokumentierten Properties, Actions oder Parameter.
+
+Falls Informationen fehlen, führe sie ausdrücklich als Assumption auf, anstatt etwas zu erfinden oder zu erraten.
+

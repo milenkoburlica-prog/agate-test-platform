@@ -28,9 +28,21 @@ AGATE addresses a different problem: **integration and system testing across exi
 
 AGATE is largely based on human-readable text artifacts such as **YAML, CSV, JSON, configuration files, and textual execution results**.
 
-This makes it well suited for AI-assisted workflows across the test LifeCycle.
+This makes it well suited for AI-assisted workflows across the test lifecycle.
 
 > **Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.**
+
+To support AI-assisted test creation and experimentation, the repository also contains an **`agate-copilot-notebook`** directory.
+
+It provides Markdown files that can be used as source material for a Microsoft Copilot Notebook, including:
+
+- AGATE concepts and DSL documentation
+- engine-specific reference documentation
+- syntax and usage examples
+- test-generation guidance
+- a sample test question that can be used to evaluate whether Copilot can generate an AGATE test based only on the provided documentation
+
+The goal is to provide Copilot with enough structured AGATE knowledge to generate tests while minimizing undocumented assumptions.
 
 ### The goal
 
