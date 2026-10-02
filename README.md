@@ -54,7 +54,7 @@ The goal is to provide Copilot with enough structured AGATE knowledge to generat
 
 AGATE is **not intended to be just another REST or YAML test framework**.
 
-Its primary goal is to orchestrate complete enterprise business tests across heterogeneous technologies.
+Its primary goal is to orchestrate complete enterprise business tests across heterogeneous Technologies and existing environments..
 
 ```text
                               AGATE TEST CASE
@@ -70,11 +70,9 @@ REST     SOAP     SQL    CMD    FILE  OpenShift    WAIT   JSON    PDF    CALL   
                               Unified Report
 ```
 
-REST, SOAP, SQL, CMD, FILE, OpenShift, WAIT, JSON and PDF operations — together with reusable `CALL` steps — are not external concepts that the tester has to combine manually.
+REST, SOAP, SQL, CMD, FILE, OpenShift, WAIT, LOOP, JSON and PDF operations — together with reusable `CALL` steps — are not external concepts that the tester has to combine manually.
 
 They are part of the **AGATE execution model**.
-
-This allows technical operations to be combined into reusable business-level test scenarios.
 
 ---
 
@@ -257,45 +255,6 @@ A migration workflow can transform existing test assets into the same native AGA
 
 From the perspective of `agate-server`, the origin of the artifact is secondary: execution uses the same AGATE DSL and module model.
 
-## One Test – Multiple Technologies
-
-The module concept also combines naturally with AGATE's cross-technology execution model.
-
-A single test can therefore remain compact while orchestrating multiple technologies:
-
-```text
-                    AGATE Test Case
-                          │
-          ┌───────────────┼────────────────┐
-          ▼               ▼                ▼
-     REST Module       SOAP Module        SQL
-          │               │                │
- metadata.json      metadata.json          │
- request.json       request.xml            │
-          │               │                │
-          └───────────────┬┴────────────────┘
-                          │
-                          ▼
-                 Shared Execution Context
-                          │
-                    ┌─────┼─────┐
-                    ▼     ▼     ▼
-                   CMD   FILE  OpenShift
-                          │
-                          ▼
-                    Unified Report
-```
-
-Values produced by one step can be consumed by subsequent steps through the shared execution context.
-
-This is the important part of the example:
-
-> **AGATE keeps the test flow readable by separating reusable technical request definitions from the business test scenario, while still allowing all technologies to participate in one shared execution flow.**
-
-The tester describes the scenario.
-Reusable modules encapsulate the technical requests.
-AGATE resolves the data and orchestrates the execution.
-
 ---
 
 # ✨ Key Features
@@ -389,6 +348,16 @@ A central architectural principle is:
 `agate-tosca-migrator` deterministically transforms supported Tricentis Tosca test structures into AGATE test definitions.
 
 `agate-ai` adds optional AI-assisted workflows where semantic understanding can provide additional value.
+
+Values produced by one step can be consumed by subsequent steps through the shared execution context.
+
+This is the important part of the example:
+
+> **AGATE keeps the test flow readable by separating reusable technical request definitions from the business test scenario, while still allowing all technologies to participate in one shared execution flow.**
+
+The tester describes the scenario.
+Reusable modules encapsulate the technical requests.
+AGATE resolves the data and orchestrates the execution.
 
 ---
 
@@ -929,3 +898,15 @@ startTests.bat validate demo variables_demo.yam
   * `shared.database.execute_sql`
 * The goal is to keep the main test case focused on the business flow while moving repeatable technical implementation details into reusable modules.
 
+
+## 2026-10-03
+
+### Copilot Notebook Integration
+
+* Added structured AGATE Markdown documentation for use with Microsoft Copilot Notebook.
+* Added central knowledge index and engine catalog to improve document retrieval.
+* Added dedicated documentation for AGATE variables, condition handling and reusable modules.
+* Added engine-specific reference documents for SQL, CMD, OC, FILE, WAIT, SOAP, REST, PDF, JSON and BUFFER.
+* Added AI-generation rules to distinguish documented AGATE syntax, user-provided inputs, test expectations, assumptions and real documentation gaps.
+* Improved guidance for deterministic test generation and multi-engine test scenarios.
+* Added retrieval rules so Copilot verifies all relevant engine documents before reporting missing documentation.
