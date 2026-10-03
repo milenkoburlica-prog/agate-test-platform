@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AGATE Demo — Patient Portal</title>
+    <style>
+      body {
+        font:
+          16px Segoe UI,
+          sans-serif;
+        background: #eff3ef;
+        color: #243d34;
+        max-width: 700px;
+        margin: 70px auto;
+      }
+      section {
+        background: white;
+        padding: 35px;
+        border-radius: 12px;
+        border: 1px solid #d3ddd5;
+      }
+      label {
+        display: block;
+        margin: 15px 0 5px;
+      }
+      input,
+      select,
+      button {
+        font: inherit;
+        padding: 10px;
+        border: 1px solid #cad7cf;
+        border-radius: 5px;
+      }
+      button {
+        background: #157b60;
+        color: white;
+        cursor: pointer;
+        margin: 15px 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      td,
+      th {
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        padding: 12px;
+      }
+      .badge {
+        background: #d9f6e4;
+        padding: 6px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Patient Portal <small style="font-size: 12px">AGATE DEMO</small></h1>
+    <section id="login">
+      <h2>Login</h2>
+      <label for="username">Username</label
+      ><input id="username" data-testid="username" /><label for="password"
+        >Password</label
+      ><input
+        type="password"
+        id="password"
+        data-testid="password"
+      /><br /><button id="loginButton" data-testid="login">Login</button
+      ><a href="#forgot" id="forgot">Forgot password</a>
+    </section>
+    <section id="searchPage" hidden>
+      <h2>Patient Search</h2>
+      <label for="vsnr">VSNR</label><input id="vsnr" data-testid="vsnr" /><label
+        for="insurance"
+        >Insurance</label
+      ><select id="insurance">
+        <option value="all">All</option>
+        <option value="oegk">ÖGK</option></select
+      ><br /><button id="search" data-testid="patient-search">Search</button
+      ><button id="reset">Reset</button>
+      <div id="results" hidden>
+        <table aria-label="Results">
+          <thead>
+            <tr>
+              <th>VSNR</th>
+              <th>Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="resultVsnr"></td>
+              <td>Demo Patient</td>
+              <td>
+                <span data-testid="patient-status" class="badge">ACTIVE</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="details">Open patient</button>
+      </div>
+    </section>
+    <section id="detailPage" hidden>
+      <h2>Patient Details</h2>
+      <label for="address">Address</label
+      ><input id="address" value="Vienna" /><br /><button
+        id="save"
+        data-testid="save-address"
+      >
+        Save
+      </button>
+      <p role="status" id="saved"></p>
+      <a
+        href="data:text/plain,AGATE%20demo%20report"
+        download="report.txt"
+        data-testid="download"
+        >Download report</a
+      >
+    </section>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      $("loginButton").onclick = () => {
+        $("login").hidden = true;
+        $("searchPage").hidden = false;
+        history.pushState({}, "", "/demo?view=search");
+      };
+      $("search").onclick = () => {
+        setTimeout(() => {
+          $("resultVsnr").textContent = $("vsnr").value;
+          $("results").hidden = false;
+          console.log("Patient search completed");
+        }, 200);
+      };
+      $("reset").onclick = () => {
+        $("vsnr").value = "";
+        $("results").hidden = true;
+      };
+      $("details").onclick = () => {
+        $("searchPage").hidden = true;
+        $("detailPage").hidden = false;
+        history.pushState({}, "", "/demo?view=details");
+      };
+      $("save").onclick = () => {
+        $("saved").textContent = "Address saved";
+      };
+      $("forgot").onclick = (e) => {
+        e.preventDefault();
+        alert("Demo: use any username and password");
+      };
+    </script>
+  </body>
+</html>

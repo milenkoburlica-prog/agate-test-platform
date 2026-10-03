@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AGATE Studio</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="brand">
+        <span>◆</span> AGATE<small>GUI STUDIO · 0.1.4</small>
+      </div>
+      <nav>
+        <button data-tab="design" class="active">◉ Design</button
+        ><button data-tab="capture">◎ Capture</button
+        ><button data-tab="modules">▦ Modules</button
+        ><button data-tab="yaml">≡ YAML</button
+        ><button data-tab="results">▶ Runs & debug</button
+        ><button data-tab="diagnostics">◌ Recorder logs</button>
+        <button data-tab="guide">? Feature tour</button>
+      </nav>
+      <div class="sidebar-foot">
+        Local workspace<br /><span id="connection">Connecting…</span>
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">AGATE / GUI WORKSPACE</span>
+          <h1 id="title">Design your next test.</h1>
+        </div>
+        <div>
+          <input
+            id="projectName"
+            value="patient-search"
+            aria-label="Project name"
+          /><button id="save">Save</button><button id="load">Load</button
+          ><button id="export">↓ Export YAML</button
+          ><input
+            id="importFile"
+            type="file"
+            accept=".yaml,.yml"
+            hidden
+          /><button id="import">Import</button>
+        </div>
+      </header>
+      <div id="toast" role="status"></div>
+      <section class="toolbar">
+        <input
+          id="url"
+          aria-label="Target URL"
+          placeholder="https://your-app/login"
+        /><label
+          ><input type="checkbox" id="headed" checked /> Show browser</label
+        ><button class="primary" id="record">● Record</button
+        ><button id="stop">■ Stop</button><button id="navigate">Open URL</button
+        ><button id="run" class="accent">▶ Run</button
+        ><button id="debug">Debug</button>
+      </section>
+      <section id="design" class="view">
+        <div class="split">
+          <div class="panel">
+            <div class="panel-title">
+              <h2>Action timeline <span id="count">0</span></h2>
+              <div>
+                <button id="add">+ Step</button
+                ><button id="autoModules">Create modules</button>
+              </div>
+            </div>
+            <div class="hint">
+              Perform actions in the target browser. Select a step to refine it.
+            </div>
+            <div id="timeline"></div>
+            <div class="row">
+              <button id="reusable">Create reusable from selected</button
+              ><button id="deleteSelected">Delete selected</button>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>Step inspector</h2>
+            <div id="inspector" class="hint">
+              Select a step to edit its operation, locator or values.
+            </div>
+            <hr />
+            <h2>Pick & verify</h2>
+            <p class="hint">
+              Select a target directly in the browser. Assertion mode blocks the
+              clicked action.
+            </p>
+            <button id="pick">Pick element</button
+            ><button id="assertPick">Record assertion</button
+            ><button id="normal">Resume recording</button>
+            <div id="picked"></div>
+          </div>
+        </div>
+      </section>
+      <section id="capture" class="view" hidden>
+        <div class="panel">
+          <div class="panel-title">
+            <div>
+              <h2>Capture what matters.</h2>
+              <p class="hint">
+                Select elements, review uniqueness and save a page module.
+              </p>
+            </div>
+            <button class="primary" id="scan">Scan current page</button>
+          </div>
+          <div class="row">
+            <input
+              id="moduleName"
+              value="patient_search"
+              aria-label="Module name"
+            /><label
+              ><input type="checkbox" id="aria" /> Save exact ARIA
+              baseline</label
+            ><button id="saveCapture">Save selected elements</button>
+          </div>
+          <div id="scanResults"></div>
+        </div>
+      </section>
+      <section id="modules" class="view" hidden>
+        <div class="panel">
+          <div class="panel-title">
+            <h2>Page modules & locator health</h2>
+            <button id="health">Check current page</button>
+          </div>
+          <p class="hint">
+            A unique match is not a guarantee of future stability. Health checks
+            apply only to the current target page.
+          </p>
+          <div id="healthResults"></div>
+          <div id="moduleList"></div>
+          <h3>Reusable blocks</h3>
+          <pre id="reusableList"></pre>
+        </div>
+      </section>
+      <section id="yaml" class="view" hidden>
+        <div class="panel">
+          <div class="panel-title">
+            <h2>One readable test format.</h2>
+            <button class="primary" id="applyYaml">Validate & apply</button>
+          </div>
+          <p class="hint">
+            Apply changes before switching views. This proposed GUI dialect can
+            be adapted to your existing AGATE schema.
+          </p>
+          <textarea
+            id="yamlText"
+            spellcheck="false"
+            aria-label="YAML test editor"
+          ></textarea>
+        </div>
+      </section>
+      <section id="results" class="view" hidden>
+        <div class="split">
+          <div class="panel">
+            <div class="panel-title">
+              <h2>Run & step debugger</h2>
+              <span id="runStatus" class="badge">idle</span>
+            </div>
+            <div class="row">
+              <button id="next">Step →</button
+              ><button id="resume">Continue</button
+              ><button id="pause">Pause after step</button
+              ><button id="cancel">Stop run</button
+              ><button id="trace">Open trace</button>
+            </div>
+            <p id="progress" class="hint"></p>
+            <div id="resultList"></div>
+            <h3>Network & console</h3>
+            <pre id="logs"></pre>
+          </div>
+          <div class="panel">
+            <h2>Runtime variables</h2>
+            <p class="hint">
+              R = request, B = buffers, E = environment. Values are supplied
+              here, not loaded from your OS environment. Password fields are
+              recorded as {E[PASSWORD]}.
+            </p>
+            <textarea
+              id="vars"
+              spellcheck="false"
+              aria-label="Runtime variables"
+            >
+{
+  "R": {},
+  "E": {"PASSWORD": ""},
+  "B": {}
+}</textarea>
+            <h3>Current buffers</h3>
+            <pre id="buffers"></pre>
+            <h3>Step evidence</h3>
+            <div id="evidence"></div>
+          </div>
+        </div>
+      </section>
+      <section id="diagnostics" class="view" hidden>
+        <div class="panel">
+          <h2>Recorder diagnostics</h2>
+          <p class="hint">
+            Source events, trusted/synthetic clicks, document/frame URLs,
+            pointer target, SELECT value/label and the corresponding timeline
+            step. Password field values are masked. Diagnostics do not
+            automatically remove repeated trusted clicks.
+          </p>
+          <div class="row">
+            <button id="refreshRecorderLog">Refresh log</button
+            ><a href="/api/record/log" download>Download recorder log</a>
+          </div>
+          <p id="recorderLogStatus" class="hint"></p>
+          <pre id="recorderLog" style="max-height: 65vh"></pre>
+        </div>
+      </section>
+      <section id="guide" class="view" hidden>
+        <div class="panel">
+          <h2>Your first 10-minute test.</h2>
+          <ol>
+            <li>Click <b>Record</b>. The bundled demo opens in Chromium.</li>
+            <li>
+              Enter any username and password, click Login, enter VSNR and click
+              Search.
+            </li>
+            <li>
+              Click <b>Record assertion</b>, then click the ACTIVE status in the
+              browser.
+            </li>
+            <li>Choose TEXT_EQUALS, expected ACTIVE, and add the assertion.</li>
+            <li>
+              Stop recording. Select a step; replace its VSNR value with
+              <code>{R[Request.VSNR]}</code>.
+            </li>
+            <li>
+              Delete any unwanted steps. This edits the test; it does not undo
+              browser actions.
+            </li>
+            <li>
+              Click Create modules to replace inline locators with page
+              references.
+            </li>
+            <li>
+              In Runtime variables, set E.PASSWORD to demo for this demo (or your test PIN for a real app). Save, then Run. Debug starts a fresh browser and waits for Step.
+            </li>
+            <li>
+              Review screenshots, console/network and Open trace after
+              completion.
+            </li>
+            <li>
+              Open Capture, scan the page, select elements and save a module.
+            </li>
+          </ol>
+          <h3>Available for review</h3>
+          <p>
+            Record · editable timeline · capture · locator alternatives · page
+            modules · assertions · parameters · extract buffers · reusable
+            blocks · YAML import/export · run · breakpoints · step debug ·
+            screenshots · trace · network/console · ARIA baseline · locator
+            health · failure suggestions.
+          </p>
+          <h3>Experimental boundaries</h3>
+          <p>
+            Recorder uses a custom DOM observer, not Playwright's private
+            codegen internals. Accessible names are approximated during capture;
+            all candidate locators are checked with Playwright for match counts.
+            Automatic module grouping uses visible headings and OPEN steps;
+            review SPA boundaries manually. Suggestions never silently heal a
+            test. ARIA comparison is exact and has no wildcard support.
+            Multi-tab actions, drag/drop and native file dialogs are not
+            automatically recorded; UPLOAD paths must be supplied manually.
+            Closed shadow DOM is unsupported.
+          </p>
+          <p>
+            One local user, one project and one active target browser. Run tests
+            against systems you are authorized to test. Traces and screenshots
+            can contain application data.
+          </p>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

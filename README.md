@@ -910,3 +910,12 @@ startTests.bat validate demo variables_demo.yam
 * Added AI-generation rules to distinguish documented AGATE syntax, user-provided inputs, test expectations, assumptions and real documentation gaps.
 * Improved guidance for deterministic test generation and multi-engine test scenarios.
 * Added retrieval rules so Copilot verifies all relevant engine documents before reporting missing documentation.
+
+
+## 2026-10-04
+
+### AGATE Studio added
+
+* AGATE Studio is a visual GUI test designer that records browser interactions, turns them into editable YAML tests, and lets users run and debug them with Playwright.
+* Written in JavaScript, with a Node.js/Express backend and an HTML/CSS/JavaScript frontend.
+* Currently runs as a standalone application; integration with the Java/Quarkus-based agate-server is planned.

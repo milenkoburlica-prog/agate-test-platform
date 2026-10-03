@@ -1,0 +1,5 @@
+node_modules/
+data/projects/
+data/runs/
+.env
+data/recordings/

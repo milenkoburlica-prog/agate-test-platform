@@ -1,0 +1,67 @@
+name: Patient search demo
+version: 1
+timeout: 5000
+pages:
+  login:
+    url: http://127.0.0.1:4310/demo
+    elements:
+      username: { testId: username }
+      password: { testId: password }
+      login: { testId: login }
+  patient_search:
+    elements:
+      vsnr: { testId: vsnr }
+      search: { testId: patient-search }
+      status: { testId: patient-status }
+reusable:
+  login:
+    - id: enter_username
+      type: GUI
+      op: FILL
+      target: login.username
+      value: "{L[username]}"
+    - id: enter_password
+      type: GUI
+      op: FILL
+      target: login.password
+      value: "{E[PASSWORD]}"
+    - id: submit_login
+      type: GUI
+      op: CLICK
+      target: login.login
+steps:
+  - id: open_portal
+    type: GUI
+    op: OPEN
+    url: http://127.0.0.1:4310/demo
+  - id: login
+    type: GUI
+    op: CALL
+    command: login
+    parameters:
+      username: milenko
+  - id: enter_vsnr
+    type: GUI
+    op: FILL
+    target: patient_search.vsnr
+    value: "{R[Request.VSNR]}"
+  - id: search
+    type: GUI
+    op: CLICK
+    target: patient_search.search
+  - id: verify_status
+    type: GUI
+    op: ASSERT
+    target: patient_search.status
+    assertion:
+      type: TEXT_EQUALS
+      expected: ACTIVE
+  - id: buffer_status
+    type: GUI
+    op: EXTRACT
+    target: patient_search.status
+    buffer: patientStatus
+  - id: screenshot
+    type: GUI
+    op: SCREENSHOT
+    value: patient.png
