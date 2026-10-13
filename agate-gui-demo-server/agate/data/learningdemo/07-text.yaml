@@ -1,0 +1,7 @@
+name: AGATE learning L07
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.07-text
+  parameters:
+    verbose: 'true'

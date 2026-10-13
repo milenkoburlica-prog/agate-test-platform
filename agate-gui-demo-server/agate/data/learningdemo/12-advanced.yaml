@@ -1,0 +1,7 @@
+name: AGATE learning L12
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.12-advanced
+  parameters:
+    verbose: 'true'

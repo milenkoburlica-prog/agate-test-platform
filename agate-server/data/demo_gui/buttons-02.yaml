@@ -1,0 +1,35 @@
+testCases: 
+
+  - id: "AGATE learning Buttons"
+    description: "AGATE learning Buttons"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      name: AGATE learning L02
+
+    timeout: 10000
+    steps: 
+
+      - section: Buttons und exakte Namen — Lernseite öffnen
+        description: 'Seite: http://127.0.0.1:8767/02-buttons.html'
+        
+      - type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/02-buttons.html
+        page: L02 — Buttons and exact matching
+        
+                
+      - type: BUFFER
+        op: EXEC
+        name: 'Geburtsdatum'
+        value: '{DATE[][-66y][yyyyMMdd]}'
+
+      - section: Buttons und exakte Namen
+        description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+          auch bei verbose=false sichtbar.
+
+      - type: CALL
+        command: reusable.buttons.buttons-02
+        parameters:
+          verbose: 'true'

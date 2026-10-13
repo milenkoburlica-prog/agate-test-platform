@@ -1,0 +1,1171 @@
+steps:
+
+- section: Label auswählen
+  description: Ein Feld über seine fachliche Beschriftung wählen und den Wert prüfen.
+
+- id: l03-ref-002
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    label: Full name
+    exact: true
+  value: Alex Example
+
+- id: l03-ref-003
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: Alex Example
+
+- type: WAIT
+  value: '5000'
+
+- section: Placeholder als Alternative
+  description: Den bestehenden Namen durch eine neue Eingabe ersetzen.
+
+- id: l03-ref-004
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    placeholder: Enter full name
+  value: Taylor Example
+
+- id: l03-ref-005
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: Taylor Example
+
+- type: WAIT
+  value: '5000'
+- section: Weitere Locator-Strategien
+  description: ID, CSS, testId und Rolle als Alternativen zeigen.
+
+- id: l03-ref-006
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VISIBLE
+  textbox:
+    id: L03-name
+
+- id: l03-ref-007
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VISIBLE
+  target:
+    css: '#L03-name'
+
+- id: l03-ref-008
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VISIBLE
+  target:
+    testId: name-input
+
+- id: l03-ref-009
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VISIBLE
+  target:
+    role: textbox
+    name: Full name
+    exact: true
+
+- id: l03-ref-010
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: COUNT
+  textbox:
+    label: Full
+    exact: false
+  expected: 1
+
+- section: Zustände und Timeout
+  description: Sichtbarkeit, Präsenz und aktiviert prüfen; kein EDITABLE-Assertion
+    erfinden.
+
+- id: l03-ref-011
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: EXISTS
+  textbox:
+    id: L03-name
+
+- id: l03-ref-012
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: ENABLED
+  textbox:
+    id: L03-name
+
+- id: l03-ref-013
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: WAIT
+  textbox:
+    id: L03-name
+  state: visible
+  timeout: 2500
+
+- section: CLICK und HOVER
+  description: Das Feld bedienen. Eine Tooltip-Wirkung ist auf dieser Seite nicht
+    implementiert.
+
+- id: l03-ref-014
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: CLICK
+  textbox:
+    id: L03-name
+
+- id: l03-ref-015
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: HOVER
+  textbox:
+    id: L03-name
+
+- section: Tastaturereignis
+  description: Enter erzeugt in der Fixture einen überprüfbaren Ergebnistext.
+
+- id: l03-ref-016
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: PRESS
+  textbox:
+    id: L03-name
+  value: Enter
+
+- id: l03-ref-017
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: TEXT
+  target:
+    css: '#L03-enter'
+  expected: Enter received
+
+- type: WAIT
+  value: '5000'
+
+- section: EXTRACT mit source=value
+  description: Den aktuellen Wert lesen, nicht ein möglicherweise veraltetes HTML-Attribut.
+
+- id: l03-ref-018
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: EXTRACT
+  textbox:
+    id: L03-name
+  source: value
+  buffer: DemoCurrentName
+
+- id: l03-ref-019
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: '{B[DemoCurrentName]}'
+
+- section: VALUE-Muster
+  description: Glob verwendet nur den Joker *; Regex braucht explizite Grenzen.
+
+- id: l03-ref-020
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE_GLOB
+  textbox:
+    id: L03-name
+  expected: Taylor*
+
+- id: l03-ref-021
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE_MATCHES
+  textbox:
+    id: L03-name
+  expected: ^Taylor Example$
+
+- section: Feld leeren
+  description: FILL mit leerem String ersetzt den Inhalt; keine eigene CLEAR-Aktion.
+
+- id: l03-ref-022
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    id: L03-name
+  value: ''
+
+- id: l03-ref-023
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: ''
+
+- type: WAIT
+  value: '5000'
+
+- section: Alias INPUT
+  description: INPUT wird intern zu FILL normalisiert. Neue Tests sollten FILL bevorzugen.
+
+- id: l03-ref-024
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: INPUT
+  textbox:
+    id: L03-name
+  value: Jordan Example
+
+- id: l03-ref-025
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: Jordan Example
+
+- section: Email
+  description: Eine Texteingabe und Wertprüfung ist noch keine vollständige Fachvalidierung.
+
+- id: l03-ref-026
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    label: Email
+  value: demo@example.test
+
+- id: l03-ref-027
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-email
+  expected: demo@example.test
+
+- section: Password
+  description: Nur fiktive Lernwerte verwenden; Ein- und Ausgabe explizit sensibel
+    markieren.
+
+- id: l03-ref-028
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    label: Password
+  value: local-demo-only
+  sensitive: true
+
+- id: l03-ref-029
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-password
+  expected: local-demo-only
+  sensitive: true
+
+- section: Textarea
+  description: Mehrzeilige aktuelle Werte mit VALUE prüfen, nicht mit TEXT.
+
+- id: l03-ref-030
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    label: Notes
+  value: 'Erste Zeile
+
+    Zweite Zeile'
+- id: l03-ref-031
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-notes
+  expected: 'Erste Zeile
+
+    Zweite Zeile'
+
+- type: WAIT
+  value: '5000'
+
+- section: Readonly
+  description: Das Feld bleibt enabled, ist aber nicht editierbar. Kein FILL-Versuch.
+
+- id: l03-ref-032
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: ENABLED
+  textbox:
+    id: L03-readonly
+
+- id: l03-ref-033
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-readonly
+  expected: REF-001
+
+- id: l03-ref-034
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: COUNT
+  target:
+    css: input[id="L03-readonly"][readonly]
+  expected: 1
+
+- section: Attribut lesen
+  description: Das ursprüngliche value-Attribut eines unveränderten readonly-Feldes
+    auslesen.
+
+- id: l03-ref-035
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: EXTRACT
+  textbox:
+    id: L03-readonly
+  attribute: value
+  buffer: DemoReadonly
+
+- id: l03-ref-036
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-readonly
+  expected: '{B[DemoReadonly]}'
+
+- section: Numerisches Feld
+  description: Eine gültige Zahl als String angeben.
+
+- id: l03-ref-037
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    id: L03-number
+  value: '42'
+
+- id: l03-ref-038
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-number
+  expected: '42'
+
+- section: Datum und Zeit
+  description: Maschinenformate verwenden; nicht lokale Anzeigeformate als Eingabe
+    erfinden.
+
+- id: l03-ref-039
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    id: L03-date
+  value: '2026-01-15'
+
+- id: l03-ref-040
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-date
+  expected: '2026-01-15'
+
+- id: l03-ref-041
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: FILL
+  textbox:
+    id: L03-time
+  value: '14:30'
+
+- id: l03-ref-042
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  textbox:
+    id: L03-time
+  expected: '14:30'
+
+- section: Range
+  description: Ein Slider besitzt eine andere Semantik. Eine definierte Tastaturänderung
+    prüfen.
+
+- id: l03-ref-043
+  type: GUI
+  op: EXEC
+  page: L03 - Inputs
+  action: PRESS
+  target:
+    css: '#L03-range'
+  value: ArrowRight
+
+- id: l03-ref-044
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  target:
+    css: '#L03-range'
+  expected: '6'
+
+- section: Color-Wert lesen
+  description: Nur den vorhandenen Wert prüfen; keine Farbdialog-Automatisierung behaupten.
+
+- id: l03-ref-045
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: VALUE
+  target:
+    css: '#L03-color'
+  expected: '#006699'
+
+- section: Abwesenheit
+  description: Ein ausdrücklich nicht vorhandenes Feld erfüllt NOT_EXISTS und HIDDEN.
+
+- id: l03-ref-046
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: NOT_EXISTS
+  textbox:
+    id: nicht-vorhandenes-feld
+
+- id: l03-ref-047
+  type: GUI
+  op: ASSERT
+  page: L03 - Inputs
+  action: HIDDEN
+  textbox:
+    id: nicht-vorhandenes-feld
+
+- section: DISABLED und Freigabe
+  description: Den echten deaktivierten Zustand prüfen und anschließend zustandsabhängig
+    auf enabled warten.
+
+- id: l03-extra-001
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: DISABLED
+  textbox:
+    id: L03-disabled
+
+- id: l03-extra-002
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: CLICK
+  button:
+    id: L03-enable
+
+- id: l03-extra-003
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: ENABLED
+  textbox:
+    id: L03-disabled
+  timeout: 2500
+
+- id: l03-extra-004
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-disabled
+  value: Freigegebener Wert
+
+- id: l03-extra-005
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-disabled
+  expected: Freigegebener Wert
+
+- type: WAIT
+  value: '5000'
+
+- section: Hidden-Feld im DOM
+  description: Ein verborgenes Textfeld ist vorhanden, aber nicht sichtbar. Danach
+    Anzeige auslösen und auf visible warten.
+
+- id: l03-extra-006
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: EXISTS
+  textbox:
+    id: L03-hidden
+
+- id: l03-extra-007
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: HIDDEN
+  textbox:
+    id: L03-hidden
+
+- id: l03-extra-008
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: WAIT
+  textbox:
+    id: L03-hidden
+  state: attached
+  timeout: 2500
+
+- id: l03-extra-009
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: CLICK
+  button:
+    id: L03-show
+
+- id: l03-extra-010
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: WAIT
+  textbox:
+    id: L03-hidden
+  state: visible
+  timeout: 2500
+
+- id: l03-extra-011
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-hidden
+  value: Jetzt sichtbar
+
+- id: l03-extra-012
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-hidden
+  expected: Jetzt sichtbar
+
+- type: WAIT
+  value: '5000'
+
+- section: hidden und detached getrennt
+  description: Verbergen erhält das DOM-Element; Entfernen lässt keinen Treffer zurück.
+
+- id: l03-extra-013
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: CLICK
+  button:
+    id: L03-hide
+
+- id: l03-extra-014
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: WAIT
+  textbox:
+    id: L03-hidden
+  state: hidden
+  timeout: 2500
+
+- id: l03-extra-015
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: EXISTS
+  textbox:
+    id: L03-hidden
+
+- id: l03-extra-016
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: CLICK
+  button:
+    id: L03-remove
+
+- id: l03-extra-017
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: WAIT
+  textbox:
+    id: L03-hidden
+  state: detached
+  timeout: 2500
+
+- id: l03-extra-018
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: NOT_EXISTS
+  textbox:
+    id: L03-hidden
+
+- section: input type=hidden
+  description: Den technischen Wert lesen, ohne ein verborgenes Feld mit FILL zu bearbeiten.
+
+- id: l03-extra-019
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: HIDDEN
+  target:
+    css: '#L03-hidden-type'
+
+- id: l03-extra-020
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: EXTRACT
+  target:
+    css: '#L03-hidden-type'
+  source: value
+  buffer: DemoHiddenValue
+
+- id: l03-extra-021
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  target:
+    css: '#L03-hidden-type'
+  expected: '{B[DemoHiddenValue]}'
+
+- section: HTML-Attribut bleibt Ausgangswert
+  description: FILL ändert den aktuellen Wert. EXTRACT attribute value kann weiterhin
+    den ursprünglichen Attributwert liefern.
+
+- id: l03-extra-022
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-attribute
+  value: Aktueller Wert
+
+- id: l03-extra-023
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: EXTRACT
+  textbox:
+    id: L03-attribute
+  attribute: value
+  buffer: DemoOriginalAttribute
+
+- id: l03-extra-024
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: TEXT
+  target:
+    css: '#L03-original-attribute'
+  expected: '{B[DemoOriginalAttribute]}'
+
+- id: l03-extra-025
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: EXTRACT
+  textbox:
+    id: L03-attribute
+  source: value
+  buffer: DemoLiveValue
+
+- id: l03-extra-026
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-attribute
+  expected: '{B[DemoLiveValue]}'
+
+- id: l03-extra-027
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-attribute
+  expected: Aktueller Wert
+
+- type: WAIT
+  value: '5000'
+
+- section: Weitere Texttypen
+  description: Search, URL und Tel besitzen ihre eigene HTML-Semantik, unterstützen
+    aber normale Texteingaben.
+
+- id: l03-extra-028
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-search
+  value: Demo Suche
+
+- id: l03-extra-029
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-search
+  expected: Demo Suche
+
+- id: l03-extra-030
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-url
+  value: https://example.test/demo
+
+- id: l03-extra-031
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-url
+  expected: https://example.test/demo
+
+- id: l03-extra-032
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-tel
+  value: 555-0100
+
+- id: l03-extra-033
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-tel
+  expected: 555-0100
+
+- section: datetime-local
+  description: Ein lokales Maschinenformat ohne erfundene Zeitzonenumrechnung verwenden.
+
+- id: l03-extra-034
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-datetime
+  value: 2026-01-15T14:30
+
+- id: l03-extra-035
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-datetime
+  expected: 2026-01-15T14:30
+
+- type: WAIT
+  value: '5000'
+
+- section: Tab und Tastaturkombination
+  description: Tab muss vom Namensfeld zum Emailfeld führen. Danach Auswahl und Backspace
+    am Namensfeld nachweisen.
+
+- id: l03-extra-036
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: PRESS
+  textbox:
+    id: L03-name
+  value: Tab
+
+- id: l03-extra-037
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: COUNT
+  target:
+    css: '#L03-email:focus'
+  expected: 1
+
+- id: l03-extra-038
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-name
+  value: Auswahl löschen
+
+- id: l03-extra-039
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: PRESS
+  textbox:
+    id: L03-name
+  value: ControlOrMeta+A
+
+- id: l03-extra-040
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: PRESS
+  textbox:
+    id: L03-name
+  value: Backspace
+
+- id: l03-extra-041
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: ''
+
+- type: WAIT
+  value: '5000'
+
+- section: HOVER mit sichtbarer Wirkung
+  description: Diese neue Fixture zeigt einen Hinweis, der danach geprüft wird.
+
+- id: l03-extra-042
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: HOVER
+  textbox:
+    id: L03-tooltip-input
+
+- id: l03-extra-043
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: TEXT
+  target:
+    css: '#L03-tooltip'
+  expected: Hinweis für die Eingabe
+
+- type: WAIT
+  value: '5000'
+
+- section: scope bei gleichen Labels
+  description: Die zwei Referenzfelder werden über ihren fachlichen Bereich unterschieden.
+
+- id: l03-extra-044
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: COUNT
+  target:
+    label: Referenz
+    exact: true
+  expected: 2
+
+- id: l03-extra-045
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  target:
+    label: Referenz
+    exact: true
+    scope:
+      css: '#L03-profile'
+  value: Profil-Referenz
+
+- id: l03-extra-046
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-profile-reference
+  expected: Profil-Referenz
+
+- id: l03-extra-047
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  target:
+    label: Referenz
+    exact: true
+    scope:
+      css: '#L03-team'
+  value: Team-Referenz
+
+- id: l03-extra-048
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-team-reference
+  expected: Team-Referenz
+
+- type: WAIT
+  value: '5000'
+
+- section: index und nth demonstrieren
+  description: Diese Alternativen hängen ausdrücklich von der DOM-Reihenfolge ab und
+    ersetzen keine scope-Begründung.
+
+- id: l03-extra-049
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    label: Referenz
+    exact: true
+    index: 0
+  value: Erster Treffer
+
+- id: l03-extra-050
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-profile-reference
+  expected: Erster Treffer
+
+- id: l03-extra-051
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  target:
+    label: Referenz
+    exact: true
+    nth: 1
+  value: Zweiter Treffer
+
+- id: l03-extra-052
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-team-reference
+  expected: Zweiter Treffer
+
+- section: contenteditable
+  description: Technischen target verwenden und den aktuellen Inhalt mit TEXT statt
+    inputValue prüfen.
+
+- id: l03-extra-053
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  target:
+    role: textbox
+    name: Bearbeitbare Notiz
+    exact: true
+  value: Neue Notiz
+
+- id: l03-extra-054
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: TEXT
+  target:
+    css: '#L03-editable'
+  expected: Neue Notiz
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframe und scope zusammen
+  description: Das Feld liegt in einem anderen Dokument und innerhalb eines Formularbereichs.
+
+- id: l03-extra-055
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  target:
+    label: Name
+    exact: true
+    frames:
+    - '#L03-frame'
+    scope:
+      css: '#L03-frame-form'
+  value: Frame Example
+
+- id: l03-extra-056
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  target:
+    css: '#L03-frame-name'
+    frames:
+    - '#L03-frame'
+  expected: Frame Example
+
+- type: WAIT
+  value: '5000'
+
+- section: Wertleerzeichen bewusst erhalten
+  description: VALUE_GLOB übernimmt keine TEXT_GLOB-Normalisierung. Randzeichen sind
+    echte Eingabedaten.
+
+- id: l03-extra-057
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-name
+  value: '  Alex Example  '
+
+- id: l03-extra-058
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-name
+  expected: '  Alex Example  '
+
+- id: l03-extra-059
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE_GLOB
+  textbox:
+    id: L03-name
+  expected: '*Alex*Example*'
+
+- section: Fragezeichen im VALUE_GLOB
+  description: '? bleibt ein literales Zeichen. Nur * ist ein Joker.'
+
+- id: l03-extra-060
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: FILL
+  textbox:
+    id: L03-name
+  value: A?B
+
+- id: l03-extra-061
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE_GLOB
+  textbox:
+    id: L03-name
+  expected: A?B
+
+- section: Sensitive auch beim Lesen
+  description: Fiktiven Password-Wert lesen und die Wertprüfung ebenfalls sensibel
+    markieren.
+
+- id: l03-extra-062
+  type: GUI
+  op: EXEC
+  page: L03 - Vollständige Input-Referenz
+  action: EXTRACT
+  textbox:
+    id: L03-password
+  source: value
+  buffer: DemoSecretValue
+  sensitive: true
+
+- id: l03-extra-063
+  type: GUI
+  op: ASSERT
+  page: L03 - Vollständige Input-Referenz
+  action: VALUE
+  textbox:
+    id: L03-password
+  expected: '{B[DemoSecretValue]}'
+  sensitive: true
+
+- section: Abschluss
+  description: Alle im Input-Kapitel beschriebenen unterstützten Varianten haben nun
+    echte Fixtures. Native Farbdialoge und Fachvalidierung bleiben ausdrücklich außerhalb
+    dieses Vertrags.

@@ -1,0 +1,14 @@
+# Expected failure. Run individually; excluded from Learning_All.
+name: 'Expected failure: literal_star_contains'
+steps:
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/07-text.html
+- type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  target:
+    css: '#L07-vpn'
+  expected: VPNR*
+  timeout: 1500

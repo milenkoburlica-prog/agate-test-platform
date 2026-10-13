@@ -34,6 +34,9 @@ public class StepParserFactory {
         }
 
         step.setType(StepType.valueOf(rawType.toUpperCase()));
+        if (step.getType() == StepType.GUI || step.getType() == StepType.WINDOW) {
+            step.setGui(new java.util.LinkedHashMap<>(stepMap));
+        }
         step.setId(asString(stepMap.get("id")));
         step.setOp(asString(stepMap.get("op")));
         step.setName(asString(stepMap.get("name")));
@@ -63,10 +66,12 @@ public class StepParserFactory {
                 asLong(stepMap.get("timeoutMs")));
 
         step.setExpected(asString(stepMap.get("expected")));
-        step.setValue(asString(stepMap.get("value")));
+        step.setValue(step.getType() == StepType.GUI && !(stepMap.get("value") instanceof String)
+                ? null : asString(stepMap.get("value")));
         step.setAction(asString(stepMap.get("action")));
         step.setSource(asString(stepMap.get("source")));
-        step.setTarget(asString(stepMap.get("target")));
+        step.setTarget(step.getType() == StepType.GUI && stepMap.get("target") instanceof Map
+                ? null : asString(stepMap.get("target")));
         step.setPath(asString(stepMap.get("path")));
         step.setSelector(asString(stepMap.get("selector")));
 

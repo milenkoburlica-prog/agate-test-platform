@@ -1,0 +1,62 @@
+# OPEN_TAB names a new tab; CLOSE_TAB restores the original page. YAML page labels do not select tabs.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/10-tabs.html
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN_TAB
+  tab: secondary
+  url: http://127.0.0.1:8767/tab.html
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#TAB-value'
+  expected: Secondary tab content
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLOSE_TAB
+  tab: secondary
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L10-next'
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L10-next'
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L01-help'
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: BACK
+  page: L10 — Tabs and navigation
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L10-next'
+  page: L10 — Tabs and navigation

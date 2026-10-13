@@ -1,0 +1,374 @@
+# Vollständige Link-Lektion: EXEC-Aktionen und alle linkgeeigneten ASSERT-Werte.
+steps:
+- section: Vorbereitung
+  description: Die Link-Lernseite mit definiertem Ausgangszustand öffnen.
+- id: l01-1
+  type: GUI
+  op: EXEC
+  action: OPEN
+  page: L01 - Links
+  url: http://127.0.0.1:8767/01-links.html
+- type: WAIT
+  value: '5000'
+- section: Locator - Exakter Name
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-3
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    text: (H)elp
+    exact: true
+- section: Locator - Standard exact=true
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-4
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    text: (H)elp
+- section: Locator - HTML-ID
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-5
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    id: L01-help
+- section: Locator - CSS
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-6
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  target:
+    css: '#L01-help'
+- section: Locator - testId
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-7
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  target:
+    testId: help-link
+- section: Locator - Rolle und Name
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-8
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  target:
+    role: link
+    name: (H)elp
+    exact: true
+- section: Locator - Text-Locator
+  description: Denselben Link über die erklärte Strategie auswählen; VISIBLE prüft
+    den Zustand.
+- id: l01-9
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  target:
+    text: (H)elp overview
+    exact: true
+- section: Teilstring und COUNT
+  description: exact=false findet beide Help-Links. COUNT prüft die Anzahl ohne mehrdeutigen
+    Klick.
+- id: l01-10
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L01 - Links
+  link:
+    text: (H)elp
+    exact: false
+  expected: 2
+- section: Timeout auf Schrittebene
+  description: Dieser Schritt überschreibt den TestCase-Wert 10000 mit 2500 ms.
+- id: l01-11
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    id: L01-help
+  timeout: 2500
+- section: ASSERT - TEXT
+  description: Den Elementtext prüfen. TEXT_EQUALS ist ein Alias von TEXT; nur TEXT_GLOB
+    verwendet den Joker *.
+- id: l01-12
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L01 - Links
+  link:
+    id: L01-help
+  expected: (H)elp
+- section: ASSERT - TEXT_EQUALS
+  description: Den Elementtext prüfen. TEXT_EQUALS ist ein Alias von TEXT; nur TEXT_GLOB
+    verwendet den Joker *.
+- id: l01-13
+  type: GUI
+  op: ASSERT
+  action: TEXT_EQUALS
+  page: L01 - Links
+  link:
+    id: L01-help
+  expected: (H)elp
+- section: ASSERT - TEXT_CONTAINS
+  description: Den Elementtext prüfen. TEXT_EQUALS ist ein Alias von TEXT; nur TEXT_GLOB
+    verwendet den Joker *.
+- id: l01-14
+  type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  page: L01 - Links
+  link:
+    id: L01-help
+  expected: elp
+- section: ASSERT - TEXT_GLOB
+  description: Den Elementtext prüfen. TEXT_EQUALS ist ein Alias von TEXT; nur TEXT_GLOB
+    verwendet den Joker *.
+- id: l01-15
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L01 - Links
+  link:
+    id: L01-help
+  expected: '*elp'
+- section: ASSERT - TEXT_MATCHES
+  description: Den Elementtext prüfen. TEXT_EQUALS ist ein Alias von TEXT; nur TEXT_GLOB
+    verwendet den Joker *.
+- id: l01-16
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L01 - Links
+  link:
+    id: L01-help
+  expected: ^\(H\)elp$
+- section: Leerzeichen und NBSP
+  description: Die Namensauswahl normalisiert Leerzeichen; exact verlangt keine Rohtext-Gleichheit.
+- id: l01-17
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    text: Leerzeichen normalisiert
+    exact: true
+- section: ASSERT - EXISTS
+  description: Ein unsichtbarer Link kann trotzdem im DOM vorhanden sein.
+- id: l01-18
+  type: GUI
+  op: ASSERT
+  action: EXISTS
+  page: L01 - Links
+  link:
+    id: L01-hidden
+- section: ASSERT - HIDDEN
+  description: Den vorhandenen, aber unsichtbaren Link prüfen.
+- id: l01-19
+  type: GUI
+  op: ASSERT
+  action: HIDDEN
+  page: L01 - Links
+  link:
+    id: L01-hidden
+- section: ASSERT - ENABLED
+  description: Den normalen Linkzustand prüfen; dies garantiert noch keine fachliche
+    Berechtigung.
+- id: l01-20
+  type: GUI
+  op: ASSERT
+  action: ENABLED
+  page: L01 - Links
+  link:
+    id: L01-help
+- section: ASSERT - DISABLED
+  description: Diese Fixture besitzt aria-disabled=true; ein bloßes CSS-disabled wäre
+    nicht gleichwertig.
+- id: l01-21
+  type: GUI
+  op: ASSERT
+  action: DISABLED
+  page: L01 - Links
+  link:
+    id: L01-disabled
+- section: EXEC - HOVER
+  description: HOVER blendet den Hinweis ein; danach wird sein Text geprüft.
+- id: l01-22
+  type: GUI
+  op: EXEC
+  action: HOVER
+  page: L01 - Links
+  link:
+    id: L01-hover
+- type: WAIT
+  value: '5000'
+- section: Hover-Ergebnis
+  description: Den durch HOVER eingeblendeten Hinweis prüfen.
+- id: l01-24
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L01 - Links
+  target:
+    css: '#L01-tooltip'
+  expected: Hinweis nach HOVER
+- section: EXEC - PRESS
+  description: Enter aktiviert einen fokussierten Link. Die Fixture protokolliert
+    die Aktivierung.
+- id: l01-25
+  type: GUI
+  op: EXEC
+  action: PRESS
+  page: L01 - Links
+  link:
+    id: L01-key
+  value: Enter
+- type: WAIT
+  value: '5000'
+- section: Tastatur-Ergebnis
+  description: Das Ergebnis der Enter-Aktivierung prüfen.
+- id: l01-27
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L01 - Links
+  target:
+    css: '#L01-key-result'
+  expected: Enter hat den Link aktiviert
+- section: EXEC - CLICK
+  description: Der Help-Klick startet die verzögerte Anzeige.
+- id: l01-28
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L01 - Links
+  link:
+    id: L01-help
+- section: EXEC - WAIT
+  description: Auf visible warten, höchstens 2000 ms; keine feste Zwei-Sekunden-Pause.
+- id: l01-29
+  type: GUI
+  op: EXEC
+  action: WAIT
+  page: L01 - Links
+  link:
+    id: L01-delayed
+  state: visible
+  timeout: 2000
+- section: WAIT-Ergebnis
+  description: Der verzögerte Link muss nun sichtbar sein.
+- id: l01-30
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    id: L01-delayed
+- section: EXEC - EXTRACT
+  description: href des Menülinks als L01Href lesen. EXTRACT allein ist keine Prüfung.
+- id: l01-31
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L01 - Links
+  link:
+    id: L01-menu
+  attribute: href
+  buffer: L01Href
+- type: WAIT
+  value: '5000'
+- section: EXTRACT-Ergebnis
+  description: Den gelesenen href für eine konkrete DOM-Prüfung verwenden.
+- id: l01-33
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L01 - Links
+  target:
+    css: a[id="L01-menu"][href="{B[L01Href]}"]
+  expected: 1
+- section: Entfernen per CLICK
+  description: Dieser Link entfernt sich beim Klick aus dem DOM.
+- id: l01-34
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L01 - Links
+  link:
+    id: L01-remove
+- type: WAIT
+  value: '5000'
+- section: ASSERT - NOT_EXISTS
+  description: Nach der Entfernung darf kein Treffer mehr vorhanden sein.
+- id: l01-36
+  type: GUI
+  op: ASSERT
+  action: NOT_EXISTS
+  page: L01 - Links
+  link:
+    id: L01-remove
+- section: EXEC - DOWNLOAD
+  description: Ein echtes Browser-Downloadereignis erzeugen und die Textdatei speichern.
+- id: l01-37
+  type: GUI
+  op: EXEC
+  action: DOWNLOAD
+  page: L01 - Links
+  link:
+    id: L01-download
+  value: learning-link.txt
+  buffer: L01Download
+  timeout: 10000
+- type: WAIT
+  value: '5000'
+- section: EXEC - DOWNLOAD_PDF
+  description: Dieser Link startet einen POST. Originalantwort speichern; kein HTML-Druck
+    und kein allgemeiner GET-Downloader.
+- id: l01-39
+  type: GUI
+  op: EXEC
+  action: DOWNLOAD_PDF
+  page: L01 - Links
+  link:
+    id: L01-pdf
+  outputFile: output/learningdemo/link-original.pdf
+  responseUrlGlob: '**/demo-report.pdf*'
+  buffer: L01PDF
+  timeout: 10000
+
+- type: WAIT
+  value: '15000'
+
+
+- section: Nach PDF zurück auf der Lernseite
+  description: DOWNLOAD_PDF schließt neue PDF-Popups; der ursprüngliche Link bleibt
+    erreichbar.
+- id: l01-41
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 - Links
+  link:
+    id: L01-pdf
+
+
+- type: WAIT
+  value: '15000'

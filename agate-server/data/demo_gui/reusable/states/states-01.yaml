@@ -1,0 +1,147 @@
+steps:
+
+- section: Zustände und automatisches Warten — Lernseite öffnen
+  description: 'Seite: http://127.0.0.1:8767/08-states-01.html'
+
+- type: GUI
+  op: EXEC
+  page: L08 — Visibility, enabled state and waiting
+  action: OPEN
+  url: http://127.0.0.1:8767/08-states-01.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Zustände und automatisches Warten — Unsichtbarkeit prüfen
+  description: css=#L08-delayed
+
+- section: Demo-Element vorhanden
+  description: EXISTS unterscheidet verborgen von nicht vorhanden.
+
+- id: states-01-exists
+  type: GUI
+  op: ASSERT
+  page: States 01
+  action: EXISTS
+  target:
+    css: '#L08-delayed'
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: HIDDEN
+  target:
+    css: '#L08-delayed'
+
+- section: Zustände und automatisches Warten — Element anklicken
+  description: css=#L08-start
+
+- type: GUI
+  op: EXEC
+  page: L08 — Visibility, enabled state and waiting
+  action: CLICK
+  target:
+    css: '#L08-start'
+
+- type: WAIT
+  value: '5000'
+
+- section: Zustände und automatisches Warten — Sichtbarkeit prüfen
+  description: css=#L08-delayed
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: VISIBLE
+  target:
+    css: '#L08-delayed'
+
+- section: Zustände und automatisches Warten — Vollständigen Text prüfen
+  description: 'css=#L08-delayed; Erwartung: Ready after event'
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: TEXT
+  target:
+    css: '#L08-delayed'
+  expected: Ready after event
+
+- section: Zustände und automatisches Warten — Deaktivierten Zustand prüfen
+  description: css=#L08-disabled
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: DISABLED
+  target:
+    css: '#L08-disabled'
+
+- section: Zustände und automatisches Warten — Element anklicken
+  description: css=#L08-enable
+
+- type: GUI
+  op: EXEC
+  page: L08 — Visibility, enabled state and waiting
+  action: CLICK
+  target:
+    css: '#L08-enable'
+
+- type: WAIT
+  value: '5000'
+
+- section: Zustände und automatisches Warten — Aktivierten Zustand prüfen
+  description: css=#L08-disabled
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: ENABLED
+  target:
+    css: '#L08-disabled'
+
+- section: Zustände und automatisches Warten — Element anklicken
+  description: css=#L08-remove-button
+
+- type: GUI
+  op: EXEC
+  page: L08 — Visibility, enabled state and waiting
+  action: CLICK
+  target:
+    css: '#L08-remove-button'
+
+- type: WAIT
+  value: '5000'
+
+- section: Zustände und automatisches Warten — Abwesenheit prüfen
+  description: css=#L08-remove
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: NOT_EXISTS
+  target:
+    css: '#L08-remove'
+
+- section: Zustände und automatisches Warten — Hover-Verhalten auslösen
+  description: css=#L08-hover
+
+- type: GUI
+  op: EXEC
+  page: L08 — Visibility, enabled state and waiting
+  action: HOVER
+  target:
+    css: '#L08-hover'
+
+- type: WAIT
+  value: '5000'
+
+- section: Zustände und automatisches Warten — Sichtbarkeit prüfen
+  description: css=#L08-tooltip
+
+- type: GUI
+  op: ASSERT
+  page: L08 — Visibility, enabled state and waiting
+  action: VISIBLE
+  target:
+    css: '#L08-tooltip'

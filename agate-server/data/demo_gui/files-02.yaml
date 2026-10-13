@@ -1,0 +1,9 @@
+testCases:
+- name: AGATE Files 02
+  timeout: 10000
+  steps:
+
+  - type: CALL
+    command: reusable.files.files-02
+    parameters:
+      verbose: 'true'

@@ -61,7 +61,7 @@ public class XTestStepExtend {
         JsonArray testcaseArray;
 
         try (FileReader reader =
-                     new FileReader(inputFile)) {
+                     new FileReader(inputFile, StandardCharsets.UTF_8)) {
 
             testcaseArray =
                     JsonParser.parseReader(reader)

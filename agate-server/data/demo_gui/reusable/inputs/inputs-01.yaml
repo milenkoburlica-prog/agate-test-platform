@@ -1,0 +1,133 @@
+steps:
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: textbox Full name; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  action: FILL
+  page: L03 — Inputs, labels and keyboard
+  textbox:
+    label: Full name
+  value: Alex Example
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Eingabewert prüfen
+  description: 'css=#L03-name; Erwartung: Alex Example'
+- type: GUI
+  op: ASSERT
+  page: L03 — Inputs, labels and keyboard
+  action: VALUE
+  target:
+    css: '#L03-name'
+  expected: Alex Example
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: placeholder=Enter full name; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  action: FILL
+  page: L03 — Inputs, labels and keyboard
+  target:
+    placeholder: Enter full name
+  value: Jane
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Tastaturaktion ausführen
+  description: css=#L03-name
+
+- type: GUI
+  op: EXEC
+  action: PRESS
+  page: L03 — Inputs, labels and keyboard
+  target:
+    css: '#L03-name'
+  value: Enter
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Vollständigen Text prüfen
+  description: 'css=#L03-enter; Erwartung: Enter received'
+
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L03 — Inputs, labels and keyboard
+  target:
+    css: '#L03-enter'
+  expected: Enter received
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: css=#L03-email; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  page: L03 — Inputs, labels and keyboard
+  action: FILL
+  target:
+    css: '#L03-email'
+  value: demo@example.test
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: css=#L03-password; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  page: L03 — Inputs, labels and keyboard
+  action: FILL
+  target:
+    css: '#L03-password'
+  value: local-demo-only
+  sensitive: true
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: css=#L03-notes; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  page: L03 — Inputs, labels and keyboard
+  action: FILL
+  target:
+    css: '#L03-notes'
+  value: 'First line
+
+    Second line'
+
+- type: WAIT
+  value: '5000'
+
+- section: Eingabefelder und Tastatur — Eingabewert prüfen
+  description: 'css=#L03-readonly; Erwartung: REF-001'
+- type: GUI
+  op: ASSERT
+  page: L03 — Inputs, labels and keyboard
+  action: VALUE
+  target:
+    css: '#L03-readonly'
+  expected: REF-001
+
+- section: Eingabefelder und Tastatur — Eingabefeld befüllen
+  description: css=#L03-number; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  page: L03 — Inputs, labels and keyboard
+  action: FILL
+  target:
+    css: '#L03-number'
+  value: '42'
+
+- type: WAIT
+  value: '5000'

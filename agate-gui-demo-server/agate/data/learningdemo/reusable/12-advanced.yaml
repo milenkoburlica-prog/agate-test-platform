@@ -1,0 +1,111 @@
+# Open shadow roots support CSS locators. HTML dialogs are DOM elements; JS alerts use the server default dismiss handler.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/12-advanced.html
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-shadow-button'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-shadow-result'
+  expected: Shadow clicked
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    role: textbox
+    name: Editable note
+  value: Edited note
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-editable'
+  expected: Edited note
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-summary'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-detail-text'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-modal-open'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-dialog'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-modal-close'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: HIDDEN
+  target:
+    css: '#L12-dialog'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-alert'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-alert-result'
+  expected: Alert dismissed
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-svg'
+  page: L12 — Shadow DOM, editable content and dialogs
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-canvas'
+  page: L12 — Shadow DOM, editable content and dialogs

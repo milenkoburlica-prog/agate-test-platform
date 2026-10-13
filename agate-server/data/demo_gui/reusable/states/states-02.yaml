@@ -1,0 +1,401 @@
+steps:
+
+- section: Lernseite öffnen
+  description: Jeder Test beginnt mit einer frischen Seite.
+
+- id: states-02-001
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/08-states.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Vorhanden und sichtbar
+  description: Vorhanden und sichtbar
+
+- id: states-02-002
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: EXISTS
+  target:
+    css: '#L08-visible'
+
+- section: Sichtbar
+  description: Sichtbar
+
+- id: states-02-003
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: VISIBLE
+  target:
+    css: '#L08-visible'
+
+- section: Hidden bleibt im DOM
+  description: Hidden bleibt im DOM
+
+- id: states-02-004
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: EXISTS
+  target:
+    css: '#L08-hidden'
+
+- section: Hidden ist unsichtbar
+  description: Hidden ist unsichtbar
+
+- id: states-02-005
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: HIDDEN
+  target:
+    css: '#L08-hidden'
+
+- section: Hidden hat einen Treffer
+  description: Hidden hat einen Treffer
+
+- id: states-02-006
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: COUNT
+  target:
+    css: '#L08-hidden'
+  expected: 1
+
+- section: Fehlendes Element
+  description: Fehlendes Element
+
+- id: states-02-007
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: NOT_EXISTS
+  target:
+    css: '#L08-missing'
+
+- section: Fehlendes Element ist auch hidden
+  description: Fehlendes Element ist auch hidden
+
+- id: states-02-008
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: HIDDEN
+  target:
+    css: '#L08-missing'
+
+- section: Deaktivierter Button
+  description: Deaktivierter Button
+
+- id: states-02-009
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: DISABLED
+  target:
+    css: '#L08-disabled'
+
+- section: Aktiver Button
+  description: Aktiver Button
+
+- id: states-02-010
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: ENABLED
+  target:
+    css: '#L08-enable'
+
+- section: Readonly ist nicht disabled
+  description: Readonly ist nicht disabled
+
+- id: states-02-011
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: ENABLED
+  target:
+    css: '#L08-readonly'
+
+- section: Anfangszustand Checkbox
+  description: Anfangszustand Checkbox
+
+- id: states-02-012
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: UNCHECKED
+  target:
+    css: '#L08-check'
+
+- section: Opacity null bleibt Playwright-visible
+  description: Opacity null bleibt Playwright-visible
+
+- id: states-02-013
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: VISIBLE
+  target:
+    css: '#L08-opacity'
+
+- section: Keine Fläche ist hidden
+  description: Keine Fläche ist hidden
+
+- id: states-02-014
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: HIDDEN
+  target:
+    css: '#L08-zero'
+
+- section: Mehrere Treffer sind bei COUNT erlaubt
+  description: Mehrere Treffer sind bei COUNT erlaubt
+
+- id: states-02-015
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: COUNT
+  target:
+    css: .L08-repeat
+  expected: 2
+
+- section: Checkbox aktivieren
+  description: Checkbox aktivieren
+
+- id: states-02-016
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CHECK
+  target:
+    css: '#L08-check'
+
+- section: Angehakt
+  description: Angehakt
+
+- id: states-02-017
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: CHECKED
+  target:
+    css: '#L08-check'
+
+- section: Checkbox deaktivieren
+  description: Checkbox deaktivieren
+
+- id: states-02-018
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: UNCHECK
+  target:
+    css: '#L08-check'
+
+- section: Nicht angehakt
+  description: Nicht angehakt
+
+- id: states-02-019
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: UNCHECKED
+  target:
+    css: '#L08-check'
+
+- section: Asynchron aktivieren
+  description: Asynchron aktivieren
+
+- id: states-02-020
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CLICK
+  target:
+    css: '#L08-enable'
+
+- section: Assertion wartet auf enabled
+  description: Assertion wartet auf enabled
+
+- id: states-02-021
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: ENABLED
+  target:
+    css: '#L08-disabled'
+  timeout: 2000
+
+- section: GUI WAIT attached auf hidden
+  description: GUI WAIT attached auf hidden
+
+- id: states-02-022
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L08-hidden'
+  state: attached
+
+- section: Asynchron sichtbar machen
+  description: Asynchron sichtbar machen
+
+- id: states-02-023
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CLICK
+  target:
+    css: '#L08-show'
+
+- section: WAIT ohne state bedeutet visible
+  description: WAIT ohne state bedeutet visible
+
+- id: states-02-024
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L08-hidden'
+
+- section: Sichtbarkeit bestätigen
+  description: Sichtbarkeit bestätigen
+
+- id: states-02-025
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: VISIBLE
+  target:
+    css: '#L08-hidden'
+
+- type: WAIT
+  value: '5000'
+
+- section: Asynchron verbergen
+  description: Asynchron verbergen
+
+- id: states-02-026
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CLICK
+  target:
+    css: '#L08-hide'
+
+- section: WAIT hidden
+  description: WAIT hidden
+
+- id: states-02-027
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L08-hidden'
+  state: hidden
+
+- section: Weiterhin vorhanden
+  description: Weiterhin vorhanden
+
+- id: states-02-028
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: EXISTS
+  target:
+    css: '#L08-hidden'
+
+- section: Asynchron entfernen
+  description: Asynchron entfernen
+
+- id: states-02-029
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CLICK
+  target:
+    css: '#L08-remove'
+
+- section: WAIT detached
+  description: WAIT detached
+
+- id: states-02-030
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L08-hidden'
+  state: detached
+
+- section: Entfernung bestätigen
+  description: Entfernung bestätigen
+
+- id: states-02-031
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: NOT_EXISTS
+  target:
+    css: '#L08-hidden'
+
+- section: Element asynchron hinzufügen
+  description: Element asynchron hinzufügen
+
+- id: states-02-032
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: CLICK
+  target:
+    css: '#L08-add'
+
+- section: WAIT attached auf neues Element
+  description: WAIT attached auf neues Element
+
+- id: states-02-033
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L08-added'
+  state: attached
+
+- section: Neues Element vorhanden
+  description: Neues Element vorhanden
+
+- id: states-02-034
+  type: GUI
+  op: ASSERT
+  page: States - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L08-added'
+  expected: Neu
+
+- section: Feste GUI-Pause ohne Target
+  description: GUI WAIT ohne target wartet feste Millisekunden; kein Zustandsnachweis.
+
+- id: states-02-035
+  type: GUI
+  op: EXEC
+  page: States - Lernreferenz 02
+  action: WAIT
+  value: '250'
+
+- type: WAIT
+  value: '5000'

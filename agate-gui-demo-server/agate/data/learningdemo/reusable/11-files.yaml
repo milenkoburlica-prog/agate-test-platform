@@ -1,0 +1,51 @@
+# UPLOAD uses a file path relative to the AGATE working directory. DOWNLOAD_PDF saves the original POST PDF and returns to the source tab.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/11-files.html
+  page: L11 — Upload, download and original PDF
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: UPLOAD
+  target:
+    css: '#L11-upload'
+  value: demo-upload.txt
+  page: L11 — Upload, download and original PDF
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L11-upload-result'
+  expected: demo-upload.txt
+  page: L11 — Upload, download and original PDF
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: DOWNLOAD
+  target:
+    css: '#L11-download'
+  value: learning-download.txt
+  buffer: DemoDownload
+  page: L11 — Upload, download and original PDF
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: DOWNLOAD_PDF
+  target:
+    css: '#L11-pdf'
+  outputFile: output/learningdemo/original.pdf
+  responseUrlGlob: '**/dbasQuittung.xhtml*'
+  buffer: DemoPDF
+  timeout: 10000
+  page: L11 — Upload, download and original PDF
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L11-pdf'
+  page: L11 — Upload, download and original PDF

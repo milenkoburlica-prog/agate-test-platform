@@ -163,6 +163,7 @@ public class ToscaToAgaPhase1 {
                         new BufferedWriter(
                                 new FileWriter(
                                         yamlOut,
+                                        java.nio.charset.StandardCharsets.UTF_8,
                                         false
                                 )
                         )
@@ -557,6 +558,7 @@ public class ToscaToAgaPhase1 {
                                         new FileWriter(
                                                 templateYamlOut
                                                         + ".yaml",
+                                                java.nio.charset.StandardCharsets.UTF_8,
                                                 false
                                         )
                                 )
@@ -841,6 +843,22 @@ public class ToscaToAgaPhase1 {
                         );
             }
 
+
+            if (at.co.svc.aga.transformator.utils.ProcessExecuteSqlScript.process(step, ident, currentYamlOutputPath)) {
+                continue;
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessPdfWorkflow.process(step, ident, currentYamlOutputPath)) {
+                continue;
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessWindowStep.process(step, ident, currentYamlOutputPath)) {
+                continue;
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessGuiStep.process(step, ident, currentYamlOutputPath)) {
+                continue;
+            }
 
             // -------------------------------------------------
             // BUFFER

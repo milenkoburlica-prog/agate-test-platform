@@ -19,6 +19,7 @@ import at.co.svc.tosca.transformation.ToscaLoopSupport;
 public class IfPropagationEngine {
 
     private final Map<String, JsonNode> index;
+    private boolean hasUnresolvedIf;
 
     /*
      * Condition steps that were successfully converted into AGATE
@@ -90,6 +91,7 @@ public class IfPropagationEngine {
                         index
                 );
 
+        JsonNode originalRoot = root.deepCopy();
         List<JsonNode> topLevelIfItems =
                 new ArrayList<>();
 
@@ -118,6 +120,10 @@ public class IfPropagationEngine {
             if (ToscaLoopSupport.isLoopControlFlow(
                     node)) {
 
+                if(!isDisabled(node) && !hasControlFlowAncestor(node,index) && NativeWindowIfContract.hasWindowPredicate(node,index)) {
+                    engine.preserveWindowLoop(node);
+                    continue;
+                }
                 MigrationLog.debug(
                         "[IF] LOOP preserved: "
                                 + getNodeId(node)
@@ -154,9 +160,13 @@ public class IfPropagationEngine {
         }
 
 
-        engine.process(
-                topLevelIfItems
-        );
+        // Snapshot before review substitution: all original branches remain inspectable.
+        engine.process(topLevelIfItems);
+        if (engine.hasUnresolvedIf) {
+            File reviewFile = new File(input.replace(".json", "_if-review.json"));
+            mapper.writerWithDefaultPrettyPrinter().writeValue(reviewFile, originalRoot);
+            MigrationLog.warn("Original IF structure retained for review: " + reviewFile.getAbsolutePath());
+        }
 
 
         String outPath =
@@ -303,10 +313,8 @@ public class IfPropagationEngine {
                 );
 
 
-        String localCondition =
-                buildCondition(
-                        folderIds
-                );
+        String localCondition = NativeWindowIfContract.hasWindowPredicate(ifNode,index)
+                ? "" : buildCondition(folderIds);
 
 
         MigrationLog.debug(
@@ -316,16 +324,23 @@ public class IfPropagationEngine {
         );
 
 
-        if (isBlank(
-                localCondition)) {
-
-            MigrationLog.info(
-                    "[Review] IF condition could not be migrated"
-                            + " - IF="
-                            + ifId
-                            + ". Control-flow branch was not flattened."
-            );
-
+        if (isBlank(localCondition)) {
+            String issue = "IF=" + ifId + " (" + ifNode.path("Attributes").path("Name").asText("")
+                    + "): native or unsupported predicate; whole branch withheld from executable YAML"
+                    + "; parentCondition=" + parentContext;
+            NativeWindowIfContract.Result nativeIf = NativeWindowIfContract.translate(ifNode, index, parentContext);
+            replaceWithReview(ifNode, folderIds, issue);
+            if (!nativeIf.step().isEmpty()) {
+                ObjectNode gui = (ObjectNode) ifNode.path("Parameters").get(0).path("Gui");
+                gui.remove("migrationReview");
+                ObjectMapper contractMapper = new ObjectMapper();
+                gui.set("nativeIfContract", contractMapper.valueToTree(nativeIf.step()));
+                gui.set("nativeIfReview", contractMapper.valueToTree(nativeIf.review()));
+                MigrationLog.info("Structured " + nativeIf.step().get("type") + " IF preserved: " + ifId + " | locator mappings=" + nativeIf.review().size());
+            } else {
+                MigrationLog.warn(issue);
+                hasUnresolvedIf = true;
+            }
             return;
         }
 
@@ -641,12 +656,11 @@ public class IfPropagationEngine {
     private String buildCondition(
             List<String> folderIds) {
 
-        List<String> conditions =
-                new ArrayList<>();
+        List<String> conditions = new ArrayList<>();
+        Set<String> convertedItems = new HashSet<>();
+        boolean unresolved = false;
 
-
-        for (String folderId :
-                folderIds) {
+        for (String folderId : folderIds) {
 
             JsonNode folder =
                     index.get(
@@ -694,9 +708,7 @@ public class IfPropagationEngine {
                 if (!isBlank(
                         condition)) {
 
-                    conditionItemIdsToRemove.add(
-                            itemId.asText()
-                    );
+                    convertedItems.add(itemId.asText());
 
                     addUniqueCondition(
                             conditions,
@@ -704,7 +716,7 @@ public class IfPropagationEngine {
                     );
 
                 } else {
-
+                    unresolved = true;
                     MigrationLog.info(
                             "[Review] Could not extract IF condition from step "
                                     + itemId.asText()
@@ -714,15 +726,69 @@ public class IfPropagationEngine {
         }
 
 
-        return joinConditions(
-                conditions
-        );
+        if (unresolved || conditions.isEmpty()) return null;
+        conditionItemIdsToRemove.addAll(convertedItems);
+        return joinConditions(conditions);
     }
 
 
     // =========================================================
     // CONDITION EXTRACTION
     // =========================================================
+
+    private void preserveWindowLoop(JsonNode node) {
+        NativeWindowIfContract.Result contract=NativeWindowIfContract.translate(node,index,"");
+        List<String> folders=new ArrayList<>();for(JsonNode id:node.path("Assocs").path("ControlFlowFolders"))folders.add(id.asText());
+        String issue="WINDOW loop requires review: "+getNodeId(node)+" | "+String.join("; ",contract.review());
+        replaceWithReview(node,folders,issue);
+        if(!contract.step().isEmpty()) {
+            ObjectNode gui=(ObjectNode)node.path("Parameters").get(0).path("Gui");gui.remove("migrationReview");
+            ObjectMapper mapper=new ObjectMapper();gui.set("nativeIfContract",mapper.valueToTree(contract.step()));gui.set("nativeIfReview",mapper.valueToTree(contract.review()));
+            MigrationLog.info("Native WINDOW loop preserved: "+getNodeId(node));
+        } else {hasUnresolvedIf=true;MigrationLog.warn(issue);}
+    }
+
+    private void replaceWithReview(JsonNode ifNode, List<String> folderIds, String issue) {
+        JsonNode source = null;
+        Set<String> descendants = new HashSet<>();
+        for (String folderId : folderIds) collectReviewDescendants(folderId, descendants);
+        for (String id : descendants) {
+            JsonNode node = index.get(id);
+            if (source == null && node != null && "XTestStep".equals(node.path("ObjectClass").asText())) source = node;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode replacement = source == null ? mapper.createObjectNode() : source.deepCopy();
+        replacement.put("Surrogate", getNodeId(ifNode));
+        replacement.put("ObjectClass", "XTestStep");
+        ObjectNode attrs = mapper.createObjectNode();
+        attrs.put("Name", ifNode.path("Attributes").path("Name").asText());
+        replacement.set("Attributes", attrs);
+        ObjectNode parameter = mapper.createObjectNode();
+        parameter.put("Value", "review");
+        parameter.put("ActionMode", "Input");
+        ObjectNode gui = mapper.createObjectNode();
+        gui.putObject("properties").put("Engine", "AnyUI");
+        gui.put("name", "Unresolved IF review");
+        gui.put("migrationReview", issue);
+        parameter.set("Gui", gui);
+        replacement.set("Parameters", mapper.createArrayNode().add(parameter));
+        // No condition or branch action is retained as an executable step.
+        ((ObjectNode) ifNode).removeAll();
+        ((ObjectNode) ifNode).setAll(replacement);
+        for (String id : descendants) {
+            JsonNode node = index.get(id);
+            if (node != null) ensureAttributesObject(node).put("DisabledDescription", "Migration review: unresolved IF");
+        }
+    }
+
+    private void collectReviewDescendants(String id, Set<String> ids) {
+        if (!ids.add(id)) return;
+        JsonNode node = index.get(id);
+        if (node == null) return;
+        for (String relation : List.of("Items", "ControlFlowFolders")) {
+            for (JsonNode child : node.path("Assocs").path(relation)) collectReviewDescendants(child.asText(), ids);
+        }
+    }
 
     private String extractCondition(
             JsonNode node) {
@@ -774,6 +840,10 @@ public class IfPropagationEngine {
             }
 
 
+            if ("AnyUI".equalsIgnoreCase(parameter.path("gui").path("properties").path("Engine").asText())
+                    || "AnyUI".equalsIgnoreCase(parameter.path("Gui").path("properties").path("Engine").asText())) {
+                return null;
+            }
             if (!explicitName.isEmpty()) {
 
                 return "'{B["

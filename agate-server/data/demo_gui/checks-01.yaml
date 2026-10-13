@@ -1,0 +1,32 @@
+testCases: 
+
+  - id: "AGATE learning Links"
+    description: "AGATE learning Checks"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      name: AGATE learning L05
+
+    timeout: 10000 
+    steps:
+    
+      - section: Checkboxen und Radiobuttons — Lernseite öffnen
+        description: 'Seite: http://127.0.0.1:8767/05-checks.html'
+      
+      - type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/05-checks.html
+        page: L05 — Checkboxes and radio buttons
+
+      - type: WAIT
+        value: '5000'
+      
+      - section: Checkboxen und Radiobuttons
+        description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+          auch bei verbose=false sichtbar.
+        
+      - type: CALL
+        command: reusable.checks.checks-01
+        parameters:
+          verbose: 'true'

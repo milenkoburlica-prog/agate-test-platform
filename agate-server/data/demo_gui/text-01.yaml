@@ -1,0 +1,12 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+name: AGATE learning L07
+timeout: 10000
+steps:
+- section: Text, Leerzeichen und Glob-Prüfungen
+  description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+    auch bei verbose=false sichtbar.
+- type: CALL
+  command: reusable.text.text-01
+  parameters:
+    verbose: 'true'

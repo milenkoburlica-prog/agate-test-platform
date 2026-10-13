@@ -1,0 +1,396 @@
+steps:
+
+- section: Lernseite öffnen
+  description: Jeder Test beginnt mit einer frischen Seite.
+
+- id: frames-02-001
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/09-frames.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframe-Element im Hauptdokument
+  description: Iframe-Element im Hauptdokument
+
+- id: frames-02-002
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: VISIBLE
+  target:
+    css: '#L09-frame'
+
+- section: Text im Hauptdokument
+  description: Text im Hauptdokument
+
+- id: frames-02-003
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+  expected: Hauptdokument
+
+- section: Gleiche ID im Frame separat
+  description: Gleiche ID im Frame separat
+
+- id: frames-02-004
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames:
+    - '#L09-frame'
+  expected: Frame-Dokument
+
+- section: Iframe mit Attribut-Selektor
+  description: Iframe mit Attribut-Selektor
+
+- id: frames-02-005
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames:
+    - iframe[title="Learning frame"]
+  expected: Frame-Dokument
+
+- section: Anderen Frame wählen
+  description: Anderen Frame wählen
+
+- id: frames-02-006
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames:
+    - '#L09-other'
+  expected: Anderer Frame
+
+- section: Frame-Inhalt ist nicht im Haupt-DOM
+  description: Frame-Inhalt ist nicht im Haupt-DOM
+
+- id: frames-02-007
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: NOT_EXISTS
+  target:
+    css: '#L09-input'
+
+- section: Input im Frame ausfüllen
+  description: Input im Frame ausfüllen
+
+- id: frames-02-008
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: FILL
+  target:
+    label: Frame-Name
+    exact: true
+    frames:
+    - '#L09-frame'
+  value: Alex
+
+- section: Frame-Inputwert prüfen
+  description: Frame-Inputwert prüfen
+
+- id: frames-02-009
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: VALUE
+  target:
+    css: '#L09-input'
+    frames:
+    - '#L09-frame'
+  expected: Alex
+
+- section: Rolle und Scope innerhalb eines Frames
+  description: Rolle und Scope innerhalb eines Frames
+
+- id: frames-02-010
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: CLICK
+  target:
+    role: button
+    name: Frame-Aktion
+    exact: true
+    scope:
+      css: '#L09-form'
+    frames:
+    - '#L09-frame'
+
+- section: Frame-Ausgabe prüfen
+  description: Frame-Ausgabe prüfen
+
+- id: frames-02-011
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-result'
+    frames:
+    - '#L09-frame'
+  expected: Frame geklickt
+
+- section: Ursprünglicher Frame bleibt getrennt
+  description: Ursprünglicher Frame bleibt getrennt
+
+- id: frames-02-012
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-result'
+  expected: Bereit
+
+- section: Zwei Ebenen von außen nach innen
+  description: Zwei Ebenen von außen nach innen
+
+- id: frames-02-013
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+  expected: Innerer Frame
+
+- section: Checkbox im inneren Frame
+  description: Checkbox im inneren Frame
+
+- id: frames-02-014
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: CHECK
+  target:
+    label: Innere Zustimmung
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+
+- section: Innere Checkbox angehakt
+  description: Innere Checkbox angehakt
+
+- id: frames-02-015
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: CHECKED
+  target:
+    css: '#L09-check'
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+
+- section: TableCell im inneren Frame
+  description: TableCell im inneren Frame
+
+- id: frames-02-016
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-table'
+    tableCell:
+      row: 1
+      cell: 1
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+  expected: Frame-Zelle
+
+- section: Text aus innerem Frame extrahieren
+  description: Text aus innerem Frame extrahieren
+
+- id: frames-02-017
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: EXTRACT
+  target:
+    css: '#L09-message'
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+  buffer: FrameText
+
+- section: Frame-Buffer prüfen
+  description: Frame-Buffer prüfen
+
+- id: frames-02-018
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames:
+    - '#L09-frame'
+    - '#L09-inner'
+  expected: '{B[FrameText]}'
+
+- section: WAIT im Frame
+  description: WAIT im Frame
+
+- id: frames-02-019
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: WAIT
+  target:
+    css: '#L09-input'
+    frames:
+    - '#L09-frame'
+  state: visible
+
+- section: Mehrdeutige Buttons im Hauptdokument
+  description: Mehrdeutige Buttons im Hauptdokument
+
+- id: frames-02-020
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: COUNT
+  target:
+    role: button
+    name: Scoped action
+    exact: true
+  expected: 2
+
+- section: 'Scope im Hauptdokument: Links'
+  description: 'Scope im Hauptdokument: Links'
+
+- id: frames-02-021
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: CLICK
+  target:
+    role: button
+    name: Scoped action
+    exact: true
+    scope:
+      css: '#L09-left'
+
+- section: 'Scope-Ergebnis: Links'
+  description: 'Scope-Ergebnis: Links'
+
+- id: frames-02-022
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-result'
+  expected: Links
+
+- section: 'Scope im Hauptdokument: Rechts'
+  description: 'Scope im Hauptdokument: Rechts'
+
+- id: frames-02-023
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: CLICK
+  target:
+    role: button
+    name: Scoped action
+    exact: true
+    scope:
+      css: '#L09-right'
+
+- section: 'Scope-Ergebnis: Rechts'
+  description: 'Scope-Ergebnis: Rechts'
+
+- id: frames-02-024
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-result'
+  expected: Rechts
+
+- section: Verschachtelter Scope im Frame
+  description: Verschachtelter Scope im Frame
+
+- id: frames-02-025
+  type: GUI
+  op: EXEC
+  page: Frames - Lernreferenz 02
+  action: EXTRACT
+  target:
+    css: output
+    scope:
+      css: form
+      scope:
+        css: body
+    frames:
+    - '#L09-frame'
+  buffer: ScopedFrameText
+
+- section: Verschachtelten Scope bestätigen
+  description: Verschachtelten Scope bestätigen
+
+- id: frames-02-026
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-result'
+    frames:
+    - '#L09-frame'
+  expected: '{B[ScopedFrameText]}'
+
+- type: WAIT
+  value: '5000'
+
+- section: Frame-Input im DOM vorhanden
+  description: EXISTS prüft den Inhalt des gewählten Frame-Dokuments.
+
+- id: frames-02-027
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: EXISTS
+  target:
+    css: '#L09-input'
+    frames:
+    - '#L09-frame'
+
+- section: Leere Frame-Liste bedeutet Hauptdokument
+  description: Leere Frame-Liste bedeutet Hauptdokument
+
+- id: frames-02-028
+  type: GUI
+  op: ASSERT
+  page: Frames - Lernreferenz 02
+  action: TEXT
+  target:
+    css: '#L09-message'
+    frames: []
+  expected: Hauptdokument

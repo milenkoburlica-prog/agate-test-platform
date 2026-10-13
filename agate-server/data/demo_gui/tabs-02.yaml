@@ -1,0 +1,9 @@
+testCases:
+- name: AGATE Tabs 02
+  timeout: 10000
+  steps:
+
+  - type: CALL
+    command: reusable.tabs.tabs-02
+    parameters:
+      verbose: 'true'

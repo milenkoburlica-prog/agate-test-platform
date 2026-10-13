@@ -1,0 +1,12 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+name: AGATE learning L09
+timeout: 10000
+steps:
+- section: Iframes und Bereiche
+  description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+    auch bei verbose=false sichtbar.
+- type: CALL
+  command: reusable.frames.frames-01
+  parameters:
+    verbose: 'true'

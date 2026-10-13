@@ -28,6 +28,8 @@ import at.co.svc.agate.core.dsl.resolver.YamlPlaceholderResolver;
 import at.co.svc.agate.core.dsl.utils.CsvLoader;
 import at.co.svc.agate.core.project.ProjectRuntime;
 
+import at.co.svc.agate.core.dsl.model.SectionMetadata;
+
 public class YamlTestCaseLoader {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
@@ -50,6 +52,7 @@ public class YamlTestCaseLoader {
 
             Map<String, Object> root = (Map<String, Object>) loaded;
 
+            root = at.co.svc.agate.engine.gui.GuiDocumentAdapter.normalize(root);
             validateRootStructure(root);
 
             List<TestCase> rawList = parseTestCases(root, yamlPath);
@@ -143,6 +146,12 @@ public class YamlTestCaseLoader {
 
         tc.setName(asString(tcMap.get("name") != null ? tcMap.get("name") : tcMap.get("id")));
         tc.setDescription(asString(tcMap.get("description")));
+        if (tcMap.get("timeout") != null) {
+            tc.setTimeout(Integer.valueOf(tcMap.get("timeout").toString()));
+        }
+        if (tcMap.get("pages") instanceof Map) {
+            tc.setGuiPages(new java.util.LinkedHashMap<>((Map<String, Object>) tcMap.get("pages")));
+        }
         tc.setStage(asString(tcMap.get("stage")));
         tc.setPriority(asString(tcMap.get("priority")));
 
@@ -242,20 +251,22 @@ public class YamlTestCaseLoader {
                 new ArrayList<>();
 
         int localIndex = 1;
+        List<SectionMetadata> pendingSections = new ArrayList<>();
 
         for (Map<String, Object> stepMap : stepList) {
 
             /*
              * SECTION is metadata only.
              *
-             * It intentionally has no type and must never be parsed
-             * as an executable TestStep. Keep localIndex aligned with
+             * It has no type and is attached to adjacent executable steps
+             * for runtime display only. Keep localIndex aligned with
              * the YAML list position so source-step references remain
              * stable for later executable steps.
              */
             if (stepMap != null
                     && stepMap.containsKey("section")) {
 
+                pendingSections.add(SectionMetadata.from(stepMap, yamlPath, localIndex));
                 localIndex++;
                 continue;
             }
@@ -285,6 +296,9 @@ public class YamlTestCaseLoader {
                             localIndex,
                             resolver
                     );
+
+            step.getSectionsBefore().addAll(pendingSections);
+            pendingSections.clear();
 
             step.setSourceFile(
                     yamlPath
@@ -647,6 +661,10 @@ public class YamlTestCaseLoader {
             localIndex++;
         }
 
+        // Preserve trailing markers without inventing an executable step.
+        if (!pendingSections.isEmpty() && !resultList.isEmpty()) {
+            resultList.get(resultList.size() - 1).getSectionsAfter().addAll(pendingSections);
+        }
         return resultList;
     }
     
@@ -816,6 +834,9 @@ public class YamlTestCaseLoader {
             YamlPlaceholderResolver resolver,
             String path,
             int idx) {
+
+        // GUI fields, including nested targets and SELECT objects, resolve at execution time.
+        if (step.getType() == StepType.GUI || step.getType() == StepType.WINDOW) return;
 
         // Resolve only values that are safe at load time.
         // Runtime-dependent placeholders B[...] and R[...] must remain unresolved

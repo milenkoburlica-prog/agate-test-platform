@@ -1,0 +1,894 @@
+steps:
+
+- section: Vorbereitung
+  description: Die neutrale L05-Seite frisch öffnen.
+
+- id: checks-001
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: OPEN
+  url: http://127.0.0.1:8767/05-checks.html
+
+- section: Locator-Varianten
+  description: Checkboxlabel ist im vereinfachten Vertrag Rolle CHECKBOX plus Name.
+
+- id: checks-002
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  checkbox:
+    label: Accept terms
+    exact: true
+
+- id: checks-003
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  checkbox:
+    label: Accept terms
+
+- id: checks-004
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  checkbox:
+    id: L05-consent
+
+- id: checks-005
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  target:
+    css: '#L05-consent'
+
+- id: checks-006
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  target:
+    role: checkbox
+    name: Accept terms
+    exact: true
+
+- id: checks-007
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VISIBLE
+  target:
+    label: Accept terms
+    exact: true
+
+- id: checks-008
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: COUNT
+  checkbox:
+    label: Accept
+    exact: false
+  expected: 1
+
+- id: checks-009
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: EXISTS
+  checkbox:
+    id: L05-consent
+
+- id: checks-010
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: ENABLED
+  checkbox:
+    id: L05-consent
+
+- section: CHECK und Idempotenz
+  description: Zweimal CHECK muss den gewünschten Zustand erhalten, nicht umschalten.
+
+- id: checks-011
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: UNCHECK
+  checkbox:
+    id: L05-consent
+
+- id: checks-012
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-consent
+
+- id: checks-013
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CHECK
+  checkbox:
+    label: Accept terms
+
+- id: checks-014
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CHECK
+  checkbox:
+    id: L05-consent
+
+- id: checks-015
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  checkbox:
+    id: L05-consent
+
+- type: WAIT
+  value: '5000'
+
+- section: UNCHECK und Idempotenz
+  description: Wiederholtes UNCHECK hält eine Checkbox abgewählt.
+
+- id: checks-016
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: UNCHECK
+  checkbox:
+    id: L05-consent
+
+- id: checks-017
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: UNCHECK
+  checkbox:
+    id: L05-consent
+
+- id: checks-018
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-consent
+
+- section: CLICK ist ein Toggle
+  description: Mit bekanntem Ausgangszustand die beiden Richtungen nachweisen.
+
+- id: checks-019
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CLICK
+  checkbox:
+    id: L05-consent
+
+- id: checks-020
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  checkbox:
+    id: L05-consent
+
+- id: checks-021
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CLICK
+  checkbox:
+    id: L05-consent
+
+- id: checks-022
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-consent
+
+- section: Tastatur und HOVER
+  description: Space aktiviert die bekannte abgewählte Checkbox; Hover muss keine
+    sichtbare Wirkung besitzen.
+
+- id: checks-023
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: PRESS
+  checkbox:
+    id: L05-consent
+  value: Space
+
+- id: checks-024
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  checkbox:
+    id: L05-consent
+
+- id: checks-025
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: HOVER
+  checkbox:
+    id: L05-consent
+
+- id: checks-026
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: WAIT
+  checkbox:
+    id: L05-consent
+  state: visible
+  timeout: 2500
+
+- type: WAIT
+  value: '5000'
+
+- section: Value ist nicht checked
+  description: Der Default-value on bleibt konstant; CHECKED/UNCHECKED prüft die Auswahl.
+
+- id: checks-027
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VALUE
+  checkbox:
+    id: L05-consent
+  expected: 'on'
+
+- id: checks-028
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VALUE_GLOB
+  checkbox:
+    id: L05-consent
+  expected: o*
+
+- id: checks-029
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VALUE_MATCHES
+  checkbox:
+    id: L05-consent
+  expected: ^on$
+
+- id: checks-030
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: EXTRACT
+  checkbox:
+    id: L05-consent
+  source: value
+  buffer: DemoCheckValue
+
+- id: checks-031
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: UNCHECK
+  checkbox:
+    id: L05-consent
+
+- id: checks-032
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-consent
+
+- id: checks-033
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: VALUE
+  checkbox:
+    id: L05-consent
+  expected: '{B[DemoCheckValue]}'
+
+- section: Attribut lesen
+  description: type ist ein HTML-Attribut. Es ist nicht der aktuelle checked-Zustand.
+
+- id: checks-034
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: EXTRACT
+  checkbox:
+    id: L05-consent
+  attribute: type
+  buffer: DemoCheckType
+
+- id: checks-035
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: COUNT
+  target:
+    css: input[id="L05-consent"][type="{B[DemoCheckType]}"]
+  expected: 1
+
+- section: Radio-Gruppe
+  description: Die zweite Auswahl muss die erste in derselben Gruppe abwählen.
+
+- id: checks-036
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CHECK
+  radio:
+    label: Card
+    exact: true
+
+- id: checks-037
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  radio:
+    id: L05-card
+
+- id: checks-038
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  radio:
+    id: L05-cash
+
+- id: checks-039
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CHECK
+  radio:
+    id: L05-cash
+
+- id: checks-040
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  radio:
+    id: L05-cash
+
+- id: checks-041
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  radio:
+    id: L05-card
+
+- type: WAIT
+  value: '5000'
+
+- section: Radio per Tastatur
+  description: Space auf der anderen Radiooption muss die Gruppenauswahl ändern.
+
+- id: checks-042
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: PRESS
+  radio:
+    id: L05-card
+  value: Space
+
+- id: checks-043
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  radio:
+    id: L05-card
+
+- id: checks-044
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  radio:
+    id: L05-cash
+
+- section: Nativer Input mit Rolle switch
+  description: checkbox.id filtert den HTML-Typ; der Rollen-Locator muss switch verwenden.
+
+- id: checks-045
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: CHECK
+  checkbox:
+    id: L05-toggle
+
+- id: checks-046
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: CHECKED
+  target:
+    role: switch
+    name: Notifications
+    exact: true
+
+- id: checks-047
+  type: GUI
+  op: EXEC
+  page: L05 - Checks
+  action: UNCHECK
+  target:
+    role: switch
+    name: Notifications
+    exact: true
+
+- id: checks-048
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-toggle
+
+- section: Abwesenheit
+  description: Diese Checkbox-ID existiert ausdrücklich nicht.
+
+- id: checks-049
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: NOT_EXISTS
+  checkbox:
+    id: nicht-vorhandene-checkbox
+
+- id: checks-050
+  type: GUI
+  op: ASSERT
+  page: L05 - Checks
+  action: HIDDEN
+  checkbox:
+    id: nicht-vorhandene-checkbox
+
+- section: DISABLED und Freigabe
+  description: Eine native Checkbox ist gesperrt; erst ENABLED abwarten, dann CHECK.
+
+- id: checks-extra-001
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: DISABLED
+  checkbox:
+    id: L05-disabled
+
+- id: checks-extra-002
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CLICK
+  button:
+    id: L05-enable
+
+- id: checks-extra-003
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: ENABLED
+  checkbox:
+    id: L05-disabled
+  timeout: 2500
+
+- id: checks-extra-004
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  checkbox:
+    id: L05-disabled
+
+- id: checks-extra-005
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  checkbox:
+    id: L05-disabled
+
+- type: WAIT
+  value: '5000'
+
+- section: Alle WAIT-Zustände
+  description: attached, visible, hidden und detached sind DOM-Zustände, nicht checked.
+
+- id: checks-extra-006
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: EXISTS
+  checkbox:
+    id: L05-hidden
+
+- id: checks-extra-007
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: HIDDEN
+  checkbox:
+    id: L05-hidden
+
+- id: checks-extra-008
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: WAIT
+  checkbox:
+    id: L05-hidden
+  state: attached
+
+- id: checks-extra-009
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CLICK
+  button:
+    id: L05-show
+
+- id: checks-extra-010
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: WAIT
+  checkbox:
+    id: L05-hidden
+  state: visible
+  timeout: 2500
+
+- id: checks-extra-011
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  checkbox:
+    id: L05-hidden
+
+- id: checks-extra-012
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  checkbox:
+    id: L05-hidden
+
+- type: WAIT
+  value: '5000'
+
+- id: checks-extra-013
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CLICK
+  button:
+    id: L05-hide
+
+- id: checks-extra-014
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: WAIT
+  checkbox:
+    id: L05-hidden
+  state: hidden
+
+- id: checks-extra-015
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: EXISTS
+  checkbox:
+    id: L05-hidden
+
+- id: checks-extra-016
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CLICK
+  button:
+    id: L05-remove
+
+- id: checks-extra-017
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: WAIT
+  checkbox:
+    id: L05-hidden
+  state: detached
+
+- id: checks-extra-018
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: NOT_EXISTS
+  checkbox:
+    id: L05-hidden
+
+- section: TestId und scope
+  description: Zwei gleichnamige Checkboxen gezielt unterscheiden.
+
+- id: checks-extra-019
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: COUNT
+  checkbox:
+    label: Zustimmung
+    exact: true
+  expected: 2
+
+- id: checks-extra-020
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: VISIBLE
+  target:
+    testId: profile-check
+
+- id: checks-extra-021
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  target:
+    role: checkbox
+    name: Zustimmung
+    exact: true
+    scope:
+      css: '#L05-profile'
+
+- id: checks-extra-022
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  checkbox:
+    id: L05-profile-check
+
+- id: checks-extra-023
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  target:
+    role: checkbox
+    name: Zustimmung
+    exact: true
+    scope:
+      css: '#L05-team'
+
+- id: checks-extra-024
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  checkbox:
+    id: L05-team-check
+
+- section: index und nth
+  description: Nultbasierte Reihenfolge ausdrücklich demonstrieren; scope ist fachlich
+    klarer.
+
+- id: checks-extra-025
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: UNCHECK
+  checkbox:
+    label: Zustimmung
+    exact: true
+    index: 0
+
+- id: checks-extra-026
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-profile-check
+
+- id: checks-extra-027
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: UNCHECK
+  target:
+    role: checkbox
+    name: Zustimmung
+    exact: true
+    nth: 1
+
+- id: checks-extra-028
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-team-check
+
+- type: WAIT
+  value: '5000'
+
+- section: Value und Ausgangsattribut
+  description: Das checked-Attribut bleibt Ausgangsmarkup; der Livezustand wird mit
+    UNCHECKED geprüft.
+
+- id: checks-extra-029
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  checkbox:
+    id: L05-valued
+
+- id: checks-extra-030
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: UNCHECK
+  checkbox:
+    id: L05-valued
+
+- id: checks-extra-031
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: UNCHECKED
+  checkbox:
+    id: L05-valued
+
+- id: checks-extra-032
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: VALUE
+  checkbox:
+    id: L05-valued
+  expected: accepted
+
+- id: checks-extra-033
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: COUNT
+  target:
+    css: input[id="L05-valued"][checked]
+  expected: 1
+
+- section: HOVER mit Wirkung
+  description: Der Hinweis erscheint nach der Mausbewegung.
+
+- id: checks-extra-034
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: HOVER
+  checkbox:
+    id: L05-hover
+
+- id: checks-extra-035
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: TEXT
+  target:
+    css: '#L05-tooltip'
+  expected: Hinweis sichtbar
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframe und scope
+  description: Checkbox und Radiogruppe innerhalb eines eigenen Dokuments prüfen.
+
+- id: checks-extra-036
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  target: &id001
+    role: checkbox
+    name: Frame-Zustimmung
+    exact: true
+    frames:
+    - '#L05-frame'
+    scope:
+      css: '#L05-frame-group'
+
+- id: checks-extra-037
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  target: *id001
+
+- id: checks-extra-038
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  target:
+    css: '#L05-frame-a'
+    frames:
+    - '#L05-frame'
+
+- id: checks-extra-039
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  target:
+    css: '#L05-frame-a'
+    frames:
+    - '#L05-frame'
+
+- id: checks-extra-040
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: UNCHECKED
+  target:
+    css: '#L05-frame-b'
+    frames:
+    - '#L05-frame'
+
+- id: checks-extra-041
+  type: GUI
+  op: EXEC
+  page: L05 - Vollständige Checks
+  action: CHECK
+  target:
+    css: '#L05-frame-b'
+    frames:
+    - '#L05-frame'
+
+- id: checks-extra-042
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: CHECKED
+  target:
+    css: '#L05-frame-b'
+    frames:
+    - '#L05-frame'
+
+- id: checks-extra-043
+  type: GUI
+  op: ASSERT
+  page: L05 - Vollständige Checks
+  action: UNCHECKED
+  target:
+    css: '#L05-frame-a'
+    frames:
+    - '#L05-frame'
+
+- section: Abschluss
+  description: Alle unterstützten dokumentierten Varianten sind vorhanden; indeterminate
+    und aria-pressed bleiben keine Checkboxaktionen.

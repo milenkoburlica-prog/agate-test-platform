@@ -3,6 +3,7 @@ package at.co.svc.agate.engine.gui;
 import java.io.Serializable;
 
 public class GuiResponse implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final boolean success;
     private final String value;
     private final String errorMessage;

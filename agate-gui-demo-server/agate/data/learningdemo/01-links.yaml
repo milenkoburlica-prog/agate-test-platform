@@ -1,0 +1,7 @@
+name: AGATE learning L01
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.01-links
+  parameters:
+    verbose: 'true'

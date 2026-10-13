@@ -173,7 +173,9 @@ public class MainMigrationApp {
             );
         }
 
-        MigrationReport.printSummary();
+        MigrationReport.printSummary(
+                Paths.get(System.getProperty("user.dir"), migrationDir, appID),
+                baseFileName);
 
         migrationSucceeded = true;
 

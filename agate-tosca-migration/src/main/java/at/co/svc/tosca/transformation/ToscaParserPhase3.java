@@ -173,6 +173,12 @@ public class ToscaParserPhase3 {
         ArrayNode originalValues =
                 (ArrayNode) valuesNode;
 
+        // GUI structural constraints belong to locators; do not apply API path/index rewriting.
+        for (JsonNode value : originalValues) {
+            if (value.has("gui")) return newStep;
+        }
+
+
 
         // =====================================================
         // 3. BUILD INDEXES FOR LIST-LIKE LEVELS

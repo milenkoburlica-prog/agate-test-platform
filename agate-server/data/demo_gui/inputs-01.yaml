@@ -1,0 +1,30 @@
+testCases: 
+
+  - id: "AGATE learning Inputs"
+    description: "AGATE learning Inputs"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      name: AGATE learning L02
+
+    timeout: 10000 
+    steps:
+
+      - section: Inputs — Lernseite öffnen
+        description: 'Seite: http://127.0.0.1:8767/03-inputs.html'
+        
+      - type: GUI
+        op: EXEC
+        action: OPEN
+        page: L02 — Inputs 
+        url: http://127.0.0.1:8767/03-inputs.html
+       
+        
+      - section: Eingabefelder und Tastatur
+        description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+          auch bei verbose=false sichtbar.
+      
+      - type: CALL
+        command: reusable.inputs.inputs-01
+        parameters:
+          verbose: 'true'

@@ -1,0 +1,85 @@
+steps:
+
+- section: Iframes und Bereiche — Lernseite öffnen
+  description: 'Seite: http://127.0.0.1:8767/09-frames-01.html'
+
+- type: GUI
+  op: EXEC
+  page: L09 — Frames and scoped locators
+  action: OPEN
+  url: http://127.0.0.1:8767/09-frames-01.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframes und Bereiche — Eingabefeld befüllen
+  description: css=#FRAME-name; innerhalb des Iframes; Einen Eingabewert setzen.
+
+- type: GUI
+  op: EXEC
+  page: L09 — Frames and scoped locators
+  action: FILL
+  target:
+    css: '#FRAME-name'
+    frames:
+    - '#L09-frame'
+  value: Inside frame
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframes und Bereiche — Element anklicken
+  description: css=#FRAME-button; innerhalb des Iframes
+
+- type: GUI
+  op: EXEC
+  page: L09 — Frames and scoped locators
+  action: CLICK
+  target:
+    css: '#FRAME-button'
+    frames:
+    - '#L09-frame'
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframes und Bereiche — Vollständigen Text prüfen
+  description: 'css=#FRAME-result; innerhalb des Iframes; Erwartung: Frame clicked'
+
+- type: GUI
+  op: ASSERT
+  page: L09 — Frames and scoped locators
+  action: TEXT
+  target:
+    css: '#FRAME-result'
+    frames:
+    - '#L09-frame'
+  expected: Frame clicked
+
+- section: Iframes und Bereiche — Element anklicken
+  description: role=button; name=Scoped action; auf den angegebenen Bereich begrenzt
+
+- type: GUI
+  op: EXEC
+  page: L09 — Frames and scoped locators
+  action: CLICK
+  target:
+    role: button
+    name: Scoped action
+    exact: true
+    scope:
+      css: '#L09-right'
+
+- type: WAIT
+  value: '5000'
+
+- section: Iframes und Bereiche — Vollständigen Text prüfen
+  description: 'css=#L09-result; Erwartung: Right'
+
+- type: GUI
+  op: ASSERT
+  page: L09 — Frames and scoped locators
+  action: TEXT
+  target:
+    css: '#L09-result'
+  expected: Right

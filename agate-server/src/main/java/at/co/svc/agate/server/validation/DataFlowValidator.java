@@ -294,6 +294,8 @@ public final class DataFlowValidator
                     }
                 }
 
+                registerGuiBuffer(node, type, op, variables);
+
                 /*
                  * =========================================================
                  * 7. Native BUFFER / EXEC creates runtime variable
@@ -697,6 +699,8 @@ public final class DataFlowValidator
                 }
             }
 
+            registerGuiBuffer(step, type, op, variables);
+
             /*
              * =====================================================
              * 5. Native BUFFER / EXEC creates variable
@@ -958,6 +962,16 @@ public final class DataFlowValidator
 
         return RESPONSE_ENGINES.contains(type)
                 && "EXEC".equals(op);
+    }
+
+    private static void registerGuiBuffer(JsonNode step, String type, String op, Set<String> variables) {
+        if (!"GUI".equals(type)) return;
+        if (!("EXTRACT".equals(op) || "BUFFER".equals(op) || "DOWNLOAD".equals(op) || "DOWNLOAD_PDF".equals(op))) return;
+        String name = "BUFFER".equals(op) ? ValidationUtil.text(step,"name") : null;
+        if (name == null) name = ValidationUtil.text(step,"buffer");
+        if (name == null) name = ValidationUtil.text(step,"response");
+        if (name == null) name = ("DOWNLOAD".equals(op) || "DOWNLOAD_PDF".equals(op)) ? "download" : "extracted";
+        if (!name.isBlank()) variables.add(name);
     }
 
     private boolean createsBufferVariable(

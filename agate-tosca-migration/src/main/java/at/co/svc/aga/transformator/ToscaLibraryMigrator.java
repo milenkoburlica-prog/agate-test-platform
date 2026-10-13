@@ -158,7 +158,7 @@ public class ToscaLibraryMigrator {
         StringBuilder yaml =
                 new StringBuilder();
 
-        yaml.append("steps:");
+        yaml.append("steps:\n");
 
         String outputPath =
                 "migration/data/"
@@ -287,6 +287,26 @@ public class ToscaLibraryMigrator {
                 return baos.toString();
             }
 
+            if (at.co.svc.aga.transformator.utils.ProcessExecuteSqlScript.process(step, "", yamlOutputPath)) {
+                System.out.flush();
+                return baos.toString(StandardCharsets.UTF_8);
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessPdfWorkflow.process(step, "", yamlOutputPath)) {
+                System.out.flush();
+                return baos.toString(StandardCharsets.UTF_8);
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessWindowStep.process(step, "", yamlOutputPath)) {
+                System.out.flush();
+                return baos.toString(StandardCharsets.UTF_8);
+            }
+
+            if (at.co.svc.aga.transformator.utils.ProcessGuiStep.process(step, "", yamlOutputPath)) {
+                System.out.flush();
+                return baos.toString(StandardCharsets.UTF_8);
+            }
+
             // 2. Set "OP" if it has not already been set
             if (step.getOp() == null || step.getOp().isEmpty()) {
                 if (moduleName.contains("DB Expert") || moduleName.contains("SQL")) {
@@ -379,7 +399,7 @@ public class ToscaLibraryMigrator {
                 } else {
                      System.out.println("      ");
                      System.out.println("      # ERROR");
-                     System.out.println("        Unprocessed moduleName=" + moduleName);
+                     System.out.println("      # Unprocessed moduleName=" + moduleName);
                      System.out.println("      ");
 
                      MigrationReport.registerUnprocessedModule(

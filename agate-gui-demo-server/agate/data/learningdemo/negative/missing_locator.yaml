@@ -1,0 +1,13 @@
+# Expected failure. Run individually; excluded from Learning_All.
+name: 'Expected failure: missing_locator'
+steps:
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/02-buttons.html
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#does-not-exist'
+  timeout: 1500

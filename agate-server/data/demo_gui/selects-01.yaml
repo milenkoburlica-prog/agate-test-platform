@@ -1,0 +1,32 @@
+testCases: 
+
+  - id: "AGATE learning Links"
+    description: "AGATE learning Links"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      name: AGATE learning L02
+
+    timeout: 10000 
+    steps:
+
+      - section: Dropdowns und Auswahlstrategien — Lernseite öffnen
+        description: 'Seite: http://127.0.0.1:8767/04-selects.html'
+      
+      - type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/04-selects.html
+        page: L04 — Dropdowns and multiple selection
+
+      - type: WAIT
+        value: '5000'
+      
+      - section: Dropdowns und Auswahlstrategien
+        description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+          auch bei verbose=false sichtbar.
+
+      - type: CALL
+        command: reusable.selects.selects-01
+        parameters:
+          verbose: 'true'

@@ -1,0 +1,224 @@
+steps:
+
+- section: Lokale Upload-Dateien prüfen
+  description: Pfad ist relativ zum AGATE-Prozess-Arbeitsverzeichnis, nicht zum YAML- oder Webserver-Ordner.
+
+- id: files-precheck-1
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: demo-fixtures/demo-upload.txt
+
+- id: files-precheck-2
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: demo-fixtures/demo-second.txt
+
+- section: Lernseite öffnen
+  description: Lernseite öffnen
+
+- id: files-02-001
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/11-files.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Einzeldatei per CSS hochladen
+  description: Einzeldatei per CSS hochladen
+
+- id: files-02-002
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: UPLOAD
+  target:
+    css: '#L11-upload'
+  value: demo-fixtures/demo-upload.txt
+
+- section: Dateiname bestätigen
+  description: Dateiname bestätigen
+
+- id: files-02-003
+  type: GUI
+  op: ASSERT
+  page: Files - Referenz 02
+  action: TEXT
+  target:
+    css: '#L11-result'
+  expected: demo-upload.txt
+
+- type: WAIT
+  value: '5000'
+
+- section: Upload über Label ersetzen
+  description: Upload über Label ersetzen
+
+- id: files-02-004
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: UPLOAD
+  target:
+    label: Einzeldatei
+  value: demo-fixtures/demo-second.txt
+
+- section: Ersetzter Dateiname
+  description: Ersetzter Dateiname
+
+- id: files-02-005
+  type: GUI
+  op: ASSERT
+  page: Files - Referenz 02
+  action: TEXT
+  target:
+    css: '#L11-result'
+  expected: demo-second.txt
+
+- section: Mehrere Dateien hochladen
+  description: Mehrere Dateien hochladen
+
+- id: files-02-006
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: UPLOAD
+  target:
+    css: '#L11-multi'
+  value:
+  - demo-fixtures/demo-upload.txt
+  - demo-fixtures/demo-second.txt
+
+- section: Beide Dateien bestätigen
+  description: Beide Dateien bestätigen
+
+- id: files-02-007
+  type: GUI
+  op: ASSERT
+  page: Files - Referenz 02
+  action: TEXT
+  target:
+    css: '#L11-multi-result'
+  expected: demo-upload.txt, demo-second.txt
+
+- section: Leere Liste löscht Dateiauswahl
+  description: Leere Liste löscht Dateiauswahl
+
+- id: files-02-008
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: UPLOAD
+  target:
+    css: '#L11-multi'
+  value: []
+
+- section: Auswahl ist leer
+  description: Auswahl ist leer
+
+- id: files-02-009
+  type: GUI
+  op: ASSERT
+  page: Files - Referenz 02
+  action: TEXT
+  target:
+    css: '#L11-multi-result'
+  expected: Keine Datei
+
+- section: Download mit explizitem Dateinamen
+  description: Download mit explizitem Dateinamen
+
+- id: files-02-010
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: DOWNLOAD
+  target:
+    css: '#L11-download'
+  value: learning-download-02.txt
+  buffer: DownloadedText
+
+- section: Gespeicherte Datei vorhanden
+  description: Gespeicherte Datei vorhanden
+
+- id: files-02-011
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: '{B[DownloadedText]}'
+
+- section: Download mit vorgeschlagenem Namen
+  description: Download mit vorgeschlagenem Namen
+
+- id: files-02-012
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: DOWNLOAD
+  target:
+    css: '#L11-download'
+  buffer: SuggestedDownload
+
+- section: Zweite Datei vorhanden
+  description: Zweite Datei vorhanden
+
+- id: files-02-013
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: '{B[SuggestedDownload]}'
+
+- type: WAIT
+  value: '5000'
+
+- section: Originale POST-PDF-Antwort speichern
+  description: Originale POST-PDF-Antwort speichern
+
+- id: files-02-014
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: DOWNLOAD_PDF
+  target:
+    css: '#L11-pdf'
+  outputFile: output/learningdemo/files-original-02.pdf
+  responseUrlGlob: '**/demo-report.pdf*'
+  buffer: OriginalPdf
+  timeout: 10000
+
+- section: PDF-Datei vorhanden
+  description: PDF-Datei vorhanden
+
+- id: files-02-015
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: '{B[OriginalPdf]}'
+
+- section: Ausgangsseite nach PDF wieder bedienen
+  description: Ausgangsseite nach PDF wieder bedienen
+
+- id: files-02-016
+  type: GUI
+  op: ASSERT
+  page: Files - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L11-pdf'
+
+- type: WAIT
+  value: '5000'
+
+- section: Screenshot explizit erzeugen
+  description: Screenshot explizit erzeugen
+
+- id: files-02-017
+  type: GUI
+  op: EXEC
+  page: Files - Referenz 02
+  action: SCREENSHOT
+  value: files-02.png

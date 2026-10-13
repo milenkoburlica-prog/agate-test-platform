@@ -1,0 +1,887 @@
+# Vollständige positive Button-Lektion mit deutschen Abschnittsbeschreibungen.
+steps:
+- section: Vorbereitung
+  description: Die erweiterte L02-Seite frisch öffnen. timeout gehört zum TestCase,
+    nicht zu variables.
+- id: l02b-001
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: OPEN
+  url: http://127.0.0.1:8767/02-buttons.html
+- type: WAIT
+  value: '5000'
+- section: Locator - Name exact=true
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-002
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    text: (O)K
+    exact: true
+- section: Locator - Name mit Standard exact=true
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-003
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    text: (O)K
+- section: Locator - HTML-ID
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-004
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    id: L02-ok
+- section: Locator - CSS
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-005
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  target:
+    css: '#L02-ok'
+- section: Locator - Rolle und Name
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-006
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  target:
+    role: button
+    name: (O)K
+    exact: true
+- section: Locator - testId
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-007
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  target:
+    testId: nested-button
+- section: Locator - Allgemeiner Text-Locator
+  description: Alternative Auswahl; die Strategie muss eindeutig zum tatsächlichen
+    Element passen.
+- id: l02b-008
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  target:
+    text: Nested action
+    exact: true
+- section: 'Teilstring: zwei Treffer'
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-009
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: COUNT
+  button:
+    text: (O)K
+    exact: false
+  expected: 2
+- section: Groß-/Kleinschreibung beim Teilstring
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-010
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: COUNT
+  button:
+    text: (o)k
+    exact: false
+  expected: 2
+- section: Sternchen im Namen ist literal
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-011
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: COUNT
+  button:
+    text: (O)K*
+    exact: true
+  expected: 0
+- section: Timeout des Schritts
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-012
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    id: L02-ok
+  timeout: 2500
+- section: ASSERT - TEXT
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-013
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  button:
+    id: L02-nested
+  expected: Nested action
+- section: ASSERT - TEXT_EQUALS
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-014
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT_EQUALS
+  button:
+    id: L02-nested
+  expected: Nested action
+- section: ASSERT - TEXT_CONTAINS
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-015
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT_CONTAINS
+  button:
+    id: L02-nested
+  expected: action
+- section: ASSERT - TEXT_GLOB
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-016
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT_GLOB
+  button:
+    id: L02-nested
+  expected: Nested*
+- section: ASSERT - TEXT_MATCHES
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-017
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT_MATCHES
+  button:
+    id: L02-nested
+  expected: ^Nested action$
+- section: ASSERT - VALUE
+  description: 'Input-Button: Der tatsächliche value besitzt am Ende ein Leerzeichen.'
+- id: l02b-018
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE
+  button:
+    id: L02-ok
+  expected: '(O)K '
+- section: ASSERT - VALUE_GLOB
+  description: 'Input-Button: Der tatsächliche value besitzt am Ende ein Leerzeichen.'
+- id: l02b-019
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE_GLOB
+  button:
+    id: L02-ok
+  expected: (O)K*
+- section: ASSERT - VALUE_MATCHES
+  description: 'Input-Button: Der tatsächliche value besitzt am Ende ein Leerzeichen.'
+- id: l02b-020
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE_MATCHES
+  button:
+    id: L02-ok
+  expected: ^\(O\)K\s*$
+- section: 'EXISTS: unsichtbar, aber vorhanden'
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-021
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: EXISTS
+  button:
+    id: L02-hidden
+- section: 'HIDDEN: vorhandenes verborgenes Element'
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-022
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: HIDDEN
+  button:
+    id: L02-hidden
+- section: 'ENABLED: normaler Button'
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-023
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: ENABLED
+  button:
+    id: L02-ok
+- section: 'DISABLED: natives disabled'
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-024
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: DISABLED
+  button:
+    id: L02-disabled
+- section: Zustandsänderung auslösen
+  description: Nach 250 ms wird der native disabled-Button freigegeben; keine feste
+    Pause dazwischen.
+- id: l02b-025
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-enable
+- section: EXEC - WAIT
+  description: Auf visible warten; Sichtbarkeit beweist noch nicht enabled.
+- id: l02b-026
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: WAIT
+  button:
+    id: L02-disabled
+  state: visible
+  timeout: 2500
+- section: Freigegebenen Zustand abwarten
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-027
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: ENABLED
+  button:
+    id: L02-disabled
+  timeout: 2500
+- section: Freigegebene Aktion ausführen
+  description: Erst nach ENABLED klicken.
+- id: l02b-028
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-disabled
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-029
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-state-result'
+  expected: Aktion ausgeführt
+- section: NBSP und Namensnormalisierung
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-030
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    text: Leerzeichen normalisiert
+    exact: true
+- section: ARIA überschreibt den Namen
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-031
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    text: Aktion bestätigen
+    exact: true
+- section: ARIA-Buttontext bleibt getrennt
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-032
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  button:
+    id: L02-aria
+  expected: Sichtbarer Text
+- section: Icon mit Accessible Name
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-033
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    text: Ansicht öffnen
+    exact: true
+- section: EXEC - CLICK
+  description: Den Input-Button über den normalisierten Namen klicken.
+- id: l02b-034
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    text: (O)K
+    exact: true
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-035
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: OK clicked
+- section: Verschachtelter span
+  description: Der Buttonname reicht aus; kein span-CLICK erforderlich.
+- id: l02b-036
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    text: Nested action
+    exact: true
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-037
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Nested clicked
+- section: EXEC - HOVER
+  description: Der Hover-Button blendet einen sichtbaren Hinweis ein.
+- id: l02b-038
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: HOVER
+  button:
+    id: L02-hover
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-039
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-tooltip'
+  expected: Hinweis sichtbar
+- section: EXEC - PRESS / Enter
+  description: Enter aktiviert den nativen Button.
+- id: l02b-040
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: PRESS
+  button:
+    id: L02-continue
+  value: Enter
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-041
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Continue clicked
+- section: Vorbereitung der Space-Prüfung
+  description: Das Ergebnis löschen, damit eine alte Erfolgsanzeige die Prüfung nicht
+    erfüllt.
+- id: l02b-042
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-clear-result
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-043
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Ready
+- section: EXEC - PRESS / Space
+  description: Die Leertaste aktiviert einen nativen Button.
+- id: l02b-044
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: PRESS
+  button:
+    id: L02-continue
+  value: Space
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-045
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Continue clicked
+- section: Zwei gleiche Namen
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-046
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: COUNT
+  button:
+    text: Repeat
+    exact: true
+  expected: 2
+- section: button.index demonstrieren
+  description: Explizit den ersten Repeat-Button wählen; index ist nultbasiert und
+    reihenfolgeabhängig.
+- id: l02b-047
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    text: Repeat
+    exact: true
+    index: 0
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-048
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Repeat 0
+- section: target.nth demonstrieren
+  description: Die technische Alternative wählt den zweiten Treffer.
+- id: l02b-049
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  target:
+    role: button
+    name: Repeat
+    exact: true
+    nth: 1
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-050
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Repeat 1
+- section: 'scope: Editor'
+  description: Den gleichnamigen Speichern-Button fachlich über seinen Bereich eingrenzen.
+- id: l02b-051
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  target:
+    role: button
+    name: Speichern
+    exact: true
+    scope:
+      css: '#L02-editor'
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-052
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-scope-result'
+  expected: Editor gespeichert
+- section: 'scope: Einstellungen'
+  description: Denselben Namen im anderen Bereich gezielt auswählen.
+- id: l02b-053
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  target:
+    role: button
+    name: Speichern
+    exact: true
+    scope:
+      css: '#L02-settings'
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-054
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-scope-result'
+  expected: Einstellungen gespeichert
+- section: Eigener role=button
+  description: button.id filtert native Tags. Für dieses div wird target.role verwendet.
+- id: l02b-055
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: PRESS
+  target:
+    role: button
+    name: Eigene Aktion
+    exact: true
+  value: Enter
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-056
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-custom-result'
+  expected: Eigene Aktion ausgeführt
+- section: 'EXTRACT: Attribut'
+  description: Die echte Input-Beschriftung lesen und anschließend als VALUE-Erwartung
+    verwenden.
+- id: l02b-057
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: EXTRACT
+  button:
+    id: L02-ok
+  attribute: value
+  buffer: L02ButtonLabel
+- section: EXTRACT-Ergebnis prüfen
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-058
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE
+  button:
+    id: L02-ok
+  expected: '{B[L02ButtonLabel]}'
+- section: 'EXTRACT: source=value'
+  description: Input-value direkt lesen; nicht für normale button-Elemente verwenden.
+- id: l02b-059
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: EXTRACT
+  button:
+    id: L02-ok
+  source: value
+  buffer: L02InputValue
+- section: Direkt gelesenen Wert prüfen
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-060
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE
+  button:
+    id: L02-ok
+  expected: '{B[L02InputValue]}'
+- section: 'EXTRACT: innerText'
+  description: Ohne attribute/source wird der Text eines normalen Buttons gelesen.
+- id: l02b-061
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: EXTRACT
+  button:
+    id: L02-nested
+  buffer: L02ButtonText
+- section: Gelesenen Text prüfen
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-062
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  button:
+    id: L02-nested
+  expected: '{B[L02ButtonText]}'
+- section: Input type=submit
+  description: Das Formular fängt den Submit ab und protokolliert den auslösenden
+    Button.
+- id: l02b-063
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-input-submit
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-064
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-form-result'
+  expected: Input abgesendet
+- section: Button type=submit
+  description: Auch ein nativer button kann ein Formular absenden.
+- id: l02b-065
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-button-submit
+- type: WAIT
+  value: '5000'
+- section: Ergebnis prüfen
+  description: Nicht nur den Klick, sondern seine sichtbare Wirkung prüfen.
+- id: l02b-066
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-form-result'
+  expected: Button abgesendet
+- section: Formularwert vorbereiten
+  description: FILL gehört zum Eingabefeld; hier ist es Vorbereitung der Reset-Prüfung.
+- id: l02b-067
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: FILL
+  target:
+    css: '#L02-form-name'
+  value: Geänderter Wert
+- section: Input type=reset
+  description: Zur ursprünglichen Formularbelegung zurücksetzen.
+- id: l02b-068
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-input-reset
+- type: WAIT
+  value: '5000'
+- section: Reset-Wert prüfen
+  description: Das Eingabefeld muss wieder seinen Anfangswert besitzen.
+- id: l02b-069
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE
+  target:
+    css: '#L02-form-name'
+  expected: Anfangswert
+- section: Zweiten Reset vorbereiten
+  description: Den Formularwert erneut ändern.
+- id: l02b-070
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: FILL
+  target:
+    css: '#L02-form-name'
+  value: Anderer Wert
+- section: Button type=reset
+  description: Auch der native Reset-Button setzt die Formularbelegung zurück.
+- id: l02b-071
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-button-reset
+- type: WAIT
+  value: '5000'
+- section: Zweiten Reset prüfen
+  description: Die Rücksetzung am Eingabewert nachweisen.
+- id: l02b-072
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VALUE
+  target:
+    css: '#L02-form-name'
+  expected: Anfangswert
+- section: Toggle-Button
+  description: aria-pressed ist kein checked-Zustand. Den Button klicken und das Attribut
+    über CSS prüfen.
+- id: l02b-073
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-toggle
+- type: WAIT
+  value: '5000'
+- section: Toggle-Ergebnis prüfen
+  description: COUNT auf den konkreten Attributzustand; nicht ASSERT CHECKED verwenden.
+- id: l02b-074
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: COUNT
+  target:
+    css: button[id="L02-toggle"][aria-pressed="true"]
+  expected: 1
+- section: Iframe-Kontext
+  description: Der Button liegt in einem eigenen Dokument.
+- id: l02b-075
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  target:
+    role: button
+    name: Frame-Aktion
+    exact: true
+    frames:
+    - '#L02-frame'
+- type: WAIT
+  value: '5000'
+- section: Iframe-Ergebnis
+  description: Den Zustand innerhalb desselben Frames prüfen.
+- id: l02b-076
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: TEXT
+  target:
+    css: '#L02-frame-result'
+    frames:
+    - '#L02-frame'
+  expected: Frame-Aktion ausgeführt
+- section: Entfernung auslösen
+  description: Der Button entfernt sich selbst aus dem DOM.
+- id: l02b-077
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: CLICK
+  button:
+    id: L02-remove
+- type: WAIT
+  value: '5000'
+- section: ASSERT - NOT_EXISTS
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-078
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: NOT_EXISTS
+  button:
+    id: L02-remove
+- section: EXEC - DOWNLOAD
+  description: Der Button erzeugt einen echten Textdownload.
+- id: l02b-079
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: DOWNLOAD
+  button:
+    id: L02-download
+  value: button-demo.txt
+  buffer: L02Download
+  timeout: 10000
+- type: WAIT
+  value: '5000'
+- type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: '{B[L02Download]}'
+- section: EXEC - DOWNLOAD_PDF
+  description: Originalen POST-PDF-Inhalt speichern. Die PDF-Tab-Korrektur 1.0.65
+    schließt den neuen Tab.
+- id: l02b-080
+  type: GUI
+  op: EXEC
+  page: L02 - Buttons und Varianten
+  action: DOWNLOAD_PDF
+  button:
+    id: L02-pdf
+  outputFile: output/learningdemo/button-original.pdf
+  responseUrlGlob: '**/demo-report.pdf*'
+  buffer: L02PDF
+  timeout: 10000
+- type: WAIT
+  value: '5000'
+- type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: '{B[L02PDF]}'
+- section: Rückkehr zur Ausgangsseite
+  description: Die beschriebene Erwartung automatisch prüfen.
+- id: l02b-081
+  type: GUI
+  op: ASSERT
+  page: L02 - Buttons und Varianten
+  action: VISIBLE
+  button:
+    id: L02-pdf
+- section: Abschluss
+  description: Alle dokumentierten Buttonaktionen und Prüfungen wurden durch die positive
+    Lektion abgedeckt.

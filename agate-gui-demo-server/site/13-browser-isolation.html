@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGATE L13 - Browser Reuse / Isolated Context</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f7fb;color:#132039;max-width:820px;margin:40px auto;padding:0 22px}
+    h1{font-size:29px}p{line-height:1.55} .board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+    .panel{border:1px solid #dbe2ed;border-radius:14px;background:#fff;padding:16px}
+    .panel small{display:block;color:#65748d;margin-bottom:12px}.panel strong{font:700 22px ui-monospace,monospace;overflow-wrap:anywhere}
+    button{font-size:15px;border:0;background:#1a57bf;color:#fff;border-radius:9px;padding:10px 16px;margin:4px 10px 4px 0;cursor:pointer}
+    button:hover{background:#11428f} input{font-size:15px;border:1px solid #bcc8db;padding:11px;border-radius:9px;width:calc(100% - 24px);margin-bottom:10px}
+    .hint{background:#e7eefb;padding:14px 18px;border-radius:12px;font-size:14px}
+    #isolation-ok{font-weight:650;color:#216044}
+    @media(max-width:550px){.board{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>AGATE Learning L13 · Browser Reuse + ISOLATED</h1>
+  <p>Each test case opens this same page in a <strong>new BrowserContext</strong>, while Chromium itself stays running for the entire suite.</p>
+  <div class="board">
+    <div class="panel"><small>localStorage marker</small><strong id="state">LOADING</strong></div>
+    <div class="panel"><small>Cookie marker</small><strong id="cookie">LOADING</strong></div>
+    <div class="panel"><small>Saved memo</small><strong id="memo-state">LOADING</strong></div>
+  </div>
+  <div class="panel">
+    <p>Write state into <em>this browser context only</em>:</p>
+    <button id="mark-one" type="button">Set marker ONE</button>
+    <button id="mark-two" type="button">Set marker TWO</button>
+    <p>Write a memo to localStorage:</p>
+    <input id="memo" type="text" placeholder="Memo" aria-label="Memo">
+    <button id="save-memo" type="button">Save memo</button>
+  </div>
+  <p class="hint" id="isolation-ok">Isolation check: a fresh test should show CLEAN / EMPTY / EMPTY, even after previous tests wrote state.</p>
+  <script>
+  (() => {
+    const flagKey = 'agate_demo_flag';
+    const memoKey = 'agate_demo_memo';
+    function cookieValue() {
+      const match = document.cookie.split('; ').find(v => v.startsWith('agate_demo_cookie='));
+      return match ? decodeURIComponent(match.slice('agate_demo_cookie='.length)) : 'EMPTY';
+    }
+    function render() {
+      document.querySelector('#state').textContent = localStorage.getItem(flagKey) || 'CLEAN';
+      document.querySelector('#cookie').textContent = cookieValue();
+      document.querySelector('#memo-state').textContent = localStorage.getItem(memoKey) || 'EMPTY';
+    }
+    function mark(value) {
+      localStorage.setItem(flagKey, value);
+      document.cookie = 'agate_demo_cookie=' + encodeURIComponent(value) + '; Path=/; SameSite=Lax';
+      render();
+    }
+    document.querySelector('#mark-one').addEventListener('click', () => mark('ONE'));
+    document.querySelector('#mark-two').addEventListener('click', () => mark('TWO'));
+    document.querySelector('#save-memo').addEventListener('click', () => {
+      localStorage.setItem(memoKey, document.querySelector('#memo').value);
+      render();
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>

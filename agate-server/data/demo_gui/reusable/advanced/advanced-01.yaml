@@ -1,0 +1,141 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+steps:
+- section: Shadow DOM und erweiterte Elemente — Lernseite öffnen
+  description: 'Seite: http://127.0.0.1:8767/12-advanced.html'
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/12-advanced.html
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Element anklicken
+  description: css=#L12-shadow-button
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-shadow-button'
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Vollständigen Text prüfen
+  description: 'css=#L12-shadow-result; Erwartung: Shadow clicked'
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-shadow-result'
+  expected: Shadow clicked
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Eingabefeld befüllen
+  description: role=textbox; name=Editable note; Einen Eingabewert setzen.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    role: textbox
+    name: Editable note
+  value: Edited note
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Vollständigen Text prüfen
+  description: 'css=#L12-editable; Erwartung: Edited note'
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-editable'
+  expected: Edited note
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Element anklicken
+  description: css=#L12-summary
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-summary'
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Sichtbarkeit prüfen
+  description: css=#L12-detail-text
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-detail-text'
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Element anklicken
+  description: css=#L12-modal-open
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-modal-open'
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Sichtbarkeit prüfen
+  description: css=#L12-dialog
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-dialog'
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Element anklicken
+  description: css=#L12-modal-close
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-modal-close'
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Unsichtbarkeit prüfen
+  description: css=#L12-dialog
+- type: GUI
+  op: ASSERT
+  action: HIDDEN
+  target:
+    css: '#L12-dialog'
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Element anklicken
+  description: css=#L12-alert
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L12-alert'
+  page: L12 — Shadow DOM, editable content and dialogs
+- type: WAIT
+  value: '5000'
+- section: Shadow DOM und erweiterte Elemente — Vollständigen Text prüfen
+  description: 'css=#L12-alert-result; Erwartung: Alert dismissed'
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L12-alert-result'
+  expected: Alert dismissed
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Sichtbarkeit prüfen
+  description: css=#L12-svg
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-svg'
+  page: L12 — Shadow DOM, editable content and dialogs
+- section: Shadow DOM und erweiterte Elemente — Sichtbarkeit prüfen
+  description: css=#L12-canvas
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L12-canvas'
+  page: L12 — Shadow DOM, editable content and dialogs

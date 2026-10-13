@@ -13,6 +13,7 @@ import at.co.svc.agate.core.dsl.register.YamlTestCaseLoader;
 import at.co.svc.agate.core.dsl.runtime.ExecutionContext;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.engine.gui.GuiEngine;
+import at.co.svc.agate.engine.gui.GuiRunScope;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -151,7 +152,8 @@ public class TestRunnerService {
         TestLogger frameworkLogger = msg -> logService.addLog(sessionId, msg);
         TestExecutor executor = new TestExecutor(frameworkLogger);
 
-        try {
+        try (GuiRunScope guiRunScope = GuiRunScope.fromYaml(yamlFile)) {
+            executor.withGuiScope(guiRunScope);
             List<TestCase> allTestCases = YamlTestCaseLoader.loadTestCases(yamlFile);
             Optional<TestCase> targetTcOpt = allTestCases.stream().filter(tc -> tc.getName().equals(testCaseId))
                     .findFirst();
@@ -230,10 +232,10 @@ public class TestRunnerService {
             }
 
             // 4. KLJUČNI PREOKRET: Umesto executeSingleStep, puštamo ceo engine da vodi test!
-            TestExecutor executor = new TestExecutor(frameworkLogger);
-            
-            // Ova metoda unutar sebe kreira ispravan kontekst i puni ga tabelama iz finalTc!
-            executor.executeTestCase(finalTc, yamlFile);
+            try (GuiRunScope guiRunScope = GuiRunScope.fromYaml(yamlFile)) {
+                TestExecutor executor = new TestExecutor(frameworkLogger).withGuiScope(guiRunScope);
+                executor.executeTestCase(finalTc, yamlFile);
+            }
 
         } catch (Exception e) {
             logService.addLog(sessionId, "CRITICAL RUN ERROR: " + e.getMessage());

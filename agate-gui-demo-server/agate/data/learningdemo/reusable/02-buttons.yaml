@@ -1,0 +1,65 @@
+# index is zero-based; prefer scope or a unique name when available.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/02-buttons.html
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  button:
+    text: (O)K
+    exact: true
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: OK clicked
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L02-nested'
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Nested clicked
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    role: button
+    name: (O)K continue
+    exact: true
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Continue clicked
+  page: L02 — Buttons and exact matching
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  button:
+    text: Repeat
+    exact: true
+    index: 0
+  page: L02 — Buttons

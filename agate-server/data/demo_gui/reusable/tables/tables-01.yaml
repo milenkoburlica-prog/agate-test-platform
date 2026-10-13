@@ -1,0 +1,145 @@
+# AGATE GUI 1.0.75 | Grundlagen + Linkklickkorrektur
+# Reusable: reusable.tables.tables-01
+# Alle Tabellenkoordinaten beginnen bei 1; last bedeutet die letzte direkte DOM-Zeile/Zelle.
+steps:
+
+- section: Lernseite öffnen
+  description: Lokale Tabellen-Lernseite starten.
+- id: tables-01-001
+  type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/06-tables.html
+  page: L06 — Tabellen und Zeilenauswahl
+- type: WAIT
+  value: '5000'
+
+- section: Direkte Koordinate row=2, cell=2
+  description: Die Kopfzeile zählt als row=1; Zeilen und Zellen sind einsbasiert.
+- id: tables-01-002
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Team Member Alex Example
+
+- section: Glob mit Whitespace und NBSP
+  description: Reference:1001 enthält führende geschützte Leerzeichen.
+- id: tables-01-003
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 3
+      cell: 2
+  expected: Reference:1001*
+
+- section: Letzte direkte Zeile
+  description: 'row: last wählt die letzte direkte Tabellenzeile.'
+- id: tables-01-004
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: last
+      cell: 2
+  expected: Final value
+
+- section: Verschachtelte Tabelle korrekt abgrenzen
+  description: Die inneren Tabellenzeilen werden bei der äußeren Tabelle nicht mitgezählt.
+- id: tables-01-005
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-outer'
+    tableCell:
+      row: last
+      cell: 1
+  expected: Outer last
+
+- section: Zeile anhand mehrerer Zellinhalte auswählen
+  description: Beide Kriterien müssen in derselben direkten Tabellenzeile erfüllt sein.
+- id: tables-01-006
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: REF-1001*
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: Group Alpha*
+      cell: 1
+  expected: 1
+- id: tables-01-007
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: REF-1001*
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: Group Alpha*
+      cell: 1
+
+- section: Link innerhalb der ausgewählten Zelle anklicken
+  description: 'Der Klick auf td aktiviert ein darin enthaltenes a-Element nicht zuverlässig: Link ausdrücklich anklicken.'
+- id: tables-01-008
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    role: link
+    name: Open A
+    scope:
+      css: '#L06-records'
+      tableCell:
+        rowCellsAll:
+        - sourceMode: '519'
+          operator: '1'
+          type: TEXT_GLOB
+          expected: REF-1001*
+        - sourceMode: '519'
+          operator: '1'
+          type: TEXT_GLOB
+          expected: Group Alpha*
+        cell: 1
+- type: WAIT
+  value: '5000'
+- id: tables-01-009
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-result'
+  expected: Record A

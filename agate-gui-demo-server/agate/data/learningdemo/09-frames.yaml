@@ -1,0 +1,7 @@
+name: AGATE learning L09
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.09-frames
+  parameters:
+    verbose: 'true'

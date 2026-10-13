@@ -9,6 +9,11 @@ import at.co.svc.aga.transformator.utils.MigrationLog;
  */
 public class StepValueDetails {
 
+    private java.util.Map<String,Object> gui;
+
+    public java.util.Map<String,Object> getGui() { return gui; }
+    public void setGui(java.util.Map<String,Object> gui) { this.gui = gui; }
+
     private String value;
 
     private String actionMode; // Input, Verify, Buffer, etc.

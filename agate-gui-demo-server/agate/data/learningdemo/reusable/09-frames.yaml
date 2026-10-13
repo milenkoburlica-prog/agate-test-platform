@@ -1,0 +1,56 @@
+# Frame selectors enter iframe documents. Scope disambiguates identical accessible names.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/09-frames.html
+  page: L09 — Frames and scoped locators
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    css: '#FRAME-name'
+    frames:
+    - '#L09-frame'
+  value: Inside frame
+  page: L09 — Frames and scoped locators
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#FRAME-button'
+    frames:
+    - '#L09-frame'
+  page: L09 — Frames and scoped locators
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#FRAME-result'
+    frames:
+    - '#L09-frame'
+  expected: Frame clicked
+  page: L09 — Frames and scoped locators
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    role: button
+    name: Scoped action
+    exact: true
+    scope:
+      css: '#L09-right'
+  page: L09 — Frames and scoped locators
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L09-result'
+  expected: Right
+  page: L09 — Frames and scoped locators

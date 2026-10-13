@@ -1,0 +1,95 @@
+# Index is zero-based and fragile if order changes. Label identifies the intended reader. Value identifies the HTML option value.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/04-selects.html
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-reader'
+  value:
+    index: 0
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-reader'
+  expected: sim-a
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  dropdown:
+    label: Card reader
+  value:
+    label: SIMU_6666901100
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-reader'
+  expected: sim-b
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-reader'
+  value:
+    value: sim-c
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-reader'
+  expected: sim-c
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-reader'
+  value:
+    labelGlob: '*1100'
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-reader'
+  value:
+    labelPattern: ^SIMU_6666901100$
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-multi'
+  value:
+  - value: konv
+  - label: DBAS
+  page: L04 — Dropdowns and multiple selection
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: COUNT
+  target:
+    css: '#L04-multi option:checked'
+  expected: 2
+  page: L04 — Dropdowns and multiple selection

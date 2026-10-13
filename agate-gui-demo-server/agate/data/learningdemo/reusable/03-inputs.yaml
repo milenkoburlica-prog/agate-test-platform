@@ -1,0 +1,91 @@
+# Prefer label or placeholder for user-facing fields. sensitive protects password values.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/03-inputs.html
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  textbox:
+    label: Full name
+  value: Jolanda Selem
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L03-name'
+  expected: Jolanda Selem
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    placeholder: Enter full name
+  value: Jane
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: PRESS
+  target:
+    css: '#L03-name'
+  value: Enter
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L03-enter'
+  expected: Enter received
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    css: '#L03-email'
+  value: demo@example.test
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    css: '#L03-password'
+  value: local-demo-only
+  sensitive: true
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    css: '#L03-notes'
+  value: 'First line
+
+    Second line'
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L03-readonly'
+  expected: REF-001
+  page: L03 — Inputs, labels and keyboard
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: FILL
+  target:
+    css: '#L03-number'
+  value: '42'
+  page: L03 — Inputs, labels and keyboard

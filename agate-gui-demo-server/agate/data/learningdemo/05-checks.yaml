@@ -1,0 +1,7 @@
+name: AGATE learning L05
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.05-checks
+  parameters:
+    verbose: 'true'

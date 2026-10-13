@@ -1,0 +1,7 @@
+name: AGATE learning L10
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.10-tabs
+  parameters:
+    verbose: 'true'

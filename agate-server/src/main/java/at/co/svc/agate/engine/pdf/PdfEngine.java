@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -38,7 +40,7 @@ public class PdfEngine extends AbstractStepEngine {
             PrintDslStepContext.logDslStepContext(logger, step);
         }
 
-        String op = (step.getOp() != null) ? step.getOp().toUpperCase() : "ASSERT";
+        String op = (step.getOp() != null) ? step.getOp().trim().toUpperCase(Locale.ROOT) : "ASSERT";
         long startTime = System.currentTimeMillis();
 
         try {
@@ -107,7 +109,7 @@ public class PdfEngine extends AbstractStepEngine {
             for (int i = 0; i < assertions.size(); i++) {
                 PdfAssertion assertion = assertions.get(i);
                 String rawValue = assertion.getValue();
-                String action = (assertion.getAction() != null) ? assertion.getAction().toUpperCase() : "EXIST";
+                String action = (assertion.getAction() != null) ? assertion.getAction().trim().toUpperCase(Locale.ROOT) : "EXIST";
 
                 if (rawValue == null) {
                     throw new IllegalArgumentException("[PDF Engine] Assertion at index " + i + " is missing 'value'.");
@@ -120,6 +122,7 @@ public class PdfEngine extends AbstractStepEngine {
 
                 switch (action) {
                     case "EXIST":
+                    case "CONTAINS":
                         passed = pdfText.contains(textToFind);
                         logDetail = passed ? String.format("Found text [%s]", textToFind) : String.format("Text [%s] does NOT exist in PDF", textToFind);
                         break;
@@ -127,6 +130,15 @@ public class PdfEngine extends AbstractStepEngine {
                     case "NO_EXIST":
                         passed = !pdfText.contains(textToFind);
                         logDetail = passed ? String.format("Text [%s] absent as expected", textToFind) : String.format("Text [%s] was found, but it should NOT exist", textToFind);
+                        break;
+
+                    case "REGEX":
+                    case "NO_REGEX":
+                        boolean found = regexExists(pdfText, textToFind, i);
+                        passed = "REGEX".equals(action) ? found : !found;
+                        logDetail = String.format("Regex [%s] %s (expected: %s)",
+                                textToFind, found ? "matched" : "did not match",
+                                "REGEX".equals(action) ? "at least one match" : "no match");
                         break;
 
                     case "COUNT":
@@ -149,6 +161,20 @@ public class PdfEngine extends AbstractStepEngine {
                     throw new AssertionError("[PDF Engine] ASSERT FAILED: " + logDetail);
                 }
             }
+        }
+    }
+
+    /** Finds a regex anywhere in extracted text; no implicit flags or normalization. */
+    private static boolean regexExists(String text, String expression, int assertionIndex) {
+        if (expression.isEmpty()) {
+            throw new IllegalArgumentException("[PDF Engine] Empty regex at assertion index " + assertionIndex);
+        }
+        try {
+            return Pattern.compile(expression).matcher(text).find();
+        } catch (PatternSyntaxException e) {
+            throw new IllegalArgumentException("[PDF Engine] Invalid regex at assertion index "
+                    + assertionIndex + ": " + e.getDescription()
+                    + " (pattern position " + e.getIndex() + ")", e);
         }
     }
 

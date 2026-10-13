@@ -1,5 +1,6 @@
 @echo off
-
+REM chromium|edge|chrome
+set "AGATE_GUI_BROWSER=edge"
 :: ============================================================
 :: AGATE START SCRIPT
 :: ============================================================

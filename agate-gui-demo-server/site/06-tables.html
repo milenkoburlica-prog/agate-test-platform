@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AGATE L06 — Tables: coordinates and row criteria</title><link rel="stylesheet" href="/style.css"></head><body id="page-L06"><header><a id="L06-home" href="/">AGATE Learning Lab</a> <span class="lesson-id"> / L06</span></header><main><h1 id="L06-title">Tables: coordinates and row criteria</h1><p class="hint">Stable page ID: <code>page-L06</code>. Learn the alternatives, then choose the clearest unique locator.</p><section><h2>Direct rows and cells</h2><table id="L06-coordinates"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Name</td><td><b>Team Member Alex Example </b></td></tr><tr><td>Reference</td><td>&nbsp; Reference:1001</td></tr><tr><td>Last</td><td>Final value</td></tr></tbody></table><p>AGATE coordinates include header rows: row 2 is the first body row. Both row and cell are one-based. <code>last</code> selects the last direct row/cell.</p></section><section><h2>Business row selection</h2><table id="L06-records"><thead><tr><th>Open</th><th>Reference</th><th>Group</th><th>Status</th></tr></thead><tbody><tr data-record="A"><td><a href="#record" onclick="document.querySelector('#L06-result').textContent='Record A'">Open A</a></td><td>REF-1001</td><td>Group Alpha</td><td>Active</td></tr><tr data-record="B"><td><a href="#record" onclick="document.querySelector('#L06-result').textContent='Record B'">Open B</a></td><td>REF-1001</td><td>Group Beta</td><td>Active</td></tr><tr data-record="C"><td><a href="#record" onclick="document.querySelector('#L06-result').textContent='Record C'">Open C</a></td><td>REF-2002</td><td>Group Alpha</td><td>Inactive</td></tr></tbody></table><output id="L06-result">No record</output><p>Both criteria must occur in cells of the same row. Checking Reference alone would be ambiguous.</p></section><section><h2>Nested table</h2><table id="L06-outer"><tbody><tr><td>Outer first</td><td><table id="L06-inner"><tr><td>Inner only</td></tr></table></td></tr><tr><td>Outer last</td><td>Two direct rows</td></tr></tbody></table></section>
+<section id="L06-extra-footer-section">
+  <h2>Footer rows (thead, tbody, tfoot)</h2>
+  <table id="L06-footer"><thead><tr><th>Position</th><th>Betrag</th></tr></thead>
+    <tbody><tr><td>Erste Position</td><td>10</td></tr></tbody>
+    <tfoot><tr><td>Summe</td><td>10</td></tr></tfoot>
+  </table>
+</section>
+<section id="L06-extra-editable-section">
+  <h2>Input inside a table cell</h2>
+  <table id="L06-editable"><tbody><tr><td>Notiz</td><td><input id="L06-editable-input" aria-label="Table note" value="Original"></td></tr></tbody></table>
+</section>
+<section id="L06-extra-spans-section">
+  <h2>DOM positions with colspan and rowspan</h2>
+  <table id="L06-spans"><tbody>
+    <tr><td colspan="2">Wide label</td><td>Second DOM cell</td></tr>
+    <tr><td rowspan="2">Row group</td><td>Row B cell 2</td></tr>
+    <tr><td>Row C first DOM cell</td></tr>
+  </tbody></table>
+  <p>The position counts direct DOM cells, not visual grid columns.</p>
+</section>
+<details><summary>AGATE best practice</summary>Prefer a meaningful accessible name or a stable ID. Validate state after an action. Use coordinates only when table layout is stable. CSS is useful for precise technical constraints. Never select the first match to hide ambiguity.</details></main><footer>AGATE learning demo · deterministic local fixtures</footer><script></script></body></html>

@@ -6,6 +6,16 @@ import java.util.regex.Pattern;
 
 public class ConditionEvaluator {
 
+    private Map<String, Object> values = Collections.emptyMap();
+    private boolean resolveNames;
+
+    public boolean evaluate(String expression, Map<String, Object> runtimeValues) {
+        ConditionEvaluator evaluator = new ConditionEvaluator();
+        evaluator.values = runtimeValues == null ? Collections.emptyMap() : runtimeValues;
+        evaluator.resolveNames = true;
+        return evaluator.evaluate(expression);
+    }
+
     public boolean evaluate(String expression) {
 
         if (expression == null || expression.isBlank()) {
@@ -96,7 +106,7 @@ public class ConditionEvaluator {
             return null;
         }
 
-        String value = clean(m.group(1));
+        String value = operand(m.group(1));
 
         String op = m.group(2).toUpperCase();
 
@@ -134,7 +144,7 @@ public class ConditionEvaluator {
             return null;
         }
 
-        String left = clean(m.group(1));
+        String left = operand(m.group(1));
 
         String op = m.group(2).toUpperCase();
 
@@ -163,6 +173,18 @@ public class ConditionEvaluator {
     // HELPERS
     // =========================================================
 
+    private String operand(String raw) {
+        String token = removeOuterBrackets(raw.trim());
+        boolean quoted = (token.startsWith("'") && token.endsWith("'"))
+                || (token.startsWith("\"") && token.endsWith("\""));
+        if (resolveNames && !quoted && token.matches("[A-Za-z_][A-Za-z0-9_.]*")
+                && !Set.of("NULL", "TRUE", "FALSE").contains(token.toUpperCase(Locale.ROOT))) {
+            Object value = values.get(token);
+            return value == null ? null : clean(value.toString());
+        }
+        return clean(token);
+    }
+
     private String normalize(String s) {
 
         return s
@@ -182,7 +204,8 @@ public class ConditionEvaluator {
             s = s.substring(1, s.length() - 1);
         }
 
-        return s.trim();
+        s = s.trim();
+        return s.equalsIgnoreCase("NULL") || s.equals("{NULL}") ? null : s;
     }
 
     private String removeOuterBrackets(String s) {

@@ -1,0 +1,55 @@
+# Whole name versus substring, CSS, testId and text strategies.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/01-links.html
+  page: L01 — Links and locator strategies
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  link:
+    text: (H)elp
+    exact: true
+  page: L01 — Links and locator strategies
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: COUNT
+  link:
+    text: (H)elp
+    exact: false
+  page: L01 — Links and locator strategies
+  expected: 2
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L01-help'
+  page: L01 — Links and locator strategies
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    text: (H)elp overview
+    exact: true
+  page: L01 — Links
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    testId: help-link
+  page: L01 — Links and locator strategies
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  link:
+    text: (H)elp
+    exact: true
+  page: L01 — Links and locator strategies

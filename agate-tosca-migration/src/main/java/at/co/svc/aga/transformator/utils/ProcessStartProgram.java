@@ -131,6 +131,13 @@ public class ProcessStartProgram {
                         )
                 );
 
+        translatedCommand = DbasMigrationOverrides.sqlplus(translatedCommand);
+
+        // Cleanup is idempotent only when Tosca expects normal success.
+        if (directory.isBlank() && (expectedExitCode.isBlank() || "0".equals(expectedExitCode.trim()))) {
+            translatedCommand = TaskkillCleanupCommand.rewrite(translatedCommand);
+        }
+
         // -----------------------------------------------------
         // AGATE DSL
         // -----------------------------------------------------

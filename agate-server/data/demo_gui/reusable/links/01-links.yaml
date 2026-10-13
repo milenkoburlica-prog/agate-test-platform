@@ -1,0 +1,103 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+steps:
+
+
+- section: Links und Locator-Strategien — Sichtbarkeit prüfen
+  description: link (H)elp (exact=true)
+
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 — Links and locator strategies
+  link:
+    text: (H)elp
+    exact: true
+
+- section: Links und Locator-Strategien — Sichtbarkeit prüfen
+  description: link (H)elp (exact=true ist optional)
+
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 — Links and locator strategies
+  link:
+    text: (H)elp
+
+
+- section: Links und Locator-Strategien — Anzahl der Treffer prüfen
+  description: 'link (H)elp (exact=false); Erwartung: 2'
+
+- type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L01 — Links and locator strategies
+  link:
+    text: (H)elp
+    exact: false
+  expected: 2
+
+
+
+- section: Links und Locator-Strategien — Sichtbarkeit prüfen
+  description: text=(H)elp overview
+
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 — Links
+  target:
+    text: (H)elp overview
+    exact: true
+
+
+- section: Links und Locator-Strategien — Sichtbarkeit prüfen
+  description: css=#L01-help
+
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 — Links and locator strategies
+  target:
+    css: '#L01-help'
+
+
+- section: Links und Locator-Strategien — Sichtbarkeit prüfen
+  description: testId=help-link
+
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L01 — Links and locator strategies
+  target:
+    testId: help-link
+
+
+- section: Links und Locator-Strategien — Element anklicken
+  description: link (H)elp (exact=true)
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L01 — Links and locator strategies
+  link:
+    text: (H)elp
+    exact: true
+
+- type: WAIT
+  value: '5000'
+
+
+- section: Links und Locator-Strategien — Element anklicken
+  description: link (H)elp (exact=true is optional)
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L01 — Links and locator strategies
+  link:
+    text: (H)elp
+
+- type: WAIT
+  value: '5000'
+

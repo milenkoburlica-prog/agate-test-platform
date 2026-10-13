@@ -1,0 +1,116 @@
+# AGATE L10: Tabs und Navigation (vereinbar mit der erweiterten Demo-Website).
+# Referenz: 10-tabs.html -> tabs-02-child.html (nicht mehr 01-links.html).
+# Alle bisherigen Lernpausen (5 Sekunden) bleiben erhalten.
+steps:
+
+- section: Hauptseite öffnen
+  description: Die L10-Lernseite öffnen; die GUI-Session wird bei Bedarf erstellt.
+
+- id: tabs-01-001
+  type: GUI
+  op: EXEC
+  action: OPEN
+  url: 'http://127.0.0.1:8767/10-tabs.html'
+  page: L10 - Tabs und Navigation
+
+- type: WAIT
+  value: '5000'
+
+- section: Benannten zweiten Tab öffnen
+  description: OPEN_TAB registriert den Namen secondary und macht den neuen Tab zum aktuellen Tab.
+
+- id: tabs-01-002
+  type: GUI
+  op: EXEC
+  action: OPEN_TAB
+  tab: secondary
+  url: 'http://127.0.0.1:8767/tab.html'
+  page: L10 - Tabs und Navigation
+
+- type: WAIT
+  value: '5000'
+
+- section: Inhalt des zweiten Tabs überprüfen
+  description: Die Prüfung erfolgt im aktiven, benannten Tab secondary.
+
+- id: tabs-01-003
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#TAB-value'
+  expected: Secondary tab content
+  page: L10 - Tabs und Navigation
+
+- section: Benannten Tab schließen
+  description: Nach CLOSE_TAB ist die Hauptseite wieder die aktive Seite, sofern sie die einzige verbleibende Seite ist.
+
+- id: tabs-01-004
+  type: GUI
+  op: EXEC
+  action: CLOSE_TAB
+  tab: secondary
+  page: L10 - Tabs und Navigation
+
+- type: WAIT
+  value: '5000'
+
+- section: Hauptseite nach dem Schließen prüfen
+  description: Der Link L10-next ist auf der ursprünglichen Hauptseite sichtbar.
+
+- id: tabs-01-005
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L10-next'
+  page: L10 - Tabs und Navigation
+
+- section: Zur L10-Unterseite navigieren
+  description: Der Link führt in der erweiterten Demo zu /tabs-02-child.html.
+
+- id: tabs-01-006
+  type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L10-next'
+  page: L10 - Tabs und Navigation
+
+- type: WAIT
+  value: '5000'
+
+- section: Inhalt der Unterseite überprüfen
+  description: Die Unterseite enthält L10-child; L01-help gehört zur älteren Demo und existiert hier nicht.
+
+- id: tabs-01-007
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+  page: L10 - Tabs und Navigation
+
+- section: Im aktuellen Tab zurück navigieren
+  description: BACK kehrt von der Unterseite zur L10-Hauptseite zurück.
+
+- id: tabs-01-008
+  type: GUI
+  op: EXEC
+  action: BACK
+  page: L10 - Tabs und Navigation
+
+- type: WAIT
+  value: '5000'
+
+- section: Hauptseite nach BACK überprüfen
+  description: Auf der Hauptseite ist L10-next wieder sichtbar.
+
+- id: tabs-01-009
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L10-next'
+  page: L10 - Tabs und Navigation

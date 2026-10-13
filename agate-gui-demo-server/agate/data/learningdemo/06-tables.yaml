@@ -1,0 +1,7 @@
+name: AGATE learning L06
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.06-tables
+  parameters:
+    verbose: 'true'

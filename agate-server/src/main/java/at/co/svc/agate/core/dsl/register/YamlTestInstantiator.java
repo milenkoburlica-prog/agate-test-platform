@@ -987,7 +987,7 @@ public class YamlTestInstantiator {
                                     "{NULL}";
  if (CONSOLE_PRINT) {
                                 System.out.println(
-                                        "\n[DEBUG-Klip] Provera liste uslova za parametar: "
+                                        "\n[DEBUG-Parameters] Checking condition list for parameter: "
                                                 + key);
                             }
  for (Object conditionObject :
@@ -1012,9 +1012,9 @@ public class YamlTestInstantiator {
                                                 "value");
  if (CONSOLE_PRINT) {
                                     System.out.println(
-                                            "  -> Evaluiram uslov: ["
+                                            "  -> Evaluating condition: ["
                                                     + condition
-                                                    + "] | Trenutna vrednost 'value' u šablonu: ["
+                                                    + "] | Current template 'value': ["
                                                     + rawValue
                                                     + "]");
                                 }
@@ -1027,23 +1027,23 @@ public class YamlTestInstantiator {
                                             rawValue;
  if (CONSOLE_PRINT) {
                                         System.out.println(
-                                                "  ✔ USLOV PROŠAO! Izabrana vrednost za "
+                                                "  ✔ CONDITION PASSED! Selected value for "
                                                         + key
-                                                        + " je: ["
+                                                        + " is: ["
                                                         + resolvedValue
                                                         + "]");
                                     }
  break;
                                 } else if (CONSOLE_PRINT) {
                                     System.out.println(
-                                            "  ❌ Uslov nije ispunjen.");
+                                            "  ❌ Condition was not satisfied.");
                                 }
                             }
  if (CONSOLE_PRINT) {
                                 System.out.println(
-                                        "[DEBUG-Klip] Finalno dodeljen "
+                                        "[DEBUG-Parameters] Final assigned value for "
                                                 + key
-                                                + " u updatedParams: ["
+                                                + " in updatedParams: ["
                                                 + resolvedValue
                                                 + "]\n");
                             }

@@ -1,0 +1,95 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+steps:
+
+- section: Checkboxen und Radiobuttons — Option aktivieren
+  description: checkbox Accept terms
+
+- type: GUI
+  op: EXEC
+  page: L05 — Checkboxes and radio buttons
+  action: CHECK
+  checkbox:
+    label: Accept terms
+
+- type: WAIT
+  value: '5000'
+
+- section: Checkboxen und Radiobuttons — Aktivierte Option prüfen
+  description: css=#L05-consent
+
+- type: GUI
+  op: ASSERT
+  page: L05 — Checkboxes and radio buttons
+  action: CHECKED
+  target:
+    css: '#L05-consent'
+
+- section: Checkboxen und Radiobuttons — Option deaktivieren
+  description: css=#L05-consent
+
+- type: GUI
+  op: EXEC
+  page: L05 — Checkboxes and radio buttons
+  action: UNCHECK
+  target:
+    css: '#L05-consent'
+
+- type: WAIT
+  value: '5000'
+
+- section: Checkboxen und Radiobuttons — Deaktivierte Option prüfen
+  description: css=#L05-consent
+
+- type: GUI
+  op: ASSERT
+  page: L05 — Checkboxes and radio buttons
+  action: UNCHECKED
+  target:
+    css: '#L05-consent'
+
+- section: Checkboxen und Radiobuttons — Option aktivieren
+  description: css=#L05-card
+
+- type: GUI
+  op: EXEC
+  page: L05 — Checkboxes and radio buttons
+  action: CHECK
+  target:
+    css: '#L05-card'
+
+- type: WAIT
+  value: '5000'
+
+- section: Checkboxen und Radiobuttons — Aktivierte Option prüfen
+  description: css=#L05-card
+
+- type: GUI
+  op: ASSERT
+  page: L05 — Checkboxes and radio buttons
+  action: CHECKED
+  target:
+    css: '#L05-card'
+
+- section: Checkboxen und Radiobuttons — Option aktivieren
+  description: css=#L05-cash
+
+- type: GUI
+  op: EXEC
+  page: L05 — Checkboxes and radio buttons
+  action: CHECK
+  target:
+    css: '#L05-cash'
+
+- type: WAIT
+  value: '5000'
+
+- section: Checkboxen und Radiobuttons — Deaktivierte Option prüfen
+  description: css=#L05-card
+
+- type: GUI
+  op: ASSERT
+  page: L05 — Checkboxes and radio buttons
+  action: UNCHECKED
+  target:
+    css: '#L05-card'

@@ -1,0 +1,140 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+steps:
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'css=#L04-device; Auswahl: {''index'': 0}; Index beginnt bei 0 und
+    hängt von der Reihenfolge ab.'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-device'
+  value:
+    index: 0
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Eingabewert prüfen
+  description: 'css=#L04-device; Erwartung: device-alpha'
+
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-device'
+  expected: device-alpha
+  page: L04 — Dropdowns and multiple selection
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'dropdown Demo device; Auswahl: {''label'': ''Device Beta''}; Auswahl
+    über den angezeigten Optionsnamen.'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  dropdown:
+    label: Demo device
+  value:
+    label: Device Beta
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Eingabewert prüfen
+  description: 'css=#L04-device; Erwartung: device-beta'
+
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-device'
+  expected: device-beta
+  page: L04 — Dropdowns and multiple selection
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'css=#L04-device; Auswahl: {''value'': ''device-gamma''}'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-device'
+  value:
+    value: device-gamma
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Eingabewert prüfen
+  description: 'css=#L04-device; Erwartung: device-gamma'
+
+- type: GUI
+  op: ASSERT
+  action: VALUE
+  target:
+    css: '#L04-device'
+  expected: device-gamma
+  page: L04 — Dropdowns and multiple selection
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'css=#L04-device; Auswahl: {''labelGlob'': ''*Beta''}'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-device'
+  value:
+    labelGlob: '*Beta'
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'css=#L04-device; Auswahl: {''labelPattern'': ''^Device Beta$''}'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-device'
+  value:
+    labelPattern: ^Device Beta$
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Auswahl ändern
+  description: 'css=#L04-multi; Auswahl: [{''value'': ''analytics''}, {''label'': ''REPORTS''}]'
+
+- type: GUI
+  op: EXEC
+  action: SELECT
+  target:
+    css: '#L04-multi'
+  value:
+  - value: analytics
+  - label: REPORTS
+  page: L04 — Dropdowns and multiple selection
+
+- type: WAIT
+  value: '5000'
+
+- section: Dropdowns und Auswahlstrategien — Anzahl der Treffer prüfen
+  description: 'css=#L04-multi option:checked; Erwartung: 2'
+
+- type: GUI
+  op: ASSERT
+  action: COUNT
+  target:
+    css: '#L04-multi option:checked'
+  expected: 2
+  page: L04 — Dropdowns and multiple selection

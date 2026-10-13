@@ -31,6 +31,7 @@ public class StepEngineRegistry {
         engines.add(new FileEngine());
 
         engines.add(new GuiEngine());
+        engines.add(new at.co.svc.agate.engine.window.WindowEngine());
 
         engines.add(new RestEngine());
         engines.add(new WaitEngine());

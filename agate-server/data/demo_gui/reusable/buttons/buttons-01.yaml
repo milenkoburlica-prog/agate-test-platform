@@ -1,0 +1,93 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+steps:
+
+- section: Buttons und exakte Namen — Element anklicken
+  description: button (O)K (exact=true)
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L02 — Buttons and exact matching
+  button:
+    text: (O)K
+    exact: true
+
+- type: WAIT
+  value: '5000'
+
+- section: Buttons und exakte Namen — Vollständigen Text prüfen
+  description: 'css=#L02-result; Erwartung: OK clicked'
+
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L02 — Buttons and exact matching
+  target:
+    css: '#L02-result'
+  expected: OK clicked
+
+- section: Buttons und exakte Namen — Element anklicken
+  description: css=#L02-nested
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L02 — Buttons and exact matching
+  target:
+    css: '#L02-nested'
+
+- type: WAIT
+  value: '5000'
+
+- section: Buttons und exakte Namen — Vollständigen Text prüfen
+  description: 'css=#L02-result; Erwartung: Nested clicked'
+
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L02-result'
+  expected: Nested clicked
+  page: L02 — Buttons and exact matching
+
+- section: Buttons und exakte Namen — Element anklicken
+  description: role=button; name=(O)K continue
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L02 — Buttons and exact matching
+  target:
+    role: button
+    name: (O)K continue
+    exact: true
+
+- type: WAIT
+  value: '5000'
+
+- section: Buttons und exakte Namen — Vollständigen Text prüfen
+  description: 'css=#L02-result; Erwartung: Continue clicked'
+
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L02 — Buttons and exact matching
+  target:
+    css: '#L02-result'
+  expected: Continue clicked
+
+- section: Buttons und exakte Namen — Element anklicken
+  description: button Repeat (exact=true)
+
+- type: GUI
+  op: EXEC
+  action: CLICK
+  page: L02 — Buttons
+  button:
+    text: Repeat
+    exact: true
+    index: 0
+
+- type: WAIT
+  value: '5000'

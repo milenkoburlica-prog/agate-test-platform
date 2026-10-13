@@ -1,0 +1,78 @@
+# Rows and cells are one-based, including header rows. rowCellsAll requires every criterion in the same row. Nested table rows are excluded.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/06-tables.html
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Frau Dr. med. Jolanda Selem
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 3
+      cell: 2
+  expected: VPNR:110981*
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: last
+      cell: 2
+  expected: Final value
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L06-outer'
+    tableCell:
+      row: last
+      cell: 1
+  expected: Outer last
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L06-consultations'
+    tableCell:
+      rowCellsAll:
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: 7141210142*
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: ÖGK*
+      cell: 1
+  page: 'L06 — Tables: coordinates and row criteria'
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L06-result'
+  expected: Record A
+  page: 'L06 — Tables: coordinates and row criteria'

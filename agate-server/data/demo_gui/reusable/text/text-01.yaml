@@ -1,0 +1,134 @@
+# AGATE GUI 1.0.75 | L07 | text-01
+# Reusable: reusable.text.text-01
+# Nur TEXT_GLOB und VALUE_GLOB verwenden * als Joker; ? bleibt literal.
+# Lernpause: 5 Sekunden unmittelbar nach OPEN.
+steps:
+- section: Lernseite öffnen
+  description: Neutrale L07-Lernseite; kein persönliches Browserprofil.
+- id: text-01-001
+  type: GUI
+  op: EXEC
+  action: OPEN
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  url: http://127.0.0.1:8767/07-text.html
+- type: WAIT
+  value: '5000'
+- section: Seite sichtbar
+  description: Die Lernseite besitzt die stabile ID page-L07.
+- id: text-01-002
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#page-L07'
+- section: Glob am Textanfang
+  description: Nur * ist der Joker; geschützte Leerzeichen werden normalisiert.
+- id: text-01-003
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: Reference:1001*
+- section: Glob am Textende
+  description: '* trifft einen beliebig langen Präfix.'
+- id: text-01-004
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: '*1001'
+- section: Glob innerhalb des Texts
+  description: Auch ein Teilbereich kann über führenden und abschließenden Joker geprüft werden.
+- id: text-01-005
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: '*Reference*'
+- section: Zeilenumbruch und NBSP
+  description: HTML br und geschützte Leerzeichen werden für Textprüfungen normalisiert.
+- id: text-01-006
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-whitespace'
+  expected: Team*Member Alex Example
+- section: Fragezeichen bleibt literal
+  description: In TEXT_GLOB ist ? KEIN Joker, sondern ein wörtliches Zeichen.
+- id: text-01-007
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-literal'
+  expected: A?B [005] (OK).
+- section: Teiltext prüfen
+  description: TEXT_CONTAINS benötigt kein führendes oder abschließendes *.
+- id: text-01-008
+  type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-extra'
+  expected: Reference:1001
+- section: Text vollständig vergleichen
+  description: TEXT verwendet normalisierten vollständigen Text.
+- id: text-01-009
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: Reference:1001
+- section: Regulären Ausdruck prüfen
+  description: TEXT_MATCHES ist Regex, kein Glob.
+- id: text-01-010
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: Reference:\d{4}
+- section: Wert eines Input-Elements mit Glob
+  description: VALUE_GLOB prüft input.value statt sichtbarem Zelltext.
+- id: text-01-011
+  type: GUI
+  op: ASSERT
+  action: VALUE_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: ok*
+- section: Text in Buffer übernehmen
+  description: EXTRACT liest standardmäßig innerText.
+- id: text-01-012
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  buffer: DemoReference
+- section: Buffer in einer Assertion verwenden
+  description: Der zuvor gelesene Buffer wird dynamisch aufgelöst.
+- id: text-01-013
+  type: GUI
+  op: ASSERT
+  action: TEXT_EQUALS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: '{B[DemoReference]}'

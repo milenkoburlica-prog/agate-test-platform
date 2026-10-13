@@ -1,0 +1,96 @@
+# TEXT_GLOB: only * is a wildcard; ? and punctuation are literal. Text whitespace and NBSP are normalized; VALUE_GLOB preserves value whitespace.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/07-text.html
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L07-vpn'
+  expected: VPNR:110981*
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L07-vpn'
+  expected: '*110981'
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L07-vpn'
+  expected: '*VPNR*'
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L07-whitespace'
+  expected: Frau*Dr. med. Jolanda Selem
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  target:
+    css: '#L07-literal'
+  expected: A?B [005] (OK).
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  target:
+    css: '#L07-extra'
+  expected: VPNR:110981
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L07-vpn'
+  expected: VPNR:110981
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  target:
+    css: '#L07-vpn'
+  expected: VPNR:110981
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VALUE_GLOB
+  target:
+    css: '#L07-value'
+  expected: ok*
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: EXTRACT
+  target:
+    css: '#L07-vpn'
+  buffer: DemoVPNR
+  page: L07 — Text, whitespace, glob and regex
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L07-vpn'
+  expected: '{B[DemoVPNR]}'
+  page: L07 — Text, whitespace, glob and regex

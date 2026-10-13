@@ -19,6 +19,11 @@ public final class DocumentStructureValidator implements AgateValidator {
     private static final Set<String> TEST_CASE_FIELDS =
             Set.of(
                     "id",
+                    "name",
+                    "version",
+                    "timeout",
+                    "pages",
+                    "reusable",
                     "description",
                     "stage",
                     "priority",

@@ -161,7 +161,7 @@ public class JsonEngine extends AbstractStepEngine {
                     if (current.isJsonObject()) {
                         current = current.getAsJsonObject().get(fieldName);
                     } else {
-                        throw new RuntimeException("Očekivan JSON Objekat za polje '" + fieldName + "', ali pronađen: " + current);
+                        throw new RuntimeException("Expected a JSON object for field '" + fieldName + "', but found: " + current);
                     }
                 }
                 else if (arrayIndexStr != null) {
@@ -171,23 +171,23 @@ public class JsonEngine extends AbstractStepEngine {
                         if (index >= 0 && index < array.size()) {
                             current = array.get(index);
                         } else {
-                            throw new RuntimeException("Indeks niza [" + index + "] je van granica. Veličina niza: " + array.size());
+                            throw new RuntimeException("Array index [" + index + "] is out of bounds. Array size: " + array.size());
                         }
                     } else {
-                        throw new RuntimeException("Očekivan JSON Niz za indeks [" + arrayIndexStr + "], ali pronađen: " + current);
+                        throw new RuntimeException("Expected a JSON array for index [" + arrayIndexStr + "], but found: " + current);
                     }
                 }
                 else if (bracketKey != null) {
                     if (current.isJsonObject()) {
                         current = current.getAsJsonObject().get(bracketKey);
                     } else {
-                        throw new RuntimeException("Očekivan JSON Objekat za ključ ['" + bracketKey + "'], ali pronađen: " + current);
+                        throw new RuntimeException("Expected a JSON object for key ['" + bracketKey + "'], but found: " + current);
                     }
                 }
 
                 path = path.substring(matcher.end());
             } else {
-                throw new RuntimeException("Sintaksna greška u JSONPath izrazu na delu: " + path);
+                throw new RuntimeException("Invalid JSONPath syntax at: " + path);
             }
         }
 

@@ -1,0 +1,404 @@
+steps:
+
+- section: Lernseite öffnen
+  description: Lernseite öffnen
+
+- id: advanced-02-001
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/12-advanced.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Offener Shadow-DOM per CSS
+  description: Offener Shadow-DOM per CSS
+
+- id: advanced-02-002
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-shadow-button'
+
+- section: Shadow-Button per Rolle
+  description: Shadow-Button per Rolle
+
+- id: advanced-02-003
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    role: button
+    name: Shadow action
+    exact: true
+
+- section: Shadow-Ergebnis
+  description: Shadow-Ergebnis
+
+- id: advanced-02-004
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-shadow-result'
+  expected: Shadow clicked
+
+- section: Shadow-DOM mit host-scope
+  description: Shadow-DOM mit host-scope
+
+- id: advanced-02-005
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: EXTRACT
+  target:
+    css: '#L12-shadow-result'
+    scope:
+      css: '#L12-shadow'
+  buffer: ShadowText
+
+- section: Shadow-Buffer prüfen
+  description: Shadow-Buffer prüfen
+
+- id: advanced-02-006
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-shadow-result'
+  expected: '{B[ShadowText]}'
+
+- section: Geschlossener Shadow-Inhalt nicht erreichbar
+  description: NOT_EXISTS bedeutet hier nicht, dass die Anwendung den Inhalt nicht intern angelegt hat.
+
+- id: advanced-02-007
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: NOT_EXISTS
+  target:
+    css: '#L12-secret'
+
+- section: Contenteditable ausfüllen
+  description: Contenteditable ausfüllen
+
+- id: advanced-02-008
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: FILL
+  target:
+    role: textbox
+    name: Editable note
+  value: Bearbeitete Notiz
+
+- section: Contenteditable mit TEXT prüfen
+  description: Contenteditable mit TEXT prüfen
+
+- id: advanced-02-009
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-editable'
+  expected: Bearbeitete Notiz
+
+- section: Contenteditable mit Tastatur ergänzen
+  description: Contenteditable mit Tastatur ergänzen
+
+- id: advanced-02-010
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: PRESS
+  target:
+    css: '#L12-editable'
+  value: End
+
+- section: Zeichen mit PRESS eingeben
+  description: Zeichen mit PRESS eingeben
+
+- id: advanced-02-011
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: PRESS
+  target:
+    css: '#L12-editable'
+  value: '!'
+
+- section: Bearbeiteten Text prüfen
+  description: Bearbeiteten Text prüfen
+
+- id: advanced-02-012
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-editable'
+  expected: Bearbeitete Notiz!
+
+- type: WAIT
+  value: '5000'
+
+- section: Details-Inhalt anfangs hidden
+  description: Details-Inhalt anfangs hidden
+
+- id: advanced-02-013
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: HIDDEN
+  target:
+    css: '#L12-detail-text'
+
+- section: Details öffnen
+  description: Details öffnen
+
+- id: advanced-02-014
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-summary'
+
+- section: Details sichtbar
+  description: Details sichtbar
+
+- id: advanced-02-015
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-detail-text'
+
+- section: Details wieder schließen
+  description: Details wieder schließen
+
+- id: advanced-02-016
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-summary'
+
+- section: Details wieder hidden
+  description: Details wieder hidden
+
+- id: advanced-02-017
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: HIDDEN
+  target:
+    css: '#L12-detail-text'
+
+- section: HTML dialog öffnen
+  description: HTML dialog öffnen
+
+- id: advanced-02-018
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-modal-open'
+
+- section: HTML dialog sichtbar
+  description: HTML dialog sichtbar
+
+- id: advanced-02-019
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-dialog'
+
+- section: Button im dialog-scope
+  description: Button im dialog-scope
+
+- id: advanced-02-020
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    role: button
+    name: Close modal
+    scope:
+      css: '#L12-dialog'
+
+- section: HTML dialog geschlossen
+  description: HTML dialog geschlossen
+
+- id: advanced-02-021
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: HIDDEN
+  target:
+    css: '#L12-dialog'
+
+- section: JavaScript-Dialog automatisch dismiss
+  description: JavaScript-Dialog automatisch dismiss
+
+- id: advanced-02-022
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-alert'
+
+- section: Ergebnis nach dismiss
+  description: Ergebnis nach dismiss
+
+- id: advanced-02-023
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-alert-result'
+  expected: Alert dismissed
+
+- section: JavaScript-Dialog automatisch dismiss
+  description: JavaScript-Dialog automatisch dismiss
+
+- id: advanced-02-024
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-confirm'
+
+- section: Ergebnis nach dismiss
+  description: Ergebnis nach dismiss
+
+- id: advanced-02-025
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-alert-result'
+  expected: Abgelehnt
+
+- section: JavaScript-Dialog automatisch dismiss
+  description: JavaScript-Dialog automatisch dismiss
+
+- id: advanced-02-026
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: CLICK
+  target:
+    css: '#L12-prompt'
+
+- section: Ergebnis nach dismiss
+  description: Ergebnis nach dismiss
+
+- id: advanced-02-027
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: TEXT
+  target:
+    css: '#L12-alert-result'
+  expected: Abgebrochen
+
+- section: 'Element vorhanden: L12-svg'
+  description: 'Element vorhanden: L12-svg'
+
+- id: advanced-02-028
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-svg'
+
+- section: 'Element vorhanden: L12-canvas'
+  description: 'Element vorhanden: L12-canvas'
+
+- id: advanced-02-029
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-canvas'
+
+- section: 'Element vorhanden: L12-progress'
+  description: 'Element vorhanden: L12-progress'
+
+- id: advanced-02-030
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-progress'
+
+- section: 'Element vorhanden: L12-meter'
+  description: 'Element vorhanden: L12-meter'
+
+- id: advanced-02-031
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L12-meter'
+
+- section: Progress-Attribut lesen
+  description: Progress-Attribut lesen
+
+- id: advanced-02-032
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: EXTRACT
+  target:
+    css: '#L12-progress'
+  attribute: value
+  buffer: ProgressValue
+
+- section: Attribut über CSS bestätigen
+  description: Attribut über CSS bestätigen
+
+- id: advanced-02-033
+  type: GUI
+  op: ASSERT
+  page: Advanced - Referenz 02
+  action: COUNT
+  target:
+    css: '#L12-progress[value="{B[ProgressValue]}"]'
+  expected: 1
+
+- section: Screenshot für visuelle Kontrolle
+  description: Screenshot für visuelle Kontrolle
+
+- id: advanced-02-034
+  type: GUI
+  op: EXEC
+  page: Advanced - Referenz 02
+  action: SCREENSHOT
+  value: advanced-02.png
+
+- type: WAIT
+  value: '5000'

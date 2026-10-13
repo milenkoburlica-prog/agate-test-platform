@@ -187,6 +187,33 @@ public class XTestStepJsonCompressor {
         List<String> testStepValues =
                 asStringList(assocs.get("TestStepValues"));
 
+        // An explicitly empty HTML step has no actions. Never resurrect its
+        // DerivedFrom template values, which may belong to an excluded branch.
+        if (assocs.containsKey("TestStepValues") && testStepValues.isEmpty()) {
+            List<String> ids=asStringList(assocs.get("Module"));
+            Map<String,Object> module=ids.isEmpty()?null:tsuIndex.get(ids.get(0));
+            if(module!=null && "XModule".equals(asText(module.get("ObjectClass")))
+                    && "HtmlDocument".equalsIgnoreCase(asText(asMap(module.get("Attributes")).get("BusinessType")))) {
+                boolean html=false;
+                for(String id:asStringList(asMap(module.get("Assocs")).get("Properties"))) {
+                    Map<String,Object> prop=tsuIndex.get(id);if(prop==null)continue;
+                    Map<String,Object> attrs=asMap(prop.get("Attributes"));
+                    if("Engine".equals(asText(attrs.get("Name"))) && "Html".equalsIgnoreCase(asText(attrs.get("Value"))))html=true;
+                }
+                if(html) {
+                    Map<String,Object> gui=new LinkedHashMap<>();gui.put("emptyHtmlStep",true);
+                    gui.put("name","__AGATE_EMPTY_HTML_STEP__");
+                    gui.put("sourceStep",step.get("Surrogate"));gui.put("sourceModule",ids.get(0));
+                    gui.put("reason","explicit TestStepValues is empty");
+                    Map<String,Object> param=new LinkedHashMap<>();param.put("Gui",gui);
+                    param.put("Value","");param.put("ActionMode","");
+                    // ParserPhase1 requires a non-empty technical parameter key.
+                    param.put("ExplicitName","__AGATE_EMPTY_HTML_STEP__");
+                    result.add(param);return result;
+                }
+            }
+        }
+
         boolean isApiModule = false;
         List<String> moduleIds = asStringList(assocs.get("Module"));
 
@@ -261,9 +288,14 @@ public class XTestStepJsonCompressor {
                 explicitName = "SQL Statement";
             }
             
-            value = value.replace("\r", " ").replace("\n", " ").replaceAll("\\s+", " ").trim();
+            if (GuiMetadata.fromValue(xValue, bySurrogate, tsuIndex).isEmpty())
+                value = value.replace("\r", " ").replace("\n", " ").replaceAll("\\s+", " ").trim();
             
-            param.put("ModuleAttributeSurrogate", valueSurrogate);
+            param.put("ModuleAttributeSurrogate", valueSurrogate); // legacy TSV ID: keep for existing ordering
+            param.put("TestStepValueSurrogate", valueSurrogate);
+            param.put("ActualModuleAttributeSurrogate", moduleAttrId);
+            Map<String,Object> gui = GuiMetadata.fromValue(xValue, bySurrogate, tsuIndex);
+            if (!gui.isEmpty()) param.put("Gui", gui);
             param.put("Value", value);
             param.put("ExplicitName", explicitName);
             
@@ -287,7 +319,7 @@ public class XTestStepJsonCompressor {
 
             if (("Insert".equals(actionMode)) && ("Open Connection".equals(toscaInfo.path))) continue;
             if (("Insert".equals(actionMode)) && ("Close connection".equals(toscaInfo.path))) continue;
-            if ("Select".equals(actionMode)) continue;
+            if ("Select".equals(actionMode) && gui.isEmpty()) continue;
 
             result.add(param);
         }
@@ -993,7 +1025,7 @@ public class XTestStepJsonCompressor {
                         new GZIPInputStream(fis);
 
                 InputStreamReader reader =
-                        new InputStreamReader(gis)
+                        new InputStreamReader(gis, java.nio.charset.StandardCharsets.UTF_8)
         ) {
 
             Map<String, Object> root =

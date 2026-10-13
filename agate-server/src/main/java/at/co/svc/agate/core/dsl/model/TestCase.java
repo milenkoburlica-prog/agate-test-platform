@@ -7,6 +7,13 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TestCase {
+    private Integer timeout;
+    private Map<String, Object> guiPages = new HashMap<>();
+    public Integer getTimeout() { return timeout; }
+    public void setTimeout(Integer timeout) { this.timeout = timeout; }
+    public Map<String, Object> getGuiPages() { return guiPages; }
+    public void setGuiPages(Map<String, Object> pages) { this.guiPages = pages; }
+
 
     @JsonProperty("id")
     private String name;

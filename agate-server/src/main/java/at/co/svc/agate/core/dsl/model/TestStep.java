@@ -15,6 +15,17 @@ import at.co.svc.agate.core.reference.UnorderedRule;
 
 
 public class TestStep {
+    // Informational metadata, never executable steps or statistics entries.
+    private List<SectionMetadata> sectionsBefore = new ArrayList<>();
+    private List<SectionMetadata> sectionsAfter = new ArrayList<>();
+    public List<SectionMetadata> getSectionsBefore() { return sectionsBefore; }
+    public List<SectionMetadata> getSectionsAfter() { return sectionsAfter; }
+
+    // GUI keeps structured DSL separately; legacy FILE/REST String APIs stay intact.
+    private Map<String, Object> gui;
+    public Map<String, Object> getGui() { return gui; }
+    public void setGui(Map<String, Object> gui) { this.gui = gui; }
+
 
 
 

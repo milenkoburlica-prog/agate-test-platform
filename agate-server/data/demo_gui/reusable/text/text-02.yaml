@@ -1,0 +1,286 @@
+# AGATE GUI 1.0.75 | L07 | text-02
+# Reusable: reusable.text.text-02
+# Nur TEXT_GLOB und VALUE_GLOB verwenden * als Joker; ? bleibt literal.
+# Lernpause: 5 Sekunden unmittelbar nach OPEN.
+steps:
+- section: Lernseite öffnen
+  description: Selbständiger Reusable-Test; beginnt mit OPEN und verwendet eine frische Test-Session.
+- id: text-02-001
+  type: GUI
+  op: EXEC
+  action: OPEN
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  url: http://127.0.0.1:8767/07-text.html
+- type: WAIT
+  value: '5000'
+- section: Existenz des leeren Elements
+  description: Ein leeres DOM-Element kann existieren, ohne Text zu besitzen.
+- id: text-02-002
+  type: GUI
+  op: ASSERT
+  action: EXISTS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-empty'
+- section: Leeren Text prüfen
+  description: TEXT_EQUALS erwartet den leeren String.
+- id: text-02-003
+  type: GUI
+  op: ASSERT
+  action: TEXT_EQUALS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-empty'
+  expected: ''
+- section: Fehlenden Locator prüfen
+  description: NOT_EXISTS ist eine erfolgreiche Prüfung für ein bewusst fehlendes Element.
+- id: text-02-004
+  type: GUI
+  op: ASSERT
+  action: NOT_EXISTS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-does-not-exist'
+- section: Mehrere passende Elemente zählen
+  description: COUNT ist für mehrere Matches geeignet.
+- id: text-02-005
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference, #L07-extra'
+  expected: 2
+- section: HTML-NBSP und Zeilenwechsel normalisieren
+  description: TEXT prüft den normalisierten sichtbaren Text.
+- id: text-02-006
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-whitespace'
+  expected: Team Member Alex Example
+- section: Teiltext ohne Joker
+  description: TEXT_CONTAINS sucht einen wörtlichen Teil des Textes.
+- id: text-02-007
+  type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-whitespace'
+  expected: Member Alex
+- section: Interner Glob-Joker
+  description: '* kann innerhalb des erwarteten Texts stehen.'
+- id: text-02-008
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-whitespace'
+  expected: Team*Alex Example
+- section: Fragezeichen und Satzzeichen literal
+  description: '? ist in TEXT_GLOB kein Joker; [ ] ( ) sind ebenfalls literal.'
+- id: text-02-009
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-literal'
+  expected: A?B [005] (OK).
+- section: Regex-Sonderzeichen escapen
+  description: Regex verwendet \?, \[ und \); anders als TEXT_GLOB.
+- id: text-02-010
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-literal'
+  expected: ^A\?B \[005\] \(OK\)\.$
+- section: Regex-Ziffernklasse
+  description: 'Teiltreffer: vier Ziffern direkt nach Reference:.'
+- id: text-02-011
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: Reference:\d{4}
+- section: Regulärer Ausdruck für mehrere Textanteile
+  description: Regex sucht Reference und Member mit variabler Länge dazwischen.
+- id: text-02-012
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-extra'
+  expected: Reference:\d{4}.+Member
+- section: Sternchen als literal bei CONTAINS
+  description: TEXT_CONTAINS interpretiert * nicht als Joker.
+- id: text-02-013
+  type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-hint'
+  expected: '*'
+- section: Exakter Eingabewert
+  description: VALUE liest den aktuellen Inputwert.
+- id: text-02-014
+  type: GUI
+  op: ASSERT
+  action: VALUE
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: ok
+- section: Input-Wert mit Glob
+  description: VALUE_GLOB hat den *-Joker.
+- id: text-02-015
+  type: GUI
+  op: ASSERT
+  action: VALUE_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: o*
+- section: Input-Wert mit Regex
+  description: VALUE_MATCHES prüft den Formularwert mit Regex.
+- id: text-02-016
+  type: GUI
+  op: ASSERT
+  action: VALUE_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: ^o[k]$
+- section: Text extrahieren
+  description: EXTRACT ohne source liest innerText.
+- id: text-02-017
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-extra'
+  buffer: ReferenceExtra
+- section: Textbuffer wiederverwenden
+  description: Assertion referenziert exakt den extrahierten Text.
+- id: text-02-018
+  type: GUI
+  op: ASSERT
+  action: TEXT_EQUALS
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-extra'
+  expected: '{B[ReferenceExtra]}'
+- section: Inputwert extrahieren
+  description: 'EXTRACT source: value liest input.value statt innerText.'
+- id: text-02-019
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  source: value
+  buffer: InitialInputValue
+- section: Extrahierten Inputwert prüfen
+  description: Buffer ist in expected auflösbar.
+- id: text-02-020
+  type: GUI
+  op: ASSERT
+  action: VALUE
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: '{B[InitialInputValue]}'
+- section: Formularwert ändern
+  description: FILL simuliert Eingabe in das Feld.
+- id: text-02-021
+  type: GUI
+  op: EXEC
+  action: FILL
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  value: updated-1001
+- section: Geänderten Wert exakt prüfen
+  description: VALUE prüft das tatsächlich eingegebene Ergebnis.
+- id: text-02-022
+  type: GUI
+  op: ASSERT
+  action: VALUE
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: updated-1001
+- section: Geänderten Wert mit Glob prüfen
+  description: VALUE_GLOB prüft die variable Endung.
+- id: text-02-023
+  type: GUI
+  op: ASSERT
+  action: VALUE_GLOB
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: updated-*
+- section: Geänderten Wert mit Regex prüfen
+  description: VALUE_MATCHES prüft Ziffern als Muster.
+- id: text-02-024
+  type: GUI
+  op: ASSERT
+  action: VALUE_MATCHES
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: ^updated-\d+$
+- section: Geänderten Wert extrahieren
+  description: Nochmals EXTRACT source:value, diesmal nach FILL.
+- id: text-02-025
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  source: value
+  buffer: UpdatedInputValue
+- section: Geänderten Wert per Buffer vergleichen
+  description: Zeigt dynamische Wiederverwendung nach einer GUI-Aktion.
+- id: text-02-026
+  type: GUI
+  op: ASSERT
+  action: VALUE
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  expected: '{B[UpdatedInputValue]}'
+- section: HTML-Attribut extrahieren
+  description: EXTRACT attribute:id demonstriert DOM-Attribute statt sichtbarem Text.
+- id: text-02-027
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-value'
+  attribute: id
+  buffer: InputElementId
+- section: Abschließende Kontrolle
+  description: Die Änderungen am Feld beeinflussen andere Seitentexte nicht.
+- id: text-02-028
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L07 — Text, Leerzeichen, Glob und Regex
+  target:
+    css: '#L07-reference'
+  expected: Reference:1001

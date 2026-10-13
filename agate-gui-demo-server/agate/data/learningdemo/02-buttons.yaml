@@ -1,0 +1,7 @@
+name: AGATE learning L02
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.02-buttons
+  parameters:
+    verbose: 'true'

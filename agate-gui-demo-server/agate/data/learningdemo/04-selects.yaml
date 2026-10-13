@@ -1,0 +1,7 @@
+name: AGATE learning L04
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.04-selects
+  parameters:
+    verbose: 'true'

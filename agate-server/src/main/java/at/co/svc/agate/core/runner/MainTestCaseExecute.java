@@ -23,6 +23,7 @@ import at.co.svc.agate.core.project.ProjectRuntime;
 import at.co.svc.agate.core.reference.ReferencePathResolver;
 import at.co.svc.agate.server.validation.StartupValidator;
 import at.co.svc.agate.engine.gui.GuiEngine;
+import at.co.svc.agate.engine.gui.GuiRunScope;
 
 public class MainTestCaseExecute {
 
@@ -331,7 +332,7 @@ public class MainTestCaseExecute {
         List<String> failedTestNames =
                 new ArrayList<>();
 
-        try {
+        try (GuiRunScope guiRunScope = GuiRunScope.fromYaml(yamlFile)) {
 
             for (TestCase tc : testCases) {
 
@@ -357,9 +358,7 @@ public class MainTestCaseExecute {
                         };
 
                 TestExecutor executionWithLogs =
-                        new TestExecutor(
-                                customLogger
-                        );
+                        new TestExecutor(customLogger).withGuiScope(guiRunScope);
 
                 try {
 
@@ -676,6 +675,8 @@ public class MainTestCaseExecute {
                                 "/"
                         );
 
+                try (GuiRunScope guiRunScope = GuiRunScope.fromYaml(formattedYamlPath)) {
+
                 List<TestCase> allTestCasesInFile;
 
                 try {
@@ -964,9 +965,7 @@ public class MainTestCaseExecute {
                             };
 
                     TestExecutor executionWithLogs =
-                            new TestExecutor(
-                                    customLogger
-                            );
+                            new TestExecutor(customLogger).withGuiScope(guiRunScope);
 
                     try {
 
@@ -1037,6 +1036,7 @@ public class MainTestCaseExecute {
                         );
                     }
                 }
+                } // GUI browser scope for this YAML suite
             }
 
         } finally {

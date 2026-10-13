@@ -53,6 +53,11 @@ public final class ValidationParser {
                 );
             }
 
+            if (root.isObject()) {
+                java.util.Map<String,Object> normalized = at.co.svc.agate.engine.gui.GuiDocumentAdapter.normalize(
+                        mapper.convertValue(root, new com.fasterxml.jackson.core.type.TypeReference<java.util.Map<String,Object>>() {}));
+                root = mapper.valueToTree(normalized);
+            }
             return new ParsedDocument(
                     root,
                     new SourceText(text)

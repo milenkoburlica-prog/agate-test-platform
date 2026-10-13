@@ -1,0 +1,13 @@
+# Expected failure. Run individually; excluded from Learning_All.
+name: 'Expected failure: disabled_click'
+steps:
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/08-states.html
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L08-disabled'
+  timeout: 1500

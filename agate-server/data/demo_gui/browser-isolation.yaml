@@ -1,0 +1,171 @@
+# AGATE Learning L13 — Browser reuse and isolated contexts
+# Uses the EXISTING learning demo server at 127.0.0.1:8767.
+# Requires AGATE GUI Engine patch 1.0.68 (optional gui: suite configuration).
+# Three independent test cases; no SHARED session mode.
+
+gui:
+  browser: chrome
+  headless: true
+  reuse: true
+  sessionMode: ISOLATED
+
+testCases:
+  - id: AGATE_L13_01_WRITE
+    description: 'L13 - First context starts clean, then writes cookie and localStorage'
+    stage: '*'
+    priority: HIGH
+    timeout: 30000
+    steps:
+      - section: 'L13 - Test 1: neuen Kontext öffnen'
+        description: 'Seite: http://127.0.0.1:8767/13-browser-isolation.html'
+      - id: 01-open
+        type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/13-browser-isolation.html
+        page: L13 — Browser reuse / isolated context
+      - id: 02-empty-storage
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#state'
+        expected: CLEAN
+      - id: 03-empty-cookie
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#cookie'
+        expected: EMPTY
+      - id: 04-write-marker-one
+        type: GUI
+        op: EXEC
+        action: CLICK
+        target:
+          css: '#mark-one'
+      - id: 05-verify-storage
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#state'
+        expected: ONE
+      - id: 06-verify-cookie
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#cookie'
+        expected: ONE
+
+  - id: AGATE_L13_02_ISOLATED
+    description: 'L13 - Context 2 must not inherit data from context 1'
+    stage: '*'
+    priority: HIGH
+    timeout: 30000
+    steps:
+      - section: 'L13 - Test 2: neuer isolierter Kontext'
+        description: 'Neuer BrowserContext, aber derselbe Browserprozess'
+      - id: 01-open
+        type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/13-browser-isolation.html
+        page: L13 — Browser reuse / isolated context
+      - id: 02-must-be-clean
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#state'
+        expected: CLEAN
+      - id: 03-cookie-must-be-empty
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#cookie'
+        expected: EMPTY
+      - id: 04-write-marker-two
+        type: GUI
+        op: EXEC
+        action: CLICK
+        target:
+          css: '#mark-two'
+      - id: 05-verify-marker-two
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#state'
+        expected: TWO
+      - id: 06-verify-cookie-two
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#cookie'
+        expected: TWO
+      - id: 07-fill-memo
+        type: GUI
+        op: EXEC
+        action: FILL
+        target:
+          css: '#memo'
+        value: 'Only test 2 can see this memo'
+      - id: 08-save-memo
+        type: GUI
+        op: EXEC
+        action: CLICK
+        target:
+          css: '#save-memo'
+      - id: 09-verify-memo
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#memo-state'
+        expected: 'Only test 2 can see this memo'
+
+  - id: AGATE_L13_03_CLEAN_AGAIN
+    description: 'L13 - Context 3 must not inherit either earlier context'
+    stage: '*'
+    priority: HIGH
+    timeout: 30000
+    steps:
+      - section: 'L13 - Test 3: Isolation nochmals prüfen'
+        description: 'Prüft Cookie, localStorage und Memo'
+      - id: 01-open
+        type: GUI
+        op: EXEC
+        action: OPEN
+        url: http://127.0.0.1:8767/13-browser-isolation.html
+        page: L13 — Browser reuse / isolated context
+      - id: 02-storage-clean
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#state'
+        expected: CLEAN
+      - id: 03-cookie-empty
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#cookie'
+        expected: EMPTY
+      - id: 04-memo-empty
+        type: GUI
+        op: ASSERT
+        action: TEXT_EQUALS
+        target:
+          css: '#memo-state'
+        expected: EMPTY
+      - id: 05-isolation-note-visible
+        type: GUI
+        op: ASSERT
+        action: VISIBLE
+        target:
+          css: '#isolation-ok'

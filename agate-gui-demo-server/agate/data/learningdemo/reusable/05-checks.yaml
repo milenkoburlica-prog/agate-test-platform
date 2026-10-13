@@ -1,0 +1,64 @@
+# CHECK and UNCHECK are idempotent. Radio buttons share a group.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/05-checks.html
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CHECK
+  checkbox:
+    label: Accept terms
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: CHECKED
+  target:
+    css: '#L05-consent'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: UNCHECK
+  target:
+    css: '#L05-consent'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: UNCHECKED
+  target:
+    css: '#L05-consent'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CHECK
+  target:
+    css: '#L05-card'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: CHECKED
+  target:
+    css: '#L05-card'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CHECK
+  target:
+    css: '#L05-cash'
+  page: L05 — Checkboxes and radio buttons
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: UNCHECKED
+  target:
+    css: '#L05-card'
+  page: L05 — Checkboxes and radio buttons

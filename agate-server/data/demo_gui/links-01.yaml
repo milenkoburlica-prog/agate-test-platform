@@ -1,0 +1,31 @@
+
+
+testCases: 
+
+  - id: "AGATE learning Links"
+    description: "AGATE learning Links"
+    stage: "*"
+    priority: HIGH
+    variables: 
+      name: AGATE learning L02
+
+    timeout: 10000 
+    steps:
+      
+      - section: Browser start
+        description: 'Seite: http://127.0.0.1:8767/01-links.html'
+        
+      - type: GUI
+        op: EXEC
+        action: OPEN
+        page: L01 — Links and locator strategies
+        url: http://127.0.0.1:8767/01-links.html
+        
+     - section: Links und Locator-Strategien
+       description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+         auch bei verbose=false sichtbar.
+       
+     - type: CALL
+      command: reusable.links.01-links
+      parameters:
+        verbose: 'true'

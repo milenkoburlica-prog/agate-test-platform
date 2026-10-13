@@ -1,0 +1,360 @@
+steps:
+
+- section: Lernseite öffnen
+  description: Lernseite öffnen
+
+- id: tabs-02-001
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/10-tabs.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Ausgangsseite bestätigen
+  description: Ausgangsseite bestätigen
+
+- id: tabs-02-002
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-value'
+  expected: Hauptseite
+
+- section: Benannten Tab öffnen und auswählen
+  description: Benannten Tab öffnen und auswählen
+
+- id: tabs-02-003
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: OPEN_TAB
+  tab: lesson-tab
+  url: http://127.0.0.1:8767/tabs-02-child.html
+
+- section: Neuer Tab ist aktuell
+  description: Neuer Tab ist aktuell
+
+- id: tabs-02-004
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+
+- type: WAIT
+  value: '5000'
+
+- section: Nach stabilem Tabnamen suchen
+  description: Nach stabilem Tabnamen suchen
+
+- id: tabs-02-005
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: FIND_TAB
+  response: FoundTabs
+  tab: lesson-tab
+
+- section: Tabexistenz in Buffer speichern
+  description: Tabexistenz in Buffer speichern
+
+- id: tabs-02-006
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BUFFER_TAB_EXISTS
+  response: FoundTabs
+  name: HasTab
+
+- section: Suchergebnis kontrollieren
+  description: Suchergebnis kontrollieren
+
+- id: tabs-02-007
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+  condition: '''{B[HasTab]}'' == ''true'''
+
+- section: Nach URL-Glob suchen
+  description: Nach URL-Glob suchen
+
+- id: tabs-02-008
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: FIND_TAB
+  response: FoundTabs
+  urlGlob: '**/tabs-02-child.html'
+
+- section: Tabexistenz in Buffer speichern
+  description: Tabexistenz in Buffer speichern
+
+- id: tabs-02-009
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BUFFER_TAB_EXISTS
+  response: FoundTabs
+  name: HasTab
+
+- section: Suchergebnis kontrollieren
+  description: Suchergebnis kontrollieren
+
+- id: tabs-02-010
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+  condition: '''{B[HasTab]}'' == ''true'''
+
+- section: Nach Titel-Glob suchen
+  description: Nach Titel-Glob suchen
+
+- id: tabs-02-011
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: FIND_TAB
+  response: FoundTabs
+  titleGlob: AGATE Tab Kind *
+
+- section: Tabexistenz in Buffer speichern
+  description: Tabexistenz in Buffer speichern
+
+- id: tabs-02-012
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BUFFER_TAB_EXISTS
+  response: FoundTabs
+  name: HasTab
+
+- section: Suchergebnis kontrollieren
+  description: Suchergebnis kontrollieren
+
+- id: tabs-02-013
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+  condition: '''{B[HasTab]}'' == ''true'''
+
+- section: Kriterien werden mit AND verbunden
+  description: Kriterien werden mit AND verbunden
+
+- id: tabs-02-014
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: FIND_TAB
+  response: FoundTabs
+  tab: lesson-tab
+  urlGlob: '**/tabs-02-child.html'
+  titleGlob: AGATE Tab Kind ??
+
+- section: Tabexistenz in Buffer speichern
+  description: Tabexistenz in Buffer speichern
+
+- id: tabs-02-015
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BUFFER_TAB_EXISTS
+  response: FoundTabs
+  name: HasTab
+
+- section: Suchergebnis kontrollieren
+  description: Suchergebnis kontrollieren
+
+- id: tabs-02-016
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+  condition: '''{B[HasTab]}'' == ''true'''
+
+- section: Keinen passenden Tab finden
+  description: Keinen passenden Tab finden
+
+- id: tabs-02-017
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: FIND_TAB
+  tab: not-present
+  response: AbsentTabs
+
+- section: Fehlenden Tab als false speichern
+  description: Fehlenden Tab als false speichern
+
+- id: tabs-02-018
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BUFFER_TAB_EXISTS
+  response: AbsentTabs
+  name: MissingTab
+
+- section: Zweiter benannter Tab
+  description: Zweiter benannter Tab
+
+- id: tabs-02-019
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: OPEN_TAB
+  tab: other-tab
+  url: http://127.0.0.1:8767/10-tabs.html
+
+- section: Bestehenden Tab per caption auswählen
+  description: Bestehenden Tab per caption auswählen
+
+- id: tabs-02-020
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  caption: AGATE Tab Kind 02
+  expected: Unterseite
+
+- section: Benannten Tab schließen
+  description: Benannten Tab schließen
+
+- id: tabs-02-021
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: CLOSE_TAB
+  tab: lesson-tab
+
+- section: Erneutes Schließen ist zulässig
+  description: Erneutes Schließen ist zulässig
+
+- id: tabs-02-022
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: CLOSE_TAB
+  tab: lesson-tab
+
+- section: Zweiten Tab schließen
+  description: Zweiten Tab schließen
+
+- id: tabs-02-023
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: CLOSE_TAB
+  tab: other-tab
+
+- section: Eindeutige caption wählt Hauptseite
+  description: Eindeutige caption wählt Hauptseite
+
+- id: tabs-02-024
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-value'
+  caption: AGATE Tabs 02
+  expected: Hauptseite
+
+- section: Navigation im selben Tab
+  description: Navigation im selben Tab
+
+- id: tabs-02-025
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: CLICK
+  target:
+    css: '#L10-next'
+
+- section: Unterseite nach Navigation
+  description: Unterseite nach Navigation
+
+- id: tabs-02-026
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-child'
+  expected: Unterseite
+
+- section: Browserhistorie zurück
+  description: Browserhistorie zurück
+
+- id: tabs-02-027
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: BACK
+
+- section: Zurück auf Hauptseite
+  description: Zurück auf Hauptseite
+
+- id: tabs-02-028
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: TEXT
+  target:
+    css: '#L10-value'
+  expected: Hauptseite
+
+- type: WAIT
+  value: '5000'
+
+- section: Session schließen
+  description: Session schließen
+
+- id: tabs-02-029
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: CLOSE
+
+- section: Nach CLOSE frische Session öffnen
+  description: Nach CLOSE frische Session öffnen
+
+- id: tabs-02-030
+  type: GUI
+  op: EXEC
+  page: Tabs - Referenz 02
+  action: OPEN
+  url: http://127.0.0.1:8767/10-tabs.html
+
+- section: Neue Session bestätigen
+  description: Neue Session bestätigen
+
+- id: tabs-02-031
+  type: GUI
+  op: ASSERT
+  page: Tabs - Referenz 02
+  action: VISIBLE
+  target:
+    css: '#L10-value'

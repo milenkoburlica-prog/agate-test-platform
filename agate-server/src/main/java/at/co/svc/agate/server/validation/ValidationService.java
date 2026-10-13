@@ -28,6 +28,7 @@ public final class ValidationService {
                 List.of(
                         new DocumentStructureValidator(),
                         new EngineTypeValidator(),
+                        new GuiSchemaValidator(),
                         new RestSoapSchemaValidator(),
                         new BufferSchemaValidator(),
                         new FileSchemaValidator(),

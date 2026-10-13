@@ -1,0 +1,51 @@
+name: AGATE learning — all positive lessons
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.01-links
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.02-buttons
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.03-inputs
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.04-selects
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.05-checks
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.06-tables
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.07-text
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.08-states
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.09-frames
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.10-tabs
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.11-files
+  parameters:
+    verbose: 'true'
+- type: CALL
+  command: reusable.12-advanced
+  parameters:
+    verbose: 'true'

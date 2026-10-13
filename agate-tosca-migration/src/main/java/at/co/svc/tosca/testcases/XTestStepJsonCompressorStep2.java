@@ -92,6 +92,8 @@ public class XTestStepJsonCompressorStep2 {
             }
 
             String moduleId = moduleIds.get(0);
+            Map<String,Object> sourceModule=tsuIndex.get(moduleId);
+            if(sourceModule!=null)copy.put("ModuleName",asText(asMap(sourceModule.get("Attributes")).get("Name")));
 
             Map<String, Object> apiModule =
                     apiModules.get(moduleId);
@@ -374,7 +376,7 @@ public class XTestStepJsonCompressorStep2 {
         try (
                 FileInputStream fis = new FileInputStream(tsuFile);
                 GZIPInputStream gis = new GZIPInputStream(fis);
-                InputStreamReader reader = new InputStreamReader(gis)
+                InputStreamReader reader = new InputStreamReader(gis, java.nio.charset.StandardCharsets.UTF_8)
         ) {
 
             Map<String, Object> root =
@@ -571,7 +573,7 @@ public class XTestStepJsonCompressorStep2 {
             try (GZIPInputStream gis =
                          new GZIPInputStream(new ByteArrayInputStream(compressed));
                  InputStreamReader isr =
-                         new InputStreamReader(gis);
+                         new InputStreamReader(gis, java.nio.charset.StandardCharsets.UTF_8);
                  BufferedReader br = new BufferedReader(isr)) {
 
                 StringBuilder sb = new StringBuilder();
@@ -601,7 +603,7 @@ public class XTestStepJsonCompressorStep2 {
             try (GZIPInputStream gis =
                          new GZIPInputStream(new ByteArrayInputStream(compressed));
                  BufferedReader br =
-                         new BufferedReader(new InputStreamReader(gis))) {
+                         new BufferedReader(new InputStreamReader(gis, java.nio.charset.StandardCharsets.UTF_8))) {
 
                 StringBuilder sb = new StringBuilder();
                 String line;

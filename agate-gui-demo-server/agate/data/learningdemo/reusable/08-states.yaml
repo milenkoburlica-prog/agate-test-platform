@@ -1,0 +1,86 @@
+# Assertions wait for state. Prefer them to arbitrary WAIT delays.
+steps:
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/08-states.html
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: HIDDEN
+  target:
+    css: '#L08-delayed'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L08-start'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L08-delayed'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: TEXT
+  target:
+    css: '#L08-delayed'
+  expected: Ready after event
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: DISABLED
+  target:
+    css: '#L08-disabled'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L08-enable'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: ENABLED
+  target:
+    css: '#L08-disabled'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: CLICK
+  target:
+    css: '#L08-remove-button'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: NOT_EXISTS
+  target:
+    css: '#L08-remove'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: EXEC
+  action: HOVER
+  target:
+    css: '#L08-hover'
+  page: L08 — Visibility, enabled state and waiting
+# Next step: one locator strategy; assertions wait for the requested state.
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  target:
+    css: '#L08-tooltip'
+  page: L08 — Visibility, enabled state and waiting

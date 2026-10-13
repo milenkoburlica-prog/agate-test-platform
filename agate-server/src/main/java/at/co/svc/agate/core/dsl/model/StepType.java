@@ -11,6 +11,7 @@ public enum StepType {
     REST,
     SOAP,
     GUI,
+    WINDOW,
     WAIT,
     CALL,
     BUFFER,

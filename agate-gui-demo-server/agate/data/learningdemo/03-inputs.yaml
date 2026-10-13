@@ -1,0 +1,7 @@
+name: AGATE learning L03
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.03-inputs
+  parameters:
+    verbose: 'true'

@@ -1,0 +1,14 @@
+# Expected failure. Run individually; excluded from Learning_All.
+name: 'Expected failure: exact_extra_words'
+steps:
+- type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/01-links.html
+- type: GUI
+  op: ASSERT
+  action: VISIBLE
+  link:
+    text: (H)elp over
+    exact: true
+  timeout: 1500

@@ -45,6 +45,8 @@ import at.co.svc.agate.engine.cmd.CmdEngine;
 import at.co.svc.agate.engine.file.FileEngine;
 
 import at.co.svc.agate.engine.gui.GuiEngine;
+import at.co.svc.agate.engine.gui.GuiSessionManager;
+import at.co.svc.agate.engine.gui.GuiRunScope;
 
 import at.co.svc.agate.engine.json.JsonEngine;
 import at.co.svc.agate.engine.loop.LoopEngine;
@@ -216,6 +218,8 @@ public class TestExecutor {
 
                         this::executeSingleStep));
 
+        engines.add(new at.co.svc.agate.engine.window.WindowEngine());
+
         engines.add(
                 new LoopEngine(
                         this::executeSingleStep,
@@ -224,6 +228,13 @@ public class TestExecutor {
     }
 
 
+
+    private GuiRunScope guiRunScope;
+    /** Applies to all test cases executed with this executor. */
+    public TestExecutor withGuiScope(GuiRunScope scope) {
+        this.guiRunScope = scope;
+        return this;
+    }
 
     public void executeTestCase(
 
@@ -240,6 +251,14 @@ public class TestExecutor {
                 new ExecutionContext(
 
                         this.logger);
+
+        // A test gets its own ExecutionContext, while the suite owns the browser.
+        // Without this binding GuiSessionManager falls back to new GuiSession(),
+        // launching and closing a dedicated Playwright/Browser for every test.
+        if (guiRunScope != null) {
+            GuiSessionManager.bind(context, guiRunScope);
+        }
+
 
 
 
@@ -521,11 +540,10 @@ public class TestExecutor {
 
 
         } finally {
-
-
+            try { GuiEngine.cleanup(context, logger); }
+            finally { GuiSessionManager.unbind(context); }
 
             Allure.getLifecycle()
-
                     .stopTestCase(
 
                             uuid);
@@ -585,6 +603,36 @@ public class TestExecutor {
      */
 
     public void executeSingleStep(
+            TestCase testCase, TestStep step, ExecutionContext context,
+            String yamlFile, int currentStepNumber, boolean isVerbose) throws Exception {
+        // Sections are deliberately visible even for silent reusable children.
+        logSections(testCase, step, step.getSectionsBefore(), context, yamlFile);
+        executeActualStep(testCase, step, context, yamlFile, currentStepNumber, isVerbose);
+        // Not reached after a failure or debugger quit.
+        logSections(testCase, step, step.getSectionsAfter(), context, yamlFile);
+    }
+
+    private void logSections(TestCase tc, TestStep owner,
+            List<at.co.svc.agate.core.dsl.model.SectionMetadata> sections,
+            ExecutionContext context, String yamlFile) {
+        for (var section : sections) {
+            TestStep metadata = new TestStep();
+            metadata.setCondition(section.condition());
+            metadata.setParameters(owner.getParameters());
+            metadata.setSourceFile(section.sourceFile());
+            metadata.setSourceStepIndex(section.sourceStepIndex());
+            metadata.setReferenceCallPath(owner.getReferenceCallPath());
+            if (!isConditionMet(tc, metadata, resolver,
+                    section.sourceFile() == null ? yamlFile : section.sourceFile(),
+                    section.sourceStepIndex(), context, false)) continue;
+            logger.info(">>> SECTION    : " + section.displayTitle());
+            if (section.description() != null && !section.description().isBlank()) {
+                logger.info("    Description: " + section.displayDescription());
+            }
+        }
+    }
+
+    private void executeActualStep(
 
             TestCase testCase,
 
@@ -866,7 +914,7 @@ long startTime =
 
                     currentStepNumber,
 
-                    true,
+                    effectiveVerbose,
 
                     this.logger,
 
@@ -1425,13 +1473,9 @@ long startTime =
 
 
 
-        Boolean isTrue =
-
-                ce.evaluate(
-
-                        resolvedCondition
-
-                );
+        // Reusable parameters take precedence over general runtime variables.
+        if (step.getParameters() != null) allData.putAll(step.getParameters());
+        Boolean isTrue = ce.evaluate(resolvedCondition, allData);
 
 
 

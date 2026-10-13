@@ -202,7 +202,9 @@ public class ToscaParserPhase1 {
             }
 
             // 2. Sort the list according to TSU order.
-            paramList.sort((p1, p2) -> {
+            // GUI parameters already follow Assocs.TestStepValues/SubValues order.
+            // Sorting by the global TSU object order can move CLICK before SELECT.
+            if (paramList.stream().noneMatch(p -> p.has("Gui"))) paramList.sort((p1, p2) -> {
                 String surr1 = p1.path("ModuleAttributeSurrogate").asText("");
                 String surr2 = p2.path("ModuleAttributeSurrogate").asText("");
                 int order1 = tsuOrderIndex.getOrDefault(surr1, Integer.MAX_VALUE);
@@ -240,6 +242,9 @@ public class ToscaParserPhase1 {
                                 .asText("")
                                 .trim();
 
+                if (key.isBlank() && p.has("Gui")) {
+                    key = p.path("Gui").path("name").asText("");
+                }
                 if (key.isBlank()) {
                     key = extractLeafName(toscaPath);
                 }
@@ -258,6 +263,7 @@ public class ToscaParserPhase1 {
                 ObjectNode v =
                         mapper.createObjectNode();
 
+                if (p.has("Gui")) v.set("gui", p.get("Gui").deepCopy());
                 v.put("name", key);
                 v.put("value", p.path("Value").asText());
                 v.put("actionMode", p.path("ActionMode").asText());
@@ -562,7 +568,9 @@ public class ToscaParserPhase1 {
         }
 
         // 2. Sort parameters according to their occurrence order in the TSU file.
-        paramList.sort((p1, p2) -> {
+        // GUI parameters already follow Assocs.TestStepValues/SubValues order.
+            // Sorting by the global TSU object order can move CLICK before SELECT.
+            if (paramList.stream().noneMatch(p -> p.has("Gui"))) paramList.sort((p1, p2) -> {
             String surr1 = p1.path("ModuleAttributeSurrogate").asText("");
             String surr2 = p2.path("ModuleAttributeSurrogate").asText("");
             
@@ -629,7 +637,9 @@ public class ToscaParserPhase1 {
         }
 
         // 2. Sort parameters according to their occurrence order in the TSU file.
-        paramList.sort((p1, p2) -> {
+        // GUI parameters already follow Assocs.TestStepValues/SubValues order.
+            // Sorting by the global TSU object order can move CLICK before SELECT.
+            if (paramList.stream().noneMatch(p -> p.has("Gui"))) paramList.sort((p1, p2) -> {
             String surr1 = p1.path("ModuleAttributeSurrogate").asText("");
             String surr2 = p2.path("ModuleAttributeSurrogate").asText("");
             
@@ -697,7 +707,9 @@ public class ToscaParserPhase1 {
         }
 
         // 2. Sort them according to TSU order.
-        paramList.sort((p1, p2) -> {
+        // GUI parameters already follow Assocs.TestStepValues/SubValues order.
+            // Sorting by the global TSU object order can move CLICK before SELECT.
+            if (paramList.stream().noneMatch(p -> p.has("Gui"))) paramList.sort((p1, p2) -> {
             String surr1 = p1.path("ModuleAttributeSurrogate").asText("");
             String surr2 = p2.path("ModuleAttributeSurrogate").asText("");
             
@@ -740,7 +752,9 @@ public class ToscaParserPhase1 {
         }
         
         // Sort according to the order in the TSU file.
-        paramList.sort((p1, p2) -> {
+        // GUI parameters already follow Assocs.TestStepValues/SubValues order.
+            // Sorting by the global TSU object order can move CLICK before SELECT.
+            if (paramList.stream().noneMatch(p -> p.has("Gui"))) paramList.sort((p1, p2) -> {
             String surr1 = p1.path("ModuleAttributeSurrogate").asText("");
             String surr2 = p2.path("ModuleAttributeSurrogate").asText("");
             

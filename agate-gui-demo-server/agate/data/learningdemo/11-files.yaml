@@ -1,0 +1,7 @@
+name: AGATE learning L11
+timeout: 10000
+steps:
+- type: CALL
+  command: reusable.11-files
+  parameters:
+    verbose: 'true'

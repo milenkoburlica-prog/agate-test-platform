@@ -1,0 +1,95 @@
+steps:
+
+- section: Lokale Upload-Dateien prüfen
+  description: Pfad ist relativ zum AGATE-Prozess-Arbeitsverzeichnis, nicht zum YAML- oder Webserver-Ordner.
+
+- id: files-precheck-1
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: demo-fixtures/demo-upload.txt
+
+- id: files-precheck-2
+  type: FILE
+  op: ASSERT
+  action: EXISTS
+  path: demo-fixtures/demo-second.txt
+
+- section: Upload, Download und Original-PDF — Lernseite öffnen
+  description: 'Seite: http://127.0.0.1:8767/11-files.html'
+
+- type: GUI
+  op: EXEC
+  page: L11 — Upload, download and original PDF
+  action: OPEN
+  url: http://127.0.0.1:8767/11-files.html
+
+- type: WAIT
+  value: '5000'
+
+- section: Upload, Download und Original-PDF — Datei hochladen
+  description: css=#L11-upload
+
+- type: GUI
+  op: EXEC
+  page: L11 — Upload, download and original PDF
+  action: UPLOAD
+  target:
+    css: '#L11-upload'
+  value: demo-fixtures/demo-upload.txt
+
+- type: WAIT
+  value: '5000'
+
+- section: Upload, Download und Original-PDF — Vollständigen Text prüfen
+  description: 'css=#L11-upload-result; Erwartung: demo-upload.txt'
+
+- type: GUI
+  op: ASSERT
+  page: L11 — Upload, download and original PDF
+  action: TEXT
+  target:
+    css: '#L11-upload-result'
+  expected: demo-upload.txt
+
+- section: Upload, Download und Original-PDF — Datei herunterladen
+  description: css=#L11-download
+
+- type: GUI
+  op: EXEC
+  page: L11 — Upload, download and original PDF
+  action: DOWNLOAD
+  target:
+    css: '#L11-download'
+  value: learning-download.txt
+  buffer: DemoDownload
+
+- type: WAIT
+  value: '5000'
+
+- section: Upload, Download und Original-PDF — Original-PDF speichern
+  description: css=#L11-pdf; Originalantwort speichern und zur Ausgangsseite zurückkehren.
+
+- type: GUI
+  op: EXEC
+  page: L11 — Upload, download and original PDF
+  action: DOWNLOAD_PDF
+  target:
+    css: '#L11-pdf'
+  outputFile: output/learningdemo/original.pdf
+  responseUrlGlob: '**/demo-report.pdf*'
+  buffer: DemoPDF
+  timeout: 10000
+
+- type: WAIT
+  value: '5000'
+
+- section: Upload, Download und Original-PDF — Sichtbarkeit prüfen
+  description: css=#L11-pdf
+
+- type: GUI
+  op: ASSERT
+  page: L11 — Upload, download and original PDF
+  action: VISIBLE
+  target:
+    css: '#L11-pdf'

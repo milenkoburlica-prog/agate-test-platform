@@ -1,0 +1,412 @@
+# AGATE GUI 1.0.75 | komplette ausführbare Tabellenreferenz
+# Reusable: reusable.tables.tables-02
+# Alle Tabellenkoordinaten beginnen bei 1; last bedeutet die letzte direkte DOM-Zeile/Zelle.
+steps:
+
+- section: Lernseite öffnen
+  description: Jeder Test beginnt auf der lokalen L06-Lernseite.
+- id: tables-02-001
+  type: GUI
+  op: EXEC
+  action: OPEN
+  url: http://127.0.0.1:8767/06-tables.html
+  page: L06 — Tabellen und Zeilenauswahl
+- type: WAIT
+  value: '5000'
+
+- section: Tabelle nach CSS vorhanden
+  description: EXISTS prüft das DOM-Element.
+- id: tables-02-002
+  type: GUI
+  op: ASSERT
+  action: EXISTS
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+
+- section: Tabelle nach HTML-Rolle sichtbar
+  description: 'nth: 0 ist nullbasiert; nur bei stabiler Reihenfolge verwenden.'
+- id: tables-02-003
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    role: table
+    nth: 0
+
+- section: Kopfzeile zählt als row 1
+  description: th-Zellen werden wie td-Zellen mitgezählt.
+- id: tables-02-004
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 1
+      cell: 2
+  expected: Value
+
+- section: Erste Datenzeile ist row 2
+  description: Positionen sind einsbasiert.
+- id: tables-02-005
+  type: GUI
+  op: ASSERT
+  action: TEXT_EQUALS
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Team Member Alex Example
+
+- section: Text mit verschachteltem b
+  description: Text innerhalb von b gehört zum Inhalt der td-Zelle.
+- id: tables-02-006
+  type: GUI
+  op: ASSERT
+  action: TEXT_CONTAINS
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Alex Example
+
+- section: Text mit Glob-Muster
+  description: '* erlaubt eine Folge beliebiger Zeichen.'
+- id: tables-02-007
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Team*Alex Example
+
+- section: Text mit regulärem Ausdruck
+  description: Regex darf einen Teil des Textes treffen.
+- id: tables-02-008
+  type: GUI
+  op: ASSERT
+  action: TEXT_MATCHES
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: Alex\s+Example
+
+- section: NBSP und Randabstände
+  description: Die Textprüfung normalisiert sichtbare Leerzeichen.
+- id: tables-02-009
+  type: GUI
+  op: ASSERT
+  action: TEXT_GLOB
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 3
+      cell: 2
+  expected: Reference:1001*
+
+- section: Letzte Zeile und letzte Zelle
+  description: 'row: last und cell: last können zusammen verwendet werden.'
+- id: tables-02-010
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: last
+      cell: last
+  expected: Final value
+
+- section: Tabellenzelle direkt per CSS
+  description: Alternative zu tableCell bei stabilen CSS-Strukturen.
+- id: tables-02-011
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates > tbody > tr:nth-child(1) > td:nth-child(2)'
+  expected: Team Member Alex Example
+
+- section: Direkte Zeilen inklusive Kopf
+  description: COUNT auf direkten thead- und tbody-Zeilen.
+- id: tables-02-012
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates > thead > tr, #L06-coordinates > tbody > tr'
+  expected: 4
+
+- section: 'Äußere Tabelle: nur direkte Zeilen'
+  description: Innere tr-Zeilen sind nicht Teil der äußeren Tabellenzeilenzahl.
+- id: tables-02-013
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-outer > tbody > tr'
+  expected: 2
+
+- section: 'Äußere Tabelle: letzte Zeile'
+  description: XPath im tableCell grenzt direkte Tabellenzeilen ab.
+- id: tables-02-014
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-outer'
+    tableCell:
+      row: last
+      cell: 1
+  expected: Outer last
+
+- section: Innere Tabelle gezielt auswählen
+  description: Verschachtelte Tabelle hat einen eigenen stabilen Locator.
+- id: tables-02-015
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-inner'
+    tableCell:
+      row: 1
+      cell: 1
+  expected: Inner only
+
+- section: Zeilenauswahl mit AND-Kriterien
+  description: 'rowCellsAll: alle Kriterien in einer direkten Zeile, mit Standard- und expliziten Parametern.'
+- id: tables-02-016
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - expected: REF-1001*
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: Group Alpha*
+      cell: 1
+  expected: 1
+
+- section: Selektierte Zelle anklicken
+  description: CLICK auf td ist technisch möglich, aber kein Ersatz für den Klick auf einen verschachtelten Link.
+- id: tables-02-017
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - expected: REF-1001*
+      - sourceMode: '519'
+        operator: '1'
+        type: TEXT_GLOB
+        expected: Group Alpha*
+      cell: 1
+
+- section: Link über Zellen-Scope anklicken
+  description: Die Zelle ist der scope für den benannten Link Open A.
+- id: tables-02-018
+  type: GUI
+  op: EXEC
+  action: CLICK
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    role: link
+    name: Open A
+    scope:
+      css: '#L06-records'
+      tableCell:
+        rowCellsAll:
+        - expected: REF-1001*
+        - sourceMode: '519'
+          operator: '1'
+          type: TEXT_GLOB
+          expected: Group Alpha*
+        cell: 1
+
+- section: Ergebnis des Linkklicks prüfen
+  description: Der Link aktualisiert das Ausgabefeld auf Record A.
+- id: tables-02-019
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-result'
+  expected: Record A
+- type: WAIT
+  value: '5000'
+
+- section: Zelltext in Buffer extrahieren
+  description: EXTRACT liest innerText der ausgewählten Zelle.
+- id: tables-02-020
+  type: GUI
+  op: EXEC
+  action: EXTRACT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  buffer: TableName
+
+- section: Extrahierten Zelltext verwenden
+  description: Buffer {B[TableName]} wird vor ASSERT aufgelöst.
+- id: tables-02-021
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-coordinates'
+    tableCell:
+      row: 2
+      cell: 2
+  expected: '{B[TableName]}'
+
+- section: Mehrdeutige Kriterien erkennen
+  description: Nur REF-1001* trifft zwei Zeilen (A und B).
+- id: tables-02-022
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - expected: REF-1001*
+      cell: last
+  expected: 2
+
+- section: Kein Datensatz erfüllt Kriterien
+  description: COUNT 0 ist eine valide negative Selektion, ohne den Suite-Lauf fehlschlagen zu lassen.
+- id: tables-02-023
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      rowCellsAll:
+      - expected: REF-9999*
+      cell: 1
+  expected: 0
+
+- section: tfoot gehört zur direkten Zeilenfolge
+  description: Die zusätzliche Footer-Fixture benötigt die mitgelieferte HTML-Datei.
+- id: tables-02-024
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-footer'
+    tableCell:
+      row: last
+      cell: 1
+  expected: Summe
+
+- section: tfoot enthält direktes th bzw. td
+  description: COUNT ermittelt den vorhandenen Footer.
+- id: tables-02-025
+  type: GUI
+  op: ASSERT
+  action: COUNT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-footer > tfoot > tr'
+  expected: 1
+
+- section: Eingabefeld innerhalb einer Tabellenzelle bearbeiten
+  description: Das Input liegt in der zweiten Tabellenzelle und hat die stabile ID L06-editable-input. Für FILL wird diese ID direkt angesprochen; die Kombination css input mit verschachteltem scope.tableCell war auf dem getesteten Server nicht ausführbar.
+- id: tables-02-026
+  type: GUI
+  op: EXEC
+  action: FILL
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-editable-input'
+  value: Aktualisiert
+
+- section: Wert des Inputs prüfen
+  description: VALUE prüft den Eingabewert, nicht den Zelltext.
+- id: tables-02-027
+  type: GUI
+  op: ASSERT
+  action: VALUE
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-editable-input'
+  expected: Aktualisiert
+
+- section: Zelle mit colspan zählt nur einmal
+  description: Spalten zählen direkte DOM-Zellen, nicht eine virtuelle Matrix.
+- id: tables-02-028
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-spans'
+    tableCell:
+      row: 1
+      cell: 2
+  expected: Second DOM cell
+
+- section: rowspan erzeugt keine virtuelle Zelle
+  description: Im dritten tr ist die erste direkte td-Zelle Row C first DOM cell.
+- id: tables-02-029
+  type: GUI
+  op: ASSERT
+  action: TEXT
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-spans'
+    tableCell:
+      row: 3
+      cell: 1
+  expected: Row C first DOM cell
+
+- section: Direkte Zellposition sichtbar
+  description: VISIBLE überprüft eine bestimmte Tabellenzelle.
+- id: tables-02-030
+  type: GUI
+  op: ASSERT
+  action: VISIBLE
+  page: L06 — Tabellen und Zeilenauswahl
+  target:
+    css: '#L06-records'
+    tableCell:
+      row: 2
+      cell: 1

@@ -1,0 +1,14 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+name: AGATE learning L06
+timeout: 10000
+steps:
+
+- section: Tabellen und Zeilenauswahl
+  description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+    auch bei verbose=false sichtbar.
+
+- type: CALL
+  command: reusable.tables.tables-02
+  parameters:
+    verbose: 'true'

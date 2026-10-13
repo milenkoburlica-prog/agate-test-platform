@@ -1,0 +1,14 @@
+# Laufzeit-Abschnitte: benötigt die Serverkorrektur 1.0.62.
+# Vorhandene Aktionen und Lernpausen bleiben unverändert.
+name: AGATE learning L12
+timeout: 10000
+
+steps:
+
+- section: Shadow DOM und erweiterte Elemente
+  description: Die zugehörige Reusable-Lektion ausführen. Abschnittstitel bleiben
+    auch bei verbose=false sichtbar.
+- type: CALL
+  command: reusable.advanced.advanced-01
+  parameters:
+    verbose: 'true'

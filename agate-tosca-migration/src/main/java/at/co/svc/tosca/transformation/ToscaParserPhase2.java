@@ -1475,6 +1475,9 @@ public class ToscaParserPhase2 {
         );
 
 
+        if (entry.has("gui")) v.set("gui", entry.get("gui").deepCopy());
+        else if (entry.has("Gui")) v.set("gui", entry.get("Gui").deepCopy());
+
         return v;
     }
 
