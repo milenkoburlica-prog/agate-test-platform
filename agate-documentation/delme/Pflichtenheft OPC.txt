@@ -2,6 +2,8 @@
 
 Die Seite und die Unterseiten beschreiben die Funktionen des Operations-Client (OPC) .
 
+![Systemarchitektur des OPC](./images/system-architektur.png)
+
 Der OPC ist ein GUI zur Verwaltung und Anzeige der für den Betrieb notwendigen Daten.
 
 * Unter [OPC - GUI](OPC%20-%20GUI/OPC%20-%20GUI.md) sind die Dialogmasken des OPC beschrieben
