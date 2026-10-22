@@ -4,7 +4,7 @@ Die Seite und die Unterseiten beschreiben die Funktionen des Operations-Client (
 
 Der OPC ist ein GUI zur Verwaltung und Anzeige der für den Betrieb notwendigen Daten.
 
-* Unter [OPC - GUI](OPC - GUI/OPC - GUI.md) sind die Dialogmasken des OPC beschrieben
+* Unter [OPC - GUI](OPC%20-%20GUI/OPC%20-%20GUI.md) sind die Dialogmasken des OPC beschrieben
 * Unter [OPC - Funktionen](OPC - Funktionen/OPC - Funktionen.md) sind die Funktionen beschrieben
 * Unter [OPC - Parameter und Parameterguppierungen](OPC - Parameter und Parameterguppierungen/OPC - Parameter und Parameterguppierungen.md) sind die von den Funktionen verwendeten Parameter beschrieben.   
   Nur für Teile der Clientverwaltung relevant, ansonsten sind die Parameter direkt bei den Funktionen beschrieben.
