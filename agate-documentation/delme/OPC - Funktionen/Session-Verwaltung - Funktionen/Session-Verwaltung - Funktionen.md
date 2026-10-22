@@ -1,2 +1,0 @@
-# Session-Verwaltung - Funktionen
-

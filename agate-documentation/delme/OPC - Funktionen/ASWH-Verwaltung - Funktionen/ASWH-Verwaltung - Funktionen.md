@@ -1,2 +1,0 @@
-# ASWH-Verwaltung - Funktionen
-

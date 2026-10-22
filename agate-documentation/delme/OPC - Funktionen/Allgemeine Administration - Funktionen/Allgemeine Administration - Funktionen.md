@@ -1,2 +1,0 @@
-# Allgemeine Administration - Funktionen
-
