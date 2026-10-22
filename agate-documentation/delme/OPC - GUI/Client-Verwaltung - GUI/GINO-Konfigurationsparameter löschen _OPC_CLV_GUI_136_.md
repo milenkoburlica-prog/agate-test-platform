@@ -8,7 +8,7 @@ Die folgenden Aktionen sind aktivierbar:
 
 |  |  |
 | --- | --- |
-| Löschen | Der ausgewählten Parameter wird mit der Funktion [GINO-Konfigurationsparameter löschen (OPC\_CLV\_FKT\_155)](../../OPC - Funktionen/Client-Verwaltung - Funktionen/GINO-Konfigurationsparameter löschen _OPC_CLV_FKT_155_.md) gelöscht. |
+| Löschen | Der ausgewählten Parameter wird mit der Funktion [GINO-Konfigurationsparameter löschen (OPC\_CLV\_FKT\_155)](../../OPC%20-%20Funktionen/Client-Verwaltung%20-%20Funktionen/GINO-Konfigurationsparameter%20l%C3%B6schen%20_OPC_CLV_FKT_155_.md) gelöscht. |
 | Schließen | Anzeigen Funktionsauswahl Client-Verwaltung () |
 
 | **Maskenfeld** | **DB –**  **Feldname** | **M/K** | **E/A** | **Beschreibung** | **Plausibilität** |

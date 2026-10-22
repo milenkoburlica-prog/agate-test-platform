@@ -8,7 +8,7 @@ Die folgenden Aktionen sind aktivierbar:
 
 |  |  |
 | --- | --- |
-| Speichern | Der neue Parameter wird mit der Funktion [GINO-Konfigurationsparameter erstellen (OPC\_CLV\_FKT\_154)](../../OPC - Funktionen/Client-Verwaltung - Funktionen/GINO-Konfigurationsparameter erstellen _OPC_CLV_FKT_154_.md) angelegt. |
+| Speichern | Der neue Parameter wird mit der Funktion [GINO-Konfigurationsparameter erstellen (OPC\_CLV\_FKT\_154)](../../OPC%20-%20Funktionen/Client-Verwaltung%20-%20Funktionen/GINO-Konfigurationsparameter%20erstellen%20_OPC_CLV_FKT_154_.md) angelegt. |
 | Schließen | Anzeigen Funktionsauswahl Client-Verwaltung () |
 
 | **Maskenfeld** | **DB –**  **Feldname** | **M/K** | **E/A** | **Beschreibung** | **Plausibilität** |

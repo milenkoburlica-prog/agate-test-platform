@@ -8,8 +8,8 @@ Die folgenden Aktionen sind aktivierbar:
 |  |  |
 | --- | --- |
 | Bearbeiten | Es werden die Parameter "Beschreibung" und "Regular Expression" zu Eingabefeldern umgeschaltet |
-| Speichern (nur nach dem Start von "Bearbeiten") | Es wird die Funktion [Systemparameter bearbeiten (OPC\_ALLG\_FKT\_004)](../../OPC - Funktionen/Allgemeine Administration - Funktionen/Systemparameter-Metainfo bearbeiten _OPC_ALLG_FKT_004_.md) mit den geänderten Werten aufgerufen. |
-| Löschen | Es wird die Funktion [Systemparameter löschen (OPC\_ALLG\_FKT\_005)](../../OPC - Funktionen/Allgemeine Administration - Funktionen/Systemparameter löschen _OPC_ALLG_FKT_005_.md) aufgerufen. |
+| Speichern (nur nach dem Start von "Bearbeiten") | Es wird die Funktion [Systemparameter bearbeiten (OPC\_ALLG\_FKT\_004)](../../OPC%20-%20Funktionen/Allgemeine%20Administration%20-%20Funktionen/Systemparameter-Metainfo%20bearbeiten%20_OPC_ALLG_FKT_004_.md) mit den geänderten Werten aufgerufen. |
+| Löschen | Es wird die Funktion [Systemparameter löschen (OPC\_ALLG\_FKT\_005)](../../OPC%20-%20Funktionen/Allgemeine%20Administration%20-%20Funktionen/Systemparameter%20l%C3%B6schen%20_OPC_ALLG_FKT_005_.md) aufgerufen. |
 
 | **Maskenfeld** | **M/K** | **E/A** | **Beschreibung** | **Format** |
 | --- | --- | --- | --- | --- |
