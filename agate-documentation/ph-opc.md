@@ -1,3 +1,11 @@
+---
+title: "Pflichtenheft OPC"
+author: "burlmi"
+source_confluence: "https://confluence.tools.svc.co.at/pages/viewpage.action?pageId=193679716"
+last_updated: "2026-10-23"
+status: "Migrated from Confluence"
+---
+
 # Pflichtenheft OPC
 
 ## Inhaltsverzeichnis
@@ -239,6 +247,7 @@
 
 
 
+<a id="pflichtenheft-opc"></a>
 # Pflichtenheft OPC
 
 Die Seite und die Unterseiten beschreiben die Funktionen des Operations-Client (OPC) .
@@ -259,6 +268,7 @@ Aufgrund der späten Zusammenlegung ergeben sich auch Unterschiede in der Strukt
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="opc-gui"></a>
 ## OPC - GUI
 
 Für alle Masken dieses Kapitels gilt folgendes.  
@@ -274,6 +284,7 @@ Für alle Masken dieses Kapitels gilt folgendes.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="allgemeine-ansichten"></a>
 ### Allgemeine Ansichten
 
 
@@ -282,6 +293,7 @@ Für alle Masken dieses Kapitels gilt folgendes.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="hauptmenue-opc-opc-gen-gui-001"></a>
 #### Hauptmenü OPC (OPC_GEN_GUI_001)
 
 Vor der Anzeige werden die Berechtigungen des Benutzers ermittelt und nur Links zu den Abläufen aktiviert und angezeigt, für die die ermittelten Rechte ausreichend sind.
@@ -302,6 +314,7 @@ Durch Auswahl des jeweiligen Menüpunktes wird in das entsprechende Untemenü ve
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="loginseite-opc-gen-gui-002"></a>
 #### Loginseite (OPC_GEN_GUI_002)
 
 Diese Maske bindet die Loginmethodik des Servers an und bietet dem Benutzer die Möglichkeit sich zu authentifizieren.  
@@ -320,6 +333,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="rueckfrage-opc-gen-gui-004"></a>
 #### Rückfrage (OPC_GEN_GUI_004)
 
 Es wird eine Frage mit zwei möglichen Antworten eingeblendet, der Benutzer kann Zustimmen oder Ablehnen.   
@@ -339,6 +353,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="erfolgsmeldung-opc-gen-gui-005"></a>
 #### Erfolgsmeldung (OPC_GEN_GUI_005)
 
 Die Erfolgsmeldung kann aus diversen Abläufen heraus aufgerufen werden.   
@@ -357,6 +372,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fehlerseite-opc-gen-gui-006"></a>
 #### Fehlerseite (OPC_GEN_GUI_006)
 
 | **Maskenfeld** | **DB –**   **Feldname** | **M/K** | **E/A** | **Beschreibung** | **Plausibilität** |
@@ -371,6 +387,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="allgemeine-administration-gui"></a>
 ### Allgemeine Administration - GUI
 
 
@@ -379,6 +396,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-allgemeine-administration-opc-alg-gui-001"></a>
 #### Startdialog Allgemeine Administration (OPC_ALG_GUI_001)
 
 Im Startdialog des Menüpunktes „Allgemeine Administration“ werden die Administrationsfunktionen der allgemeinen Administration ausgegeben.  
@@ -395,6 +413,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-opc-alg-gui-002"></a>
 #### Systemparameter (OPC_ALG_GUI_002)
 
 Anzeigename: Systemparameter konfigurieren [Systemparameter]  
@@ -431,6 +450,7 @@ Formular "Neuer Systemparameter"
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="doku-schluessel-bereitstellen-opc-alg-gui-003"></a>
 #### Doku-Schlüssel bereitstellen (OPC_ALG_GUI_003)
 
 |  |  |
@@ -449,6 +469,7 @@ Formular "Neuer Systemparameter"
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="doku-schuessel-pruefen-opc-alg-gui-004"></a>
 #### Doku-Schüssel prüfen (OPC_ALG_GUI_004)
 
 |  |  |
@@ -472,6 +493,7 @@ Formular "Neuer Systemparameter"
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="datenbank-instanz-opc-alg-gui-005"></a>
 #### Datenbank-Instanz (OPC_ALG_GUI_005)
 
 | **Maskenfeld** | **M/K** | **E/A** | **Beschreibung** | **Format** |
@@ -484,6 +506,7 @@ Formular "Neuer Systemparameter"
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-hilfeseite-opc-alg-gui-005"></a>
 #### Systemparameter Hilfeseite (OPC_ALG_GUI_005)
 
 Anzeigename: Hilfe [<Parametername>]  
@@ -508,6 +531,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-verwaltung-gui"></a>
 ### Vertragspartner-Verwaltung - GUI
 
 
@@ -516,6 +540,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-vertragspartner-verwaltung-opc-vpv-gui-001"></a>
 #### Startdialog Vertragspartner Verwaltung (OPC_VPV_GUI_001)
 
 Im Startdialog des Menüpunktes „Vertragspartner Verwaltung" werden die Administrationsfunktionen der Vertragspartnerverwaltung ausgegeben.  
@@ -535,6 +560,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-suchen-opc-vpv-gui-002"></a>
 #### Vertragspartner Suchen (OPC_VPV_GUI_002)
 
 |  |  |
@@ -554,6 +580,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-liste-opc-vpv-gui-003"></a>
 #### Vertragspartner Liste (OPC_VPV_GUI_003)
 
 |  |  |
@@ -579,6 +606,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-details-opc-vpv-gui-004"></a>
 #### Vertragspartner Details (OPC_VPV_GUI_004)
 
 |  |  |
@@ -607,6 +635,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-suspendierung-aendern-opc-vpv-gui-005"></a>
 #### Vertragspartner Suspendierung Ändern (OPC_VPV_GUI_005)
 
 |  |  |
@@ -624,6 +653,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordination-suchen-opc-vpv-gui-006"></a>
 #### Ordination Suchen (OPC_VPV_GUI_006)
 
 |  |  |
@@ -644,6 +674,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordinationen-liste-opc-vpv-gui-007"></a>
 #### Ordinationen Liste (OPC_VPV_GUI_007)
 
 |  |  |
@@ -669,6 +700,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="zuordnungen-anzeigen-opc-vpv-gui-008"></a>
 #### Zuordnungen anzeigen (OPC_VPV_GUI_008)
 
 |  |  |
@@ -712,6 +744,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordinationen-zuordnung-aendern-opc-vpv-gui-009"></a>
 #### Ordinationen Zuordnung ändern (OPC_VPV_GUI_009)
 
 |  |  |
@@ -734,6 +767,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordinationen-aus-datei-lesen-opc-vpv-gui-010"></a>
 #### Ordinationen aus Datei lesen (OPC_VPV_GUI_010)
 
 |  |  |
@@ -749,6 +783,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="datei-info-anzeigen-opc-vpv-gui-011"></a>
 #### Datei Info anzeigen (OPC_VPV_GUI_011)
 
 |  |  |
@@ -768,6 +803,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="komponenten-liste-opc-vpv-gui-012"></a>
 #### Komponenten Liste (OPC_VPV_GUI_012)
 
 |  |  |
@@ -791,6 +827,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="komponente-aendern-opc-vpv-gui-013"></a>
 #### Komponente ändern (OPC_VPV_GUI_013)
 
 |  |  |
@@ -811,6 +848,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-hochladen-opc-vpv-gui-014"></a>
 #### SW-Zertifikat Hochladen (OPC_VPV_GUI_014)
 
 |  |  |
@@ -827,6 +865,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-ueberpruefen-opc-vpv-gui-015"></a>
 #### SW-Zertifikat Überprüfen (OPC_VPV_GUI_015)
 
 |  |  |
@@ -853,6 +892,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-suchen-opc-vpv-gui-016"></a>
 #### SW-Zertifikat suchen (OPC_VPV_GUI_016)
 
 |  |  |
@@ -868,6 +908,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikatsliste-opc-vpv-gui-017"></a>
 #### SW-Zertifikatsliste (OPC_VPV_GUI_017)
 
 |  |  |
@@ -891,6 +932,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-details-opc-vpv-gui-018"></a>
 #### SW-Zertifikat Details (OPC_VPV_GUI_018)
 
 |  |  |
@@ -919,6 +961,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="client-verwaltung-gui"></a>
 ### Client-Verwaltung - GUI
 
 
@@ -927,6 +970,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-client-verwaltung-opc-clv-gui-001"></a>
 #### Startdialog Client-Verwaltung (OPC_CLV_GUI_001)
 
 Im Startdialog des Menüpunktes „Client-Verwaltung" werden die Administrationsfunktionen der Client-Verwaltung ausgegeben.  
@@ -972,6 +1016,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="stammdaten-suchen-opc-clv-gui-101"></a>
 #### Stammdaten suchen (OPC_CLV_GUI_101)
 
 Anzeigename: Stammdaten suchen (OPC\_CLV\_GUI\_101)  
@@ -998,6 +1043,7 @@ Folgende Suchkriterien können angegeben werden. (keine Vorbelegung)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="stammdaten-liste-opc-clv-gui-102"></a>
 #### Stammdaten Liste (OPC_CLV_GUI_102)
 
 Anzeigename: Stammdaten Suchergebnis (OPC\_CLV\_GUI\_102)  
@@ -1018,6 +1064,7 @@ Die Liste der gefundenen Einträge enthält folgdene Felder
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="stammdaten-detailinformationen-opc-clv-gui-103"></a>
 #### Stammdaten Detailinformationen (OPC_CLV_GUI_103)
 
 Anzeigename: Stammdaten Detailinformationen (OPC\_CLV\_GUI\_103)  
@@ -1101,6 +1148,7 @@ Die Maske dient zur Verwaltung der Entität Stammdaten (CL\_STAMMDATEN)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anschluss-suchen-opc-clv-gui-104"></a>
 #### Anschluss suchen (OPC_CLV_GUI_104)
 
 Anzeigename: Anschluss suchen (OPC\_CLV\_GUI\_104)  
@@ -1130,6 +1178,7 @@ Folgende Suchkriterien können angegeben werden. (keine Vorbelegung)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anschluss-liste-opc-clv-gui-105"></a>
 #### Anschluss Liste (OPC_CLV_GUI_105)
 
 Anzeigename: Anschluss Suchergebnis (OPC\_CLV\_GUI\_105)  
@@ -1152,6 +1201,7 @@ Die Liste der gefundenen Einträge enthält folgdene Felder
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anschluss-detailinformationen-opc-clv-gui-106"></a>
 #### Anschluss Detailinformationen (OPC_CLV_GUI_106)
 
 Anzeigename: Anschluss Detailinformationen (OPC\_CLV\_GUI\_106)  
@@ -1195,6 +1245,7 @@ Die Maske dient zur Verwaltung der Entität Stammdaten (CL\_ANSCHLUSS)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-suchen-opc-clv-gui-111"></a>
 #### Gino suchen (OPC_CLV_GUI_111)
 
 Anzeigename: GINO suchen (OPC\_CLV\_GUI\_111)  
@@ -1227,6 +1278,7 @@ Folgende Suchkriterien können angegeben werden. (keine Vorbelegung)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-liste-opc-clv-gui-112"></a>
 #### Gino Liste (OPC_CLV_GUI_112)
 
 Anzeigename: GINO Suchergebnis (OPC\_CLV\_GUI\_112)  
@@ -1253,6 +1305,7 @@ Die Liste der gefundenen Einträge enthält folgende Felder
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-detailinformationen-opc-clv-gui-113"></a>
 #### Gino Detailinformationen (OPC_CLV_GUI_113)
 
 Anzeigename: GINO Detailinformationen (OPC\_CLV\_GUI\_113)   
@@ -1293,6 +1346,7 @@ Die Maske dient zur Anzeige der Entität Gino (CL\_GINO)
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-resource-status-opc-clv-gui-114"></a>
 #### Gino Resource Status (OPC_CLV_GUI_114)
 
 Anzeigename: GINO Resource Status (OPC\_CLV\_GUI\_114)   
@@ -1331,6 +1385,7 @@ Folgende Aktionen steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppen-zuordnungen-opc-clv-gui-115"></a>
 #### Gino Gruppen Zuordnungen (OPC_CLV_GUI_115)
 
 Anzeigename: GINO Gruppen Zuordnungen (OPC\_CLV\_GUI\_115)   
@@ -1369,6 +1424,7 @@ Folgende Aktion steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-kalve-aufruf-fwcheck-opc-clv-gui-116"></a>
 #### Gino Kalve Aufruf ”_fwcheck” (OPC_CLV_GUI_116)
 
 Anzeigename: GINO Kalve Aufruf „/fwcheck" (OPC\_CLV\_GUI\_116)   
@@ -1395,6 +1451,7 @@ Folgende Aktion steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-kalve-aufruf-server-config-opc-clv-gui-117"></a>
 #### Gino Kalve Aufruf ”_server-config” (OPC_CLV_GUI_117)
 
 Anzeigename: GINO Kalve Aufruf „/server-config" (OPC\_CLV\_GUI\_117)   
@@ -1422,6 +1479,7 @@ Folgende Aktion steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-kalve-aufruf-alive-opc-clv-gui-118"></a>
 #### Gino Kalve Aufruf ”_alive” (OPC_CLV_GUI_118)
 
 Anzeigename: GINO Kalve Aufruf „/alive" (OPC\_CLV\_GUI\_118)   
@@ -1448,6 +1506,7 @@ Folgende Aktion steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-kalve-aufruf-scriptcheck-opc-clv-gui-119"></a>
 #### Gino Kalve Aufruf ”_scriptcheck” (OPC_CLV_GUI_119)
 
 Anzeigename: GINO Kalve Aufruf „/scriptcheck" (OPC\_CLV\_GUI\_119)   
@@ -1474,6 +1533,7 @@ Folgende Aktion steht zur Verfügung:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfigurationsparameter-erstellen-opc-clv-gui-135"></a>
 #### GINO-Konfigurationsparameter erstellen (OPC_CLV_GUI_135)
 
 Anzeigename für GINO-Konfigurationsparameter erstellen: GINO-Konfigurationsparameter erstellen (OPC\_CLV\_GUI\_135)
@@ -1498,6 +1558,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfigurationsparameter-loeschen-opc-clv-gui-136"></a>
 #### GINO-Konfigurationsparameter löschen (OPC_CLV_GUI_136)
 
 Anzeigename für GINO-Konfigurationsparameter erstellen: GINO-Konfigurationsparameter löschen (OPC\_CLV\_GUI\_136)
@@ -1522,6 +1583,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenliste-ausgeben-opc-clv-gui-140"></a>
 #### GINO-Gruppenliste ausgeben (OPC_CLV_GUI_140)
 
 Anzeigename für GINO-Gruppenliste Konfiguration: GINO-Gruppenliste Konfiguration [GINO-Konfiguration]  
@@ -1554,6 +1616,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-konfiguration-anzeigen-erstellen-aendern-opc-clv-gui-142"></a>
 #### GINO-Gruppe Konfiguration anzeigen_erstellen_ändern (OPC_CLV_GUI_142)
 
 |  |  |
@@ -1589,6 +1652,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-firmware-anzeigen-erstellen-aendern-opc-clv-gui-143"></a>
 #### GINO-Gruppe Firmware anzeigen_erstellen_ändern (OPC_CLV_GUI_143)
 
 |  |  |
@@ -1621,6 +1685,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-task-anzeigen-erstellen-aendern-opc-clv-gui-144"></a>
 #### GINO-Gruppe Task anzeigen_erstellen_ändern (OPC_CLV_GUI_144)
 
 |  |  |
@@ -1656,6 +1721,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-script-task-anzeigen-erstellen-aendern-opc-clv-gui-146"></a>
 #### GINO-Gruppe Script-Task anzeigen_erstellen_ändern (OPC_CLV_GUI_146)
 
 |  |  |
@@ -1689,6 +1755,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenmitglieder-verwalten-opc-clv-gui-145"></a>
 #### GINO Gruppenmitglieder verwalten (OPC_CLV_GUI_145)
 
 |  |  |
@@ -1713,6 +1780,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmwareliste-ausgeben-opc-clv-gui-150"></a>
 #### GINO-Firmwareliste ausgeben (OPC_CLV_GUI_150)
 
 |  |  |
@@ -1733,6 +1801,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmware-hochladen-opc-clv-gui-151"></a>
 #### GINO-Firmware hochladen (OPC_CLV_GUI_151)
 
 |  |  |
@@ -1753,6 +1822,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-scriptliste-ausgeben-opc-clv-gui-152"></a>
 #### GINO-Scriptliste ausgeben (OPC_CLV_GUI_152)
 
 |  |  |
@@ -1770,6 +1840,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-script-hochladen-opc-clv-gui-153"></a>
 #### GINO-Script hochladen (OPC_CLV_GUI_153)
 
 |  |  |
@@ -1783,6 +1854,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-sperrliste-ausgeben-opc-clv-gui-084-kvw-12096"></a>
 #### GINO-Sperrliste ausgeben (OPC_CLV_GUI_084)_KVW-12096_
 
 |  |  |
@@ -1805,6 +1877,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-mit-seriennummer-sperren-opc-clv-gui-085"></a>
 #### GINO mit Seriennummer sperren (OPC_CLV_GUI_085)
 
 |  |  |
@@ -1826,6 +1899,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-mit-seriennummer-fuer-andere-instanz-exportieren-opc-clv-gui-086"></a>
 #### GINO mit Seriennummer für andere Instanz exportieren (OPC_CLV_GUI_086)
 
 |  |  |
@@ -1847,6 +1921,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-opc-clv-gui-089"></a>
 #### Provider (OPC_CLV_GUI_089)
 
 |  |  |
@@ -1866,6 +1941,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-anlegen-opc-clv-gui-090"></a>
 #### Provider anlegen (OPC_CLV_GUI_090)
 
 |  |  |
@@ -1881,6 +1957,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-aendern-opc-clv-gui-091"></a>
 #### Provider ändern (OPC_CLV_GUI_091)
 
 |  |  |
@@ -1897,6 +1974,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-produktionsdaten-importieren-opc-clv-gui-087"></a>
 #### GINO Produktionsdaten importieren (OPC_CLV_GUI_087)
 
 Die folgenden Aktionen sind aktivierbar
@@ -1918,6 +1996,7 @@ Die folgenden Aktionen sind aktivierbar
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-verwaltung-gui"></a>
 ### Session-Verwaltung - GUI
 
 
@@ -1926,6 +2005,7 @@ Die folgenden Aktionen sind aktivierbar
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-session-verwaltung-opc-sev-gui-001"></a>
 #### Startdialog Session-Verwaltung (OPC_SEV_GUI_001)
 
 Im Startdialog des Menüpunktes „Session-Verwaltung" werden die Abläufe als Menüpunkte angeboten.  
@@ -1943,6 +2023,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anmeldung-suchen-opc-sev-gui-002"></a>
 #### Anmeldung suchen (OPC_SEV_GUI_002)
 
 |  |  |
@@ -1957,6 +2038,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anmeldungen-liste-opc-sev-gui-003"></a>
 #### Anmeldungen Liste (OPC_SEV_GUI_003)
 
 |  |  |
@@ -1977,6 +2059,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anzahl-offener-vp-sessions-suchen-opc-sev-gui-004"></a>
 #### Anzahl offener VP-Sessions suchen (OPC_SEV_GUI_004)
 
 |  |  |
@@ -1993,6 +2076,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anzahl-offene-vp-session-details-opc-sev-gui-005"></a>
 #### Anzahl offene VP-Session Details (OPC_SEV_GUI_005)
 
 |  |  |
@@ -2011,6 +2095,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-informationen-suchen-opc-sev-gui-006"></a>
 #### Session-Informationen suchen (OPC_SEV_GUI_006)
 
 |  |  |
@@ -2033,6 +2118,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-informationen-liste-opc-sev-gui-007"></a>
 #### Session-Informationen Liste (OPC_SEV_GUI_007)
 
 |  |  |
@@ -2064,6 +2150,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-details-opc-sev-gui-008"></a>
 #### Session Details (OPC_SEV_GUI_008)
 
 |  |  |
@@ -2107,6 +2194,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="request-liste-opc-sev-gui-009"></a>
 #### Request Liste (OPC_SEV_GUI_009)
 
 |  |  |
@@ -2133,6 +2221,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="dialog-session-beenden-suchen-opc-sev-gui-010"></a>
 #### Dialog_Session beenden suchen (OPC_SEV_GUI_010)
 
 |  |  |
@@ -2152,6 +2241,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="dialog-session-beenden-liste-opc-sev-gui-011-kvw-12428"></a>
 #### Dialog_Session beenden Liste (OPC_SEV_GUI_011)_KVW-12428_
 
 |  |  |
@@ -2181,6 +2271,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachrichten-verwaltung-gui"></a>
 ### Nachrichten Verwaltung - GUI
 
 
@@ -2189,6 +2280,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-nachrichten-opc-mes-gui-001"></a>
 #### Startdialog Nachrichten (OPC_MES_GUI_001)
 
 Im Startdialog des Menüpunktes „Nachrichten" werden die Abläufe als Menüpunkte angeboten.  
@@ -2204,6 +2296,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-erstellen-opc-mes-gui-002"></a>
 #### Nachricht erstellen (OPC_MES_GUI_002)
 
 |  |  |
@@ -2227,6 +2320,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-pruefen-opc-mes-gui-003"></a>
 #### Nachricht prüfen (OPC_MES_GUI_003)
 
 |  |  |
@@ -2261,6 +2355,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-suchen-opc-mes-gui-004"></a>
 #### Nachricht suchen (OPC_MES_GUI_004)
 
 |  |  |
@@ -2284,6 +2379,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachrichten-liste-opc-mes-gui-005"></a>
 #### Nachrichten Liste (OPC_MES_GUI_005)
 
 |  |  |
@@ -2318,6 +2414,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachrichten-detail-opc-mes-gui-006"></a>
 #### Nachrichten Detail (OPC_MES_GUI_006)
 
 |  |  |
@@ -2346,6 +2443,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="adressaten-liste-opc-mes-gui-007"></a>
 #### Adressaten Liste (OPC_MES_GUI_007)
 
 |  |  |
@@ -2369,6 +2467,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkartenverwaltung-gui"></a>
 ### Chipkartenverwaltung - GUI
 
 
@@ -2377,6 +2476,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-chipkartenverwaltung-opc-ckv-gui-001"></a>
 #### Startdialog Chipkartenverwaltung (OPC_CKV_GUI_001)
 
 Im Startdialog des Menüpunktes „Chipkarten-Verwaltung" werden die Administrationsfunktionen der Chipkartenverwaltung ausgegeben.  
@@ -2394,6 +2494,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarten-suchkriterien-opc-ckv-gui-002"></a>
 #### Chipkarten Suchkriterien (OPC_CKV_GUI_002)
 
 |  |  |
@@ -2414,6 +2515,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarten-ergebnis-liste-opc-ckv-gui-003"></a>
 #### Chipkarten Ergebnis Liste (OPC_CKV_GUI_003)
 
 |  |  |
@@ -2444,6 +2546,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarten-details-opc-ckv-gui-004"></a>
 #### Chipkarten Details (OPC_CKV_GUI_004)
 
 |  |  |
@@ -2476,6 +2579,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarte-bearbeiten-opc-ckv-gui-005"></a>
 #### Chipkarte bearbeiten (OPC_CKV_GUI_005)
 
 |  |  |
@@ -2491,6 +2595,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarte-endzustand-setzen-opc-ckv-gui-006"></a>
 #### Chipkarte Endzustand setzen (OPC_CKV_GUI_006)
 
 |  |  |
@@ -2507,6 +2612,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformation-suchen-opc-ckv-gui-007"></a>
 #### Fotoinformation Suchen (OPC_CKV_GUI_007)
 
 |  |  |
@@ -2523,6 +2629,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformation-details-opc-ckv-gui-008"></a>
 #### Fotoinformation Details (OPC_CKV_GUI_008)
 
 |  |  |
@@ -2547,6 +2654,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformationen-beenden-opc-ckv-gui-009"></a>
 #### Fotoinformationen beenden (OPC_CKV_GUI_009)
 
 |  |  |
@@ -2564,6 +2672,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="foto-avisos-anlegen-opc-ckv-gui-010"></a>
 #### Foto-Avisos anlegen (OPC_CKV_GUI_010)
 
 |  |  |
@@ -2580,6 +2689,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="foto-metadaten-loeschen-opc-ckv-gui-011"></a>
 #### Foto-Metadaten löschen (OPC_CKV_GUI_011)
 
 |  |  |  |
@@ -2604,6 +2714,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarte-verwalten-loeschen-opc-ckv-gui-012"></a>
 #### Chipkarte-Verwalten löschen (OPC_CKV_GUI_012)
 
 Anzeigename: Karte verwalten (OPC\_CKV\_GUI\_012) [e-card Löschen]
@@ -2631,6 +2742,7 @@ Je nach Benutzereingabe oder technischem Zustand werden entsprechende Warn‑ od
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkarte-verwalten-delete-zip-herunterladen-opc-ckv-gui-013"></a>
 #### Chipkarte-Verwalten DELETE-ZIP herunterladen (OPC_CKV_GUI_013)
 
 Anzeigename: Karte verwalten (OPC\_CKV\_GUI\_013)
@@ -2657,6 +2769,7 @@ Je nach Benutzereingabe oder technischem Zustand werden entsprechende Warn‑ od
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="aswh-verwaltung-gui"></a>
 ### ASWH-Verwaltung - GUI
 
 
@@ -2665,6 +2778,7 @@ Je nach Benutzereingabe oder technischem Zustand werden entsprechende Warn‑ od
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="startdialog-aswh-verwaltung-opc-ahv-gui-001"></a>
 #### Startdialog ASWH-Verwaltung (OPC_AHV_GUI_001)
 
 Im Startdialog des Menüpunktes „ASWH-Verwaltung" werden die Administrationsfunktionen der ASWH-Verwaltung ausgegeben.  
@@ -2680,6 +2794,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="hersteller-importieren-opc-ahv-gui-001"></a>
 #### Hersteller importieren (OPC_AHV_GUI_001)
 
 |  |  |
@@ -2695,6 +2810,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="hersteller-exportieren-opc-ahv-gui-002"></a>
 #### Hersteller exportieren (OPC_AHV_GUI_002)
 
 |  |  |
@@ -2710,6 +2826,7 @@ Die folgenden Aktionen sind aktivierbar:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="opc-funktionen"></a>
 ## OPC - Funktionen
 
 Meldungsnummern die mit „GUI" beginnen (z.B. GUI-001) sind nicht Teil der Meldung und werden nicht ausgegeben. Sie wurden eingeführt um auf die Meldung referenzieren zu können und werden auserhalb dieses Dokuments nicht verwendet.
@@ -2718,6 +2835,7 @@ Meldungsnummern die mit „GUI" beginnen (z.B. GUI-001) sind nicht Teil der Meld
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anmelden-am-opc"></a>
 ### Anmelden am OPC
 
 
@@ -2726,6 +2844,7 @@ Meldungsnummern die mit „GUI" beginnen (z.B. GUI-001) sind nicht Teil der Meld
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anmelden-bf-anm-fkt-001"></a>
 #### Anmelden (BF_ANM_FKT_001)
 
 # Beschreibung
@@ -2756,6 +2875,7 @@ Die Ausgangsdaten stehen der aktiven Session zur Verfügung.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="abmelden-bf-abm-fkt-001"></a>
 #### Abmelden (BF_ABM_FKT_001)
 
 # Beschreibung
@@ -2770,6 +2890,7 @@ Der Benutzer ist authentifizeirt.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fenster-hauptmenue-e-card-betriebs-client-ausgeben-bf-anm-fkt-006"></a>
 #### Fenster ‚Hauptmenü e-card Betriebs-Client‘ ausgeben (BF_ANM_FKT_006)
 
 # Beschreibung
@@ -2798,6 +2919,7 @@ Die Anmeldung war erfolgreich.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="allgemeine-administration-funktionen"></a>
 ### Allgemeine Administration - Funktionen
 
 
@@ -2806,6 +2928,7 @@ Die Anmeldung war erfolgreich.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-ausgeben-opc-allg-fkt-001"></a>
 #### Systemparameter ausgeben (OPC_ALLG_FKT_001)
 
 # Beschreibung
@@ -2843,6 +2966,7 @@ Der aufrufende Benutzer hat eine Rolle, die ihn berechtigt, diese Systemparamete
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-aendern-opc-allg-fkt-002"></a>
 #### Systemparameter ändern (OPC_ALLG_FKT_002)
 
 # Beschreibung
@@ -2874,6 +2998,7 @@ Dabei werden die Werte gegen den Regex-Wert aus der Datenbank validiert, insofer
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-hinzufuegen-opc-allg-fkt-003"></a>
 #### Systemparameter hinzufügen (OPC_ALLG_FKT_003)
 
 # Beschreibung
@@ -2928,6 +3053,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-metainfo-bearbeiten-opc-allg-fkt-004"></a>
 #### Systemparameter-Metainfo bearbeiten (OPC_ALLG_FKT_004)
 
 # Beschreibung
@@ -2976,6 +3102,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="systemparameter-loeschen-opc-allg-fkt-005"></a>
 #### Systemparameter löschen (OPC_ALLG_FKT_005)
 
 # Beschreibung
@@ -3010,6 +3137,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="system-gruppen-abfragen-opc-allg-fkt-006"></a>
 #### System-Gruppen abfragen (OPC_ALLG_FKT_006)
 
 # Beschreibung
@@ -3026,6 +3154,7 @@ Liest und liefert für jede Gruppe in den Systemparametern aus der Datenbank ein
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="doku-schluessel-lesen-opc-allg-fkt-010"></a>
 #### Doku-Schlüssel lesen (OPC_ALLG_FKT_010)
 
 # Beschreibung
@@ -3086,6 +3215,7 @@ Eine Datei (Dateierweiterung ‚CER' oder ‚PEM') mit dem bereitzustellenden Ze
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="doku-schluessel-speichern-opc-allg-fkt-011"></a>
 #### Doku-Schlüssel speichern (OPC_ALLG_FKT_011)
 
 # Beschreibung
@@ -3126,6 +3256,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartnerverwaltung-funktionen"></a>
 ### Vertragspartnerverwaltung - Funktionen
 
 Die folgenden Funktionen dienen der Suspendierung eines Vertragspartners.
@@ -3139,6 +3270,7 @@ Die folgenden Funktionen dienen der Suspendierung eines Vertragspartners.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-suchen-opc-vpv-fkt-001"></a>
 #### Vertragspartner suchen (OPC_VPV_FKT_001)
 
 # Beschreibung
@@ -3185,6 +3317,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartnerdetails-suchen-opc-vpv-fkt-002"></a>
 #### Vertragspartnerdetails suchen (OPC_VPV_FKT_002)
 
 # Beschreibung
@@ -3230,6 +3363,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vertragspartner-suspendieren-opc-vpv-fkt-003"></a>
 #### Vertragspartner suspendieren (OPC_VPV_FKT_003)
 
 # Beschreibung
@@ -3266,6 +3400,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="suspendierung-eines-vertragspartners-aufheben-opc-vpv-fkt-004"></a>
 #### Suspendierung eines Vertragspartners aufheben (OPC_VPV_FKT_004)
 
 # Beschreibung
@@ -3302,6 +3437,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-bereitstellen-opc-vpv-fkt-006"></a>
 #### SW-Zertifikat bereitstellen (OPC_VPV_FKT_006)
 
 # Vorbedingungen
@@ -3357,6 +3493,7 @@ Nachdem das SW-Zertifikat erfolgreich gelesen wurde, werden die folgenden Prüfu
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-suchen-opc-vpv-fkt-007"></a>
 #### SW-Zertifikat suchen (OPC_VPV_FKT_007)
 
 # Vorbedingungen
@@ -3401,6 +3538,7 @@ Können keine SW-Zertifikate zur angegebenen Vertragspartnernummer ermittelt wer
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-details-suchen-opc-vpv-fkt-008"></a>
 #### SW-Zertifikat Details suchen (OPC_VPV_FKT_008)
 
 # Vorbedingungen
@@ -3445,6 +3583,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-sperren-entsperren-opc-vpv-fkt-009"></a>
 #### SW-Zertifikat sperren _ entsperren (OPC_VPV_FKT_009)
 
 # Vorbedingungen
@@ -3482,6 +3621,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="rollen-ermitteln-opc-vpv-fkt-010"></a>
 #### Rollen ermitteln (OPC_VPV_FKT_010)
 
 # Beschreibung
@@ -3515,6 +3655,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="auspraegungscodes-ermitteln-opc-vpv-fkt-012"></a>
 #### Ausprägungscodes ermitteln (OPC_VPV_FKT_012)
 
 # Beschreibung
@@ -3545,6 +3686,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="komponenten-ermitteln-opc-vpv-fkt-013"></a>
 #### Komponenten ermitteln (OPC_VPV_FKT_013)
 
 # Beschreibung
@@ -3581,6 +3723,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="komponente-aendern-opc-vpv-fkt-014"></a>
 #### Komponente ändern (OPC_VPV_FKT_014)
 
 # Beschreibung
@@ -3612,6 +3755,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordinationen-suchen-opc-vpv-fkt-015"></a>
 #### Ordinationen suchen (OPC_VPV_FKT_015)
 
 # Beschreibung
@@ -3658,6 +3802,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ordinationen-aus-datei-lesen-opc-vpv-fkt-016"></a>
 #### Ordinationen aus Datei lesen (OPC_VPV_FKT_016)
 
 # Beschreibung
@@ -3708,6 +3853,7 @@ Der Systembenutzer ist zur Durchführung des Ablaufes und im Speziellen zum Aufr
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="zugeordnete-rollen-ermitteln-opc-vpv-fkt-017"></a>
 #### Zugeordnete Rollen ermitteln (OPC_VPV_FKT_017)
 
 # Beschreibung
@@ -3745,6 +3891,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="zugeordnete-sperren-ermitteln-opc-vpv-fkt-018"></a>
 #### Zugeordnete Sperren ermitteln (OPC_VPV_FKT_018)
 
 # Beschreibung
@@ -3780,6 +3927,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="zugeordnete-piloten-ermitteln-opc-vpv-fkt-019"></a>
 #### Zugeordnete Piloten ermitteln (OPC_VPV_FKT_019)
 
 # Beschreibung
@@ -3815,6 +3963,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="zugeordnete-vertraege-ermitteln-opc-vpv-fkt-020"></a>
 #### Zugeordnete Verträge ermitteln (OPC_VPV_FKT_020)
 
 # Beschreibung
@@ -3852,6 +4001,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="rollen-zuordnen-opc-vpv-fkt-021"></a>
 #### Rollen zuordnen (OPC_VPV_FKT_021)
 
 # Beschreibung
@@ -3883,6 +4033,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sperren-zuordnen-opc-vpv-fkt-022"></a>
 #### Sperren zuordnen (OPC_VPV_FKT_022)
 
 # Beschreibung
@@ -3914,6 +4065,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="piloten-zuordnen-opc-vpv-fkt-023"></a>
 #### Piloten zuordnen (OPC_VPV_FKT_023)
 
 # Beschreibung
@@ -3945,6 +4097,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sw-zertifikat-importieren-opc-vpv-fkt-024"></a>
 #### SW-Zertifikat importieren (OPC_VPV_FKT_024)
 
 # Vorbedingungen
@@ -3985,6 +4138,7 @@ In der DB wird als Fingerprint der SHA1-Wert gespeichert.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="client-verwaltung-funktionen"></a>
 ### Client-Verwaltung - Funktionen
 
 Hinweis: Jene Funktion der Clientverwaltung die neben dem OPC auch von anderen Batches und Services genutzt werden sind haben als Prefix CV\_BAS\_FKT\_. Und sind bei den CLV Basisfunktionen beschrieben.
@@ -3993,6 +4147,7 @@ Hinweis: Jene Funktion der Clientverwaltung die neben dem OPC auch von anderen B
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="detailinformation-gino-ermitteln-opc-clv-fkt-026"></a>
 #### Detailinformation – GINO ermitteln (OPC_CLV_FKT_026)
 
 # Vorbedingungen
@@ -4027,6 +4182,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="report-prozentuelle-auswertung-der-am-system-angemeldeten-vertragspartner-erstellen-opc-clv-fkt-056"></a>
 #### Report „Prozentuelle Auswertung der am System angemeldeten Vertragspartner“ erstellen (OPC_CLV_FKT_056)
 
 # Vorbedingungen
@@ -4071,6 +4227,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="report-details-der-am-system-angemeldeten-vertragspartner-erstellen-opc-clv-fkt-057"></a>
 #### Report „Details der am System angemeldeten Vertragspartner“ erstellen (OPC_CLV_FKT_057)
 
 # Vorbedingungen
@@ -4121,6 +4278,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="client-stammdaten-suchen-opc-clv-fkt-109"></a>
 #### Client-Stammdaten suchen (OPC_CLV_FKT_109)
 
 # Vorbedingungen
@@ -4178,6 +4336,7 @@ Für das Stats-Logging wird die Dauer des Funktionsaufrufs mit den nachfolgenden
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="uebersiedlung-stornieren-opc-clv-fkt-117"></a>
 #### Übersiedlung stornieren (OPC_CLV_FKT_117)
 
 # Vorbedingungen
@@ -4219,6 +4378,7 @@ Für den Vorgänger wird für den Provider- und Callcenterexport das Exportdatum
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="uebernahme-stornieren-opc-clv-fkt-118"></a>
 #### Übernahme stornieren (OPC_CLV_FKT_118)
 
 # Vorbedingungen
@@ -4261,6 +4421,7 @@ Hinweis: das bedeutet nicht, dass der Zustand vor der Übernahme wiederhergestel
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="bereich-fuer-ip-adresse-ermitteln-opc-clv-fkt-124"></a>
 #### Bereich für IP-Adresse ermitteln (OPC_CLV_FKT_124)
 
 # Vorbedingungen
@@ -4302,6 +4463,7 @@ Die Meldungen werden nur dann in die Eventlog-Datei geschrieben, falls die Funkt
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ip-adresse-aus-bereich-ermitteln-opc-clv-fkt-125"></a>
 #### IP-Adresse aus Bereich ermitteln (OPC_CLV_FKT_125)
 
 # Vorbedingungen
@@ -4346,6 +4508,7 @@ Die Meldungen werden nur dann in die Eventlog-Datei geschrieben, falls die Funkt
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenliste-ermitteln-opc-clv-fkt-140"></a>
 #### GINO-Gruppenliste ermitteln (OPC_CLV_FKT_140)
 
 # Vorbedingungen
@@ -4379,6 +4542,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-konfiguration-ermitteln-opc-clv-fkt-141"></a>
 #### GINO-Gruppe Konfiguration ermitteln (OPC_CLV_FKT_141)
 
 # Vorbedingungen
@@ -4416,6 +4580,7 @@ Wird in den Eingangsdaten keine GINO-Gruppen-ID gesetzt, so werden in der Entit�
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-speichern-opc-clv-fkt-142"></a>
 #### GINO-Gruppe speichern (OPC_CLV_FKT_142)
 
 # Vorbedingungen
@@ -4468,6 +4633,7 @@ jeweils aus den Eingangsdaten versorgt.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfiguration-zuordnung-speichern-opc-clv-fkt-143"></a>
 #### GINO-Konfiguration Zuordnung speichern (OPC_CLV_FKT_143)
 
 # Vorbedingungen
@@ -4511,6 +4677,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmware-zuordnung-speichern-opc-clv-fkt-144"></a>
 #### GINO-Firmware Zuordnung speichern (OPC_CLV_FKT_144)
 
 # Vorbedingungen
@@ -4551,6 +4718,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfigurationsgruppe-loeschen-opc-clv-fkt-145"></a>
 #### GINO-Konfigurationsgruppe löschen (OPC_CLV_FKT_145)
 
 # Vorbedingungen
@@ -4584,6 +4752,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenmitglieder-ermitteln-opc-clv-fkt-146"></a>
 #### GINO Gruppenmitglieder ermitteln (OPC_CLV_FKT_146)
 
 # Vorbedingungen
@@ -4616,6 +4785,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-anschluesse-ermitteln-opc-clv-fkt-147"></a>
 #### GINO Anschlüsse ermitteln (OPC_CLV_FKT_147)
 
 # Vorbedingungen
@@ -4650,6 +4820,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenmitglieder-hinzufuegen-opc-clv-fkt-148"></a>
 #### GINO Gruppenmitglieder hinzufügen (OPC_CLV_FKT_148)
 
 # Vorbedingungen
@@ -4693,6 +4864,7 @@ Andernfalls wird für jeden Eintrag der von der obigen Funktion zurückgeliefert
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppenmitglieder-loeschen-opc-clv-fkt-149"></a>
 #### GINO Gruppenmitglieder löschen (OPC_CLV_FKT_149)
 
 # Vorbedingungen
@@ -4722,6 +4894,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmware-speichern-opc-clv-fkt-150"></a>
 #### GINO-Firmware speichern (OPC_CLV_FKT_150)
 
 # Vorbedingungen
@@ -4764,6 +4937,7 @@ Falls nein, wird in „GINO Firmware" ein neuer Eintrag mit „Software Version"
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-gruppe-firmware-ermitteln-opc-clv-fkt-151"></a>
 #### GINO-Gruppe Firmware ermitteln (OPC_CLV_FKT_151)
 
 # Vorbedingungen
@@ -4796,6 +4970,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmware-versionen-ermitteln-opc-clv-fkt-152"></a>
 #### GINO-Firmware Versionen ermitteln (OPC_CLV_FKT_152)
 
 # Vorbedingungen
@@ -4828,6 +5003,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-firmwaregruppe-loeschen-opc-clv-fkt-153"></a>
 #### GINO-Firmwaregruppe löschen (OPC_CLV_FKT_153)
 
 # Vorbedingungen
@@ -4861,6 +5037,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-task-gruppe-ermitteln-opc-clv-fkt-161"></a>
 #### GINO-Task Gruppe ermitteln (OPC_CLV_FKT_161)
 
 # Vorbedingungen
@@ -4893,6 +5070,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-task-zuordnung-speichern-opc-clv-fkt-162"></a>
 #### GINO-Task Zuordnung speichern (OPC_CLV_FKT_162)
 
 # Vorbedingungen
@@ -4925,6 +5103,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-task-gruppe-loeschen-opc-clv-fkt-163"></a>
 #### GINO-Task Gruppe löschen (OPC_CLV_FKT_163)
 
 # Vorbedingungen
@@ -4958,6 +5137,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-resource-status-ermitteln-opc-clv-fkt-164"></a>
 #### GINO-Resource Status ermitteln (OPC_CLV_FKT_164)
 
 # Vorbedingungen
@@ -4993,6 +5173,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-script-gruppe-ermitteln-opc-clv-fkt-165"></a>
 #### GINO-Script Gruppe ermitteln (OPC_CLV_FKT_165)
 
 # Vorbedingungen
@@ -5025,6 +5206,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-script-zuordnung-speichern-opc-clv-fkt-166"></a>
 #### GINO-Script Zuordnung speichern (OPC_CLV_FKT_166)
 
 # Vorbedingungen
@@ -5057,6 +5239,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-script-gruppe-loeschen-opc-clv-fkt-167"></a>
 #### GINO-Script Gruppe löschen (OPC_CLV_FKT_167)
 
 # Vorbedingungen
@@ -5090,6 +5273,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-scripte-ermitteln-opc-clv-fkt-168"></a>
 #### GINO-Scripte ermitteln (OPC_CLV_FKT_168)
 
 # Vorbedingungen
@@ -5119,6 +5303,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-script-speichern-opc-clv-fkt-169"></a>
 #### GINO-Script speichern (OPC_CLV_FKT_169)
 
 # Vorbedingungen
@@ -5163,6 +5348,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-sperrliste-ermitteln-opc-clv-fkt-170-kvw-12096"></a>
 #### GINO-Sperrliste ermitteln (OPC_CLV_FKT_170)_KVW-12096_
 
 # Vorbedingungen
@@ -5195,6 +5381,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-sperren-opc-clv-fkt-171"></a>
 #### GINO sperren (OPC_CLV_FKT_171)
 
 # Vorbedingungen
@@ -5248,6 +5435,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ginos-entsperren-opc-clv-fkt-172"></a>
 #### GINOs entsperren (OPC_CLV_FKT_172)
 
 # Vorbedingungen
@@ -5288,6 +5476,7 @@ Die Funktion wird unter Ausgabe der Meldung GUI-014 beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-resource-historie-ermitteln-opc-clv-fkt-173"></a>
 #### GINO-Resource Historie ermitteln (OPC_CLV_FKT_173)
 
 # Vorbedingungen
@@ -5323,6 +5512,7 @@ Keine.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-ermitteln-opc-clv-fkt-174"></a>
 #### Provider ermitteln (OPC_CLV_FKT_174)
 
 # Vorbedingungen
@@ -5352,6 +5542,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-anzeigen-opc-clv-fkt-175"></a>
 #### Provider anzeigen (OPC_CLV_FKT_175)
 
 # Vorbedingungen
@@ -5381,6 +5572,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-loeschen-opc-clv-fkt-176"></a>
 #### Provider löschen (OPC_CLV_FKT_176)
 
 # Vorbedingungen
@@ -5424,6 +5616,7 @@ Vor dem Löschen muss der Benutzer, falls die Prüfungen erfolgreich waren, das 
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-speichern-opc-clv-fkt-177"></a>
 #### Provider speichern (OPC_CLV_FKT_177)
 
 # Vorbedingungen
@@ -5468,6 +5661,7 @@ Vor dem Anlegen muss der Benutzer, falls die Prüfung erfolgreich war, das Anleg
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="provider-aendern-opc-clv-fkt-178"></a>
 #### Provider ändern (OPC_CLV_FKT_178)
 
 # Vorbedingungen
@@ -5514,6 +5708,7 @@ Hierzu werden folgende Schritte durchgeführt:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-seriennummern-aus-datei-lesen-opc-clv-fkt-179"></a>
 #### GINO Seriennummern aus Datei lesen (OPC_CLV_FKT_179)
 
 # Vorbedingungen
@@ -5560,6 +5755,7 @@ Für jede Zeile werden folgende Schritte durchgeführt:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ginos-sperren-opc-clv-fkt-180"></a>
 #### GINOs sperren (OPC_CLV_FKT_180)
 
 # Vorbedingungen
@@ -5595,6 +5791,7 @@ Die Funktion wird unter Ausgabe der Meldung GUI-013 beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="ginos-fuer-andere-instanz-vorbereiten-opc-clv-fkt-181"></a>
 #### GINOs für andere Instanz vorbereiten (OPC_CLV_FKT_181)
 
 # Vorbedingungen
@@ -5629,6 +5826,7 @@ Die Funktion wird unter Ausgabe der Meldung GUI-033 beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-produktionsdaten-aus-datei-lesen-opc-clv-fkt-182"></a>
 #### GINO Produktionsdaten aus Datei lesen (OPC_CLV_FKT_182)
 
 # Vorbedingungen
@@ -5670,6 +5868,7 @@ Der Inhalt der Datei wird zurückgegeben.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-produktionsdaten-importieren-opc-clv-fkt-183"></a>
 #### GINO Produktionsdaten importieren (OPC_CLV_FKT_183)
 
 # Vorbedingungen
@@ -5714,6 +5913,7 @@ Die Funktion wird unter Ausgabe der Meldung GUI-041 beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfigurationsparameter-erstellen-opc-clv-fkt-154"></a>
 #### GINO-Konfigurationsparameter erstellen (OPC_CLV_FKT_154)
 
 # Vorbedingungen
@@ -5753,6 +5953,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="gino-konfigurationsparameter-loeschen-opc-clv-fkt-155"></a>
 #### GINO-Konfigurationsparameter löschen (OPC_CLV_FKT_155)
 
 # Vorbedingungen
@@ -5787,6 +5988,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-verwaltung-funktionen"></a>
 ### Session-Verwaltung - Funktionen
 
 
@@ -5795,6 +5997,7 @@ Keine
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-s-suchen-opc-sev-fkt-001"></a>
 #### Session(s) suchen (OPC_SEV_FKT_001)
 
 # Beschreibung
@@ -5844,6 +6047,7 @@ Diese Funktion sucht eine oder mehrere Sessions.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anzahl-offener-vp-sessions-ermitteln-opc-sev-fkt-002"></a>
 #### Anzahl offener VP-Sessions ermitteln (OPC_SEV_FKT_002)
 
 # Beschreibung
@@ -5885,6 +6089,7 @@ Bei der Ermittlung der Anzahl der offenen Sessions über das Suchkriterium ‚Gi
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="anmeldungen-ermitteln-opc-sev-fkt-003"></a>
 #### Anmeldungen ermitteln (OPC_SEV_FKT_003)
 
 # Beschreibung
@@ -5914,6 +6119,7 @@ Diese Funktion ermittelt die letzte erfolgreiche Anmeldung mittels Ordinationska
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="sessiondetails-ermitteln-opc-sev-fkt-004"></a>
 #### Sessiondetails ermitteln (OPC_SEV_FKT_004)
 
 # Beschreibung
@@ -5967,6 +6173,7 @@ Diese Funktion ermittelt Detailinformationen zu einer Vertragspartnersession.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="session-beenden-opc-sev-fkt-005"></a>
 #### Session beenden (OPC_SEV_FKT_005)
 
 # Beschreibung
@@ -5992,6 +6199,7 @@ Diese Funktion ermittelt alle offenen Sessions zu den gegebenen Suchkriterien un
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachrichten-funktionen"></a>
 ### Nachrichten - Funktionen
 
 
@@ -6000,6 +6208,7 @@ Diese Funktion ermittelt alle offenen Sessions zu den gegebenen Suchkriterien un
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="adressaten-ermitteln-opc-mes-fkt-001"></a>
 #### Adressaten ermitteln (OPC_MES_FKT_001)
 
 # Beschreibung
@@ -6050,6 +6259,7 @@ Die Information zur Ordination bzw. Session steht bei diesem Filter nicht zur Ve
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-speichern-opc-mes-fkt-002"></a>
 #### Nachricht speichern (OPC_MES_FKT_002)
 
 # Beschreibung
@@ -6089,6 +6299,7 @@ Zum Speichern der Nachricht wird die erstellte Nachricht (inklusive Filterkriter
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-suchen-opc-mes-fkt-003"></a>
 #### Nachricht suchen (OPC_MES_FKT_003)
 
 # Beschreibung
@@ -6149,6 +6360,7 @@ Die Suchkriterien ‚VON-Datum' und ‚BIS-Datum' beziehen sich immer auf den G�
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="details-einer-nachricht-ermitteln-opc-mes-fkt-004"></a>
 #### Details einer Nachricht ermitteln (OPC_MES_FKT_004)
 
 # Beschreibung
@@ -6182,6 +6394,7 @@ Die Suchkriterien ‚VON-Datum' und ‚BIS-Datum' beziehen sich immer auf den G�
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="adressaten-einer-nachricht-ermitteln-opc-mes-fkt-007"></a>
 #### Adressaten einer Nachricht ermitteln (OPC_MES_FKT_007)
 
 # Beschreibung
@@ -6222,6 +6435,7 @@ Die Informationen zur Ordination und Session stehen nicht zur Verfügung.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="nachricht-loeschen-opc-mes-fkt-005"></a>
 #### Nachricht löschen (OPC_MES_FKT_005)
 
 # Beschreibung
@@ -6251,6 +6465,7 @@ Es ist eine Nachricht vorhanden und der Aufrufer besitzt die eindeutige Identifi
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="chipkartenverwaltung-funktionen"></a>
 ### Chipkartenverwaltung - Funktionen
 
 
@@ -6259,6 +6474,7 @@ Es ist eine Nachricht vorhanden und der Aufrufer besitzt die eindeutige Identifi
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="karten-suchen-opc-ckv-fkt-001"></a>
 #### Karten suchen (OPC_CKV_FKT_001)
 
 # Eingangsdaten
@@ -6328,6 +6544,7 @@ Die Funktion sucht alle Karten, die zu den Kriterien aus den Eingangsdaten passe
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformation-suchen-opc-ckv-fkt-002"></a>
 #### Fotoinformation suchen (OPC_CKV_FKT_002)
 
 # Vorbedingungen
@@ -6366,6 +6583,7 @@ Falls ein Eintrag gefunden wurde, wird dieser retourniert.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="bemerkung-zur-karte-aendern-opc-ckv-fkt-003"></a>
 #### Bemerkung zur Karte ändern (OPC_CKV_FKT_003)
 
 # Eingangsdaten
@@ -6402,6 +6620,7 @@ Die Bemerkung, das Bemerkungsdatum und der Bemerkungsuser werden zur e-card bzw.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="erlaubte-statusuebergaenge-pruefen-opc-ckv-fkt-004"></a>
 #### Erlaubte Statusübergänge prüfen (OPC_CKV_FKT_004)
 
 # Eingangsdaten
@@ -6426,6 +6645,7 @@ Die möglichen Auftragstypen, die laut Chipkartenverwaltung auf den eingegebenen
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="erlaubte-statusuebergaenge-fuer-opc-pruefen-opc-ckv-fkt-005"></a>
 #### Erlaubte Statusübergänge für OPC prüfen (OPC_CKV_FKT_005)
 
 # Eingangsdaten
@@ -6453,6 +6673,7 @@ Für den OPC wird ermittelt, welche Funktion mit dem Kartenstatus durchgeführt 
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="endstatus-setzen-opc-ckv-fkt-006"></a>
 #### Endstatus setzen (OPC_CKV_FKT_006)
 
 # Eingangsdaten
@@ -6484,6 +6705,7 @@ Die Karte aus den Eingangsdaten wird auf den Endstatus gesetzt.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformation-beenden-opc-ckv-fkt-007"></a>
 #### Fotoinformation beenden (OPC_CKV_FKT_007)
 
 # Vorbedingungen
@@ -6521,6 +6743,7 @@ Es wird die Meldung CKV-101 ausgegeben. (An der GUI nur falls der Aufruf über d
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="fotoinformationen-beenden-opc-ckv-fkt-008"></a>
 #### Fotoinformationen beenden (OPC_CKV_FKT_008)
 
 # Vorbedingungen
@@ -6563,6 +6786,7 @@ Die Meldung CKV-103 wird ausgegeben.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="foto-avisos-anlegen-opc-ckv-fkt-009"></a>
 #### Foto-Avisos anlegen (OPC_CKV_FKT_009)
 
 # Vorbedingungen
@@ -6616,6 +6840,7 @@ Die Meldung CKV-107 wird ausgegeben.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="vsnrs-fuer-fotoinformation-lesen-opc-ckv-fkt-010"></a>
 #### VSNRs für Fotoinformation lesen (OPC_CKV_FKT_010)
 
 # Vorbedingungen
@@ -6660,6 +6885,7 @@ Für jede Zeile werden folgende Schritte durchgeführt:
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="foto-metadaten-suchen-opc-ckv-fkt-011"></a>
 #### Foto-Metadaten suchen (OPC_CKV_FKT_011)
 
 # Vorbedingungen
@@ -6700,6 +6926,7 @@ Tritt dabei ein allgemeiner Fehler auf, wird die Funktion mit der Meldung GUI-80
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="foto-metadaten-loeschen-opc-ckv-fkt-012"></a>
 #### Foto-Metadaten löschen (OPC_CKV_FKT_012)
 
 # Vorbedingungen
@@ -6732,6 +6959,7 @@ Es wird die Erfolgsmeldung CKV-114 ausgegeben.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="aswh-verwaltung-funktionen"></a>
 ### ASWH-Verwaltung - Funktionen
 
 
@@ -6740,6 +6968,7 @@ Es wird die Erfolgsmeldung CKV-114 ausgegeben.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="herstellerdaten-importieren-opc-ahv-fkt-001"></a>
 #### Herstellerdaten importieren (OPC_AHV_FKT_001)
 
 # Vorbedingungen
@@ -6808,6 +7037,7 @@ Zum Abschluss wird die Meldung AHV-006 (dabei wird auch die Ursache eines Neuein
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="herstellerdaten-exportieren-opc-ahv-fkt-002"></a>
 #### Herstellerdaten exportieren (OPC_AHV_FKT_002)
 
 # Vorbedingungen
@@ -6843,6 +7073,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="opc-parameter-und-parameterguppierungen"></a>
 ## OPC - Parameter und Parameterguppierungen
 
 *Hinweis: Hier sind nur Parameter bzw. Parametergruppen angeführt, die die GINO Verwaltung betreffen.*
@@ -6869,6 +7100,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-gruppe"></a>
 ### Parametergruppe GINO-Gruppe
 
 |  |  |  |  |
@@ -6887,6 +7119,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-konfiguration-parameter"></a>
 ### Parametergruppe GINO-Konfiguration-Parameter
 
 |  |  |  |  |
@@ -6903,6 +7136,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-gruppen-mitglied"></a>
 ### Parametergruppe GINO-Gruppen-Mitglied
 
 |  |  |  |  |
@@ -6916,6 +7150,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-firmware"></a>
 ### Parametergruppe GINO-Firmware
 
 |  |  |  |  |
@@ -6931,6 +7166,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-produktionsdaten"></a>
 ### Parametergruppe GINO-Produktionsdaten
 
 |  |  |  |  |
@@ -6946,6 +7182,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-task"></a>
 ### Parametergruppe GINO-Task
 
 |  |  |  |  |
@@ -6963,6 +7200,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-script-task"></a>
 ### Parametergruppe GINO-Script-Task
 
 |  |  |  |  |
@@ -6983,6 +7221,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-script"></a>
 ### Parametergruppe GINO-Script
 
 |  |  |  |  |
@@ -6996,6 +7235,7 @@ Zum Abschluss wird die Meldung AHV-012 ausgegeben und die Funktion beendet.
 > *[⬆️ Zurück nach oben](#inhaltsverzeichnis)*
 
 
+<a id="parametergruppe-gino-resource-status"></a>
 ### Parametergruppe GINO-Resource Status
 
 |  |  |  |  |
