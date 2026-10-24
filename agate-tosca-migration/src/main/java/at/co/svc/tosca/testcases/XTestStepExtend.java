@@ -147,7 +147,7 @@ public class XTestStepExtend {
                 StandardCharsets.UTF_8
         );
 
-        MigrationLog.info(
+        MigrationLog.debug(
                 "Extended JSON written: "
                         + outputPath
         );

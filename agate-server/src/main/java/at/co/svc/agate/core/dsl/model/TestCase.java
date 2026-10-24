@@ -20,6 +20,14 @@ public class TestCase {
     private String description;
     private String stage;
     private String priority;
+    // Optional source metadata for instantiated tests (not runtime dependencies).
+    private String template;
+    private String testdata;
+
+    public String getTemplate() { return template; }
+    public void setTemplate(String template) { this.template = template; }
+    public String getTestdata() { return testdata; }
+    public void setTestdata(String testdata) { this.testdata = testdata; }
 
     private Map<String, Object> variables = new HashMap<>();
     private List<TestStep> steps = new ArrayList<>();

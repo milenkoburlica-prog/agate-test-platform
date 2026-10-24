@@ -1,5 +1,7 @@
 package at.co.svc.tosca.tsu.del;
 
+import at.co.svc.aga.transformator.utils.MigrationLog;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public class TCDSheetRowLevel1 {
             String originalTsuJsonPath
     ) throws Exception {
         
-        System.out.println("DEBUG: Pokušavam da kreiram fajl na: " + new File(outputFilePath).getAbsolutePath());
+        MigrationLog.debug("DEBUG: Pokušavam da kreiram fajl na: " + new File(outputFilePath).getAbsolutePath());
         
         ObjectMapper mapper = new ObjectMapper();
         Map<String, JsonNode> polazniTsuIndex = new HashMap<>();
@@ -36,7 +38,7 @@ public class TCDSheetRowLevel1 {
                         polazniTsuIndex.put(surrogate, node);
                     }
                 }
-                System.out.println("[TCD-Level1] Uspešno indeksirano " + polazniTsuIndex.size() + " entiteta.");
+                MigrationLog.debug("[TCD-Level1] Uspešno indeksirano " + polazniTsuIndex.size() + " entiteta.");
             }
         } else {
             System.err.println("[TCD-Level1] Greška: Polazni JSON ne postoji: " + originalTsuJsonPath);
@@ -108,7 +110,7 @@ public class TCDSheetRowLevel1 {
 
                 // --- SCENARIO 1: ELEMENT IMA DECU (EKSPANZIJA) ---
                 if (hasSubStructure && !childrenSurrogates.isEmpty()) {
-                    System.out.println("[EKSPANZIJA] Razbijam element: " + currentName);
+                    MigrationLog.debug("[EKSPANZIJA] Razbijam element: " + currentName);
                     
                     JsonNode currentTestSheet = currentItem.path("Assocs").path("TestSheet");
                     
@@ -162,7 +164,7 @@ public class TCDSheetRowLevel1 {
                                 } else {
                                     // Spasavamo VPNR-Karte i slične prazne parametre u strukturi
                                     cleanValuesArray.add(""); 
-                                    System.out.println("[INFO] Sačuvan prazan strukturalni parametar: " + fullPathName);
+                                    MigrationLog.debug("[INFO] Sačuvan prazan strukturalni parametar: " + fullPathName);
                                 }
                             }
                             assocs.set("Values", cleanValuesArray);
@@ -233,7 +235,7 @@ public class TCDSheetRowLevel1 {
         }
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(outputFilePath), level1Result);
-        System.out.println("✔ [TCD-Level1] Kompletan izvoz završen. Sadrži TestSheet, ParentItem, OwningClass i Values. Putanja: " + outputFilePath);
+        MigrationLog.debug("✔ [TCD-Level1] Kompletan izvoz završen. Sadrži TestSheet, ParentItem, OwningClass i Values. Putanja: " + outputFilePath);
     }
     
     private static String findInstanceName(ObjectMapper mapper, Map<String, JsonNode> polazniTsuIndex, JsonNode valuesNode) {

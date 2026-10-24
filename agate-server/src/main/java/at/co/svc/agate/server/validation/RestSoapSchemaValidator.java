@@ -36,7 +36,8 @@ public final class RestSoapSchemaValidator
                     "expected",
                     "value",
                     "ignore",
-                    "unordered"
+                    "unordered",
+                    "constraints"
             );
 
     /*
@@ -163,6 +164,7 @@ public final class RestSoapSchemaValidator
                     "NOT_EMPTY",
                     "IS_NOT_EMPTY",
                     "IS_EMPTY",
+                    "EXISTS",
                     "MATCH_REFERENCE"
             );
 
@@ -269,6 +271,14 @@ public final class RestSoapSchemaValidator
             String type,
             List<ValidationIssue> issues) {
 
+        // The runtime applies constraints only to SOAP BODY assertions.
+        // Reject other combinations rather than silently ignoring a filter.
+        if (node.has("constraints") && !("SOAP".equals(type)
+                && "BODY".equals(ValidationUtil.source(node)))) {
+            issues.add(ValidationIssue.error("AGATE-V123",
+                    "Property 'constraints' is supported only for SOAP/ASSERT source BODY.",
+                    c.file(), ValidationUtil.lineOfProperty(c, node, "constraints")));
+        }
         ValidationUtil.unknownFields(
                 c,
                 node,

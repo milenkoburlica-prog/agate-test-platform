@@ -320,7 +320,7 @@ public class XTestStepJsonCompressorStep2 {
 
         MAPPER.writeValue(new File(outputFile), result);
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "Step2 written: "
                         + outputFile
         );

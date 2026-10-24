@@ -204,7 +204,7 @@ toe.start(
                     .toJson(result, fw);
         }
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "TSU object extraction completed: "
                         + outputFile
                         + " | objects="

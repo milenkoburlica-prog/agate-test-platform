@@ -1,0 +1,33 @@
+TESTFALL: 089.GF – Synthetischer SOAP-XPath-Test (keine echten SVC-Daten)
+<<< HTTP : 200
+<<< BODY   : <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+<<< BODY   :   <soap:Body>
+<<< BODY   :     <getVersichertenDatenResponse xmlns="urn:synthetisches-beispiel">
+<<< BODY   :       <return>
+<<< BODY   :         <anspruchsDaten>
+<<< BODY   :           <kostenanteilbefreit>false</kostenanteilbefreit>
+<<< BODY   :           <svtCode>11</svtCode>
+<<< BODY   :         </anspruchsDaten>
+<<< BODY   :         <versichertenDaten>
+<<< BODY   :           <svNummer>TEST_SVNR_001</svNummer>
+<<< BODY   :         </versichertenDaten>
+<<< BODY   :       </return>
+<<< BODY   :     </getVersichertenDatenResponse>
+<<< BODY   :   </soap:Body>
+<<< BODY   : </soap:Envelope>
+>>> SOAP STEP FINISHED | Status: SUCCESS | Duration: 20 ms
+
+>>> DSL      - type: SOAP
+>>> DSL        op: ASSERT
+>>> DSL        source: BODY
+>>> DSL        path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getVersichertenDatenResponse']/*[local-name()='return']/*[local-name()='anspruchsDaten']/*[local-name()='kostenanteilbefreit']
+>>> DSL        action: EQUALS
+>>> DSL        expected: 'false'
+>>> DSL        response: getversichertendaten_request_response
+>>> DSL        constraints:
+>>> DSL        - path: /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getVersichertenDatenResponse']/*[local-name()='return']/*[local-name()='versichertenDaten']/*[local-name()='svtCode']
+>>> DSL          action: EQUALS
+>>> DSL          expected: '11'
+>>> SOAP STEP FINISHED | Status: FAILED | Duration: 8 ms
+    Reason : Invalid SOAP XPath expression
+    Path   : /*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='getVersichertenDatenResponse']/*[local-name()='return']/*[local-name()='anspruchsDaten']/*[local-name()='kostenanteilbefreit']

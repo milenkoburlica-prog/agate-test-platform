@@ -1,0 +1,13 @@
+at\co\svc\aga\transformator\utils\ProcessGuiStepNullNormalizationTest.class
+at\co\svc\aga\transformator\utils\LegacyEdgeRestoreWorkaroundTest.class
+at\co\svc\aga\transformator\utils\ProcessAPILogicConditionalYamlTest.class
+at\co\svc\aga\transformator\utils\ProcessApiNullSelectionRegressionTest.class
+at\co\svc\aga\transformator\utils\ProcessGuiStepHelpAndSelectTest.class
+at\co\svc\aga\transformator\utils\ProcessGuiStepReaderNameTest.class
+at\co\svc\aga\transformator\utils\ProcessTBoxEvaluationRuntimeOutputTest.class
+at\co\svc\aga\transformator\utils\ProcessAPILogicConditionalQuoteTest.class
+at\co\svc\aga\transformator\utils\ProcessTBoxEvaluationEqualityTest.class
+at\co\svc\aga\transformator\utils\ProcessGuiStepBrowserTabsCloseTest.class
+at\co\svc\aga\transformator\utils\YamlConditionLineNormalizerTest.class
+at\co\svc\aga\transformator\utils\ProcessExecuteSqlScriptPasswordTest.class
+at\co\svc\aga\transformator\utils\AgateWindowDslNativeCloseTest.class

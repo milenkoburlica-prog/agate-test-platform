@@ -220,7 +220,7 @@ public class TCDSheetInstanceLevel1 {
                 finalInstances
         );
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "[TCD-InstanceLevel1] Instance file created successfully: "
                         + outputFilePath
         );
@@ -428,7 +428,7 @@ public class TCDSheetInstanceLevel1 {
                 instances
         );
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "[TCD-InstanceLevel2] Hierarchical parameter values generated successfully: "
                         + outputFilePath
         );
@@ -690,7 +690,7 @@ public class TCDSheetInstanceLevel1 {
                 instances
         );
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "[TCD-InstanceLevel3] CL values and sub-parameters populated successfully: "
                         + outputFilePath
         );
@@ -862,7 +862,7 @@ public class TCDSheetInstanceLevel1 {
                 flatInstances
         );
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "[TCD-InstanceLevel4] Flattened instance JSON created successfully: "
                         + outputFilePath
         );
@@ -1227,7 +1227,7 @@ public class TCDSheetInstanceLevel1 {
                 }
             }
 
-            MigrationLog.success(
+            MigrationLog.debug(
                     "[TCD-MatrixLevel5] CSV generated: "
                             + targetFile.getAbsolutePath()
             );

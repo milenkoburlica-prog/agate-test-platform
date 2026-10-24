@@ -449,9 +449,14 @@ public class ToscaParserPhase3 {
                                 : indexedPath
                 );
 
-                constraints.add(
-                        constraint
-                );
+                // An empty/null structural selection does not restrict a
+                // response collection. Do not propagate it to Verify leaves.
+                String selectionValue = constraint.path("expected").asText("").trim();
+                if (!selectionValue.isEmpty()
+                        && !"{NULL}".equalsIgnoreCase(selectionValue)
+                        && !"NULL".equalsIgnoreCase(selectionValue)) {
+                    constraints.add(constraint);
+                }
 
 
                 ObjectNode valCopy =

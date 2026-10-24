@@ -206,7 +206,7 @@ public class IfPropagationEngine {
                 );
 
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "IF propagation output: "
                         + outPath
         );
@@ -906,6 +906,9 @@ public class IfPropagationEngine {
                         newCondition
                 );
 
+        requireBalancedCondition(oldCond);
+        requireBalancedCondition(newCond);
+
 
         if (isTrueOrBlank(
                 oldCond)) {
@@ -945,13 +948,9 @@ public class IfPropagationEngine {
         }
 
 
-        return wrapForAnd(
-                oldCond
-        )
-                + " AND "
-                + wrapForAnd(
-                newCond
-        );
+        String combined = wrapForAnd(oldCond) + " AND " + wrapForAnd(newCond);
+        requireBalancedCondition(combined);
+        return combined;
     }
 
 
@@ -1771,6 +1770,28 @@ public class IfPropagationEngine {
     }
 
 
+    /** Fail fast rather than silently turning malformed Tosca IF expressions into YAML. */
+    private void requireBalancedCondition(String condition) {
+        if (condition == null || condition.isBlank()) return;
+        int depth = 0;
+        char quote = 0;
+        for (int i = 0; i < condition.length(); i++) {
+            char c = condition.charAt(i);
+            if (quote != 0) {
+                if (c == quote && (i == 0 || condition.charAt(i - 1) != '\\')) quote = 0;
+                continue;
+            }
+            if (c == '\'' || c == '"') { quote = c; continue; }
+            if (c == '(') depth++;
+            if (c == ')' && --depth < 0) {
+                throw new IllegalArgumentException("Unbalanced Tosca IF condition at offset " + i + ": " + condition);
+            }
+        }
+        if (depth != 0 || quote != 0) {
+            throw new IllegalArgumentException("Unbalanced Tosca IF condition: " + condition);
+        }
+    }
+
     private List<String> splitTopLevelAnd(
             String expression) {
 
@@ -1813,13 +1834,10 @@ public class IfPropagationEngine {
 
 
             if (c == ')') {
-
-                depth =
-                        Math.max(
-                                0,
-                                depth - 1
-                        );
-
+                depth--;
+                if (depth < 0) {
+                    throw new IllegalArgumentException("Unbalanced Tosca IF condition: " + expression);
+                }
                 continue;
             }
 

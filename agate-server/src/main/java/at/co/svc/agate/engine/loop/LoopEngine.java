@@ -148,14 +148,16 @@ public class LoopEngine extends AbstractStepEngine {
                         iterations,
                         maxIterations);
 
-                executeChildren(
+                if (executeChildren(
                         tc,
                         step,
                         context,
                         yamlFile,
                         isVerbose,
                         startedAt,
-                        timeoutMs);
+                        timeoutMs)) {
+                    break;
+                }
             }
 
         } else {
@@ -176,14 +178,16 @@ public class LoopEngine extends AbstractStepEngine {
                         iterations,
                         maxIterations);
 
-                executeChildren(
+                if (executeChildren(
                         tc,
                         step,
                         context,
                         yamlFile,
                         isVerbose,
                         startedAt,
-                        timeoutMs);
+                        timeoutMs)) {
+                    break;
+                }
 
             } while (evaluateCondition(
                     tc,
@@ -211,7 +215,7 @@ public class LoopEngine extends AbstractStepEngine {
         }
     }
 
-    private void executeChildren(
+    private boolean executeChildren(
             TestCase tc,
             TestStep loopStep,
             ExecutionContext context,
@@ -225,6 +229,19 @@ public class LoopEngine extends AbstractStepEngine {
 
         for (TestStep child :
                 loopStep.getSubSteps()) {
+
+            if (child.getType() == StepType.BREAK) {
+                if (child.getCondition() == null || child.getCondition().isBlank()) {
+                    throw AgateStepException.builder("BREAK condition is missing")
+                            .hint("Define a condition on BREAK inside LOOP.steps.").build();
+                }
+                if (conditionEvaluator.evaluate(tc, child, context, yamlFile,
+                        childStepNumber, false)) {
+                    return true;
+                }
+                childStepNumber++;
+                continue;
+            }
 
             stepExecutor.execute(
                     tc,
@@ -240,6 +257,7 @@ public class LoopEngine extends AbstractStepEngine {
 
             childStepNumber++;
         }
+        return false;
     }
 
     private boolean evaluateCondition(

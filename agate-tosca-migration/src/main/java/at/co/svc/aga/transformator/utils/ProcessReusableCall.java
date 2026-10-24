@@ -12,6 +12,7 @@ import at.co.svc.tosca.util.FileNameSanitizer;
 public class ProcessReusableCall {
     public static void processReusableCall(CleanStep step) {
         
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.err.println(
                 "[REUSABLE-CALL-TRACE] name=["
                         + step.getName()
@@ -21,6 +22,7 @@ public class ProcessReusableCall {
                         + step.getCondition()
                         + "]"
         );
+        }
         
         
         // First try to apply a special-case handler
@@ -74,6 +76,7 @@ public class ProcessReusableCall {
         ToscaToAgaPhase1.writeLine("      - type: CALL");
         ToscaToAgaPhase1.writeLine("        command: '" + agatePath + "'");
         
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.err.println(
                 "[CALL-CONDITION-TRACE] reusable=["
                         + step.getReusableName()
@@ -83,6 +86,7 @@ public class ProcessReusableCall {
                         + step.getCondition()
                         + "]"
         );
+        }
         
         writeCondition(step);
         

@@ -799,6 +799,11 @@ public class ToscaToAgaPhase1 {
             }
 
 
+            if ("LOOP_SQL_BUFFER".equalsIgnoreCase(type)) {
+                writeLoopSqlBuffer(step, ident);
+                continue;
+            }
+
             // =================================================
             // BREAK
             // =================================================
@@ -822,6 +827,7 @@ public class ToscaToAgaPhase1 {
             String moduleName =
                     step.getModule();
 
+            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
             System.err.println(
                     "[STEP-DISPATCH-TRACE]"
                             + " name='" + step.getName() + "'"
@@ -829,6 +835,7 @@ public class ToscaToAgaPhase1 {
                             + " type='" + step.getType() + "'"
                             + " moduleClass='" + step.getModuleClass() + "'"
             );
+            }
             
 
             CleanStep nextStep =
@@ -1054,6 +1061,9 @@ public class ToscaToAgaPhase1 {
         );
 
 
+        ToscaToAgaPhase1.writeLine(ident + "        mode: " + step.getMode());
+        ToscaToAgaPhase1.writeLine(ident + "        timeoutMs: " + step.getTimeoutMs());
+
         Integer maxIterations =
                 step.getMaxIterations();
 
@@ -1109,6 +1119,16 @@ public class ToscaToAgaPhase1 {
         );
     }
 
+
+    private static void writeLoopSqlBuffer(CleanStep step, String ident) {
+        ToscaToAgaPhase1.writeLine("");
+        ToscaToAgaPhase1.writeLine(ident + "      - type: SQL");
+        ToscaToAgaPhase1.writeLine(ident + "        op: BUFFER");
+        ToscaToAgaPhase1.writeLine(ident + "        response: '" + step.getResponse().replace("'", "''") + "'");
+        ToscaToAgaPhase1.writeLine(ident + "        name: '" + step.getName().replace("'", "''") + "'");
+        ToscaToAgaPhase1.writeLine(ident + "        row: '" + step.getRow() + "'");
+        ToscaToAgaPhase1.writeLine(ident + "        column: '" + step.getColumn() + "'");
+    }
 
     // =========================================================
     // BREAK YAML

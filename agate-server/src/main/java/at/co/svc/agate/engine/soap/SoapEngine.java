@@ -2006,7 +2006,7 @@ public class SoapEngine extends AbstractStepEngine {
 
  try {
 
-                actual = evaluateXPath(res.getBody(), path);
+                actual = evaluateFilteredXPath(res.getBody(), path, step.getConstraints());
 
             } catch (Exception e) {
 

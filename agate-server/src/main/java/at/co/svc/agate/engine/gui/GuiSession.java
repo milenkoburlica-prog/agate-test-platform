@@ -31,6 +31,26 @@ public final class GuiSession implements AutoCloseable {
     private BrowserContext context;
     private Page page;
     private final Map<String,Page> namedTabs = new LinkedHashMap<>();
+    private final Map<Page,Page> returnTabs = new IdentityHashMap<>();
+    private int popupSequence;
+    private void registerPopup(Page opened, Page origin) {
+        if (opened == null || opened.isClosed()) return;
+        String name = "popup-" + (++popupSequence);
+        namedTabs.put(name, opened);
+        if (origin != null && origin != opened && !origin.isClosed()) returnTabs.put(opened, origin);
+        opened.onDialog(Dialog::dismiss);
+        page = opened;
+        GuiLifecycleLog.detail(metrics, "[GUI tab] OPEN name=" + name + " url=" + safeUrl(opened.url()));
+    }
+    /** Detect pages opened by a site (target=_blank/window.open), not only OPEN_TAB. */
+    public void registerNewPagesAfterClick(List<Page> before, Page origin) {
+        if (context == null) return;
+        for (Page opened : context.pages()) {
+            if (!before.contains(opened) && !namedTabs.containsValue(opened)) registerPopup(opened, origin);
+        }
+    }
+    public List<Page> pageSnapshot() { return context == null ? List.of() : new ArrayList<>(context.pages()); }
+
     public Page openTab(String name, String url, int timeout, TestLogger logger) throws Exception {
         if (name == null || name.isBlank()) throw new IllegalArgumentException("OPEN_TAB requires tab");
         Page existing=namedTabs.get(name);
@@ -59,6 +79,14 @@ public final class GuiSession implements AutoCloseable {
 
     public List<GuiTabResult.TabInfo> findTabs(String name,String urlGlob,String titleGlob) {
         List<GuiTabResult.TabInfo> result=new ArrayList<>();
+        if (context == null) return result;
+        // Also discover pages opened by browser links, even when no explicit OPEN_TAB was used.
+        for (Page candidate : context.pages()) {
+            if (!candidate.isClosed() && !namedTabs.containsValue(candidate)) {
+                // The original main tab has no explicit name, but can be found by URL/title.
+                namedTabs.put("page-" + Integer.toHexString(System.identityHashCode(candidate)), candidate);
+            }
+        }
         for(var entry:namedTabs.entrySet()) {
             Page tab=entry.getValue();if(tab.isClosed())continue;
             if(name!=null&&!name.equals(entry.getKey()))continue;
@@ -72,9 +100,67 @@ public final class GuiSession implements AutoCloseable {
     public boolean closeTab(String name) {
         if(name==null||name.isBlank())throw new IllegalArgumentException("CLOSE_TAB requires tab");
         Page target=namedTabs.remove(name);if(target==null||target.isClosed())return false;
+        Page fallback = returnTabs.remove(target);
+        boolean wasActive = page == target;
         target.close();
-        if(page==target)page=context.pages().stream().filter(p->!p.isClosed()).findFirst().orElse(null);
+        if (wasActive) {
+            page = fallback != null && !fallback.isClosed() ? fallback
+                    : context.pages().stream().filter(p->!p.isClosed()).findFirst().orElse(null);
+            if (page != null) page.bringToFront();
+        }
+        GuiLifecycleLog.detail(metrics, "[GUI tab] CLOSE name=" + name + " remaining=" + context.pages().size()
+                + " active=" + (page == null ? "none" : safeUrl(page.url())));
         return true;
+    }
+    /** Snapshot of every live Playwright page, including unregistered popups. */
+    public List<String> describeTabs() {
+        List<String> lines = new ArrayList<>();
+        if (context == null) return List.of("No browser context");
+        int index = 0;
+        for (Page candidate : context.pages()) {
+            if (candidate.isClosed()) continue;
+            String title;
+            try { title = candidate.title(); }
+            catch (RuntimeException e) { title = "<title unavailable: " + e.getClass().getSimpleName() + ">"; }
+            String name = namedTabs.entrySet().stream()
+                    .filter(entry -> entry.getValue() == candidate)
+                    .map(Map.Entry::getKey).findFirst().orElse("<unnamed>");
+            lines.add("[" + index++ + "] " + (candidate == page ? "ACTIVE " : "")
+                    + "name=" + name + " title=" + title + " url=" + safeUrl(candidate.url()));
+        }
+        return lines;
+    }
+
+    /**
+     * Close the uniquely matching page. A named tab remains idempotent for existing
+     * reference tests; a selector mismatch is an error, not a successful close.
+     * Playwright pages may initially have an empty title during popup navigation.
+     */
+    public boolean closeTab(String name, String urlGlob, String titleGlob) {
+        if (name != null && urlGlob == null && titleGlob == null) return closeTab(name);
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
+        List<GuiTabResult.TabInfo> matches;
+        do {
+            matches = findTabs(name, urlGlob, titleGlob);
+            if (!matches.isEmpty()) break;
+            // The Page can be present before navigation has populated its title.
+            if (context != null) {
+                for (Page candidate : context.pages()) {
+                    if (candidate.isClosed()) continue;
+                    try { candidate.waitForTimeout(150); break; }
+                    catch (RuntimeException ignored) { /* page closed during navigation */ }
+                }
+            }
+        } while (System.nanoTime() < deadline);
+        if (matches.isEmpty()) {
+            throw new IllegalStateException("CLOSE_TAB found no matching tab: tab=" + name
+                    + ", urlGlob=" + urlGlob + ", titleGlob=" + titleGlob
+                    + ". Available tabs: " + describeTabs());
+        }
+        if (matches.size() != 1)
+            throw new IllegalArgumentException("CLOSE_TAB matched " + matches.size()
+                    + " tabs; use an unambiguous selector. Available tabs: " + describeTabs());
+        return closeTab(matches.get(0).tab());
     }
 
     private Path directory;
@@ -149,6 +235,27 @@ public final class GuiSession implements AutoCloseable {
             }
             return page;
         } catch (Exception e) { dispose(); throw e; }
+    }
+    /** Recover exactly once from an externally closed, reused browser during initial OPEN.
+     * This method must run on the GuiBrowserHost worker, never from the caller thread.
+     */
+    Page recoverInitialOpen(TestLogger logger) throws Exception {
+        if (host == null) throw new IllegalStateException("Recovery requires a reused browser");
+        GuiLifecycleLog.detail(metrics, "[GUI lifecycle] OPEN_RECOVERY context=" + contextId);
+        if (context != null) {
+            try { context.close(); }
+            catch (RuntimeException ex) {
+                GuiLifecycleLog.detail(metrics, "[GUI lifecycle] STALE_CONTEXT_CLOSE_FAILED context=" + contextId);
+            }
+        }
+        context = null;
+        page = null;
+        namedTabs.clear();
+        returnTabs.clear();
+        tracing = false;
+        browser = null;
+        host.invalidateBrowser();
+        return page(logger);
     }
     public Path directory() { return directory; }
     public Path failureScreenshot(int index) {

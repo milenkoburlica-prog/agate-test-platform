@@ -15,7 +15,15 @@ public final class GuiBrowserActions {
     GuiTabResult result=new GuiTabResult(session.findTabs(config.text("tab"),config.text("urlGlob"),config.text("titleGlob")));
     context.storeBuffer(config.required("response"),result);logger.info("    >>> GUI        : FIND_TAB | matches="+result.tabs().size());
    }
-   case "CLOSE_TAB" -> {boolean closed=session.closeTab(config.required("tab"));logger.info("    >>> GUI        : CLOSE_TAB | "+config.required("tab")+" | "+(closed?"closed":"already absent"));}
+   case "CLOSE_TAB" -> {
+    if(config.text("tab")==null && config.text("urlGlob")==null && config.text("titleGlob")==null)
+      throw new IllegalArgumentException("CLOSE_TAB requires tab, urlGlob or titleGlob");
+    logger.info("    >>> GUI TABS   : before CLOSE_TAB " + session.describeTabs());
+    boolean closed=session.closeTab(config.text("tab"), config.text("urlGlob"), config.text("titleGlob"));
+    logger.info("    >>> GUI        : CLOSE_TAB | "+(closed?"closed":"already absent")
+      +" | tab="+config.text("tab")+" urlGlob="+config.text("urlGlob")+" titleGlob="+config.text("titleGlob"));
+    logger.info("    >>> GUI TABS   : after CLOSE_TAB " + session.describeTabs());
+   }
    case "BUFFER_TAB_EXISTS" -> {
     GuiTabResult result=context.getResponse(config.required("response"),GuiTabResult.class);
     if(result==null)throw new IllegalArgumentException("Missing GUI tab response: "+config.required("response"));

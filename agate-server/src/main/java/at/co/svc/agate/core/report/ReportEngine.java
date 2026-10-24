@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import com.itextpdf.html2pdf.HtmlConverter;
 
 import at.co.svc.agate.core.dsl.model.TestCase;
+import at.co.svc.agate.core.project.ProjectRuntime;
 
 public class ReportEngine {
 
@@ -163,7 +164,9 @@ public class ReportEngine {
             
         }
 
-        Path templatePath = Paths.get("env", "templates", "template.html");
+        // HTML templates live next to the active project's environment config.
+        // Example: svc/env/env.conf -> svc/env/templates/template.html.
+        Path templatePath = resolveHtmlTemplatePath();
         String html = Files.readString(templatePath);
 
         html = html.replace("{{RUNTIME_APP}}", System.getProperty("APPLICATION", "svc"))
@@ -180,6 +183,17 @@ public class ReportEngine {
         Files.writeString(path, html);
     }    
     
+    /** Resolve the HTML template against the configured environment file, never CWD. */
+    static Path resolveHtmlTemplatePath() {
+        Path environmentConfig = ProjectRuntime.getContext().getEnvironmentConfig();
+        Path environmentDir = environmentConfig.getParent();
+        if (environmentDir == null) {
+            throw new IllegalStateException(
+                    "Environment configuration has no parent directory: " + environmentConfig);
+        }
+        return environmentDir.resolve("templates").resolve("template.html").normalize();
+    }
+
     public void generatePdfReport(String htmlPath, String pdfOutputPath) throws Exception {
         File htmlFile = new File(htmlPath);
         File pdfFile = new File(pdfOutputPath);

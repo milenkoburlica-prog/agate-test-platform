@@ -144,9 +144,7 @@ public class ToscaParserPhase2 {
                                 index++
                         );
 
-                stepsOut.add(
-                        loop
-                );
+                appendLoopWithPrecheck(stepsOut, loop);
 
                 continue;
             }
@@ -404,15 +402,129 @@ public class ToscaParserPhase2 {
         }
 
 
+        // Translate a Tosca post-condition loop into AGATE's documented
+        // DO_WHILE contract.  Unrepresentable cases MUST fail migration rather
+        // than emitting an executable-looking YAML with wrong semantics.
+        normalizeLoopForAgate(out, nestedSteps, loopMode, mapper);
+
         out.set(
                 "steps",
                 nestedSteps
         );
 
-
         return out;
     }
 
+
+    // =====================================================
+    // AGATE LOOP NORMALIZATION
+    // =====================================================
+    private static void normalizeLoopForAgate(
+            ObjectNode loop, ArrayNode nested, LoopMode sourceMode,
+            ObjectMapper mapper) {
+
+        // The Tosca WHILE_DO condition is evaluated BEFORE its body.
+        // We preserve this contract by emitting preSteps before the LOOP,
+        // executing the original body only if the continuation is true,
+        // and evaluating the same condition at the end of each iteration.
+        // DO_WHILE is handled by the existing post-check conversion below.
+
+        java.util.regex.Pattern cellPattern = java.util.regex.Pattern.compile(
+                "^\\{SQL\\[([^\\]]+)\\]\\[([0-9]+)\\]\\[([0-9]+)\\]\\}\\s*(==|!=|>=|<=|>|<)\\s*(.+)$");
+        String continuation = null;
+        ArrayNode translated = mapper.createArrayNode();
+        int bufferIndex = 0;
+
+        ArrayNode preSteps = mapper.createArrayNode();
+        ArrayNode conditionSteps = mapper.createArrayNode();
+        ArrayNode bodySteps = mapper.createArrayNode();
+        boolean foundExit = false;
+
+        for (JsonNode nestedStep : nested) {
+            if (!"BREAK".equalsIgnoreCase(nestedStep.path("type").asText())) {
+                if (sourceMode == LoopMode.WHILE_DO) {
+                    (foundExit ? bodySteps : conditionSteps).add(nestedStep);
+                } else {
+                    translated.add(nestedStep);
+                }
+                continue;
+            }
+            if (continuation != null) {
+                throw new IllegalArgumentException(
+                        "Multiple Tosca exit conditions require manual migration: "
+                                + loop.path("name").asText());
+            }
+            foundExit = true;
+            String exit = nestedStep.path("condition").asText("").trim();
+            java.util.regex.Matcher cell = cellPattern.matcher(exit);
+            if (!cell.matches()) {
+                throw new IllegalArgumentException(
+                        "Tosca LOOP exit requires unsupported SQL result semantics: "
+                                + exit + " | loop=" + loop.path("name").asText());
+            }
+            String response = cell.group(1);
+            int row = Integer.parseInt(cell.group(2));
+            int column = Integer.parseInt(cell.group(3));
+            String op = cell.group(4);
+            String expected = cell.group(5);
+            String buffer = "agate_loop_value_" + (++bufferIndex);
+
+            ObjectNode read = mapper.createObjectNode();
+            read.put("type", "LOOP_SQL_BUFFER");
+            read.put("name", buffer);
+            read.put("response", response);
+            read.put("row", row);
+            read.put("column", column);
+            if (sourceMode == LoopMode.WHILE_DO) {
+                // The SQL check and buffer must run before entering LOOP,
+                // and again after the original body for the next evaluation.
+                conditionSteps.add(read);
+            } else {
+                translated.add(read);
+            }
+            continuation = "NOT ({B[" + buffer + "]} " + op + " " + expected + ")";
+        }
+        if (continuation == null) {
+            throw new IllegalArgumentException(
+                    "Tosca LOOP has no recognized exit condition: "
+                            + loop.path("name").asText());
+        }
+        nested.removeAll();
+        if (sourceMode == LoopMode.WHILE_DO) {
+            if (conditionSteps.size() < 2) {
+                throw new IllegalArgumentException(
+                        "Tosca WHILE_DO must have a condition-producing step before its exit: "
+                                + loop.path("name").asText());
+            }
+            // Preserve original pre-test behaviour, including zero iterations.
+            preSteps.addAll(conditionSteps);
+            nested.addAll(bodySteps);
+            // Re-check after the body; DO NOT run the body before first check.
+            for (JsonNode check : conditionSteps) {
+                nested.add(check.deepCopy());
+            }
+            loop.set("agatePreSteps", preSteps);
+            loop.put("mode", "WHILE");
+        } else {
+            nested.addAll(translated);
+            loop.put("mode", "DO_WHILE");
+        }
+        loop.put("condition", continuation);
+        // Conservative finite bound until a Tosca-specific timeout is mapped.
+        long count = Math.max(1L, loop.path("maxIterations").asLong(30L));
+        loop.put("timeoutMs", Math.max(60000L, count * 10000L));
+    }
+
+    // Expand the pre-check before the WHILE loop (including nested loops).
+    private static void appendLoopWithPrecheck(ArrayNode destination, ObjectNode loop) {
+        JsonNode precheck = loop.remove("agatePreSteps");
+        if (precheck != null && precheck.isArray()) {
+            for (JsonNode check : precheck) {
+                destination.add(check);
+            }
+        }
+        destination.add(loop);
+    }
 
     // =====================================================
     // CONDITION FOLDERS
@@ -542,7 +654,8 @@ public class ToscaParserPhase2 {
             if (ToscaLoopSupport.isLoopControlFlow(
                     item)) {
 
-                nestedSteps.add(
+                appendLoopWithPrecheck(
+                        nestedSteps,
                         transformLoop(
                                 item,
                                 nodeIndex,
@@ -609,12 +722,24 @@ public class ToscaParserPhase2 {
 
 
             /*
-             * The condition step itself still needs to execute,
-             * e.g. SQL SELECT.
+             * A Tosca RowCount verification refers to the number of rows
+             * returned by SELECT (not to its first cell). AGATE LOOP
+             * evaluates buffered values. Reuse the original SQL WHERE clause
+             * and make this condition step return SELECT COUNT(*), which can
+             * be buffered as cell [0][0]. Do not change body SQL operations.
              */
-            nestedSteps.add(
-                    transformed
-            );
+            String exitCondition = breakDefinition.breakCondition();
+            if (exitCondition.startsWith("{SQL_ROW_COUNT[")) {
+                rewriteRowCountSqlAsCount(transformed);
+                exitCondition = exitCondition.replaceFirst(
+                        "^\\{SQL_ROW_COUNT\\[([^]]+)\\]\\}",
+                        "{SQL[$1][0][0]}");
+            }
+
+            /*
+             * The condition step itself still needs to execute.
+             */
+            nestedSteps.add(transformed);
 
 
             ObjectNode breakStep =
@@ -674,7 +799,7 @@ public class ToscaParserPhase2 {
 
             breakStep.put(
                     "condition",
-                    breakDefinition.breakCondition()
+                    exitCondition
             );
 
 
@@ -738,7 +863,8 @@ public class ToscaParserPhase2 {
             if (ToscaLoopSupport.isLoopControlFlow(
                     item)) {
 
-                nestedSteps.add(
+                appendLoopWithPrecheck(
+                        nestedSteps,
                         transformLoop(
                                 item,
                                 nodeIndex,
@@ -972,6 +1098,40 @@ public class ToscaParserPhase2 {
         return null;
     }
 
+
+    /**
+     * Map a Tosca SELECT RowCount to a SQL scalar so the supported AGATE
+     * SQL BUFFER / LOOP condition path can be used. Only simple SELECTs are
+     * accepted; complex statements must be reviewed rather than silently
+     * changing their meaning.
+     */
+    private static void rewriteRowCountSqlAsCount(ObjectNode step) {
+        JsonNode values = step.path("values");
+        if (!values.isArray()) {
+            throw new IllegalArgumentException("RowCount SQL step has no values: "
+                    + step.path("name").asText());
+        }
+        for (JsonNode entry : values) {
+            String name = entry.path("name").asText("");
+            String path = entry.path("toscaPath").asText("");
+            if (!"SQL Statement".equalsIgnoreCase(name)
+                    && !"SQL Statement".equalsIgnoreCase(path)) {
+                continue;
+            }
+            String sql = entry.path("value").asText("").trim();
+            java.util.regex.Matcher select = java.util.regex.Pattern.compile(
+                    "(?is)^SELECT\\s+.+?\\s+FROM\\s+(.+?)\\s*;?$").matcher(sql);
+            if (!select.matches() || sql.matches(
+                    "(?is).*\\b(GROUP\\s+BY|HAVING|UNION|INTERSECT|EXCEPT|LIMIT|OFFSET)\\b.*")) {
+                throw new IllegalArgumentException(
+                        "RowCount migration requires a simple SELECT: " + sql);
+            }
+            ((ObjectNode) entry).put("value", "SELECT COUNT(*) FROM " + select.group(1));
+            return;
+        }
+        throw new IllegalArgumentException("RowCount SQL statement not found: "
+                + step.path("name").asText());
+    }
 
     // =====================================================
     // CELL BREAK

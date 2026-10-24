@@ -78,7 +78,7 @@ public class FolderPropagationEngine {
                         root
                 );
 
-        MigrationLog.success(
+        MigrationLog.debug(
                 "Folder propagation output: "
                         + outPath
         );
@@ -174,7 +174,7 @@ public class FolderPropagationEngine {
                             idNode.asText()
                     );
 
-            System.err.println(
+            MigrationLog.debug(
                     "[FOLDER-TRACE] parent="
                             + folderNode.path("Surrogate").asText()
                             + " child="

@@ -35,6 +35,12 @@ import at.co.svc.agate.core.error.AgateStepException;
  */
 public class YamlPlaceholderResolver {
 
+    private static final Pattern XL_PATTERN =
+            Pattern.compile("\\{XL\\[(.+?)]}", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern XL_PREFIX_PATTERN =
+            Pattern.compile("\\{XL\\[", Pattern.CASE_INSENSITIVE);
+
     private static final Pattern B_PATTERN =
             Pattern.compile("\\{B\\[(.+?)]}");
 
@@ -123,13 +129,15 @@ public class YamlPlaceholderResolver {
                         variables);
             }
 
-            // Order is important: R first, then B/T/E.
+            // Order is important: R first, then XL/B/T/E.
             result = resolveR(
                     result,
                     currentStep,
                     tc,
                     stepIndex,
                     originalAction);
+
+            result = resolveXL(result, vars, tc, stepIndex, originalAction);
 
             result = resolveB(
                     result,
@@ -153,6 +161,8 @@ public class YamlPlaceholderResolver {
 
             // R parameters may themselves contain B/T/E placeholders.
             if (result != null && result.contains("{")) {
+                result = resolveXL(result, vars, tc, stepIndex, originalAction);
+
                 result = resolveB(
                         result,
                         vars,
@@ -463,6 +473,34 @@ public class YamlPlaceholderResolver {
 
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    /** CSV/template XL references use the current test's variables, not a shared reusable snapshot. */
+    private String resolveXL(String value, Map<String, String> variables,
+                             TestCase tc, int stepIndex, String originalAction) {
+        if (value == null) return null;
+        Matcher matcher = XL_PATTERN.matcher(value);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            String name = matcher.group(1);
+            String replacement = variables == null ? null : variables.get(name);
+            if (replacement == null && tc != null && tc.getVariables() != null) {
+                Object local = tc.getVariables().get(name);
+                if (local != null) replacement = local.toString();
+            }
+            if (replacement == null) {
+                throw AgateStepException.builder("XL variable was not found")
+                        .detail("Placeholder", matcher.group(0))
+                        .detail("Name", name)
+                        .detail("Action", originalAction)
+                        .detail("Step", stepIndex > 0 ? stepIndex : null)
+                        .hint("Check testCases[].variables and the CSV column name.")
+                        .build();
+            }
+            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 
     private String resolveB(
@@ -866,6 +904,15 @@ public class YamlPlaceholderResolver {
         
         validateSimplePlaceholderSyntax(
                 value,
+                "XL",
+                XL_PREFIX_PATTERN,
+                XL_PATTERN,
+                tc,
+                stepIndex,
+                originalAction);
+
+        validateSimplePlaceholderSyntax(
+                value,
                 "B",
                 B_PREFIX_PATTERN,
                 B_PATTERN,
@@ -1174,6 +1221,10 @@ public class YamlPlaceholderResolver {
 
         if (value == null || value.isEmpty()) {
             return;
+        }
+
+        if (XL_PREFIX_PATTERN.matcher(value).find()) {
+            throw unresolvedAfterResolution(value, "XL", originalAction, stepIndex);
         }
 
         if (B_PREFIX_PATTERN.matcher(value).find()) {

@@ -24,7 +24,13 @@ public final class ProcessGuiStep {
             String message = "GUI review: " + issue;
             ToscaToAgaPhase1.writeLine(indent + "      # [Pending] " + message.replace('\n',' '));
             // Reusable generation captures stdout as YAML; diagnostics must use stderr.
-            MigrationLog.warn(message + " | step=" + step.getName());
+            // Preserve the review in the final dependency-scoped report.
+            // Per-step regex locator diagnostics are too noisy in normal mode.
+            if (issue.contains("regex locator requires mapping beyond literal alternatives")) {
+                MigrationLog.debug(message + " | step=" + step.getName());
+            } else {
+                MigrationLog.warn(message + " | step=" + step.getName());
+            }
             MigrationReport.registerUnprocessedModule(step.getModule(), step.getName() + " | " + issue, yamlFile);
         }
         DumperOptions options = new DumperOptions();
@@ -32,6 +38,8 @@ public final class ProcessGuiStep {
         options.setSplitLines(false);
         Yaml yaml = new Yaml(options);
         for (Map<String,Object> output : result.steps()) {
+            adaptKnownHelpTabClose(output, yamlFile);
+            adaptBrowserTabsClose(output, yamlFile);
             humanReadable(output);
             ToscaToAgaPhase1.writeLine("");
             for (String line : AgateYamlFormatting.dump(yaml,List.of(output)).split("\\R"))
@@ -39,6 +47,40 @@ public final class ProcessGuiStep {
         }
         return true;
     }
+    /**
+     * The Tosca online-help reusable closes the popup opened by HelpAnchor,
+     * not the e-card browser context. Scope this rule to the known reusable and
+     * the non-TSV branch; never reinterpret ordinary CloseBrowser steps.
+     */
+    static void adaptKnownHelpTabClose(Map<String,Object> output, String yamlFile) {
+        if (yamlFile == null || !yamlFile.replace('\\', '/').toLowerCase(Locale.ROOT)
+                .contains("online_hilfe_aufrufen_de")) return;
+        if (!"GUI".equals(text(output.get("type")))
+                || !"CLOSE_BROWSER".equals(text(output.get("action")))) return;
+        String condition = text(output.get("condition"));
+        if (!condition.contains("ONLINE_HILFE_APPL") || !condition.contains("NOT")
+                || !condition.contains("TSV")) return;
+        output.put("action", "CLOSE_TAB");
+        output.put("urlGlob", "*chipkarte.at*");
+    }
+
+    /**
+     * This Tosca reusable closes pre-existing desktop Edge windows by caption.
+     * The generic CloseBrowser translator must remain a Playwright GUI action.
+     */
+    static void adaptBrowserTabsClose(Map<String,Object> output, String yamlFile) {
+        if (yamlFile == null) return;
+        String normalized = yamlFile.replace('\\', '/').toLowerCase(Locale.ROOT);
+        String fileName = normalized.substring(normalized.lastIndexOf('/') + 1);
+        if (!"browser_tabs_schließen.yaml".equals(fileName)) return;
+        if (!"GUI".equals(text(output.get("type")))
+                || !"CLOSE_BROWSER".equals(text(output.get("action")))) return;
+
+        output.put("type", "WINDOW");
+        output.put("action", "CLOSE");
+        output.put("caption", "e-card*");
+    }
+
     public static boolean isGui(CleanStep step) {
         if ("CloseBrowser".equalsIgnoreCase(step.getModule()) || browserUrl(step)!=null) return true;
         return step.getValues()!=null && step.getValues().stream().anyMatch(v -> v.getGui()!=null && !v.getGui().isEmpty());
@@ -68,7 +110,13 @@ public final class ProcessGuiStep {
             // Structural selection is a locator context, not a SELECT operation on a dropdown.
             if (mode.equalsIgnoreCase("Select")||mode.equals("517")||mode.equalsIgnoreCase("Constraint")||mode.equals("1")||mode.equals("519")||mode.equals("Unknown_519")) {GuiMigrationTrace.emit("STRUCTURAL",step,value,"locator context; no standalone action");continue;}
             boolean listItemIndex=type.equalsIgnoreCase("ListItem") && text(gui.get("explicitName")).matches("#[1-9][0-9]*");
-            if (raw.equals("{NULL}") || (raw.isEmpty() && !listItemIndex)) {GuiMigrationTrace.emit("SKIP",step,value,"NULL or empty non-index value");continue;}
+            // An explicit NULL on a textbox Insert means clear the input, not skip the step.
+            boolean clearTextbox = type.equalsIgnoreCase("TextBox")
+                    && Set.of("Insert", "37", "515").contains(mode)
+                    && isNullToken(raw);
+            if (!clearTextbox && (isNullToken(raw) || (raw.isEmpty() && !listItemIndex))) {
+                GuiMigrationTrace.emit("SKIP",step,value,"NULL or empty non-index value");continue;
+            }
             String name=text(gui.get("name"));
             try {
                 if(!text(gui.get("disabledDescription")).isEmpty())throw new IllegalArgumentException("disabled value requires review");
@@ -86,7 +134,8 @@ public final class ProcessGuiStep {
                 } else target=target(gui);
                 Map<String,Object> runtime=runtimeExpression(raw);
                 boolean currentDate=runtime!=null;
-                String translated=currentDate?(raw.endsWith("*")?"*":""):raw.equals("{EMPTY}")?"":ToscaValueTranslator.translateToscaValues(raw);
+                String translated=currentDate?(raw.endsWith("*")?"*":"")
+                        : (raw.equals("{EMPTY}") || clearTextbox) ? "" : ToscaValueTranslator.translateToscaValues(raw);
                 if(translated.contains("{DATE[")||translated.contains("{REGEX[")||translated.contains("{CP["))
                     throw new IllegalArgumentException("unresolved Tosca expression");
                 if(text(value.getActionProperty()).equalsIgnoreCase("rowcount") && translated.startsWith(".rowcount="))translated=translated.substring(".rowcount=".length());
@@ -104,7 +153,12 @@ public final class ProcessGuiStep {
                     else if(type.equalsIgnoreCase("ComboBox") || type.equalsIgnoreCase("ListItem")) {
                         op="SELECT";
                         String item=raw.isEmpty()?text(gui.get("explicitName")):translated;
-                        if(item.matches("#[1-9][0-9]*")) extras.put("value",Map.of("index",Integer.parseInt(item.substring(1))-1));
+                        String readerName = readerNameFromInnerText(type, gui, comboParent, item);
+                        if(readerName != null) {
+                            String idContains = readerSelectIdContains(target);
+                            extras.put("select", Map.of("idContains", idContains, "label", readerName));
+                        }
+                        else if(item.matches("#[1-9][0-9]*")) extras.put("value",Map.of("index",Integer.parseInt(item.substring(1))-1));
                         else if(item.contains("*")) extras.put("value",Map.of("labelGlob",item));
                         else extras.put("value",Map.of("label",item));
                     } else if(type.equalsIgnoreCase("CheckBox")) {
@@ -133,7 +187,8 @@ public final class ProcessGuiStep {
                     else throw new IllegalArgumentException("unsupported buffer property " + property);
                 } else throw new IllegalArgumentException("unsupported action mode " + mode);
                 Map<String,Object> converted=base(step,text(gui.get("valueSurrogate")),op);
-                converted.put("target",target);converted.putAll(extras);
+                if (!extras.containsKey("select")) converted.put("target",target);
+                converted.putAll(extras);
                 DbasMigrationOverrides.reader(converted);
 
                 condition(converted,step.getCondition(),value.getxCondition());
@@ -148,6 +203,47 @@ public final class ProcessGuiStep {
         }
         return new Translation(output,issues);
     }
+    /**
+     * Tosca HTML ComboBox special case: a numbered ListItem (#1) may represent
+     * a reader identified by its ModuleAttribute.InnerText, not the first entry
+     * in the live dropdown. Only Kartenlesergeraet supports this override.
+     * Other ListItems keep their existing index/label semantics.
+     */
+    static String readerNameFromInnerText(String type, Map<String,Object> gui,
+                                          Map<String,Object> comboParent, String item) {
+        if (!"ListItem".equalsIgnoreCase(type) || comboParent == null
+                || !item.matches("#[1-9][0-9]*")
+                || !isKartenlesegeraet(text(comboParent.get("name"))))
+            return null;
+        String inner = text(map(gui.get("properties")).get("InnerText"));
+        if (inner.isBlank()) return null;
+        // Tosca's trailing '*' means a prefix match; intentionally discard it
+        // only for this reader-name override, as agreed for this special case.
+        if (inner.endsWith("*")) inner = inner.substring(0, inner.length() - 1);
+        if (inner.isBlank() || inner.contains("*"))
+            throw new IllegalArgumentException("unsupported Kartenlesergeraet InnerText selection");
+        return ToscaValueTranslator.translateToscaValues(inner);
+    }
+
+    // Only this specific reader case uses shorthand; the module locator must
+    // be a CSS selector of the form select[id*="..."] (no guessed defaults).
+    static String readerSelectIdContains(Map<String,Object> target) {
+        String css = text(target.get("css"));
+        var matcher = Pattern.compile("^select\\[id\\*=\"([^\"]+)\"\\]$", Pattern.CASE_INSENSITIVE).matcher(css);
+        if (!matcher.matches())
+            throw new IllegalArgumentException("Kartenlesegerät requires select[id*=\"...\"] module locator; got " + css);
+        return matcher.group(1);
+    }
+
+    private static boolean isKartenlesegeraet(String name) {
+        // Tosca exports may contain the correctly encoded German umlaut or
+        // mojibake (UTF-8 read as Latin-1). Never rely on "Kartenlesergeraet"
+        // (extra 'r'), which does not match the Tosca ModuleAttribute name.
+        String n = name.trim().toLowerCase(Locale.ROOT);
+        return n.equals("kartenlesegerät") || n.equals("kartenlesegeraet")
+                || n.equals("kartenlesegerÃ¤t");
+    }
+
     private static boolean isEmptyHtmlStep(CleanStep step) {
         return step.getValues()!=null && step.getValues().size()==1
                 && step.getValues().get(0).getGui()!=null
@@ -539,8 +635,76 @@ public final class ProcessGuiStep {
         } else if (Set.of("OPEN","BACK","CLICK","FILL","SELECT","CHECK","UNCHECK","HOVER","PRESS","UPLOAD","DOWNLOAD","WAIT","SCREENSHOT").contains(op)) {
             step.put("op", "EXEC"); step.put("action", op);
         }
+        // Human-readable SELECT: use one dropdown block, without duplicating target/value.
+        if ("SELECT".equals(text(step.get("action")))) {
+            if (step.get("select") instanceof Map<?,?> select) {
+                Map<String,Object> dropdown = new LinkedHashMap<>(map(select));
+                Object label = dropdown.remove("label");
+                if (label != null) {
+                    dropdown.put("value", label);
+                    step.remove("select");
+                    step.put("dropdown", dropdown);
+                }
+            } else if (step.get("value") instanceof Map<?,?> value && map(value).containsKey("label")) {
+                Map<String,Object> originalTarget = map(step.get("target"));
+                Map<String,Object> dropdown = new LinkedHashMap<>();
+                String css = text(originalTarget.get("css"));
+                java.util.regex.Matcher match=java.util.regex.Pattern.compile("^select\\[id\\*=\"([^\"]+)\"\\]$").matcher(css);
+                if(match.matches()) {
+                    dropdown.put("idContains",match.group(1));
+                    dropdown.put("value",map(value).get("label"));
+                    step.remove("target"); step.remove("value"); step.put("dropdown",dropdown);
+                }
+            }
+        }
+        // A SELECT with an exact-ID CSS locator and a visible label is one
+        // dropdown DSL block. Never leave a top-level value next to dropdown.
+        if ("SELECT".equals(text(step.get("action")))
+                && step.get("value") instanceof Map<?,?> value
+                && map(value).containsKey("label") && step.get("target") instanceof Map<?,?>) {
+            String css = text(map(step.get("target")).get("css"));
+            java.util.regex.Matcher exact = java.util.regex.Pattern
+                    .compile("^select\\[id=\"([^\"]+)\"\\]$").matcher(css);
+            if (exact.matches()) {
+                Map<String,Object> dropdown = new LinkedHashMap<>();
+                dropdown.put("id", exact.group(1));
+                dropdown.put("value", map(value).get("label"));
+                step.remove("target");
+                step.remove("value");
+                step.put("dropdown", dropdown);
+            }
+        }
+        // PIN fields: preserve original CSS id-suffix semantics (unlike unbound label: PIN).
+        if ("FILL".equals(text(step.get("action"))) && step.get("value") != null) {
+            Map<String,Object> oldTarget=map(step.get("target"));
+            String css=text(oldTarget.get("css"));
+            java.util.regex.Matcher pin=java.util.regex.Pattern.compile("^:is\\(input,textarea\\)\\[id\\$=\"([^\"]+)\"\\]$").matcher(css);
+            if(pin.matches()) {
+                Map<String,Object> textbox = new LinkedHashMap<>();
+                textbox.put("idEndsWith", pin.group(1));
+                textbox.put("value", step.remove("value"));
+                step.remove("target"); step.put("textbox",textbox);
+            }
+        }
+        // Plain HTML submit buttons are usually represented as input[id="..."].
+        if ("CLICK".equals(text(step.get("action"))) && step.get("target") instanceof Map<?,?>) {
+            String css=text(map(step.get("target")).get("css"));
+            java.util.regex.Matcher input=java.util.regex.Pattern.compile("^input\\[id=\"([^\"]+)\"\\]$").matcher(css);
+            if (input.matches()) {
+                // Known e-card submit control: its visible HTML value is '(W)eiter'.
+                // Restrict this translation to the exact control; never guess visible text
+                // for other IDs.
+                step.remove("target");
+                if ("WelcomeForm:continue".equals(input.group(1))
+                        && "Kartenleserauswahl & PIN-Eingabe (001)_new".equals(text(step.get("page")))) {
+                    step.put("button", Map.of("text", "(W)eiter"));
+                } else {
+                    step.put("button", Map.of("id", input.group(1)));
+                }
+            }
+        }
         Map<String,Object> target = map(step.get("target"));
-        if (target.isEmpty() || !Set.of("css","nth","role","name","exact","linkText").containsAll(target.keySet())) return;
+        if (!target.isEmpty() && Set.of("css","nth","role","name","exact","linkText").containsAll(target.keySet())) {
         Map<String,Object> element=new LinkedHashMap<>();String kind=null;
         if(target.containsKey("linkText")) {
             kind="link";element.put("text",target.get("linkText"));element.put("exact",target.getOrDefault("exact",true));
@@ -567,15 +731,57 @@ public final class ProcessGuiStep {
                 }
             }
         }
-        if(kind==null)return;
+        if(kind != null) {
         if(target.containsKey("nth")) {
             Object nth=target.get("nth");
-            if(!(nth instanceof Integer || nth instanceof Long) || ((Number)nth).longValue()<0 || ((Number)nth).longValue()>Integer.MAX_VALUE)return;
+            if(!(nth instanceof Integer || nth instanceof Long) || ((Number)nth).longValue()<0 || ((Number)nth).longValue()>Integer.MAX_VALUE) kind=null;
             element.put("index",nth);
         }
-        if(element.values().stream().anyMatch(v->v instanceof String t && t.isBlank()))return;
-        step.remove("target");step.put(kind,element);
+        if (kind!=null && element.values().stream().noneMatch(v->v instanceof String t && t.isBlank())) {
+            step.remove("target");step.put(kind,element);
+        }
+        }
+        }
+        normalizeGuiNullTokens(step);
+        reorderActionBeforePage(step);
         // Tosca business page/module names are not proven browser captions.
+    }
+    /** NULL in a text field is empty; NULL inside a text glob contributes no characters.
+     * Apply only to these two GUI actions, leaving other NULL semantics untouched. */
+    static void normalizeGuiNullTokens(Map<String,Object> step) {
+        if (!"GUI".equals(text(step.get("type")))) return;
+        String action = text(step.get("action"));
+        if ("FILL".equals(action)) {
+            Object value = step.get("value");
+            if (value instanceof String s && isNullToken(s)) step.put("value", "");
+            Object textbox = step.get("textbox");
+            if (textbox instanceof Map<?,?> t && t.get("value") instanceof String s && isNullToken(s)) {
+                Map<String,Object> normalized = new LinkedHashMap<>(map(t));
+                normalized.put("value", "");
+                step.put("textbox", normalized);
+            }
+        } else if ("TEXT_GLOB".equals(action)) {
+            Object expected = step.get("expected");
+            if (expected instanceof String s) {
+                step.put("expected", s.replace("\"{NULL}\"", "").replace("{NULL}", ""));
+            }
+        }
+    }
+
+    private static boolean isNullToken(String raw) {
+        return "{NULL}".equals(raw) || "\"{NULL}\"".equals(raw);
+    }
+
+    private static void reorderActionBeforePage(Map<String,Object> step) {
+        if (!step.containsKey("action") || !step.containsKey("page")) return;
+        Map<String,Object> ordered=new LinkedHashMap<>();
+        for (var entry:step.entrySet()) {
+            if (entry.getKey().equals("page")) {
+                ordered.put("action",step.get("action"));
+                ordered.put("page",entry.getValue());
+            } else if (!entry.getKey().equals("action")) ordered.put(entry.getKey(),entry.getValue());
+        }
+        step.clear(); step.putAll(ordered);
     }
     private static String decodeJsonString(String json) {
         // The selector generator emits JSON-style strings; CSS hexadecimal escapes stay technical.

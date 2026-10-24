@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public final class DataFlowValidator
         implements AgateValidator {
@@ -91,6 +93,9 @@ public final class DataFlowValidator
 
                 JsonNode node =
                         step.node();
+
+                warnUndefinedConditionVariables(node, variables, c.file(),
+                        ValidationUtil.lineOfProperty(c, node, "condition"), issues);
 
                 String type =
                         ValidationUtil.type(node);
@@ -322,9 +327,15 @@ public final class DataFlowValidator
              * 8. Unused testcase variables
              * =============================================================
              */
+            // Instantiated Tosca scenarios copy variable values into concrete
+            // steps. No {B[...]} reference is therefore expected for many
+            // inputs. V420 cannot reliably infer unused data in that mode.
+            boolean instantiated = tc.node().hasNonNull("template")
+                    && tc.node().hasNonNull("testdata");
             if (c.options()
                     .warnUnusedVariables()
-                    && reusableAnalysisComplete) {
+                    && reusableAnalysisComplete
+                    && !instantiated) {
 
                 Set<String> declared =
                         ValidationUtil.objectKeys(
@@ -356,7 +367,22 @@ public final class DataFlowValidator
             }
         }
 
-        return issues;
+        // One information message per declaration (variable + source location).
+        // Several instantiated test cases may declare the same template fields;
+        // repeated traversal must not print identical V420 diagnostics.
+        // Leave error/warning reporting and V420 usage detection unchanged.
+        Set<String> reportedV420 = new LinkedHashSet<>();
+        List<ValidationIssue> distinct = new ArrayList<>(issues.size());
+        for (ValidationIssue issue : issues) {
+            if ("AGATE-V420".equals(issue.code())) {
+                String key = issue.file() + "|" + issue.line() + "|" + issue.message();
+                if (!reportedV420.add(key)) {
+                    continue;
+                }
+            }
+            distinct.add(issue);
+        }
+        return distinct;
     }
 
     /*
@@ -364,6 +390,35 @@ public final class DataFlowValidator
      * Reusable data-flow analysis
      * =============================================================
      */
+
+    // A missing variable is legal in a NULL check but should be visible in validation.
+    // Only identifiers on the left of a comparison are considered here; string
+    // literals, operators, and placeholder tokens must not become false warnings.
+    private static final Pattern CONDITION_VARIABLE = Pattern.compile(
+            "(?<![\\p{L}\\p{N}_.\\[\\{])([\\p{L}_][\\p{L}\\p{N}_.]*)\\s*(?:==|!=|<>|=|\\bIS_NULL\\b|\\bIS_NOT_NULL\\b|\\bIS_EMPTY\\b|\\bIS_NOT_EMPTY\\b)",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
+
+    private static void warnUndefinedConditionVariables(JsonNode step, Set<String> known,
+            Path file, Integer line, List<ValidationIssue> issues) {
+        if (step == null || !step.isObject()) return;
+        JsonNode condition = step.get("condition");
+        if (condition == null || !condition.isTextual()) return;
+        String expression = condition.asText();
+        // Suppress spurious identifier matches inside quoted strings.
+        String unquoted = expression.replaceAll("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'", " ");
+        Matcher matches = CONDITION_VARIABLE.matcher(unquoted);
+        Set<String> reported = new LinkedHashSet<>();
+        while (matches.find()) {
+            String name = matches.group(1);
+            if (name.equalsIgnoreCase("NULL") || name.equalsIgnoreCase("TRUE") || name.equalsIgnoreCase("FALSE")) continue;
+            if (!known.contains(name) && reported.add(name)) {
+                issues.add(ValidationIssue.warning("AGATE-V430",
+                        "Undefined condition variable '" + name + "' in " + file.getFileName()
+                                + "; evaluated as NULL at runtime (unless supplied by a runtime parameter).",
+                        file, line));
+            }
+        }
+    }
 
     private boolean validateReusableFlow(
             Path testSuiteFile,
@@ -497,6 +552,9 @@ public final class DataFlowValidator
 
                 continue;
             }
+
+            warnUndefinedConditionVariables(step, variables, reusableFile,
+                    lineOfProperty(reusableFile, "condition", ValidationUtil.text(step, "condition")), issues);
 
             String type =
                     ValidationUtil.type(step);

@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 
 
@@ -70,6 +76,12 @@ import io.qameta.allure.model.Status;
 
 
 public class TestExecutor {
+
+    /** Allure is opt-in; the standard AGATE HTML/JSON reporting remains independent. */
+    private static boolean isAllureEnabled() {
+        return Boolean.parseBoolean(System.getProperty("allure.enabled", "false"));
+    }
+
 
 
 
@@ -310,97 +322,29 @@ public class TestExecutor {
 
 
 
-        Allure.getLifecycle()
+        if (isAllureEnabled()) {
+            Allure.getLifecycle()
 
                 .scheduleTestCase(
 
                         allureResult);
+        }
 
 
 
-        Allure.getLifecycle()
+        if (isAllureEnabled()) {
+            Allure.getLifecycle()
 
                 .startTestCase(
 
                         uuid);
-
-
-
-        Map<String, Object> resolvedVars =
-
-                new HashMap<>();
-
-
-
-        if (tc.getVariables() != null) {
-
-
-
-            tc.getVariables()
-
-                    .forEach(
-
-                            (k, v) -> {
-
-
-
-                                if (k != null
-
-                                        && v != null) {
-
-
-
-                                    String resolvedValue =
-
-                                            resolver.resolve(
-
-                                                    tc,
-
-                                                    v.toString(),
-
-                                                    tc.getVariables(),
-
-                                                    null,
-
-                                                    0,
-
-                                                    "HEADER_PRINT"
-
-                                            );
-
-
-
-                                    context.setVar(
-
-                                            k,
-
-                                            resolvedValue
-
-                                                    .toString());
-
-
-
-                                    resolvedVars.put(
-
-                                            k,
-
-                                            resolvedValue);
-
-                                }
-
-                            }
-
-                    );
-
-
-
-            tc.setVariables(
-
-                    resolvedVars);
-
         }
 
 
+
+        // Variables remain literal declarations; deferred references must not
+        // shadow values produced by executable steps in ExecutionContext.
+        TestVariableInitializer.copyLiteralValues(tc, context);
 
         int stepIndex =
 
@@ -460,7 +404,8 @@ public class TestExecutor {
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .updateTestCase(
 
@@ -471,17 +416,20 @@ public class TestExecutor {
                                     result.setStatus(
 
                                             Status.PASSED));
+            }
 
 
 
         } catch (DebugQuitException e) {
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
                     .updateTestCase(
                             uuid,
                             result ->
                                     result.setStatus(
                                             Status.SKIPPED));
+            }
 
             throw e;
 
@@ -509,7 +457,8 @@ public class TestExecutor {
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .updateTestCase(
 
@@ -532,6 +481,7 @@ public class TestExecutor {
                             }
 
                     );
+            }
 
 
 
@@ -543,18 +493,22 @@ public class TestExecutor {
             try { GuiEngine.cleanup(context, logger); }
             finally { GuiSessionManager.unbind(context); }
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
                     .stopTestCase(
 
                             uuid);
+            }
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .writeTestCase(
 
                             uuid);
+            }
 
         }
 
@@ -752,13 +706,15 @@ long startTime =
 
 
 
-        Allure.getLifecycle()
+        if (isAllureEnabled()) {
+            Allure.getLifecycle()
 
                 .startStep(
 
                         stepUuid,
 
                         allureStepResult);
+        }
 
 
 
@@ -784,7 +740,8 @@ long startTime =
 
 
 
-                Allure.getLifecycle()
+                if (isAllureEnabled()) {
+                    Allure.getLifecycle()
 
                         .updateStep(
 
@@ -795,6 +752,7 @@ long startTime =
                                         s.setStatus(
 
                                                 Status.SKIPPED));
+                }
 
 
 
@@ -929,7 +887,8 @@ long startTime =
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .updateStep(
 
@@ -940,6 +899,7 @@ long startTime =
                                     s.setStatus(
 
                                             Status.PASSED));
+            }
 
 
 
@@ -959,7 +919,8 @@ long startTime =
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .updateStep(
 
@@ -970,6 +931,7 @@ long startTime =
                                     s.setStatus(
 
                                             Status.FAILED));
+            }
 
 
 
@@ -989,21 +951,25 @@ long startTime =
 
 
 
-            Allure.addAttachment(
+            if (isAllureEnabled()) {
+                Allure.addAttachment(
 
                     "Step Duration",
 
                     "text/plain",
 
                     duration + " ms");
+            }
 
 
 
-            Allure.getLifecycle()
+            if (isAllureEnabled()) {
+                Allure.getLifecycle()
 
                     .stopStep(
 
                             stepUuid);
+            }
 
 
 
@@ -1083,10 +1049,13 @@ long startTime =
 
 
 
+                logFailedStepLocation(step, yamlFile);
+                if (step.getCondition() != null && !step.getCondition().isBlank()) {
+                    logFailedCondition(testCase, step, context, yamlFile, currentStepNumber);
+                }
+
                 logger.info(
-
                         String.format(
-
                                 "    %s>>> %s STEP FINISHED | Status: FAILED | Duration: %d ms%s",
 
                                 ConsoleColors.RED,
@@ -1363,6 +1332,77 @@ long startTime =
 
 
 
+    /** Diagnostics run only for FAILED steps; never change execution semantics. */
+    private void logFailedStepLocation(TestStep step, String fallbackYaml) {
+        String source = step.getSourceFile();
+        if (source == null || source.isBlank()) source = fallbackYaml;
+        if (step.getType() == StepType.CALL) {
+            logger.info("        Reusable : " + (step.getCommand() == null ? "<unknown>" : step.getCommand()));
+            if (step.getSubSteps() != null && !step.getSubSteps().isEmpty()) {
+                String calledFile = step.getSubSteps().get(0).getSourceFile();
+                if (calledFile != null && !calledFile.isBlank())
+                    logger.info("        Called YAML File: " + calledFile);
+            }
+        }
+        if (source != null && !source.isBlank()) {
+            logger.info("        YAML File: " + source);
+            Integer line = findSourceLine(source, step);
+            if (line != null) logger.info("        YAML Line: " + line);
+            else if (step.getSourceStepIndex() != null && step.getSourceStepIndex() > 0)
+                logger.info("        Step Index: " + step.getSourceStepIndex() + " (YAML line unavailable)");
+        }
+    }
+
+    private Integer findSourceLine(String source, TestStep step) {
+        try {
+            Path file = Paths.get(source);
+            if (!Files.isRegularFile(file)) return null;
+            List<String> lines = Files.readAllLines(file);
+            String id = step.getId();
+            if (id != null && !id.isBlank()) {
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i).trim();
+                    if (line.matches("-?\\s*id\\s*:.*") && line.contains(id)) {
+                        for (int j = i; j >= 0 && j >= i - 5; j--)
+                            if (lines.get(j).stripLeading().startsWith("- ")) return j + 1;
+                        return i + 1;
+                    }
+                }
+            }
+            // A source step index is not a YAML line number; do not pretend otherwise.
+        } catch (IOException | RuntimeException ignored) { }
+        return null;
+    }
+
+    private void logFailedCondition(TestCase tc, TestStep step, ExecutionContext context,
+                                    String yamlFile, int stepNumber) {
+        String condition = step.getCondition();
+        logger.info("        Condition (FAILED step): " + condition);
+        Map<String, Object> values = new HashMap<>();
+        if (tc.getVariables() != null) values.putAll(tc.getVariables());
+        values.putAll(context.getVars());
+        values.putAll(context.getBufferMap());
+        if (step.getParameters() != null) values.putAll(step.getParameters());
+        try {
+            String resolved = resolver.resolve(tc, condition, values, yamlFile,
+                                               stepNumber, "condition", step);
+            logger.info("        Condition Resolved: " + normalizeNullLiterals(resolved));
+        } catch (RuntimeException ex) {
+            logger.info("        Condition Resolution Error: " + ex.getMessage());
+        }
+        // Only report referenced variables, never dump all test data.
+        Pattern token = Pattern.compile("\\{(?:XL|B|T)\\[([^]]+)]}|[A-Za-z_][A-Za-z0-9_.]*");
+        Matcher matcher = token.matcher(condition);
+        java.util.Set<String> shown = new java.util.LinkedHashSet<>();
+        while (matcher.find()) {
+            String name = matcher.group(1) != null ? matcher.group(1) : matcher.group();
+            if (!values.containsKey(name) || !shown.add(name)) continue;
+            String printable = name.toLowerCase(java.util.Locale.ROOT).matches(".*(password|passwd|secret|token|pin|credential|apikey|api_key).*")
+                    ? "***" : String.valueOf(values.get(name));
+            logger.info("        Condition Var: " + name + " = " + printable);
+        }
+    }
+
     private boolean isConditionMet(
 
             TestCase tc,
@@ -1437,6 +1477,9 @@ long startTime =
 
 
 
+        condition = resolveSqlRowCountsInCondition(condition, context);
+        condition = resolveSqlCellsInCondition(condition, context);
+
         String resolvedCondition =
 
                 resolver.resolve(
@@ -1487,6 +1530,13 @@ long startTime =
 
 
 
+            if (step.getTextYaml() != null && !step.getTextYaml().isBlank()) {
+                logger.info("    >>> SKIPPED STEP DSL:");
+                for (String yamlLine : step.getTextYaml().split("\\R")) {
+                    logger.info("    >>> DSL      " + yamlLine);
+                }
+            }
+
             logger.info(
 
                     String.format(
@@ -1513,6 +1563,57 @@ long startTime =
      * normalization. isVerbose=false suppresses the normal SKIPPED log;
      * LoopEngine logs a successful loop exit itself.
      */
+    /**
+     * SQL_ROW_COUNT counts result-set rows (not affected rows of UPDATE/DELETE).
+     * An empty SELECT produces a stored empty List and therefore resolves to 0.
+     * Missing or non-result-set responses fail explicitly rather than pretending
+     * that no rows were returned.
+     */
+    private String resolveSqlRowCountsInCondition(String expression, ExecutionContext context) {
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(
+                "\\{SQL_ROW_COUNT\\[([^]\\r\\n]+)\\]\\}")
+                .matcher(expression);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            String responseName = matcher.group(1);
+            Object response = context.getResponse(responseName, Object.class);
+            if (!(response instanceof java.util.List<?> rows)) {
+                throw new IllegalArgumentException(
+                        "SQL_ROW_COUNT requires an existing SELECT result set: '" + responseName + "'");
+            }
+            matcher.appendReplacement(result, String.valueOf(rows.size()));
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    /** Resolves SQL result cells only in conditions; no Tosca placeholders are introduced. */
+    private String resolveSqlCellsInCondition(String expression, ExecutionContext context) {
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(
+                "\\{SQL\\[([^]\\r\\n]+)\\]\\[(\\d+)\\]\\[(\\d+)\\]\\}")
+                .matcher(expression);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            String responseName = matcher.group(1);
+            int row = Integer.parseInt(matcher.group(2));
+            int column = Integer.parseInt(matcher.group(3));
+            Object raw = context.getResponse(responseName, Object.class);
+            if (!(raw instanceof java.util.List<?> rows) || row >= rows.size()
+                    || !(rows.get(row) instanceof java.util.Map<?, ?> values)
+                    || column >= values.size()) {
+                throw new IllegalArgumentException("SQL condition cannot read cell [" + row + "]["
+                        + column + "] from response '" + responseName + "'");
+            }
+            Object cell = new java.util.ArrayList<>(values.values()).get(column);
+            if (cell == null) {
+                throw new IllegalArgumentException("SQL condition result cell is null: " + responseName);
+            }
+            matcher.appendReplacement(result, java.util.regex.Matcher.quoteReplacement(cell.toString()));
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
     public boolean evaluateLoopCondition(
             TestCase testCase,
             TestStep step,
@@ -1774,6 +1875,8 @@ long startTime =
         return normalized;
 
     }
+
+
 
 
 

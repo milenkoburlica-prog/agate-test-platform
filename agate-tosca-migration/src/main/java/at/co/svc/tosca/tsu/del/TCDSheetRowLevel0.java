@@ -1,5 +1,7 @@
 package at.co.svc.tosca.tsu.del;
 
+import at.co.svc.aga.transformator.utils.MigrationLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -44,7 +46,7 @@ public class TCDSheetRowLevel0 {
         if (testSheetNode != null) {
             testSheetName = testSheetNode.path("Attributes").path("Name").asText();
         }
-        System.out.println("[TCD-Level0] Obrada za TestSheet: " + testSheetName);
+        MigrationLog.debug("[TCD-Level0] Obrada za TestSheet: " + testSheetName);
 
         // Lista u koju pakujemo očišćene atribute (Level 0)
         ArrayNode rowDataLevel0 = mapper.createArrayNode();
@@ -61,7 +63,7 @@ public class TCDSheetRowLevel0 {
 
         // Upisivanje direktno u fajl koji je zadat kroz parametar pipeline-a
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(outputFilePath), rowDataLevel0);
-        System.out.println("✔ [TCD-Level0] Uspešno kreiran fajl: " + outputFilePath);
+        MigrationLog.debug("✔ [TCD-Level0] Uspešno kreiran fajl: " + outputFilePath);
     }
 
     private static void processAttributeRecursively(

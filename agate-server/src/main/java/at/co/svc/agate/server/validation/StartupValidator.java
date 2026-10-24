@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import at.co.svc.agate.core.project.ProjectContext;
+import at.co.svc.agate.core.project.ApplicationPathResolver;
 
 /**
  * Validates the command-line startup context before AGATE initializes the
@@ -154,9 +155,7 @@ public final class StartupValidator {
                             .toLowerCase(Locale.ROOT);
 
             Path appDirectory =
-                    testsRoot
-                            .resolve(sanitizedApp)
-                            .normalize();
+                    ApplicationPathResolver.resolve(testsRoot, sanitizedApp);
 
             if (!Files.exists(appDirectory)
                     || !Files.isDirectory(appDirectory)) {

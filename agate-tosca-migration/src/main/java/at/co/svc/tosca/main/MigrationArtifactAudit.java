@@ -214,7 +214,15 @@ public final class MigrationArtifactAudit {
                         statuses
                 );
 
-                if (mode == Mode.CLEANUP) {
+                // A partially resolved graph cannot authorize destructive cleanup.
+                // Unknown CALLs / missing or malformed reachable YAML could hide
+                // dependencies which would otherwise be considered unused.
+                at.co.svc.aga.transformator.utils.UsedYamlGraph.Result safetyGraph =
+                        at.co.svc.aga.transformator.utils.UsedYamlGraph.scan(
+                                appRoot,
+                                at.co.svc.aga.transformator.utils.UsedYamlGraph.roots(
+                                        appRoot, baseFileName));
+                if (mode == Mode.CLEANUP && migrationSucceeded && safetyGraph.complete()) {
 
                     deleteSafeCandidates(
                             statuses
@@ -227,6 +235,10 @@ public final class MigrationArtifactAudit {
                     removeEmptyGeneratedDirectories(
                             appRoot.resolve("modules")
                     );
+                } else if (mode == Mode.CLEANUP) {
+                    System.err.println("[CLEANUP-BLOCKED] No files deleted: "
+                            + (!migrationSucceeded ? "migration incomplete"
+                                    : "dependency graph incomplete (" + String.join("; ", safetyGraph.unresolved()) + ")"));
                 }
 
                 writeManifest(

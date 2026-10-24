@@ -173,17 +173,18 @@ public class MainMigrationApp {
             );
         }
 
-        MigrationReport.printSummary(
-                Paths.get(System.getProperty("user.dir"), migrationDir, appID),
-                baseFileName);
-
         migrationSucceeded = true;
 
         } finally {
 
-            artifactAudit.finish(
-                    migrationSucceeded
-            );
+            // Audit/cleanup is completed before reporting migration issues.
+            // Only issues belonging to the final dependency closure are errors.
+            artifactAudit.finish(migrationSucceeded);
+            if (migrationSucceeded) {
+                MigrationReport.printSummary(
+                        Paths.get(System.getProperty("user.dir"), migrationDir, appID),
+                        baseFileName);
+            }
         }
     }
     // =====================================================
@@ -408,21 +409,25 @@ public class MainMigrationApp {
 
         System.out.println();
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[DEPENDENCY-DEBUG] Root YAML = "
                         + rootYaml.getAbsolutePath()
                         + " exists="
                         + rootYaml.exists()
         );
+        }
 
         Path templateDir = rootPath.resolve("template");
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[DEPENDENCY-DEBUG] Template dir = "
                         + templateDir.toAbsolutePath()
                         + " exists="
                         + Files.exists(templateDir)
         );
+        }
 
         if (Files.exists(templateDir)) {
 
@@ -440,10 +445,12 @@ public class MainMigrationApp {
                         templates
                 );
 
+                if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                 System.out.println(
                         "[DEPENDENCY-DEBUG] Templates found = "
                                 + templates.length
                 );
+                }
             }
         }
 
@@ -455,10 +462,12 @@ public class MainMigrationApp {
 
             System.out.println();
 
+            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
             System.out.println(
                     "[DEPENDENCY-DEBUG] Scanning file = "
                             + f.getAbsolutePath()
             );
+            }
 
             if (f.exists()) {
 
@@ -468,40 +477,49 @@ public class MainMigrationApp {
                                 migrationDir,
                                 appID)) {
 
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[DEPENDENCY-DEBUG] CALL resolved = "
                                     + mod
                     );
+                    }
 
                     boolean migrated =
                             migratedModules.contains(mod);
 
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[DEPENDENCY-DEBUG] migrated      = "
                                     + migrated
                     );
+                    }
 
                     // -------------------------------------------------
                     // CLASSIFICATION TRACE
                     // -------------------------------------------------
 
-                    System.out.println();
-                    System.out.println("========== CLASSIFICATION TRACE ==========");
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) System.err.println("========== CLASSIFICATION TRACE ==========");
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[CLASSIFY-TRACE] dependency = "
                                     + mod
                     );
+                    }
 
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[CLASSIFY-TRACE] migrated exact match = "
                                     + migrated
                     );
+                    }
 
                     if (!migrated) {
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[CLASSIFY-TRACE] exact match NOT found"
                         );
+                        }
 
                         String dependencyComparable =
                                 mod
@@ -510,14 +528,18 @@ public class MainMigrationApp {
                                         .replace(".", "")
                                         .toLowerCase();
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[CLASSIFY-TRACE] comparable dependency = "
                                         + dependencyComparable
                         );
+                        }
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[CLASSIFY-TRACE] checking migrated candidates..."
                         );
+                        }
 
                         boolean possibleMatchFound = false;
 
@@ -534,24 +556,27 @@ public class MainMigrationApp {
 
                                 possibleMatchFound = true;
 
+                                if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                                 System.out.println(
                                         "[CLASSIFY-TRACE] POSSIBLE SAME MODULE = "
                                                 + migratedModule
                                 );
+                                }
                             }
                         }
 
                         if (!possibleMatchFound) {
 
+                            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                             System.out.println(
                                     "[CLASSIFY-TRACE] no comparable migrated module found"
                             );
+                            }
                         }
                     }
 
-                    System.out.println(
-                            "=========================================="
-                    );
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled())
+                        System.err.println("==========================================");
 
                     // -------------------------------------------------
                     // ORIGINAL LOGIC
@@ -559,17 +584,21 @@ public class MainMigrationApp {
 
                     if (migrated && usedSet.add(mod)) {
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[DEPENDENCY-DEBUG] -> USED / queued"
                         );
+                        }
 
                         queue.add(mod);
 
                     } else if (!migrated) {
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[DEPENDENCY-DEBUG] -> NEW / reference candidate"
                         );
+                        }
 
                         if (!neueReusable.contains(mod)) {
                             neueReusable.add(mod);
@@ -592,9 +621,11 @@ public class MainMigrationApp {
 
         System.out.println();
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[DEPENDENCY-DEBUG] Starting recursive dependency scan..."
         );
+        }
 
         while (!queue.isEmpty()) {
 
@@ -605,20 +636,26 @@ public class MainMigrationApp {
 
             System.out.println();
 
+            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
             System.out.println(
                     "[DEPENDENCY-DEBUG] Recursive module = "
                             + currentPath
             );
+            }
 
+            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
             System.out.println(
                     "[DEPENDENCY-DEBUG] Absolute file    = "
                             + moduleFile.getAbsolutePath()
             );
+            }
 
+            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
             System.out.println(
                     "[DEPENDENCY-DEBUG] Exists           = "
                             + moduleFile.exists()
             );
+            }
 
             if (moduleFile.exists()) {
 
@@ -631,15 +668,19 @@ public class MainMigrationApp {
                     boolean migrated =
                             migratedModules.contains(subMod);
 
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[DEPENDENCY-DEBUG] nested CALL = "
                                     + subMod
                     );
+                    }
 
+                    if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                     System.out.println(
                             "[DEPENDENCY-DEBUG] migrated    = "
                                     + migrated
                     );
+                    }
 
                     // -------------------------------------------------
                     // NESTED CLASSIFICATION TRACE
@@ -647,13 +688,15 @@ public class MainMigrationApp {
 
                     if (!migrated) {
 
-                        System.out.println();
-                        System.out.println("========== NESTED CLASSIFICATION TRACE ==========");
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled())
+                            System.err.println("========== NESTED CLASSIFICATION TRACE ==========");
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[CLASSIFY-TRACE] nested dependency = "
                                         + subMod
                         );
+                        }
 
                         String dependencyComparable =
                                 subMod
@@ -677,32 +720,37 @@ public class MainMigrationApp {
 
                                 possibleMatchFound = true;
 
+                                if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                                 System.out.println(
                                         "[CLASSIFY-TRACE] POSSIBLE SAME MODULE = "
                                                 + migratedModule
                                 );
+                                }
                             }
                         }
 
                         if (!possibleMatchFound) {
 
+                            if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                             System.out.println(
                                     "[CLASSIFY-TRACE] no comparable migrated module found"
                             );
+                            }
                         }
 
-                        System.out.println(
-                                "================================================="
-                        );
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled())
+                            System.err.println("=================================================");
                     }
 
                     if (migrated && usedSet.add(subMod)) {
 
                         queue.add(subMod);
 
+                        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
                         System.out.println(
                                 "[DEPENDENCY-DEBUG] -> nested module queued"
                         );
+                        }
                     }
                 }
 
@@ -1856,7 +1904,7 @@ public class MainMigrationApp {
         File jsonFile = new File(originalTsuJsonPath);
         
         if (!jsonFile.exists()) {
-            System.out.println("[TCD-Pipeline] JSON index does not exist. Generating it automatically...");
+            at.co.svc.aga.transformator.utils.MigrationLog.debug("[TCD-Pipeline] JSON index does not exist. Generating it automatically...");
             TsuExtractor.extractTsuToJson(tsuPath, outputDir); // Using your existing extractor
         }
         
@@ -1865,7 +1913,7 @@ public class MainMigrationApp {
         List<String> outputs = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println("[TCD-Pipeline] Creating index of the original TSU file...");
+        at.co.svc.aga.transformator.utils.MigrationLog.debug("[TCD-Pipeline] Creating index of the original TSU file...");
         Map<String, JsonNode> tsuIndex = TCDSheetRowLevel0.loadTsuToMemoryIndex(tsuPath, mapper);
 
         for (ToscaNode node : nodes) {

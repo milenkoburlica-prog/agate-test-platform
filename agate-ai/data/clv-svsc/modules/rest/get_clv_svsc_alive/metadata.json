@@ -1,8 +1,0 @@
-{
-  "url":"{{endpoint}}/clv-svsc/alive",
-  "method":"GET",
-  "headers":{
-    "Content-Type":"application/json;charset=UTF-8",
-    "accept":"application/json"
-  }
-}

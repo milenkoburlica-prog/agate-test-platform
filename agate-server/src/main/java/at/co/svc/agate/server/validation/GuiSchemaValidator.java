@@ -7,7 +7,7 @@ import com.microsoft.playwright.options.AriaRole;
 /** GUI contract checks before launching a browser; keeps other engines untouched. */
 public final class GuiSchemaValidator implements AgateValidator {
     private static final Set<String> OPS=Set.of("OPEN","BACK","CLICK","FILL","SELECT","CHECK","UNCHECK","HOVER","PRESS","UPLOAD","DOWNLOAD","DOWNLOAD_PDF","WAIT","ASSERT","EXTRACT","SCREENSHOT","ASSERT_PAGE_STRUCTURE","CLOSE","OPEN_TAB","CLOSE_TAB","FIND_TAB","BUFFER_TAB_EXISTS");
-    private static final Set<String> ASSERTIONS=Set.of("CHECKED","UNCHECKED","VISIBLE","HIDDEN","ENABLED","DISABLED","TEXT","TEXT_EQUALS","TEXT_CONTAINS","VALUE","COUNT","EXISTS","NOT_EXISTS","TEXT_MATCHES","VALUE_MATCHES","TEXT_GLOB","VALUE_GLOB");
+    private static final Set<String> ASSERTIONS=Set.of("CHECKED","UNCHECKED","VISIBLE","HIDDEN","ENABLED","DISABLED","TEXT","TEXT_EQUALS","TEXT_CONTAINS","VALUE","COUNT","EXISTS","NOT_EXISTS","TEXT_MATCHES","VALUE_MATCHES","TEXT_GLOB","VALUE_GLOB","TEXT_PATTERN");
     @Override public List<ValidationIssue> validate(ValidationContext c) {
         List<ValidationIssue> issues=new ArrayList<>();
         for(var tc:ValidationUtil.testCases(c.root())) for(var ref:ValidationUtil.steps(tc.node(),tc.index())) {
@@ -31,16 +31,37 @@ public final class GuiSchemaValidator implements AgateValidator {
         if(op.equals("BUFFER"))op="EXTRACT";
         if(!OPS.contains(op))throw new IllegalArgumentException("Unsupported GUI operation "+op);
         if(step.has("caption") && (!step.get("caption").isTextual() || step.get("caption").asText().isBlank()))throw new IllegalArgumentException("caption requires nonempty text");
+        // Match GuiStepConfig.resolve(): dropdown.value is a SELECT option label,
+        // never a locator property. Validate the option and pass only the locator
+        // attributes to GuiElementTarget. Do not mutate the source JsonNode.
+        boolean compactSelect = op.equals("SELECT") && step.has("dropdown");
+        if (compactSelect) {
+            if (step.has("target") || step.has("selector") || step.has("select") || step.has("value"))
+                throw new IllegalArgumentException("SELECT dropdown cannot be combined with target/value/select");
+            JsonNode dropdown = step.get("dropdown");
+            if (!dropdown.isObject() || !dropdown.path("value").isTextual()
+                    || dropdown.path("value").asText().isBlank())
+                throw new IllegalArgumentException("SELECT dropdown.value must be a nonempty option label");
+            checkSelection(dropdown.get("value"));
+        }
         Map<String,Object> simplifiedInput = new LinkedHashMap<>();
         for(String kind:at.co.svc.agate.engine.gui.GuiElementTarget.KINDS)
-            if(step.has(kind)) simplifiedInput.put(kind, jsonValue(step.get(kind)));
+            if(step.has(kind)) {
+                Object spec = jsonValue(step.get(kind));
+                if (compactSelect && kind.equals("dropdown")) {
+                    Map<String,Object> locator = new LinkedHashMap<>((Map<String,Object>) spec);
+                    locator.remove("value");
+                    spec = locator;
+                }
+                simplifiedInput.put(kind, spec);
+            }
         if(step.has("target"))simplifiedInput.put("target",jsonValue(step.get("target")));
         if(step.has("selector"))simplifiedInput.put("selector",jsonValue(step.get("selector")));
         boolean simplified = !at.co.svc.agate.engine.gui.GuiElementTarget.fromStep(simplifiedInput).isEmpty();
         JsonNode timeout=step.has("timeout")?step.get("timeout"):tc.get("timeout");
         if(timeout!=null && (!timeout.isIntegralNumber() || timeout.asLong()<=0 || timeout.asLong()>Integer.MAX_VALUE))throw new IllegalArgumentException("timeout must be positive milliseconds");
         if(op.equals("OPEN") && !step.hasNonNull("url") && !step.hasNonNull("value"))throw new IllegalArgumentException("OPEN requires url or legacy value");
-        if(Set.of("FILL","SELECT","PRESS","UPLOAD").contains(op)&&!step.hasNonNull("value"))throw new IllegalArgumentException(op+" requires value");
+        if(Set.of("FILL","SELECT","PRESS","UPLOAD").contains(op)&&!step.hasNonNull("value") && !(op.equals("SELECT") && compactSelect))throw new IllegalArgumentException(op+" requires value");
         if(!Set.of("OPEN","BACK","WAIT","SCREENSHOT","CLOSE","ASSERT_PAGE_STRUCTURE","OPEN_TAB","CLOSE_TAB","FIND_TAB","BUFFER_TAB_EXISTS").contains(op)) {
             JsonNode target=step.get("target");
             if(simplified) { /* validated by shared contract */ }
@@ -55,12 +76,29 @@ public final class GuiSchemaValidator implements AgateValidator {
                 if(!step.path(key).isTextual() || step.path(key).asText().isBlank())
                     throw new IllegalArgumentException("DOWNLOAD_PDF requires " + key);
         }
-        if(op.equals("SELECT"))checkSelection(step.get("value"));
+        if(op.equals("SELECT") && !compactSelect)checkSelection(step.get("value"));
         if(op.equals("ASSERT")) {
             JsonNode assertion=step.get("assertion");
             if(assertion!=null && step.has("action"))throw new IllegalArgumentException("Use action OR legacy assertion, not both");
             String type=assertion==null?ValidationUtil.text(step,"action"):ValidationUtil.text(assertion,"type");
             if(type==null||!ASSERTIONS.contains(type.toUpperCase(Locale.ROOT)))throw new IllegalArgumentException("Unsupported GUI assertion");
+            if("TEXT_PATTERN".equalsIgnoreCase(type)) {
+                JsonNode expected = assertion != null ? assertion.get("expected") : step.get("expected");
+                if(expected == null || !expected.isObject() || expected.size() != 1 || !expected.path("parts").isArray() || expected.path("parts").isEmpty())
+                    throw new IllegalArgumentException("TEXT_PATTERN requires expected.parts as a nonempty list");
+                for(JsonNode part : expected.path("parts")) {
+                    if(part.isTextual())continue;
+                    if(part.isObject() && part.hasNonNull("currentDate") && part.path("currentDate").isTextual()
+                            && !part.path("currentDate").asText().isBlank()
+                            && java.util.stream.StreamSupport.stream(java.util.Spliterators.spliteratorUnknownSize(part.fieldNames(), 0), false)
+                                .allMatch(k -> Set.of("currentDate","offsetDays","prefix","suffix").contains(k))) {
+                        try {java.time.format.DateTimeFormatter.ofPattern(part.path("currentDate").asText());}
+                        catch(IllegalArgumentException e) {throw new IllegalArgumentException("Invalid TEXT_PATTERN currentDate format",e);}
+                        continue;
+                    }
+                    throw new IllegalArgumentException("TEXT_PATTERN parts must be text or currentDate expressions");
+                }
+            }
             if(Set.of("TEXT","TEXT_EQUALS","TEXT_CONTAINS","VALUE","COUNT","TEXT_MATCHES","VALUE_MATCHES","TEXT_GLOB","VALUE_GLOB").contains(type.toUpperCase(Locale.ROOT)) && !(assertion!=null&&assertion.hasNonNull("expected"))&&!step.hasNonNull("expected"))throw new IllegalArgumentException(type+" requires expected");
         }
     }

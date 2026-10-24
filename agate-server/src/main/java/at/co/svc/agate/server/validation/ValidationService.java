@@ -43,6 +43,7 @@ public final class ValidationService {
                          * before attempting data-flow analysis.
                          */
                         new ReusableYamlSyntaxValidator(),
+                        new ReusableSemanticValidator(),
                         new SuspiciousYamlEscapeValidator(),
                         new PlaceholderSyntaxValidator(),
 
@@ -163,7 +164,11 @@ public final class ValidationService {
             }
         }
 
-        return new ValidationResult(
-                issues);
+        // A large instantiated suite can traverse the same source locations
+        // several times. Emit an identical diagnostic only once, without
+        // collapsing distinct messages or different source locations.
+        java.util.LinkedHashSet<ValidationIssue> unique =
+                new java.util.LinkedHashSet<>(issues);
+        return new ValidationResult(new ArrayList<>(unique));
     }
 }

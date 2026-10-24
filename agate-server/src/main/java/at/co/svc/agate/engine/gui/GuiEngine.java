@@ -42,7 +42,20 @@ public class GuiEngine extends AbstractStepEngine {
                 page.setDefaultNavigationTimeout(config.timeout());
                 String before = session.currentUrl();
                 if (config.op().equals("OPEN")) log.browser(session.browserDescription());
-                execute(tc, context, session, page, config, log);
+                try {
+                    execute(tc, context, session, page, config, log);
+                } catch (PlaywrightException failedOpen) {
+                    // Only the initial, non-side-effecting OPEN may be retried.
+                    // A closed page/context can race with Browser.isConnected() after
+                    // an external WM_CLOSE; never retry CLICK/FILL/SELECT/etc.
+                    if (!"OPEN".equals(config.op()) || !"about:blank".equals(before)
+                            || !isUnexpectedBrowserClose(failedOpen)) throw failedOpen;
+                    logger.info("[GUI lifecycle] OPEN_RETRY_AFTER_TARGET_CLOSED (once)");
+                    page = session.recoverInitialOpen(logger);
+                    page.setDefaultTimeout(config.timeout());
+                    page.setDefaultNavigationTimeout(config.timeout());
+                    execute(tc, context, session, page, config, log);
+                }
                 log.navigation(before, session.currentUrl());
                 log.success();
             } catch (Exception | AssertionError failure) {
@@ -62,13 +75,27 @@ public class GuiEngine extends AbstractStepEngine {
         });
         // TestExecutor already prints status and duration once for every step.
     }
+    static boolean isUnexpectedBrowserClose(Throwable failure) {
+        for (Throwable current = failure; current != null; current = current.getCause()) {
+            String message = Objects.toString(current.getMessage(), "").toLowerCase(Locale.ROOT);
+            if (message.contains("targetclosederror")
+                    || message.contains("target page, context or browser has been closed")
+                    || message.contains("browser has been closed")
+                    || message.contains("connection closed")) return true;
+        }
+        return false;
+    }
     private void execute(TestCase tc, ExecutionContext context, GuiSession session, Page page, GuiStepConfig c, GuiStepLog log) {
         Locator target = c.target().isEmpty() ? null : GuiLocatorResolver.resolve(page, c.target());
         switch (c.op()) {
             case "OPEN" -> page.navigate(c.text("url") != null ? c.required("url") : c.required("value"),
                     new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
             case "BACK" -> page.goBack(new Page.GoBackOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
-            case "CLICK" -> requireTarget(target,c).click();
+            case "CLICK" -> {
+                List<Page> before = session.pageSnapshot();
+                requireTarget(target,c).click();
+                session.registerNewPagesAfterClick(before, page);
+            }
             case "FILL" -> {
                 Locator input = requireTarget(target,c);
                 log.prepareInput(input);
@@ -223,6 +250,7 @@ public class GuiEngine extends AbstractStepEngine {
             case "UNCHECKED" -> assertThat(locator).not().isChecked(new LocatorAssertions.IsCheckedOptions().setTimeout(c.timeout()));
             case "EXISTS" -> locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED).setTimeout(c.timeout()));
             case "NOT_EXISTS" -> assertThat(locator).hasCount(0,new LocatorAssertions.HasCountOptions().setTimeout(c.timeout()));
+            case "TEXT_PATTERN" -> assertThat(locator).hasText(GuiTextPattern.pattern(expected),new LocatorAssertions.HasTextOptions().setTimeout(c.timeout()).setUseInnerText(true));
             case "TEXT_GLOB" -> assertThat(locator).hasText(GuiTextGlob.pattern(Objects.requireNonNull(expected).toString()),new LocatorAssertions.HasTextOptions().setTimeout(c.timeout()).setUseInnerText(true));
             case "VALUE_GLOB" -> assertThat(locator).hasValue(globPattern(Objects.requireNonNull(expected).toString()),new LocatorAssertions.HasValueOptions().setTimeout(c.timeout()));
             case "TEXT_MATCHES" -> assertThat(locator).hasText(java.util.regex.Pattern.compile(Objects.requireNonNull(expected).toString(),java.util.regex.Pattern.DOTALL),new LocatorAssertions.HasTextOptions().setTimeout(c.timeout()).setUseInnerText(true));

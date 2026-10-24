@@ -167,7 +167,7 @@ public class XTestStepJsonCompressor {
                 compressed
         );
 
-        MigrationLog.success("Compressed JSON written: " + outputFile);
+        MigrationLog.debug("Compressed JSON written: " + outputFile);
     }
 
     // =========================================================
@@ -1191,8 +1191,7 @@ public class XTestStepJsonCompressor {
              result
      );
 
-     System.out.println("Reusable template compression done:");
-     System.out.println(outputFile);
+     MigrationLog.debug("Reusable template compression done: " + outputFile);
 
      return outputFile;
  }

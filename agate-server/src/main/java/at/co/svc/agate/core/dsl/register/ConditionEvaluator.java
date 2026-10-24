@@ -80,6 +80,10 @@ public class ConditionEvaluator {
             return unary;
         }
 
+        // Numeric comparisons are needed for SQL-driven LOOP/BREAK conditions.
+        Boolean numeric = tryNumericComparison(expr);
+        if (numeric != null) return numeric;
+
         // Binary
         Boolean binary = tryBinary(expr);
 
@@ -126,6 +130,25 @@ public class ConditionEvaluator {
         }
 
         return false;
+    }
+
+    private Boolean tryNumericComparison(String expr) {
+        Matcher match = Pattern.compile("^(.+?)\\s*(>=|<=|>|<)\\s*(.+)$").matcher(expr);
+        if (!match.matches()) return null;
+        try {
+            java.math.BigDecimal left = new java.math.BigDecimal(operand(match.group(1)).trim());
+            java.math.BigDecimal right = new java.math.BigDecimal(operand(match.group(3)).trim());
+            int compare = left.compareTo(right);
+            return switch (match.group(2)) {
+                case ">" -> compare > 0;
+                case "<" -> compare < 0;
+                case ">=" -> compare >= 0;
+                case "<=" -> compare <= 0;
+                default -> false;
+            };
+        } catch (NumberFormatException | NullPointerException ex) {
+            throw new IllegalArgumentException("Numeric condition requires numeric operands: " + expr, ex);
+        }
     }
 
     // =========================================================
@@ -177,7 +200,7 @@ public class ConditionEvaluator {
         String token = removeOuterBrackets(raw.trim());
         boolean quoted = (token.startsWith("'") && token.endsWith("'"))
                 || (token.startsWith("\"") && token.endsWith("\""));
-        if (resolveNames && !quoted && token.matches("[A-Za-z_][A-Za-z0-9_.]*")
+        if (resolveNames && !quoted && token.matches("[\\p{L}_][\\p{L}\\p{N}_.]*")
                 && !Set.of("NULL", "TRUE", "FALSE").contains(token.toUpperCase(Locale.ROOT))) {
             Object value = values.get(token);
             return value == null ? null : clean(value.toString());
@@ -245,13 +268,14 @@ public class ConditionEvaluator {
 
         int level = 0;
 
-        String upper = expr.toUpperCase();
+        // Do not uppercase the whole expression: Unicode case conversion may change
+        // its length (e.g. Straße -> STRASSE) and corrupt character offsets.
 
         int last = 0;
 
-        for (int i = 0; i < upper.length(); i++) {
+        for (int i = 0; i < expr.length(); i++) {
 
-            char c = upper.charAt(i);
+            char c = expr.charAt(i);
 
             if (c == '(') level++;
             if (c == ')') level--;
@@ -260,7 +284,7 @@ public class ConditionEvaluator {
 
                 String op = " " + operator + " ";
 
-                if (upper.startsWith(op, i)) {
+                if (expr.regionMatches(true, i, op, 0, op.length())) {
 
                     parts.add(expr.substring(last, i).trim());
 

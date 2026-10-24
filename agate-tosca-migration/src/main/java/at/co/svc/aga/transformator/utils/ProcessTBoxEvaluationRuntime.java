@@ -38,7 +38,7 @@ public final class ProcessTBoxEvaluationRuntime {
                 || step.getValues() == null
                 || step.getValues().isEmpty()) {
 
-            MigrationLog.info(
+            MigrationLog.warn(
                     "[Review] TBox Evaluation Tool has no values"
                             + stepSuffix(step)
             );
@@ -52,7 +52,7 @@ public final class ProcessTBoxEvaluationRuntime {
         if (expression == null
                 || expression.isBlank()) {
 
-            MigrationLog.info(
+            MigrationLog.warn(
                     "[Review] TBox Evaluation Tool expression not found"
                             + stepSuffix(step)
             );
@@ -60,12 +60,15 @@ public final class ProcessTBoxEvaluationRuntime {
             return false;
         }
 
+        MigrationLog.debug("[EVALUATION-TRACE] step=" + safeStepName(step)
+                + " expression=" + expression);
+
         ParsedEquality equality =
                 parseEquality(expression);
 
         if (equality == null) {
 
-            MigrationLog.info(
+            MigrationLog.warn(
                     "[Review] Unsupported executable TBox Evaluation Tool expression: "
                             + expression
                             + stepSuffix(step)
@@ -73,6 +76,9 @@ public final class ProcessTBoxEvaluationRuntime {
 
             return false;
         }
+
+        MigrationLog.debug("[EVALUATION-TRACE] left=" + equality.left()
+                + " right=" + equality.right());
 
         AssertionMapping mapping =
                 mapToBufferAssertion(
@@ -82,7 +88,7 @@ public final class ProcessTBoxEvaluationRuntime {
 
         if (mapping == null) {
 
-            MigrationLog.info(
+            MigrationLog.warn(
                     "[Review] TBox Evaluation Tool expression cannot be mapped "
                             + "safely to BUFFER ASSERT: "
                             + expression
@@ -93,6 +99,9 @@ public final class ProcessTBoxEvaluationRuntime {
         }
 
         ToscaToAgaPhase1.writeLine("");
+
+        MigrationLog.debug("[EVALUATION-TRACE] mapping BUFFER ASSERT name="
+                + mapping.bufferName() + " expected=" + mapping.expected());
 
         ToscaToAgaPhase1.writeLine(
                 ident
@@ -158,7 +167,11 @@ public final class ProcessTBoxEvaluationRuntime {
             String candidate =
                     value.getValue().trim();
 
-            if (candidate.contains("==")) {
+            MigrationLog.debug("[EVALUATION-TRACE] valueName=" + value.getName()
+                    + " actionMode=" + value.getActionMode()
+                    + " rawExpression=" + candidate);
+
+            if (parseEquality(candidate) != null) {
                 return candidate;
             }
         }
@@ -189,9 +202,10 @@ public final class ProcessTBoxEvaluationRuntime {
                         pos
                 ).trim();
 
+        int operatorLength = expression.startsWith("==", pos) ? 2 : 1;
         String right =
                 expression.substring(
-                        pos + 2
+                        pos + operatorLength
                 ).trim();
 
         left =
@@ -227,86 +241,26 @@ public final class ProcessTBoxEvaluationRuntime {
     }
 
 
-    private static int findEqualityOperator(
-            String expression) {
-
-        boolean inSingleQuote =
-                false;
-
-        boolean inDoubleQuote =
-                false;
-
-        int depth =
-                0;
-
-        for (int i = 0;
-             i < expression.length() - 1;
-             i++) {
-
-            char c =
-                    expression.charAt(i);
-
-            if (c == '\''
-                    && !inDoubleQuote) {
-
-                inSingleQuote =
-                        !inSingleQuote;
-
-                continue;
-            }
-
-            if (c == '"'
-                    && !inSingleQuote) {
-
-                inDoubleQuote =
-                        !inDoubleQuote;
-
-                continue;
-            }
-
-            if (inSingleQuote
-                    || inDoubleQuote) {
-
-                continue;
-            }
-
-            if (c == '(') {
-
-                depth++;
-
-                continue;
-            }
-
-            if (c == ')') {
-
-                depth =
-                        Math.max(
-                                0,
-                                depth - 1
-                        );
-
-                continue;
-            }
-
-            if (depth == 0
-                    && c == '='
-                    && expression.charAt(i + 1) == '=') {
-
-                return i;
-            }
+    private static int findEqualityOperator(String expression) {
+        boolean single = false;
+        boolean doubleQuoted = false;
+        int depth = 0;
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+            if (c == '\'' && !doubleQuoted) { single = !single; continue; }
+            if (c == '"' && !single) { doubleQuoted = !doubleQuoted; continue; }
+            if (single || doubleQuoted) continue;
+            if (c == '(') { depth++; continue; }
+            if (c == ')') { depth = Math.max(0, depth - 1); continue; }
+            if (depth != 0 || c != '=') continue;
+            char prev = i > 0 ? expression.charAt(i - 1) : '\0';
+            char next = i + 1 < expression.length() ? expression.charAt(i + 1) : '\0';
+            if (prev == '!' || prev == '<' || prev == '>' || prev == '=') continue;
+            if (next == '=') return i;   // AGATE equality
+            return i;                    // Tosca equality
         }
-
-        /*
-         * Typical Tosca form:
-         *
-         *   '{B[L_Verify]}' == '{B[SSHResponse]}'
-         *
-         * The operator remains outside the quoted operands.
-         * Fallback protects against unusual parenthesis wrapping.
-         */
-        return expression.indexOf("==");
+        return -1;
     }
-
 
     // =========================================================
     // AGATE mapping

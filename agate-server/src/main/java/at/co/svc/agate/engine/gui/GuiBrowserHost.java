@@ -82,6 +82,24 @@ final class GuiBrowserHost implements AutoCloseable {
             throw ex;
         }
     }
+    /** Discard a browser invalidated outside Playwright (for example by WINDOW CLOSE).
+     * Called exclusively on the Playwright owner thread; the next browser() launches afresh.
+     */
+    void invalidateBrowser() {
+        GuiLifecycleLog.detail(metrics, "[GUI lifecycle] BROWSER_INVALIDATED id=" + browserInstanceId);
+        Browser oldBrowser = browser;
+        browser = null;
+        if (playwright != null) {
+            Playwright oldPlaywright = playwright;
+            playwright = null;
+            try {
+                GuiPlaywrightShutdown.closeLaunchOwnedBrowser(oldPlaywright, browserInstanceId, metrics);
+            } catch (RuntimeException ex) {
+                System.err.println("[GUI lifecycle] INVALIDATED_BROWSER_CLEANUP_ERROR: " + ex);
+            }
+        }
+        // Do not touch other Edge processes: only the Playwright launch-owned tree.
+    }
     String label() { return label == null ? config.browser() : label; }
     @Override public void close() {
         Future<?> finished;

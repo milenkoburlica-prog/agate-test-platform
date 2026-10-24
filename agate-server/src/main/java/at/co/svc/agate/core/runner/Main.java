@@ -136,12 +136,18 @@ public class Main {
                                 .trim()
                                 .toLowerCase();
 
-                Path yamlFile =
-                        projectContext
-                                .getTestsRoot()
-                                .resolve(application)
-                                .resolve(args[2])
-                                .normalize();
+                // Keep validation path resolution consistent with AGATE's
+                // dotted application notation (e.g. DMP.11.02_isDmpPatient).
+                // Prefer a literal application directory when it exists.
+                Path testsRoot = projectContext.getTestsRoot();
+                Path applicationRoot = testsRoot.resolve(application).normalize();
+                if (!Files.isDirectory(applicationRoot)) {
+                    applicationRoot = testsRoot
+                            .resolve(application.replace('.', File.separatorChar))
+                            .normalize();
+                }
+
+                Path yamlFile = applicationRoot.resolve(args[2]).normalize();
 
                 startValidation(
                         yamlFile.toString());
@@ -631,6 +637,13 @@ public class Main {
                 projectPath =
                         args[++i];
 
+                continue;
+            }
+
+            if ("--verbose".equalsIgnoreCase(arg)) {
+
+                // Full execution trace, including nested CALL/reusable steps.
+                System.setProperty("agate.call.verbose", "true");
                 continue;
             }
 

@@ -57,13 +57,8 @@ public final class ProjectRuntime {
                     "application must not be empty");
         }
 
-        return getContext()
-                .getTestsRoot()
-                .resolve(
-                        application
-                                .trim()
-                                .toLowerCase())
-                .normalize();
+        return ApplicationPathResolver.resolve(
+                getContext().getTestsRoot(), application);
     }
 
     public static Path modulesRoot(

@@ -145,15 +145,19 @@ public class ToscaLibraryMigrator {
             List<String> migModules) throws Exception {
 
         System.out.println();
-        System.out.println("========== REUSABLE CREATE TRACE ==========");
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) System.err.println("========== REUSABLE CREATE TRACE ==========");
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println("[CREATE-TRACE] rawName = '" + rawName + "'");
+        }
 
         String cleanName =
                 FileNameSanitizer.sanitize(rawName);
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] cleanName = '" + cleanName + "'"
         );
+        }
 
         StringBuilder yaml =
                 new StringBuilder();
@@ -167,9 +171,11 @@ public class ToscaLibraryMigrator {
                         + cleanName
                         + ".yaml";
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] outputPath = " + outputPath
         );
+        }
 
         File outputFile =
                 new File(
@@ -177,15 +183,19 @@ public class ToscaLibraryMigrator {
                         outputPath
                 );
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] absolute outputPath = "
                         + outputFile.getAbsolutePath()
         );
+        }
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] exists BEFORE write = "
                         + outputFile.exists()
         );
+        }
 
         for (int i = 0; i < steps.size(); i++) {
 
@@ -212,23 +222,22 @@ public class ToscaLibraryMigrator {
                 yaml.toString()
         );
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] exists AFTER write = "
                         + outputFile.exists()
         );
+        }
 
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) {
         System.out.println(
                 "[CREATE-TRACE] registered migrated module = "
                         + outputPath
         );
+        }
 
-        System.out.println(
-                "==========================================="
-        );
-
-        System.out.println(
-                "Migrated reusable block: "
-                        + outputPath
+        at.co.svc.aga.transformator.utils.MigrationLog.debug(
+                "Migrated reusable block: " + outputPath
         );
 
         migModules.add(outputPath);
@@ -263,6 +272,12 @@ public class ToscaLibraryMigrator {
             // Handle them before the legacy module dispatch so the old behaviour stays unchanged.
             if (type.equalsIgnoreCase("LOOP")) {
                 processLoop(step, moduleMap, appId, yamlOutputPath);
+                System.out.flush();
+                return baos.toString();
+            }
+
+            if (type.equalsIgnoreCase("LOOP_SQL_BUFFER")) {
+                processLoopSqlBuffer(step);
                 System.out.flush();
                 return baos.toString();
             }
@@ -439,6 +454,12 @@ public class ToscaLibraryMigrator {
 
         System.out.println();
         System.out.println("      - type: LOOP");
+        System.out.println("        mode: " + step.getMode());
+        System.out.println("        timeoutMs: " + step.getTimeoutMs());
+        if (step.getCondition() != null) {
+            System.out.println("        condition: \"" + escapeYamlDoubleQuoted(step.getCondition()) + "\"");
+        }
+
 
         if (step.getMaxIterations() != null) {
             System.out.println("        maxIterations: " + step.getMaxIterations());
@@ -479,6 +500,16 @@ public class ToscaLibraryMigrator {
         }
     }
 
+
+    private void processLoopSqlBuffer(CleanStep step) {
+        System.out.println();
+        System.out.println("      - type: SQL");
+        System.out.println("        op: BUFFER");
+        System.out.println("        response: '" + step.getResponse().replace("'", "''") + "'");
+        System.out.println("        name: '" + step.getName().replace("'", "''") + "'");
+        System.out.println("        row: '" + step.getRow() + "'");
+        System.out.println("        column: '" + step.getColumn() + "'");
+    }
 
     /**
      * Writes an AGATE BREAK control-flow step.
@@ -569,7 +600,7 @@ public class ToscaLibraryMigrator {
     }
 
     private void saveToFile(String path, String content) throws Exception {
-        System.out.println("createDirectories6="+path);
+        if (at.co.svc.aga.transformator.utils.MigrationLog.isDebugEnabled()) System.err.println("createDirectories6="+path);
         Files.createDirectories(Paths.get(path).getParent());
         Files.write(Paths.get(path), content.getBytes(StandardCharsets.UTF_8));
     }

@@ -16,10 +16,11 @@ public final class GuiElementTarget {
         if (!(step.get(kind) instanceof Map<?,?> source)) throw new IllegalArgumentException(kind+" must be an object");
         Map<String,Object> spec=new LinkedHashMap<>();source.forEach((k,v)->spec.put(k.toString(),v));
         List<String> strategies = switch(kind) {
-            case "textbox" -> List.of("label","placeholder","id");
-            case "dropdown","checkbox","radio" -> List.of("label","id");
-            case "text" -> List.of("value","id");
-            default -> List.of("text","id");
+            case "textbox" -> List.of("label", "placeholder", "id", "idStartsWith", "idEndsWith", "idContains");
+            case "dropdown" -> List.of("label", "id", "idStartsWith", "idEndsWith", "idContains");
+            case "checkbox", "radio" -> List.of("label", "id", "idStartsWith", "idEndsWith", "idContains");
+            case "text" -> List.of("value", "id", "idStartsWith", "idEndsWith", "idContains");
+            default -> List.of("text", "id", "idStartsWith", "idEndsWith", "idContains");
         };
         Set<String> allowed=new HashSet<>(strategies);allowed.addAll(List.of("exact","index"));
         if (!allowed.containsAll(spec.keySet())) throw new IllegalArgumentException("Unsupported "+kind+" field");
@@ -32,8 +33,8 @@ public final class GuiElementTarget {
             throw new IllegalArgumentException(kind+".exact must be boolean");
         Map<String,Object> target=new LinkedHashMap<>();
         boolean exact=!Boolean.FALSE.equals(spec.get("exact"));
-        if (strategy.equals("id")) {
-            if (spec.containsKey("exact"))throw new IllegalArgumentException(kind+".id is always exact; omit exact");
+        if (strategy.equals("id") || strategy.equals("idStartsWith") || strategy.equals("idContains") || strategy.equals("idEndsWith")) {
+            if (spec.containsKey("exact"))throw new IllegalArgumentException(kind+".id locator does not support exact");
             String tag=switch(kind) {
                 case "link" -> "a";
                 case "button" -> ":is(button,input[type=button],input[type=submit],input[type=reset])";
@@ -44,7 +45,8 @@ public final class GuiElementTarget {
                 case "heading" -> ":is(h1,h2,h3,h4,h5,h6)";
                 default -> "";
             };
-            target.put("css",tag+"[id=\""+cssString(value)+"\"]");
+            String attrOp = strategy.equals("idContains") ? "*=" : strategy.equals("idEndsWith") ? "$=" : strategy.equals("idStartsWith") ? "^=" : "=";
+            target.put("css",tag+"[id"+attrOp+"\""+cssString(value)+"\"]");
         } else {
             target.put("exact",exact);
             switch(kind) {

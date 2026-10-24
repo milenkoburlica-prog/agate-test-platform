@@ -1,0 +1,12 @@
+at\co\svc\agate\ai\MultiEngineTest.class
+at\co\svc\agate\ai\ChatResourceTest.class
+at\co\svc\agate\ai\CloudEvidenceSanitizerTest.class
+at\co\svc\agate\ai\DiagnosticResourceTest.class
+at\co\svc\agate\ai\EvidenceExplorerTest.class
+at\co\svc\agate\ai\SoapEvidenceTest.class
+at\co\svc\agate\ai\XpathFixVerifierTest.class
+at\co\svc\agate\ai\DiagnosticPromptTest.class
+at\co\svc\agate\ai\ExecutionAwareTest.class
+at\co\svc\agate\ai\RequestRouterTest.class
+at\co\svc\agate\ai\SoapResponseCorrelationTest.class
+at\co\svc\agate\ai\AssertionMismatchTest.class

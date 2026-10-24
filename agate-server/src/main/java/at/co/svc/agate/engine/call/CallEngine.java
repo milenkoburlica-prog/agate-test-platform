@@ -114,10 +114,13 @@ public class CallEngine extends AbstractStepEngine {
              * this setting.
              * =====================================================
              */
+            // CLI --verbose applies to the entire execution tree. Without
+            // it, preserve the explicit per-CALL opt-in behavior.
             boolean childVerbose =
-                    false;
+                    isVerbose && Boolean.getBoolean("agate.call.verbose");
 
             if (isVerbose
+                    && !childVerbose
                     && step.getParameters()
                     != null
                     && step.getParameters()

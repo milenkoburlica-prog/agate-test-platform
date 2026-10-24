@@ -73,7 +73,7 @@ public final class GuiStepLog {
         String type=Objects.toString(a.get("type"),Objects.toString(config.get("action"),"")).toUpperCase(Locale.ROOT);
         if(Set.of("VALUE","VALUE_MATCHES","VALUE_GLOB").contains(type) && passwordField(locator)) {field("Actual","***");return;}
         observe("Actual",()->switch(type) {
-            case "TEXT", "TEXT_EQUALS", "TEXT_CONTAINS", "TEXT_MATCHES", "TEXT_GLOB" -> locator.innerText(new Locator.InnerTextOptions().setTimeout(250));
+            case "TEXT", "TEXT_EQUALS", "TEXT_CONTAINS", "TEXT_MATCHES", "TEXT_GLOB", "TEXT_PATTERN" -> locator.innerText(new Locator.InnerTextOptions().setTimeout(250));
             case "VALUE", "VALUE_MATCHES", "VALUE_GLOB" -> locator.inputValue(new Locator.InputValueOptions().setTimeout(250));
             case "COUNT", "EXISTS", "NOT_EXISTS" -> locator.count();
             case "VISIBLE", "HIDDEN" -> locator.isVisible()?"visible":"hidden";

@@ -29,11 +29,11 @@ public final class ProcessWindowStep {
         }
         for (String note : result.runtimeNotes()) {
             ToscaToAgaPhase1.writeLine(indent+"      # [Runtime] "+note.replace('\n',' '));
-            if (MigrationLog.isEnabled()) System.err.println("[INFO] WINDOW runtime: "+note+" | step="+s.getName());
+            MigrationLog.debug("WINDOW runtime: "+note+" | step="+s.getName());
         }
         if(result.steps().stream().anyMatch(ProcessWindowStep::requiresWindowRuntime)) {
             ToscaToAgaPhase1.writeLine(indent+"      # Runtime erforderlich: WINDOW-Engine.");
-            if (MigrationLog.isEnabled()) System.err.println("[INFO] WINDOW migrated; execution requires WINDOW engine | step="+s.getName());
+            MigrationLog.debug("WINDOW migrated; execution requires WINDOW engine | step="+s.getName());
         }
         DumperOptions opts=new DumperOptions();opts.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);opts.setSplitLines(false);
         Yaml yaml=new Yaml(opts);

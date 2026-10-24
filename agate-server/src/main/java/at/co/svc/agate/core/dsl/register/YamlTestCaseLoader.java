@@ -154,6 +154,8 @@ public class YamlTestCaseLoader {
         }
         tc.setStage(asString(tcMap.get("stage")));
         tc.setPriority(asString(tcMap.get("priority")));
+        tc.setTemplate(asString(tcMap.get("template")));
+        tc.setTestdata(asString(tcMap.get("testdata")));
 
         Map<String, Object> vars = new HashMap<>();
         if (csvRow != null) {
@@ -718,30 +720,61 @@ public class YamlTestCaseLoader {
                 throw e;
             }
 
-            if (fragmentRoot != null && fragmentRoot.containsKey("steps")) {
-
-                List<Map<String, Object>> fragmentSteps =
-                        (List<Map<String, Object>>) fragmentRoot.get("steps");
-
-                return processSteps(
-                        tc,
-                        fragmentSteps,
+            // An explicitly declared but empty "steps:" is valid YAML.
+            // SnakeYAML parses it as null; treat it like "steps: []" (no-op).
+            // A missing "steps" key remains an invalid reusable definition.
+            if (fragmentRoot == null || !fragmentRoot.containsKey("steps")) {
+                throw definitionError(
                         fragmentPath,
-                        resolver,
-                        parentId,
-                        paramsToPass,
-                        true,
-                        referenceCallPath
-                );
+                        tc.getName(),
+                        parseParentStepIndex(parentId),
+                        "steps",
+                        null,
+                        "Reusable module must declare 'steps:' (an empty list is allowed). File: "
+                                + file.getAbsolutePath());
             }
 
-            throw definitionError(
+            Object rawSteps = fragmentRoot.get("steps");
+            if (rawSteps == null) {
+                // Valid no-op reusable: "steps:" without any entries.
+                return java.util.Collections.emptyList();
+            }
+            if (!(rawSteps instanceof List<?> rawList)) {
+                throw definitionError(
+                        fragmentPath,
+                        tc.getName(),
+                        parseParentStepIndex(parentId),
+                        "steps",
+                        rawSteps,
+                        "Reusable module 'steps' must be a YAML list. File: "
+                                + file.getAbsolutePath());
+            }
+
+            for (int i = 0; i < rawList.size(); i++) {
+                if (!(rawList.get(i) instanceof Map<?, ?>)) {
+                    throw definitionError(
+                            fragmentPath,
+                            tc.getName(),
+                            parseParentStepIndex(parentId),
+                            "steps[" + i + "]",
+                            rawList.get(i),
+                            "Reusable step must be a YAML mapping. File: " + file.getAbsolutePath());
+                }
+            }
+
+            List<Map<String, Object>> fragmentSteps =
+                    (List<Map<String, Object>>) rawSteps;
+
+            return processSteps(
+                    tc,
+                    fragmentSteps,
                     fragmentPath,
-                    tc.getName(),
-                    parseParentStepIndex(parentId),
-                    "steps",
-                    null,
-                    "Reusable module must contain a top-level 'steps:' section.");
+                    resolver,
+                    parentId,
+                    paramsToPass,
+                    true,
+                    referenceCallPath
+            );
         }
     }
     
@@ -1217,23 +1250,19 @@ public class YamlTestCaseLoader {
             // Apply NULL-removal and EMPTY-value handling after B->R compatibility mapping.
             bodyContent = resolveNullableRule(bodyContent, step.getParameters());
 
-            String resolvedBody = resolver.resolve(
-                    tc,
-                    bodyContent,
-                    step.getParameters(),
-                    reqFile.getPath(),
-                    0,
-                    "body",
-                    step);
+            String resolvedBody;
+            try {
+                resolvedBody = resolver.resolve(
+                        tc, bodyContent, step.getParameters(),
+                        reqFile.getPath(), 0, "body", step);
 
-            resolvedBody = resolver.resolve(
-                    tc,
-                    resolvedBody,
-                    tc.getVariables(),
-                    reqFile.getPath(),
-                    0,
-                    "body",
-                    step);
+                resolvedBody = resolver.resolve(
+                        tc, resolvedBody, tc.getVariables(),
+                        reqFile.getPath(), 0, "body", step);
+            } catch (at.co.svc.agate.core.error.AgateStepException failure) {
+                throw enrichSoapTemplateFailure(
+                        failure, reqFile.toPath(), bodyContent, actionValue);
+            }
 
             // Store the final JSON or XML text under the "body" key.
             stepMap.put("body", resolvedBody);
@@ -1241,6 +1270,52 @@ public class YamlTestCaseLoader {
         
     }
     
+
+    /** Preserve the original failure and identify the actual module source, not only the caller YAML. */
+    private static at.co.svc.agate.core.error.AgateStepException enrichSoapTemplateFailure(
+            at.co.svc.agate.core.error.AgateStepException failure,
+            Path templateFile,
+            String templateBody,
+            String command) {
+
+        at.co.svc.agate.core.error.AgateStepException.Builder out =
+                at.co.svc.agate.core.error.AgateStepException.builder(failure.getReason());
+
+        out.detail("Source Type", "SOAP REQUEST TEMPLATE");
+        out.detail("Source File", templateFile.toAbsolutePath().normalize());
+        out.detail("Module Command", command);
+
+        String placeholder = failure.getDetails().get("Placeholder");
+        if (placeholder == null) {
+            placeholder = failure.getDetails().get("Actual");
+        }
+
+        if (placeholder != null && templateBody != null) {
+            int at = templateBody.indexOf(placeholder);
+            if (at >= 0) {
+                int line = 1;
+                for (int i = 0; i < at; i++) {
+                    if (templateBody.charAt(i) == '\n') line++;
+                }
+                out.detail("Template Line", line);
+                // The innermost XML element containing the placeholder, when identifiable.
+                int tagStart = templateBody.lastIndexOf('<', at);
+                int tagEnd = tagStart >= 0 ? templateBody.indexOf('>', tagStart) : -1;
+                if (tagStart >= 0 && tagEnd >= 0 && tagEnd < at) {
+                    String tag = templateBody.substring(tagStart + 1, tagEnd).trim();
+                    if (tag.matches("[\\w.-]+(:[\\w.-]+)?")) {
+                        out.detail("XML Element", tag);
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String, String> detail : failure.getDetails().entrySet()) {
+            out.detail(detail.getKey(), detail.getValue());
+        }
+        out.cause(failure);
+        return out.build();
+    }
 
     private static String preferStepParametersOverBufferPlaceholders(
             String body,

@@ -7,7 +7,9 @@ public final class MigrationLog {
      * 1 = NORMAL
      * 2 = DEBUG
      */
-    private static int level = 1;
+    private static int level =
+            Boolean.parseBoolean(System.getProperty("agate.migration.debug",
+                System.getenv().getOrDefault("AGATE_MIGRATION_DEBUG", "false"))) ? 2 : 1;
 
     private MigrationLog() {
     }
@@ -79,14 +81,14 @@ public final class MigrationLog {
 
     public static void debug(String message) {
         if (level >= 2) {
-            System.out.println("[DEBUG] " + message);
+            System.err.println("[DEBUG] " + message);
         }
     }
 
     public static void debugSection(String title) {
         if (level >= 2) {
             System.out.println();
-            System.out.println("---------- DEBUG: " + title + " ----------");
+            System.err.println("---------- DEBUG: " + title + " ----------");
         }
     }
 

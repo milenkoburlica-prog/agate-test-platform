@@ -27,6 +27,8 @@ public final class DocumentStructureValidator implements AgateValidator {
                     "description",
                     "stage",
                     "priority",
+                    "template",
+                    "testdata",
                     "variables",
                     "steps"
             );

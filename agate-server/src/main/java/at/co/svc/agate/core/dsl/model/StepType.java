@@ -18,7 +18,8 @@ public enum StepType {
     JSON,
     PDF,
     FILE,
-    LOOP
+    LOOP,
+    BREAK
 
     // STRING
 }

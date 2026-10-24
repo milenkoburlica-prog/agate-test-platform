@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
 
+import at.co.svc.agate.core.project.ApplicationPathResolver;
 import at.co.svc.agate.core.project.ProjectContext;
 
 public final class ReusablePathResolver {
@@ -38,14 +39,13 @@ public final class ReusablePathResolver {
         ProjectContext context = projectContext;
         if (context != null) {
             applicationRoot =
-                    context.getTestsRoot()
-                            .resolve(normalizedApplication)
-                            .normalize();
+                    ApplicationPathResolver.resolve(
+                            context.getTestsRoot(), normalizedApplication);
         } else {
             // Legacy fallback for direct executions without ProjectContext.
             applicationRoot =
-                    Paths.get("data", normalizedApplication)
-                            .normalize();
+                    ApplicationPathResolver.resolve(
+                            Paths.get("data"), normalizedApplication);
         }
 
         return applicationRoot

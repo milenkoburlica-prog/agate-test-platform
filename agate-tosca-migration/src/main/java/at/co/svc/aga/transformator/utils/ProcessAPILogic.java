@@ -166,7 +166,7 @@ public class ProcessAPILogic {
                 String cleanCondition = ToscaValueTranslator.translateToscaValues(condition);
 
                 String formattedCondition = cleanCondition.replace("\"", "'");
-                ToscaToAgaPhase1.writeLine("        condition: \"" + formattedCondition + "\"");
+                ToscaToAgaPhase1.writeLine("        condition: \"" + escapeYamlDoubleQuoted(formattedCondition) + "\"");
             }
 
             String newEndpoint = ToscaValueTranslator.translateToscaValues(endpoint);
@@ -251,6 +251,7 @@ public class ProcessAPILogic {
                         for (StepValueDetails details : detailsList) {
                             String tValue = details.getValue();
                             tValue = ToscaValueTranslator.translateToscaValues(tValue);
+                            tValue = normalizeConditionalApiPlaceholderValue(tValue);
 
                             String condition =
                                     normalizeApiParameterCondition(
@@ -542,7 +543,7 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
 
                         ToscaToAgaPhase1.writeLine(
                                 "        condition: \""
-                                        + combined
+                                        + escapeYamlDoubleQuoted(combined)
                                         + "\""
                         );
                     }
@@ -718,7 +719,7 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
                                 + ToscaToAgaPhase1.lastApiResponseName
                 );
 
-                if (details.getConstrain() != null) {
+                if (hasMeaningfulApiConstraint(details.getConstrain())) {
 
                     String cAction =
                             details.getConstrain()
@@ -785,7 +786,7 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
 
                     ToscaToAgaPhase1.writeLine(
                             "        condition: \""
-                                    + formattedCondition
+                                    + escapeYamlDoubleQuoted(formattedCondition)
                                     + "\""
                     );
                 }
@@ -852,7 +853,7 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
                                 + ToscaToAgaPhase1.lastApiResponseName
                 );
 
-                if (details.getConstrain() != null) {
+                if (hasMeaningfulApiConstraint(details.getConstrain())) {
 
                     String cAction =
                             details.getConstrain()
@@ -934,6 +935,41 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
      * This avoids treating normal string literals such as 'ACTIVE' as AGATE
      * variables.
      */
+    /**
+     * A conditional Tosca API parameter sometimes carries quote delimiters
+     * around a single XL reference. These delimiters must not become part
+     * of the SOAP/REST parameter value after migration.
+     *
+     * Restrict the rewrite to a complete, single XL placeholder surrounded
+     * by the same number of double quotes (e.g. "{XL[x]}" or
+     * ""{XL[x]}""). Do not touch conditions, literals, expressions
+     * containing additional text, or values with unmatched quotes.
+     */
+    static String normalizeConditionalApiPlaceholderValue(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        int left = 0;
+        while (left < value.length() && value.charAt(left) == '"') {
+            left++;
+        }
+        if (left == 0 || left * 2 >= value.length()) {
+            return value;
+        }
+        int right = 0;
+        while (right < value.length() && value.charAt(value.length() - 1 - right) == '"') {
+            right++;
+        }
+        if (left != right) {
+            return value;
+        }
+        String inner = value.substring(left, value.length() - right);
+        if (inner.matches("\\{XL\\[[^\\]\\r\\n]+\\]\\}")) {
+            return inner;
+        }
+        return value;
+    }
+
     private static String normalizeApiParameterCondition(
             String condition) {
 
@@ -1046,6 +1082,24 @@ private static String prepareSoapBody(CleanStep step, String decodedPayload)
                 );
     }
     
+    /**
+     * Tosca structural Select rows without an explicit selection value must not
+     * become a semantic SOAP assertion filter. In particular an absent value
+     * may be serialized as {NULL} by earlier transformation phases.
+     * Keep explicit non-null constraints for list-instance selection.
+     */
+    static boolean hasMeaningfulApiConstraint(Constraint constraint) {
+        if (constraint == null) return false;
+        String expected = constraint.getExpected();
+        String path = constraint.getPath();
+        String action = constraint.getAction();
+        if (expected == null || expected.isBlank()
+                || "{NULL}".equalsIgnoreCase(expected.trim())
+                || "NULL".equalsIgnoreCase(expected.trim())) return false;
+        return path != null && !path.isBlank()
+                && action != null && !action.isBlank();
+    }
+
     private static String buildPathWithConstraints(String key, List<Constraint> constraints) {
         if (constraints == null || constraints.isEmpty()) {
             return key;

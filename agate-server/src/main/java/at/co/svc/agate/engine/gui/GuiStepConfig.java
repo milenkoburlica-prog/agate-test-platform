@@ -45,6 +45,43 @@ public final class GuiStepConfig {
             raw.putIfAbsent("buffer", Objects.toString(raw.get("response"), "extracted"));
         }
         raw.put("op", op);
+        // Declarative SELECT shorthand. Normalize before placeholder expansion,
+        // preserving the existing target/value engine and all legacy YAML files.
+        if (op.equals("SELECT") && raw.containsKey("select")) {
+            if (raw.containsKey("target") || raw.containsKey("value") || raw.containsKey("selector"))
+                throw new IllegalArgumentException("SELECT: use select OR target/value, not both");
+            Map<String,Object> spec = map(raw.get("select"));
+            if (spec.size() != 2 || !spec.containsKey("idContains") || !spec.containsKey("label"))
+                throw new IllegalArgumentException("SELECT select requires exactly idContains and label");
+            String idFragment = Objects.toString(spec.get("idContains"), "");
+            if (idFragment.isBlank()) throw new IllegalArgumentException("SELECT idContains cannot be blank");
+            // Avoid selector injection and CSS escapes: use a quoted CSS attribute value.
+            String cssEscaped = idFragment.replace("\\", "\\\\").replace("\"", "\\\"");
+            raw.put("target", Map.of("css", "select[id*=\"" + cssEscaped + "\"]"));
+            raw.put("value", Map.of("label", spec.get("label")));
+            raw.remove("select");
+        }
+        // New compact dropdown form: the locator and chosen option live together.
+        if (op.equals("SELECT") && raw.containsKey("dropdown")) {
+            if (raw.containsKey("target") || raw.containsKey("selector") || raw.containsKey("select") || raw.containsKey("value"))
+                throw new IllegalArgumentException("SELECT dropdown cannot be combined with target/value/select");
+            Map<String,Object> dropdown = new LinkedHashMap<>(map(raw.get("dropdown")));
+            Object selected = dropdown.remove("value");
+            if (!(selected instanceof String) || ((String) selected).isBlank())
+                throw new IllegalArgumentException("SELECT dropdown.value must be a nonempty option label");
+            raw.put("value", Map.of("label", selected));
+            raw.put("dropdown", dropdown);
+        }
+        // New compact textbox form: textbox.value means the text to enter.
+        if (op.equals("FILL") && raw.containsKey("textbox")) {
+            if (raw.containsKey("value") || raw.containsKey("target") || raw.containsKey("selector"))
+                throw new IllegalArgumentException("FILL textbox cannot be combined with target/value");
+            Map<String,Object> textbox = new LinkedHashMap<>(map(raw.get("textbox")));
+            Object input = textbox.remove("value");
+            if (input == null) throw new IllegalArgumentException("FILL textbox.value is required");
+            raw.put("value", input);
+            raw.put("textbox", textbox);
+        }
         Map<String,Object> simplified = GuiElementTarget.fromStep(raw);
         if (!simplified.isEmpty()) raw.put("target", simplified);
         if (op.equals("ASSERT") && raw.containsKey("assertion") && raw.containsKey("action"))

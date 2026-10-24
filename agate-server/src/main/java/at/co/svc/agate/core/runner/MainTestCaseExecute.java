@@ -18,6 +18,7 @@ import at.co.svc.agate.core.error.AgateStepException;
 import at.co.svc.agate.core.interfaces.TestLogger;
 import at.co.svc.agate.core.report.JsonReportEngine;
 import at.co.svc.agate.core.report.ReportEngine;
+import at.co.svc.agate.core.project.ApplicationPathResolver;
 import at.co.svc.agate.core.project.ProjectContext;
 import at.co.svc.agate.core.project.ProjectRuntime;
 import at.co.svc.agate.core.reference.ReferencePathResolver;
@@ -40,6 +41,10 @@ public class MainTestCaseExecute {
                     "allure.enabled",
                     "false"
             );
+
+            // Allure is disabled for standard AGATE execution. Remove stale
+            // legacy artifacts and clean up again after all reports finish.
+            at.co.svc.agate.core.allure.AllureResultsCleanup.installForDisabledAllure();
 
             // Targeted YAML file
             String yamlFile =
@@ -569,10 +574,8 @@ public class MainTestCaseExecute {
                 || file.trim().isEmpty()) {
 
             Path appFolder =
-                    projectContext
-                            .getTestsRoot()
-                            .resolve(sanitizedApps)
-                            .normalize();
+                    ApplicationPathResolver.resolve(
+                            projectContext.getTestsRoot(), sanitizedApps);
 
             yamlFilesToExecute =
                     Files.walk(
@@ -616,9 +619,8 @@ public class MainTestCaseExecute {
             }
 
             Path singlePath =
-                    projectContext
-                            .getTestsRoot()
-                            .resolve(sanitizedApps)
+                    ApplicationPathResolver.resolve(
+                            projectContext.getTestsRoot(), sanitizedApps)
                             .resolve(targetFile)
                             .normalize();
 
@@ -1145,7 +1147,7 @@ public class MainTestCaseExecute {
                         projectContext
                                 .getReportsRoot()
                                 .resolve(currentInstance)
-                                .resolve(sanitizedApps)
+                                .resolve(ApplicationPathResolver.relativePath(sanitizedApps))
                                 .toString();
 
                 String reportName;

@@ -204,9 +204,12 @@ public class ProcessStartProgram {
             );
         }
 
+        // Tosca only verifies the process exit code when an ExitCode
+        // expectation is explicitly provided. An empty ExitCode means
+        // "wait for completion without checking the return code".
         ToscaToAgaPhase1.writeLine(
                 ident
-                        + "        ignoreExitCode: false"
+                        + "        ignoreExitCode: " + expectedExitCode.isBlank()
         );
 
         if (!expectedExitCode.isBlank()

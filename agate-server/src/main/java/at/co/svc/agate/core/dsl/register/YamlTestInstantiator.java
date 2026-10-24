@@ -24,7 +24,7 @@ public class YamlTestInstantiator {
  private static class TCObject {
  private final String testId;
  private final Map<String, String> variables =
- new HashMap<>();
+ new LinkedHashMap<>();
  public TCObject(
                 String testId) {
  this.testId =
@@ -305,6 +305,28 @@ public class YamlTestInstantiator {
             newTestCase.put(
                     "stage",
                     "*");
+            // Preserve origin as informational metadata. Generated test cases
+            // remain self-contained: runtime execution does not read either file.
+            newTestCase.put("template", "template/" + templateFileName.replace('\\', '/'));
+            newTestCase.put("testdata", "template/" + csvFileName.replace('\\', '/'));
+
+            // Merge the current CSV column into the individual test case.
+            // Use LinkedHashMap to retain existing template variable order.
+            Map<String, Object> generatedVariables = new LinkedHashMap<>();
+            Object templateVariables = newTestCase.get("variables");
+            if (templateVariables instanceof Map<?, ?> existingVariables) {
+                for (Map.Entry<?, ?> entry : existingVariables.entrySet()) {
+                    generatedVariables.put(String.valueOf(entry.getKey()), entry.getValue());
+                }
+            }
+            for (Map.Entry<String, String> entry : tc.getVariables().entrySet()) {
+                if (entry.getKey() != null && !entry.getKey().isBlank()) {
+                    // CSV is test-instance-specific and intentionally wins on collisions.
+                    generatedVariables.put(entry.getKey(), entry.getValue());
+                }
+            }
+            newTestCase.put("variables", generatedVariables);
+
             Set<String> tcMissingKeys =
  new TreeSet<>();
             /*
@@ -312,10 +334,16 @@ public class YamlTestInstantiator {
              *
              * {XL[...]}
              */
+            // Remember which SOAP ASSERT selection constraints are backed by
+            // test-data references. Explicit literal NULL checks must survive.
+            Map<Map<String, Object>, Boolean> dynamicSelectionConstraints =
+                    new java.util.IdentityHashMap<>();
+            collectDynamicSelectionConstraints(newTestCase, dynamicSelectionConstraints);
             replaceXLBuffer(
                     newTestCase,
                     tc,
                     tcMissingKeys);
+            dropUnspecifiedSelectionConstraints(newTestCase, dynamicSelectionConstraints);
             /*
              * Evaluate template conditions and remove
              * non-applicable steps.
@@ -348,8 +376,21 @@ public class YamlTestInstantiator {
             }
             globalMissingKeys.addAll(
                     tcMissingKeys);
-            finalTestCasesList.add(
-                    newTestCase);
+
+            // Keep source information in the test-case header rather than
+            // appending it after the executable steps. YAML mappings preserve
+            // insertion order through LinkedHashMap and SnakeYAML.
+            Map<String, Object> orderedTestCase = new LinkedHashMap<>();
+            for (String key : List.of("id", "description", "stage", "priority",
+                    "template", "testdata")) {
+                if (newTestCase.containsKey(key)) {
+                    orderedTestCase.put(key, newTestCase.get(key));
+                }
+            }
+            for (Map.Entry<String, Object> entry : newTestCase.entrySet()) {
+                orderedTestCase.putIfAbsent(entry.getKey(), entry.getValue());
+            }
+            finalTestCasesList.add(orderedTestCase);
         }
         /*
          * ==============================================================
@@ -1344,6 +1385,56 @@ public class YamlTestInstantiator {
  return false;
         }
     }
+    /**
+     * Capture dynamic SOAP assertion selection criteria before XL expansion.
+     * Explicit expected: '{NULL}' is NOT considered optional.
+     */
+    @SuppressWarnings("unchecked")
+    private void collectDynamicSelectionConstraints(Object node,
+            Map<Map<String, Object>, Boolean> dynamic) {
+        if (node instanceof Map<?, ?> map) {
+            if ("SOAP".equalsIgnoreCase(String.valueOf(map.get("type")))
+                    && "ASSERT".equalsIgnoreCase(String.valueOf(map.get("op")))
+                    && map.get("constraints") instanceof List<?> constraints) {
+                for (Object item : constraints) {
+                    if (item instanceof Map<?, ?> criterion) {
+                        Object expected = criterion.get("expected");
+                        if (expected instanceof String str
+                                && str.matches("\\{XL\\[[^]\\r\\n]+\\]\\}")) {
+                            dynamic.put((Map<String, Object>) criterion, Boolean.TRUE);
+                        }
+                    }
+                }
+            }
+            for (Object value : map.values()) collectDynamicSelectionConstraints(value, dynamic);
+        } else if (node instanceof List<?> list) {
+            for (Object value : list) collectDynamicSelectionConstraints(value, dynamic);
+        }
+    }
+
+    /** Omit only optional selections whose CSV value is absent/null. */
+    @SuppressWarnings("unchecked")
+    private void dropUnspecifiedSelectionConstraints(Object node,
+            Map<Map<String, Object>, Boolean> dynamic) {
+        if (node instanceof Map<?, ?> map) {
+            if ("SOAP".equalsIgnoreCase(String.valueOf(map.get("type")))
+                    && "ASSERT".equalsIgnoreCase(String.valueOf(map.get("op")))
+                    && map.get("constraints") instanceof List<?> list) {
+                List<Object> mutable = (List<Object>) list;
+                mutable.removeIf(item -> item instanceof Map<?, ?> criterion
+                        && dynamic.containsKey(criterion)
+                        && (criterion.get("expected") == null
+                            || "{NULL}".equalsIgnoreCase(String.valueOf(criterion.get("expected")))
+                            || "NULL".equalsIgnoreCase(String.valueOf(criterion.get("expected")))
+                            || "".equals(String.valueOf(criterion.get("expected")))));
+                if (mutable.isEmpty()) ((Map<String, Object>) map).remove("constraints");
+            }
+            for (Object value : map.values()) dropUnspecifiedSelectionConstraints(value, dynamic);
+        } else if (node instanceof List<?> list) {
+            for (Object value : list) dropUnspecifiedSelectionConstraints(value, dynamic);
+        }
+    }
+
  private void replaceXLBuffer(
             Object object,
             TCObject tc,

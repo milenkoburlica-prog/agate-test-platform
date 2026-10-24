@@ -13,6 +13,11 @@ public final class AgateWindowDsl {
     }
     private static List<Map<String,Object>> lower(Map<String,Object> original) {
         Map<String,Object> step=new LinkedHashMap<>(original);
+        // Apply customer-specific Tosca buffer mappings to conditions as well as values.
+        // Unmapped/runtime buffers (including generated agate_cf_* guards) stay unchanged.
+        if (step.get("condition") instanceof String condition && !condition.isBlank()) {
+            step.put("condition", ToscaValueTranslator.translateToscaValues(condition));
+        }
         String op=text(step.get("op"));
         if(Set.of("IF","WHILE","DO_WHILE").contains(op)&&step.containsKey("predicate")) return control(step,op);
         if("WINDOW".equals(step.get("type")) && !Set.of("EXEC","BUFFER").contains(op)) {
@@ -110,9 +115,13 @@ public final class AgateWindowDsl {
         List<Map<String,Object>> result=new ArrayList<>();
         for(Map<String,Object> original:steps) {
             Map<String,Object> child=new LinkedHashMap<>(original);
+            // NativeWindowIfContract emits CloseBrowser as op=EXEC,
+            // action=CLOSE_BROWSER and does not set page.
+            // Only rewrite when the native WINDOW predicate supplies
+            // one unambiguous window caption.
             boolean legacyClose="GUI".equals(child.get("type"))
-                    && Set.of("CLOSE","CLOSE_BROWSER").contains(text(child.get("op")))
-                    && "CloseBrowser".equalsIgnoreCase(text(child.get("page")));
+                    && "EXEC".equals(child.get("op"))
+                    && "CLOSE_BROWSER".equals(child.get("action"));
             if(legacyClose && !captions.isEmpty()) {
                 if(captions.size()!=1)throw new IllegalArgumentException(
                         "CloseBrowser has multiple native window captions; explicit mapping required");

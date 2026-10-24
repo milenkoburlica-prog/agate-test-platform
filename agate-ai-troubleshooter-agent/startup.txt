@@ -1,0 +1,6 @@
+cd C:\work\projects\agate-studio-new\agate-ai-platform
+
+mvn clean test
+mvn quarkus:dev -Ddebug=5091
+
+http://127.0.0.1:8091/.

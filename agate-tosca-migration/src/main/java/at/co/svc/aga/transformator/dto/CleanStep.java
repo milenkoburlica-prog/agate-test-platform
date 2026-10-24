@@ -50,6 +50,11 @@ public class CleanStep {
      */
 
     private Integer maxIterations;
+    private String mode;
+    private Long timeoutMs;
+    private String response;
+    private Integer row;
+    private Integer column;
 
     private List<CleanStep> steps;
 
@@ -57,6 +62,17 @@ public class CleanStep {
     // =========================================================
     // CONTROL FLOW
     // =========================================================
+
+    public String getMode() { return mode; }
+    public void setMode(String mode) { this.mode = mode; }
+    public Long getTimeoutMs() { return timeoutMs; }
+    public void setTimeoutMs(Long timeoutMs) { this.timeoutMs = timeoutMs; }
+    public String getResponse() { return response; }
+    public void setResponse(String response) { this.response = response; }
+    public Integer getRow() { return row; }
+    public void setRow(Integer row) { this.row = row; }
+    public Integer getColumn() { return column; }
+    public void setColumn(Integer column) { this.column = column; }
 
     public Integer getMaxIterations() {
         return maxIterations;
