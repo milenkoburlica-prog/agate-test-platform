@@ -1,40 +1,51 @@
-# AGATE AI Platform 0.9.1 – Execution-Aware Diagnostics
+# AGATE AI Troubleshooter
 
-Java 21 / Quarkus Web Chat, Groq SOAP/XPath diagnosis, read-only multi-engine log tools.
+**AI-powered Test Failure Analysis & Troubleshooting for AGATE**
 
-## Änderung gegenüber 0.9.0
+## Überblick
 
-- `AgateExecutionParser`: Ermittelt den **tatsächlich fehlgeschlagenen AGATE-DSL-Schritt** vor der Engine-Auswahl. Ein `Exit Code: 1` am Testende wird nicht als CMD-Ursache fehlinterpretiert.
-- `SqlResponseCorrelationTool`: Verknüpft `SQL BUFFER` mit einem vorausgehenden `SQL EXEC` desselben Response-Namens und erkennt `SKIPPED (Condition false: ...)`.
-- In der Kurzfassung ohne EXEC-Details meldet die Diagnose fehlende Belege, statt eine Ursache zu erfinden.
-- Testfall `examples/demo-logs/09-tf080-sql-skipped.log` reproduziert einen synthetischen TF080-Fall.
-- Bestehende Groq- und SOAP-Analyse, Web Chat, Tools und Tests bleiben erhalten.
+Der **AGATE AI Troubleshooter** ist ein KI-gestützter Diagnoseassistent zur Analyse fehlgeschlagener Testausführungen innerhalb der AGATE Testplattform.
 
-## Start
+Ziel ist es, Testfehler schneller zu verstehen, mögliche Ursachen zu identifizieren und konkrete, überprüfbare Korrekturvorschläge bereitzustellen.
 
-```powershell
+Der Assistent kombiniert die deterministische Analyse von AGATE-Ausführungsprotokollen mit der Unterstützung durch Large Language Models (LLMs).
+
+## Funktionsumfang
+
+- **Automatische Fehleranalyse:** Erkennung fehlgeschlagener Testschritte und relevanter Fehlermeldungen.
+- **Multi-Engine-Unterstützung:** Analyse von SOAP, REST, SQL, GUI, CMD, OpenShift und BUFFER.
+- **Root Cause Investigation:** Untersuchung von Fehlerursachen anhand tatsächlicher Testausführungen und vorhandener Evidenz.
+- **Intelligente Korrekturvorschläge:** Vorschläge zur Fehlerbehebung mit nachvollziehbaren Begründungen und, soweit möglich, technischer Verifikation.
+- **Evidence Explorer:** Anzeige relevanter Testschritte und direkter Zugriff auf die entsprechenden Stellen im Originalprotokoll.
+- **AI Chat:** Interaktive Fehleranalyse durch Datei-Upload oder direktes Einfügen von AGATE-Protokollen.
+
+## Architektur
+
+Der AGATE AI Troubleshooter basiert auf **Java 21 und Quarkus**.
+
+Die Fehleranalyse erfolgt über spezialisierte Java-Diagnosekomponenten. Für zusätzliche Interpretation und Korrekturvorschläge wird ein LLM über die GroqCloud API eingebunden.
+
+Die Architektur ist darauf ausgelegt, künftig weitere LLM-Anbieter und Diagnosewerkzeuge integrieren zu können.
+
+## Grundprinzip
+
+**Find the failure → Analyze the evidence → Explain the cause → Propose a fix → Verify the correction**
+
+Der Assistent führt keine eigenständigen Änderungen an AGATE-Tests oder produktiven Systemen durch. Vorgeschlagene Korrekturen müssen fachlich und technisch geprüft werden.
+
+## Projektinformationen
+
+- **Projekt:** `agate-ai-troubleshooter-agent`
+- **Technologie:** Java 21, Quarkus
+- **LLM-Integration:** GroqCloud
+- **Benutzeroberfläche:** Webbasierter AI Chat
+- **Einsatzgebiet:** AGATE Testdiagnose und Troubleshooting
+
+## Lokaler Start
+
+```bash
 mvn clean test
 mvn quarkus:dev -Ddebug=5091
 ```
 
-Web Chat: http://127.0.0.1:8091/
-
-In einem neuen Chat `examples/demo-logs/09-tf080-sql-skipped.log` hochladen und eingeben:
-
-`Analysiere den Fehler und schlage eine überprüfbare Korrektur vor.`
-
-**Erwartung:** ENGINE SQL, SQL EXEC übersprungen (`COUNT_ID=0`), SQL BUFFER greift trotzdem zu; Bedingung des Verbrauchers prüfen und mit `COUNT=0`/`COUNT=1` testen. Status `KORREKTUR_VORGESCHLAGEN_NICHT_VERIFIZIERT`.
-
-Die vorgeschlagene YAML-Anpassung ist **nicht** automatisch vorgenommen oder in AGATE ausgeführt worden. Bei produktiven Daten zunächst Tokens, Personenkennungen und Credentials anonymisieren.
-
-## Grenzen
-
-Der Parser ist zunächst auf das AGATE-Protokollformat mit `>>> DSL`/`STEP FINISHED` ausgerichtet. Bei interleaved/parallelen Step-Logs oder abweichenden Engine-Ausgaben sind zusätzliche Tests und Parser-Anpassungen erforderlich. Der SQL-Response-Scope wird nur aus dem Log abgeleitet; er wird nicht mit einer laufenden Engine-Instanz abgeglichen.
-
-
-## 0.9.2 – Diagnostic UX & Evidence Explorer
-- Strukturierter Diagnose-Response (`diagnostic`) mit Titel, Kurzbefund, Korrektur, Verifikationsgrenze und belegten Testschritten. Bestehende Felder bleiben erhalten.
-- Testschritte sind mit Zeilenreferenzen aus dem **tatsächlich hochgeladenen Log** verknüpft; Klick öffnet den Original-Log-Viewer.
-- Die vollständige ursprüngliche Tool-Ausgabe ist unter „Vollständige technische Analyse“ abrufbar.
-- Keine automatische Änderung der YAML-Dateien und keine AGATE-Testausführung.
-- Logtext verbleibt im Speicher der Browserseite; SOAP-Fälle können an Groq übertragen werden. Vertrauliche Tokens vor Upload maskieren.
+**Weboberfläche:** http://127.0.0.1:8091/

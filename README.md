@@ -42,17 +42,11 @@ This makes it well suited for AI-assisted workflows across the test lifecycle.
 
 > **Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.**
 
-To support AI-assisted test creation and experimentation, the repository also contains an **`agate-copilot-notebook`** directory.
+For AI-assisted test creation, the repository includes **`agate-copilot-notebook`**, a collection of Markdown documentation covering AGATE concepts, DSL syntax, engine-specific references, examples, and test-generation guidance. It enables experimentation with Microsoft Copilot Notebook without requiring AI for test execution.
 
-It provides Markdown files that can be used as source material for a Microsoft Copilot Notebook, including:
+For failure analysis, **`agate-ai-troubleshooter-agent`** provides an AI-powered troubleshooting assistant. It combines deterministic log analysis with LLMs to investigate failed test executions, identify possible root causes, and suggest verifiable corrections across AGATE's test engines.
 
-- AGATE concepts and DSL documentation
-- engine-specific reference documentation
-- syntax and usage examples
-- test-generation guidance
-- a sample test question to evaluate whether Copilot can generate an AGATE test based only on the provided documentation
-
-The goal is to give Copilot enough structured AGATE knowledge to help generate tests while minimizing undocumented assumptions. **Copilot Notebook is an optional test-authoring workflow, not a requirement for executing tests.**
+Both tools are optional and complement AGATE's core test execution capabilities.
 
 ### The goal
 
@@ -157,18 +151,8 @@ Different tools can create or migrate AGATE test artifacts. **`agate-server` exe
 | **`agate-server`** | Executes YAML tests across the native engines; manages reusable steps, configuration, results, and reports. |
 | **`agate-openapi`** | Generates test artifacts from OpenAPI contracts and analyzes API changes and their impact on tests. |
 | **`agate-tosca-migrator`** | Migrates supported Tosca scenarios into native AGATE artifacts; customized migration approach. |
-| **`agate-gui-studio`** | Visual GUI test designer and browser recorder producing editable YAML tests. |
-| **`agate-gui-demo-server`** | Local demo web server for exercising AGATE GUI features; start it using `start-demo.bat`. |
 | **`agate-copilot-notebook`** | Markdown knowledge base for AI-assisted test creation with Microsoft Copilot Notebook. |
-| **`agate-ai`** | Experimental AI-assisted test engineering and local LLM/Ollama integration. |
-| **`agate-client`** | Web-based project and test management interface under development. |
-
-To run the local GUI demo pages from Windows CMD:
-
-```cmd
-cd agate-gui-demo-server
-start-demo.bat
-```
+| **`agate-ai-troubleshooter-agent`** | AI-powered analysis of failed test executions, root cause investigation, and verifiable fix proposals. |
 
 The guiding principle is:
 
