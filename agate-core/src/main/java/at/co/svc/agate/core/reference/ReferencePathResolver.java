@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import at.co.svc.agate.core.dsl.model.TestCase;
 import at.co.svc.agate.core.dsl.model.TestStep;
 import at.co.svc.agate.core.project.ProjectContext;
+import at.co.svc.agate.core.project.ApplicationPathResolver;
 
 public class ReferencePathResolver {
 
@@ -133,8 +134,7 @@ public class ReferencePathResolver {
                             .toLowerCase();
 
             referenceDirectory =
-                    context.getResponsesRoot()
-                            .resolve(application)
+                    ApplicationPathResolver.resolve(context.getResponsesRoot(), application)
                             .resolve(safeYamlName)
                             .normalize();
         } else {

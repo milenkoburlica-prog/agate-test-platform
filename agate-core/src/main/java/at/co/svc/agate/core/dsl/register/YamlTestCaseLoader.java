@@ -1242,6 +1242,21 @@ public class YamlTestCaseLoader {
         if (reqFile.exists()) {
             String bodyContent = Files.readString(reqFile.toPath(), StandardCharsets.UTF_8);
 
+            // A NULL AGATE:LIST must be removed before the module loader resolves
+            // nested {B[...]} placeholders. SoapEngine is too late: this loader
+            // already resolves request.xml while constructing the test step.
+            if (reqFile.getName().toLowerCase(java.util.Locale.ROOT).endsWith(".xml")) {
+                // Expand non-NULL @Reference.list[1;12] values before resolving
+                // nested {B[...]} fields, then suppress NULL lists as before.
+                Path referenceDirectory = ProjectRuntime.isInitialized()
+                        ? ProjectRuntime.applicationRoot(application).resolve("template").resolve("references")
+                        : Path.of("data", application, "template", "references");
+                bodyContent = at.co.svc.agate.engine.soap.SoapListReferenceExpander.expand(
+                        bodyContent, step.getParameters(), referenceDirectory);
+                bodyContent = at.co.svc.agate.engine.soap.SoapNullListPreprocessor.removeNullLists(
+                        bodyContent, step.getParameters());
+            }
+
             bodyContent =
                     preferStepParametersOverBufferPlaceholders(
                             bodyContent,

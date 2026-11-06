@@ -70,56 +70,19 @@ public class YamlTestInstantiator {
          * Load CSV
          * ==============================================================
          */
+        // Parse logical CSV records, not physical lines. Test-case names may
+        // contain quoted newlines, semicolons, or doubled double-quotes.
         List<List<String>> table =
- new ArrayList<>();
- int expectedColumnCount =
-                -1;
- try (BufferedReader br =
-                     Files.newBufferedReader(
-                             csvPath,
-                             StandardCharsets.UTF_8)) {
-            String line;
- while ((line = br.readLine()) != null) {
- if (line.trim().isEmpty()) {
- continue;
-                }
-                String[] values =
-                        line.split(
-                                ";",
-                                -1);
-                List<String> row =
- new ArrayList<>();
- for (String val : values) {
-                    String cleanedVal =
-                            val;
-                    /*
-                     * Excel CSV escaping.
-                     */
-                    cleanedVal =
-                            cleanedVal.replace(
-                                    "\"\"",
-                                    "\"");
-                    /*
-                     * Remove surrounding Excel quotes.
-                     */
-                    cleanedVal =
-                            cleanedVal.replaceAll(
-                                    "^\"|\"$",
-                                    "");
-                    row.add(
-                            cleanedVal);
-                }
- if (expectedColumnCount == -1) {
-                    expectedColumnCount =
-                            row.size();
-                }
- while (row.size()
-                        < expectedColumnCount) {
-                    row.add("");
-                }
-                table.add(
-                        row);
+                at.co.svc.agate.core.dsl.utils.SemicolonCsvParser.read(csvPath);
+        int expectedColumnCount = table.isEmpty() ? 0 : table.get(0).size();
+        for (int rowIndex = 0; rowIndex < table.size(); rowIndex++) {
+            List<String> row = table.get(rowIndex);
+            if (row.size() > expectedColumnCount) {
+                throw new IllegalArgumentException("CSV row " + (rowIndex + 1)
+                        + " has " + row.size() + " fields; header has "
+                        + expectedColumnCount + ": " + csvPath);
             }
+            while (row.size() < expectedColumnCount) row.add("");
         }
  if (table.isEmpty()) {
  throw new IllegalArgumentException(
@@ -277,6 +240,7 @@ public class YamlTestInstantiator {
  new TreeSet<>();
         List<Map<String, Object>> finalTestCasesList =
  new ArrayList<>();
+        ReferenceValueResolver referenceValueResolver = new ReferenceValueResolver(appPath);
         /*
          * ==============================================================
          * Instantiate all CSV test cases
@@ -345,13 +309,21 @@ public class YamlTestInstantiator {
                     tcMissingKeys);
             dropUnspecifiedSelectionConstraints(newTestCase, dynamicSelectionConstraints);
             /*
-             * Evaluate template conditions and remove
-             * non-applicable steps.
+             * Evaluate conditions and remove non-applicable steps BEFORE
+             * resolving scalar references. A skipped CALL may legitimately
+             * contain !File[{XL[index]}].field where an empty CSV index
+             * becomes {NULL}. That reference must never be looked up.
              */
             processStepsAfterInstanciation(
                     newTestCase,
                     tc,
                     tcMissingKeys);
+            // A missing XL list index means a NULL list parameter, not an
+            // unresolved @Reference.field[{NULL}] expression.
+            // Non-NULL @... list references retain their existing semantics.
+            NullListReferenceNormalizer.normalizeTree(newTestCase);
+            // Resolve scalar references only in surviving steps.
+            referenceValueResolver.resolveTree(newTestCase, tc.getTestId());
 
             removeEmptySections(
                     newTestCase);
@@ -1157,6 +1129,22 @@ public class YamlTestInstantiator {
  if (condition == null
                 || condition.trim().isEmpty()) {
  return true;
+        }
+        // TestSOAP migration exception conditions are already XL-expanded here.
+        // They contain quoted literal values (including '{NULL}'), which the
+        // legacy Tosca/JEXL normalization below would otherwise misinterpret.
+        // Restrict the exception to generated SOAP ASSERT steps only.
+        if ("SOAP".equalsIgnoreCase(String.valueOf(step.get("type")))
+                && "ASSERT".equalsIgnoreCase(String.valueOf(step.get("op")))) {
+            Boolean migratedResult = MigratedSoapExceptionCondition.evaluate(
+                    condition, tc.getVariables());
+            if (migratedResult != null) {
+                if (Boolean.TRUE.equals(consolePrint)) {
+                    System.out.println("[MIGRATED SOAP ASSERT CONDITION] "
+                            + condition + " -> " + migratedResult);
+                }
+                return migratedResult;
+            }
         }
         condition =
                 condition.trim();

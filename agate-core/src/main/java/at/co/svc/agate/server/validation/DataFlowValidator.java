@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -410,7 +411,11 @@ public final class DataFlowValidator
         Set<String> reported = new LinkedHashSet<>();
         while (matches.find()) {
             String name = matches.group(1);
-            if (name.equalsIgnoreCase("NULL") || name.equalsIgnoreCase("TRUE") || name.equalsIgnoreCase("FALSE")) continue;
+            // Logical operators are keywords, not runtime condition variables.
+            // After stripping quoted operands, e.g. "'x' == 'EMPTY' OR 'x' == 'EMTY'",
+            // the identifier regex may otherwise mistake OR for a variable.
+            if (Set.of("NULL", "TRUE", "FALSE", "AND", "OR", "NOT")
+                    .contains(name.toUpperCase(Locale.ROOT))) continue;
             if (!known.contains(name) && reported.add(name)) {
                 issues.add(ValidationIssue.warning("AGATE-V430",
                         "Undefined condition variable '" + name + "' in " + file.getFileName()

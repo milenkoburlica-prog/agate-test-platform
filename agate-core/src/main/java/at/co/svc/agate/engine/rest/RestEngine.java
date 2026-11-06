@@ -191,8 +191,7 @@ public class RestEngine implements TestStepEngine {
  if (providedEndpoint != null && !providedEndpoint.isEmpty()) {
 
             String resolvedEndpoint = resolver.resolve(tc, providedEndpoint, tc.getVariables(), yamlFile, stepIndex,
-
-                    "endpoint");
+                    "endpoint", step);
 
 
 
@@ -208,7 +207,7 @@ public class RestEngine implements TestStepEngine {
 
         }
 
-        String finalUrl = resolver.resolve(tc, urlWithEndpoint, tc.getVariables(), yamlFile, stepIndex, "url");
+        String finalUrl = resolver.resolve(tc, urlWithEndpoint, tc.getVariables(), yamlFile, stepIndex, "url", step);
 
 
 
@@ -216,7 +215,7 @@ public class RestEngine implements TestStepEngine {
 
         String finalBody = (rawBody != null)
 
-                ? resolver.resolve(tc, rawBody, tc.getVariables(), yamlFile, stepIndex, "body")
+                ? resolver.resolve(tc, rawBody, tc.getVariables(), yamlFile, stepIndex, "body", step)
 
                 : "";
 
@@ -442,7 +441,7 @@ public class RestEngine implements TestStepEngine {
 
 
 
-                    String val = resolver.resolve(tc, dynamicValue, tc.getVariables(), yamlFile, stepIndex, "header");
+                    String val = resolver.resolve(tc, dynamicValue, tc.getVariables(), yamlFile, stepIndex, "header", step);
 
 
 
