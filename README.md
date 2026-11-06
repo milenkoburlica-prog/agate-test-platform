@@ -1,6 +1,6 @@
 # AGATE Test Platform
 
-> \*\*One test. Multiple technologies. One execution flow.\*\*
+> \\\*\\\*One test. Multiple technologies. One execution flow.\\\*\\\*
 
 **AGATE** is an open-source test automation and orchestration platform for complex integration and system tests across multiple technologies and existing environments.
 
@@ -14,7 +14,7 @@ within one human-readable YAML workflow.
 
 AGATE keeps the tester focused on **business behavior, test design, and software quality** instead of framework code, helper classes, mocks, and technical plumbing.
 
-> \*\*More focus on testing. Less focus on programming the test framework.\*\*
+> \\\*\\\*More focus on testing. Less focus on programming the test framework.\\\*\\\*
 
 ### Why not just JUnit?
 
@@ -40,7 +40,7 @@ AGATE is largely based on human-readable text artifacts such as **YAML, CSV, JSO
 
 This makes it well suited for AI-assisted workflows across the test lifecycle.
 
-> \*\*Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.\*\*
+> \\\*\\\*Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.\\\*\\\*
 
 For AI-assisted test creation, the repository includes **`agate-copilot-notebook`**, a collection of Markdown documentation covering AGATE concepts, DSL syntax, engine-specific references, examples, and test-generation guidance. It enables experimentation with Microsoft Copilot Notebook without requiring AI for test execution.
 
@@ -50,7 +50,7 @@ Both tools are optional and complement AGATE's core test execution capabilities.
 
 ### The goal
 
-> \*\*Readable tests. Reusable execution engines. Existing environments. AI-assisted testing. Minimal framework code. No vendor lock-in.\*\*
+> \\\*\\\*Readable tests. Reusable execution engines. Existing environments. AI-assisted testing. Minimal framework code. No vendor lock-in.\\\*\\\*
 
 \---
 
@@ -60,9 +60,9 @@ Clone the repository and execute an existing demo test:
 
 ```cmd
 git clone https://github.com/milenkoburlica-prog/agate-test-platform.git
-cd agate-test-platform\\agate-core
+cd agate-test-platform\\\\agate-core
 
-startTests.bat Tester1 DEMOS DEMO rest\_engine\_demo.yaml
+startTests.bat Tester1 DEMOS DEMO rest\\\_engine\\\_demo.yaml
 ```
 
 Adjust the user, environment, and demo application arguments to match your configuration. Some examples require running services, databases, or additional test data.
@@ -75,15 +75,15 @@ AGATE tests are written in YAML. Here is a deliberately simple example: **query 
 
 ```yaml
 testCases:
-  - id: TC\_Check\_Customers
+  - id: TC\\\_Check\\\_Customers
     description: Verify that customers exist
-    stage: '\*'
+    stage: '\\\*'
     priority: HIGH
 
     steps:
       - type: SQL
         op: EXEC
-        command: "SELECT COUNT(\*) AS TOTAL FROM CUSTOMERS"
+        command: "SELECT COUNT(\\\*) AS TOTAL FROM CUSTOMERS"
         response: customers
 
       - type: SQL
@@ -91,7 +91,7 @@ testCases:
         response: customers
         row: 0
         column: TOTAL
-        action: GREATER\_THAN
+        action: GREATER\\\_THAN
         expected: 0
 ```
 
@@ -156,7 +156,7 @@ Different tools can create or migrate AGATE test artifacts. **`agate-core` execu
 
 The guiding principle is:
 
-> \*\*Deterministic where possible. AI where useful.\*\*
+> \\\*\\\*Deterministic where possible. AI where useful.\\\*\\\*
 
 \---
 
@@ -176,9 +176,23 @@ The guiding principle is:
 
 ## 🤝 Feedback and Contributions
 
-AGATE is a growing open-source project. Feedback from testers, automation engineers, and teams working with complex system environments is welcome. Issues and pull requests are appreciated.
 
-If you find AGATE useful, consider giving the repository a ⭐.
+
+AGATE is an active open-source project, and I am looking for raw, honest feedback from QA and automation engineers in the trenches. 
+
+
+
+Whether you want to try out the engines, have questions about the Tosca/TestNG migrations, or want to discuss the AI troubleshoot agent:
+
+
+
+\- \*\*LinkedIn:\*\* - \*\*LinkedIn:\*\* \[Connect / DM me on LinkedIn](https://www.linkedin.com/in/milenko-burlica-93b5867a/)
+
+\- \*\*GitHub Issues:\*\* Open an issue for bugs, engine feature requests, or general discussions.
+
+\- \*\*Star the repo:\*\* If you find the concept interesting, giving it a ⭐ helps a lot!
+
+
 
 ## 📄 License
 
