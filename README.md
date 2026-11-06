@@ -1,6 +1,6 @@
 # AGATE Test Platform
 
-> **One test. Multiple technologies. One execution flow.**
+> \*\*One test. Multiple technologies. One execution flow.\*\*
 
 **AGATE** is an open-source test automation and orchestration platform for complex integration and system tests across multiple technologies and existing environments.
 
@@ -14,7 +14,7 @@ within one human-readable YAML workflow.
 
 AGATE keeps the tester focused on **business behavior, test design, and software quality** instead of framework code, helper classes, mocks, and technical plumbing.
 
-> **More focus on testing. Less focus on programming the test framework.**
+> \*\*More focus on testing. Less focus on programming the test framework.\*\*
 
 ### Why not just JUnit?
 
@@ -26,7 +26,7 @@ AGATE addresses a different problem: **integration and system testing across exi
 
 The **AGATE GUI Engine** uses Playwright for Java to automate browser interactions as part of the same YAML test flow as REST, SQL, and other technologies. It supports **Chromium, Microsoft Edge, and Google Chrome**, with configurable headless execution and browser reuse. Test cases use isolated browser contexts, whether executed individually or within a suite.
 
-For testers who prefer a visual approach, **`agate-gui-studio`** records browser interactions and turns them into editable AGATE YAML tests. The Studio is a standalone test-design tool; the Java GUI Engine performs execution in `agate-server`.
+For testers who prefer a visual approach, **`agate-gui-studio`** records browser interactions and turns them into editable AGATE YAML tests. The Studio is a standalone test-design tool; the Java GUI Engine performs execution in `agate-core`.
 
 ### Migration from Tricentis Tosca
 
@@ -40,7 +40,7 @@ AGATE is largely based on human-readable text artifacts such as **YAML, CSV, JSO
 
 This makes it well suited for AI-assisted workflows across the test lifecycle.
 
-> **Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.**
+> \*\*Text-based test artifacts are easy to understand for both humans and AI-assisted tooling.\*\*
 
 For AI-assisted test creation, the repository includes **`agate-copilot-notebook`**, a collection of Markdown documentation covering AGATE concepts, DSL syntax, engine-specific references, examples, and test-generation guidance. It enables experimentation with Microsoft Copilot Notebook without requiring AI for test execution.
 
@@ -50,9 +50,9 @@ Both tools are optional and complement AGATE's core test execution capabilities.
 
 ### The goal
 
-> **Readable tests. Reusable execution engines. Existing environments. AI-assisted testing. Minimal framework code. No vendor lock-in.**
+> \*\*Readable tests. Reusable execution engines. Existing environments. AI-assisted testing. Minimal framework code. No vendor lock-in.\*\*
 
----
+\---
 
 ## 🚀 Quick Start
 
@@ -60,14 +60,14 @@ Clone the repository and execute an existing demo test:
 
 ```cmd
 git clone https://github.com/milenkoburlica-prog/agate-test-platform.git
-cd agate-test-platform\agate-server
+cd agate-test-platform\\agate-core
 
-startTests.bat Tester1 DEMOS DEMO rest_engine_demo.yaml
+startTests.bat Tester1 DEMOS DEMO rest\_engine\_demo.yaml
 ```
 
 Adjust the user, environment, and demo application arguments to match your configuration. Some examples require running services, databases, or additional test data.
 
----
+\---
 
 ## 🧪 What an AGATE Test Looks Like
 
@@ -75,15 +75,15 @@ AGATE tests are written in YAML. Here is a deliberately simple example: **query 
 
 ```yaml
 testCases:
-  - id: TC_Check_Customers
+  - id: TC\_Check\_Customers
     description: Verify that customers exist
-    stage: '*'
+    stage: '\*'
     priority: HIGH
 
     steps:
       - type: SQL
         op: EXEC
-        command: "SELECT COUNT(*) AS TOTAL FROM CUSTOMERS"
+        command: "SELECT COUNT(\*) AS TOTAL FROM CUSTOMERS"
         response: customers
 
       - type: SQL
@@ -91,28 +91,28 @@ testCases:
         response: customers
         row: 0
         column: TOTAL
-        action: GREATER_THAN
+        action: GREATER\_THAN
         expected: 0
 ```
 
 The first step executes a SQL query; the second verifies its result. **No Java test class or database connection code is required in the YAML.**
 
-Database credentials and connection settings are maintained separately in AGATE environment configuration (for example, `agate-server/env/env.conf`) using `database.connectionString`, `database.user`, and `database.password`. Named datasources can be configured when needed. The `CUSTOMERS` table is illustrative; use a table available in your own test database.
+Database credentials and connection settings are maintained separately in AGATE environment configuration (for example, `agate-core/env/env.conf`) using `database.connectionString`, `database.user`, and `database.password`. Named datasources can be configured when needed. The `CUSTOMERS` table is illustrative; use a table available in your own test database.
 
 More sophisticated tests can combine SQL with REST, SOAP, file checks, browser actions, variables, and reusable `CALL` steps in one execution flow.
 
 **Explore real examples:**
 
-- **Test suites and reusable modules:** [`agate-server/data/demo/`](agate-server/data/demo/). For GUI Test see "agate-gui-demo-server"
-- **DSL and engine documentation:** [`agate-documentation/`](agate-documentation/)
+* **Test suites and reusable modules:** [`agate-core/data/demo/`](agate-server/data/demo/). For GUI Test see "agate-gui-demo-server"
+* **DSL and engine documentation:** [`agate-documentation/`](agate-documentation/)
 
 Each AGATE component also has its own README for installation, configuration, and detailed usage.
 
----
+\---
 
 ## 🏗️ Project Architecture
 
-Different tools can create or migrate AGATE test artifacts. **`agate-server` executes them using the same native DSL**, regardless of how they were created.
+Different tools can create or migrate AGATE test artifacts. **`agate-core` executes them using the same native DSL**, regardless of how they were created.
 
 ```text
                             AGATE TEST PLATFORM
@@ -128,7 +128,7 @@ Different tools can create or migrate AGATE test artifacts. **`agate-server` exe
                        YAML · Modules · CSV · JSON
                                   |
                                   v
-                             agate-server
+                             agate-core
                                   |
          +------------------------+------------------------+
          |                        |                        |
@@ -146,33 +146,33 @@ Different tools can create or migrate AGATE test artifacts. **`agate-server` exe
 
 ### Platform components
 
-| Component | Purpose |
-| --- | --- |
-| **`agate-server`** | Executes YAML tests across the native engines; manages reusable steps, configuration, results, and reports. |
-| **`agate-openapi`** | Generates test artifacts from OpenAPI contracts and analyzes API changes and their impact on tests. |
-| **`agate-tosca-migrator`** | Migrates supported Tosca scenarios into native AGATE artifacts; customized migration approach. |
-| **`agate-copilot-notebook`** | Markdown knowledge base for AI-assisted test creation with Microsoft Copilot Notebook. |
-| **`agate-ai-troubleshooter-agent`** | AI-powered analysis of failed test executions, root cause investigation, and verifiable fix proposals. |
+|Component|Purpose|
+|-|-|
+|**`agate-core`**|Executes YAML tests across the native engines; manages reusable steps, configuration, results, and reports.|
+|**`agate-openapi`**|Generates test artifacts from OpenAPI contracts and analyzes API changes and their impact on tests.|
+|**`agate-tosca-migrator`**|Migrates supported Tosca scenarios into native AGATE artifacts; customized migration approach.|
+|**`agate-copilot-notebook`**|Markdown knowledge base for AI-assisted test creation with Microsoft Copilot Notebook.|
+|**`agate-ai-troubleshooter-agent`**|AI-powered analysis of failed test executions, root cause investigation, and verifiable fix proposals.|
 
 The guiding principle is:
 
-> **Deterministic where possible. AI where useful.**
+> \*\*Deterministic where possible. AI where useful.\*\*
 
----
+\---
 
 ## ✨ Core Capabilities
 
-| Area | What AGATE provides |
-| --- | --- |
-| **Test design** | Readable YAML DSL, variables, CSV test data, reusable `CALL` flows, and suite validation. |
-| **Integration testing** | Native REST, SOAP, SQL, CMD, and OpenShift operations in a single scenario. |
-| **Browser testing** | Playwright-based GUI execution with Chromium, Edge, and Chrome; isolated browser contexts and optional browser reuse. |
-| **Files and data** | FILE, JSON, PDF, and BUFFER operations with assertions and value sharing. |
-| **Execution control** | WAIT, LOOP, and reusable test steps. |
-| **Results** | Structured execution logging and HTML reports. |
-| **Test generation** | OpenAPI-driven generation, Tosca migration, GUI recording, and optional AI-assisted authoring. |
+|Area|What AGATE provides|
+|-|-|
+|**Test design**|Readable YAML DSL, variables, CSV test data, reusable `CALL` flows, and suite validation.|
+|**Integration testing**|Native REST, SOAP, SQL, CMD, and OpenShift operations in a single scenario.|
+|**Browser testing**|Playwright-based GUI execution with Chromium, Edge, and Chrome; isolated browser contexts and optional browser reuse.|
+|**Files and data**|FILE, JSON, PDF, and BUFFER operations with assertions and value sharing.|
+|**Execution control**|WAIT, LOOP, and reusable test steps.|
+|**Results**|Structured execution logging and HTML reports.|
+|**Test generation**|OpenAPI-driven generation, Tosca migration, GUI recording, and optional AI-assisted authoring.|
 
----
+\---
 
 ## 🤝 Feedback and Contributions
 
@@ -183,3 +183,4 @@ If you find AGATE useful, consider giving the repository a ⭐.
 ## 📄 License
 
 AGATE Test Platform is released under the **MIT License**.
+
